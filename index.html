@@ -482,8 +482,9 @@ const CONFIG = {
         <button type="button" data-langue="fr" lang="fr" title="Français" aria-pressed="true">FR</button><button type="button" data-langue="mg" lang="mg" title="Malagasy" aria-pressed="false">MG</button><button type="button" data-langue="en" lang="en" title="English" aria-pressed="false">EN</button><button type="button" data-langue="it" lang="it" title="Italiano" aria-pressed="false">IT</button>
       </div>
       <div id="sessionChip" class="text-right text-sm min-w-0 shrink" hidden>
-        <div class="flex items-center justify-end gap-2"><span id="sessionAvatar"></span><div class="font-semibold truncate max-w-[14rem]" id="sessionName"></div></div>
-        <button type="button" id="changePwBtn" class="linkbtn text-xs">Changer mon mot de passe</button> · <button type="button" id="logoutBtn" class="linkbtn text-xs">Se déconnecter</button>
+        <button type="button" class="flex items-center justify-end gap-2" id="sessionVers" title="Mon espace : mes coordonnées, mon mot de passe, me déconnecter"><span id="sessionAvatar"></span><span class="font-semibold truncate max-w-[14rem]" id="sessionName"></span></button>
+        <span hidden><button type="button" id="changePwBtn" class="linkbtn text-xs">Changer mon mot de passe</button><button type="button" id="logoutBtn" class="linkbtn text-xs">Se déconnecter</button></span>
+        <div class="text-xs text-muted">Mon compte : dans mon portail</div>
       </div>
     </div>
     <nav class="max-w-7xl mx-auto overflow-x-auto" aria-label="Sections">
@@ -1280,7 +1281,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 111</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 112</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -7670,6 +7671,7 @@ document.addEventListener('change', async e => {
   } catch (err) { toast('Lecture du Word impossible', err.message || errText(err), 'bad'); }
 });
 
+$('#sessionVers').addEventListener('click', () => { allerRaccourci('monespace'); setTimeout(() => { const b = document.querySelector('.mc-pw'); const v = b && b.offsetParent ? b.closest('div.bg-surface') : null; if (v) v.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 1200); });
 /* Notifications sur le téléphone */
 const VAPID_PUBLIC = 'BOh-mCBxZIrDVBHP82PJgCwS5QO_zUm0XVMlfsXG51z-N1cF0ShSU24uvhtR9T6_K_Uit-Loo_8O9yZ7V__aAmw';
 const pushPossible = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && /^https:/.test(location.protocol);
