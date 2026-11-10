@@ -436,6 +436,50 @@ const CONFIG = {
   .nav-lat .tab[data-tab]:hover { background: color-mix(in srgb, var(--tc, var(--accent)) 7%, var(--surface)); }
   .nav-lat .tab[data-tab][aria-selected="true"] { background: color-mix(in srgb, var(--tc, var(--accent)) 13%, var(--surface)); color: var(--tc, var(--accent)); }
   .nav-lat .tab[data-tab][aria-selected="true"] .tab-ic { background: var(--surface); }
+  /* Recherche, pastilles, raccourcis, en-tête compact */
+  .rech-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .rech-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .rech-fond { position: fixed; inset: 0; z-index: 90; background: rgba(15, 12, 18, .45); display: flex; align-items: flex-start; justify-content: center; padding: 8vh 12px 12px; }
+  .rech-fond[hidden] { display: none; }
+  .rech-boite { width: 100%; max-width: 40rem; max-height: 82vh; display: flex; flex-direction: column; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.3); overflow: hidden; }
+  .rech-tete { display: flex; align-items: center; gap: .6rem; padding: .8rem 1rem; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .rech-tete input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 1.05rem; color: var(--ink); }
+  .rech-res { overflow-y: auto; padding: .4rem .5rem .8rem; }
+  .rech-titre { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); padding: .7rem .6rem .25rem; }
+  .rech-l { display: flex; gap: .7rem; align-items: center; width: 100%; text-align: left; padding: .5rem .6rem; border-radius: 8px; }
+  .rech-l:hover, .rech-l:focus-visible { background: var(--accent-soft); outline: none; }
+  .rech-l small { display: block; color: var(--muted); font-size: .8rem; }
+  .rech-ic { flex: none; width: 1.7rem; height: 1.7rem; border-radius: 7px; display: grid; place-items: center; font-weight: 700; font-size: .85rem; color: var(--tc); background: color-mix(in srgb, var(--tc) 14%, transparent); }
+  .rech-vide { padding: 1rem .6rem; color: var(--muted); }
+  .rech-pied { border-top: 1px solid var(--line); padding: .5rem 1rem; font-size: .72rem; color: var(--muted); }
+  kbd { font-family: inherit; font-size: .72rem; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 .3rem; background: var(--sunk); color: var(--ink); }
+  .clav-t td { padding: .25rem .5rem .25rem 0; } .clav-t td:first-child { width: 4rem; }
+  @media (max-width: 767px) { .rech-pied { display: none; } .rech-fond { padding-top: 10px; } }
+  .feuille-rech { display: flex; align-items: center; gap: .5rem; width: 100%; padding: .7rem .9rem; margin-bottom: .9rem; border: 1px solid var(--line); border-radius: 12px; background: var(--sunk); color: var(--muted); font-size: .95rem; }
+  .pastille { position: absolute; top: .45rem; right: -.45rem; width: .55rem; height: .55rem; border-radius: 50%; background: var(--bad); box-shadow: 0 0 0 2px var(--surface); }
+  .pastille[hidden] { display: none; }
+  .barre-bas button { position: relative; } .barre-bas .pastille { top: 4px; right: calc(50% - 22px); }
+  .feuille-grille button { position: relative; } .feuille-grille .pastille { top: 8px; right: 12px; }
+  .mes-racc { margin: 0 0 .6rem; padding: 0 0 .6rem; border-bottom: 1px solid var(--line); }
+  .mes-racc-t { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: .2rem .6rem .35rem; }
+  .mes-racc-l { display: flex; flex-direction: column; gap: 1px; }
+  .mes-racc-l button { display: flex; align-items: center; gap: .55rem; padding: .38rem .6rem; border-radius: 7px; font-size: .88rem; text-align: left; color: var(--ink); }
+  .mes-racc-l button:hover { background: var(--sunk); color: var(--accent); }
+  .mes-racc-l button span:first-child { width: 1.4rem; text-align: center; }
+  .feuille .mes-racc { border: 1px solid var(--line); border-radius: 12px; padding: .5rem; margin-bottom: 1rem; background: var(--surface); }
+  .feuille .mes-racc-l { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem; }
+  .feuille .mes-racc-l button { background: var(--sunk); padding: .55rem .6rem; }
+  .onglet-admin .nav-lat #navLatRacc { display: none; }
+  .flash-cible { animation: flashCible 1.8s ease; border-radius: 10px; }
+  @keyframes flashCible { 0%, 60% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 55%, transparent); } 100% { box-shadow: 0 0 0 0 transparent; } }
+  header .gutter > div:first-child, header .gutter > div:first-child img, header .font-display { transition: padding .2s, font-size .2s, width .2s, height .2s; }
+  body.entete-compact header .gutter > div:first-child { padding-top: .45rem; }
+  body.entete-compact header .entete-adresse, body.entete-compact header .font-display.italic, body.entete-compact #installBtn { display: none; }
+  body.entete-compact header .font-display.text-lg { font-size: 1.15rem; line-height: 1.3; }
+  body.entete-compact #siteLogo { width: 36px !important; height: 36px !important; }
+  body.entete-compact header nav[aria-label="Sections"] .flex { margin-top: 0; }
+  body.entete-compact header nav .tab { padding-top: .55rem; padding-bottom: .55rem; }
+  @media (max-width: 767px) { body.entete-compact header .gutter > div:first-child { padding-top: .35rem; padding-bottom: .35rem; } }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -539,6 +583,7 @@ const CONFIG = {
         </div>
       </div>
       <button type="button" id="installBtn" class="btn btn-sm shrink-0" hidden title="Installer l’application GSTF sur cet appareil" aria-label="Installer l’application GSTF">📲<span class="hidden sm:inline"> Installer l’application</span><span class="sm:hidden"> App</span></button>
+      <button type="button" id="rechBtn" class="rech-btn shrink-0" title="Rechercher dans tout le site (touche /)" aria-label="Rechercher dans le site"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></button>
       <button type="button" id="tailleBtn" class="taille-btn shrink-0 notranslate" translate="no" title="Taille du texte" aria-label="Agrandir ou réduire le texte">A<small>a</small></button>
       <div id="langues" class="langues shrink-0 notranslate" translate="no" role="group" aria-label="Langue / Language">
         <button type="button" data-langue="fr" lang="fr" title="Français" aria-pressed="true">FR</button><button type="button" data-langue="mg" lang="mg" title="Malagasy" aria-pressed="false">MG</button><button type="button" data-langue="en" lang="en" title="English" aria-pressed="false">EN</button><button type="button" data-langue="it" lang="it" title="Italiano" aria-pressed="false">IT</button>
@@ -1356,7 +1401,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 118</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 119</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1403,6 +1448,8 @@ const CONFIG = {
   <button type="button" data-bb="plus"><span class="bb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span>Plus</button>
 </nav>
 <div id="feuillePlus" class="feuille" hidden role="dialog" aria-label="Toutes les rubriques"><div class="feuille-fond"></div><div class="feuille-corps"><div class="feuille-poignee"></div>
+  <button type="button" class="feuille-rech" id="feuilleRech"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg> Rechercher dans le site…</button>
+  <div id="feuilleRacc"></div>
   <p class="eyebrow mb-3">Toutes les rubriques</p><div class="feuille-grille" id="feuilleGrille"></div><div id="feuilleNotif" class="mt-4"></div></div></div>
 <section id="aidePanel" class="aide-panel" hidden aria-label="Savoir utiliser notre site">
   <div id="aideTete" class="aide-tete flex items-center justify-between gap-2 px-4 pt-3 pb-2 border-b border-line" title="Glissez pour déplacer">
@@ -1609,6 +1656,7 @@ function renderSessionChip() {
   const p = state.profil;
   const who = !p ? '' : p.type === 'etudiant' ? `${p.prenoms} ${p.nom}` : p.type === 'enseignant' ? p.nom : p.email;
   $('#sessionChip').hidden = !who;
+  try { majRaccourcis(); } catch (e) {}
   $('#sessionName').textContent = who;
   if (currentTab === 'admin') renderAdmin();
   if (currentTab === 'contact') renderAnnuaire();
@@ -1771,6 +1819,7 @@ function showTab(name) {
   document.body.classList.toggle('onglet-admin', name === 'admin');
   window.scrollTo({ top: 0 });
   noterVisite(name);
+  try { apresOnglet(name); } catch (e) {}
 }
 
 /* Statistiques de visites : sans cookie, sans adresse IP, sans nom.
@@ -7429,6 +7478,222 @@ function allerRaccourci(h) {
   showTab(mon || 'portails');
   if (h === 'macarte' && mon === 'etudiant') setTimeout(() => { const c = $('#stuCarte'); if (c) c.scrollIntoView({ behavior: 'smooth' }); }, 900);
 }
+
+/* =================================================================== *
+ *  Menu principal : nouveautés, recherche, en-tête compact,           *
+ *  raccourcis personnels, info-bulles, raccourcis clavier             *
+ * =================================================================== */
+const INFO_ONGLETS = {
+  accueil: 'Accueil : actualités, agenda, photos et vie du séminaire', portails: 'Inscription : s’inscrire ou se connecter à son espace',
+  documents: 'Cours : matières, professeurs, emploi du temps, calendrier, règlement', bibliotheque: 'Bibliothèque : catalogue, prêts et réservations',
+  agenda: 'Agenda : récollections, examens, fêtes et grands événements', articles: 'Articles : textes et publications du séminaire', contact: 'Contact : écrire au séminaire, annuaire, plan d’accès',
+  etudiant: 'Portail étudiant : notes, emploi du temps, devoirs, carte', professeur: 'Portail professeur : notes, présences, documents de cours',
+  educateur: 'Portail des éducateurs : suivi des séminaristes', entretiens: 'Rendez-vous : prendre rendez-vous avec le Père Préfet',
+  economat: 'Économat : soutenir le séminaire, dons et comptes', anciens: 'Anciens : les anciens séminaristes', archives: 'Archives : bulletins et documents des années passées',
+  admin: 'Admin : gestion du site (administration)', prieres: 'Prières : prières de la communauté, intentions', souvenirs: 'Événements inoubliables : les grands moments en photos'
+};
+const ORDRE_CLAVIER = ['accueil', 'portails', 'documents', 'bibliotheque', 'agenda', 'articles', 'contact'];
+(function infoBulles() {
+  document.querySelectorAll('header nav .tab[data-tab], #navLat .tab[data-tab]').forEach(b => {
+    const t = INFO_ONGLETS[b.dataset.tab]; if (!t) return;
+    const n = ORDRE_CLAVIER.indexOf(b.dataset.tab);
+    b.title = t + (n >= 0 ? ` (touche ${n + 1})` : '');
+  });
+})();
+
+/* ---------- 1. Pastilles de nouveauté (depuis la dernière visite, sur cet appareil) ---------- */
+const VU_CLE = 'gstf-vu', SUIVIS = ['articles', 'agenda', 'actus'];
+let VU = null, DERNIER = {}, NOUV = {};
+try { VU = JSON.parse(localStorage.getItem(VU_CLE) || 'null'); } catch (_) {}
+const premiereVisite = !VU || typeof VU !== 'object';
+if (premiereVisite) VU = {};
+const sauverVu = () => { try { localStorage.setItem(VU_CLE, JSON.stringify(VU)); } catch (_) {} };
+async function verifierNouveautes() {
+  if (!sb) return;
+  const [a, g, c] = await Promise.all([
+    sb.from('articles').select('publie_le').order('publie_le', { ascending: false }).limit(1),
+    sb.from('agenda').select('cree_le').order('cree_le', { ascending: false }).limit(1),
+    sb.from('actualites').select('publie_le, statut').order('publie_le', { ascending: false }).limit(5)]);
+  DERNIER.articles = (!a.error && a.data && a.data[0] && a.data[0].publie_le) || '';
+  DERNIER.agenda = (!g.error && g.data && g.data[0] && g.data[0].cree_le) || '';
+  DERNIER.actus = (!c.error && (c.data || []).find(x => x.statut !== 'en_attente') || {}).publie_le || '';
+  SUIVIS.forEach(k => { if (premiereVisite && !VU[k]) VU[k] = DERNIER[k] || new Date().toISOString(); NOUV[k] = !!DERNIER[k] && (!VU[k] || DERNIER[k] > VU[k]); });
+  sauverVu();
+  if (currentTab === 'articles') marquerVu('articles'); else if (currentTab === 'agenda') marquerVu('agenda');
+  majPastilles();
+}
+function marquerVu(k) { VU[k] = DERNIER[k] && DERNIER[k] > new Date().toISOString() ? DERNIER[k] : (DERNIER[k] || new Date().toISOString()); if (NOUV[k]) { NOUV[k] = false; majPastilles(); } sauverVu(); }
+function majPastilles() {
+  const cibles = { articles: ['#tab-articles', '[data-ft="articles"]'], agenda: ['#tab-agenda', '#barreBas [data-bb="agenda"]'], actus: ['#tab-accueil', '#barreBas [data-bb="actus"]'] };
+  Object.entries(cibles).forEach(([k, sels]) => sels.forEach(sel => document.querySelectorAll(sel).forEach(el => {
+    let d = el.querySelector(':scope > .pastille');
+    if (!d) { d = document.createElement('span'); d.className = 'pastille'; d.setAttribute('aria-hidden', 'true'); el.appendChild(d); }
+    d.hidden = !NOUV[k]; el.classList.toggle('a-nouveau', !!NOUV[k]);
+    if (NOUV[k]) el.setAttribute('data-nouveau', k === 'actus' ? 'Nouvelle actualité' : k === 'agenda' ? 'Nouvel événement' : 'Nouvel article'); else el.removeAttribute('data-nouveau');
+  })));
+  const plus = $('#barreBas [data-bb="plus"]');
+  if (plus) { let d = plus.querySelector(':scope > .pastille'); if (!d) { d = document.createElement('span'); d.className = 'pastille'; plus.appendChild(d); } d.hidden = !NOUV.articles; }
+}
+let VU_ACTUS_T = null;
+function apresOnglet(name) {
+  if (name === 'articles') marquerVu('articles');
+  if (name === 'agenda') marquerVu('agenda');
+  clearTimeout(VU_ACTUS_T);
+  if (name === 'accueil' || name === 'souvenirs') VU_ACTUS_T = setTimeout(() => { if (currentTab === name) marquerVu('actus'); }, 5000);
+  majRaccourcis();
+}
+setTimeout(verifierNouveautes, 2500);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && (!verifierNouveautes.t || Date.now() - verifierNouveautes.t > 10 * 60000)) { verifierNouveautes.t = Date.now(); verifierNouveautes(); } });
+
+/* ---------- 2. Recherche dans tout le site ---------- */
+const RECH = { t: null, n: 0 };
+function ouvrirRecherche(q0 = '') {
+  let dlg = $('#rechDlg');
+  if (!dlg) {
+    document.body.insertAdjacentHTML('beforeend', `<div id="rechDlg" class="rech-fond" hidden><div class="rech-boite" role="dialog" aria-modal="true" aria-label="Rechercher dans le site">
+      <div class="rech-tete"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input id="rechQ" type="search" autocomplete="off" placeholder="Un cours, un professeur, un livre, un article, un événement, une question…" aria-label="Rechercher"><button type="button" class="linkbtn text-sm" id="rechX">Fermer</button></div>
+      <div id="rechRes" class="rech-res"></div>
+      <p class="rech-pied">Touches : <kbd>/</kbd> rechercher · <kbd>1</kbd>–<kbd>7</kbd> rubriques · <kbd>?</kbd> toutes les touches · <kbd>Échap</kbd> fermer</p></div></div>`);
+    dlg = $('#rechDlg');
+    dlg.addEventListener('click', e => { if (e.target === dlg) fermerRecherche(); });
+    $('#rechX').addEventListener('click', fermerRecherche);
+    $('#rechQ').addEventListener('input', () => { clearTimeout(RECH.t); RECH.t = setTimeout(() => chercherPartout($('#rechQ').value), 250); });
+    $('#rechQ').addEventListener('keydown', e => {
+      const l = [...dlg.querySelectorAll('[data-rr]')], i = l.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown' && l.length) { e.preventDefault(); l[0].focus(); }
+      if (e.key === 'Enter' && l.length) { e.preventDefault(); l[0].click(); }
+      if (i < 0 && e.key === 'Escape') fermerRecherche();
+    });
+    dlg.addEventListener('keydown', e => {
+      const l = [...dlg.querySelectorAll('[data-rr]')], i = l.indexOf(document.activeElement);
+      if (e.key === 'Escape') { e.preventDefault(); fermerRecherche(); }
+      if (i >= 0 && e.key === 'ArrowDown') { e.preventDefault(); (l[i + 1] || l[i]).focus(); }
+      if (i >= 0 && e.key === 'ArrowUp') { e.preventDefault(); (l[i - 1] || $('#rechQ')).focus(); }
+    });
+  }
+  dlg.hidden = false; document.body.classList.add('rech-ouverte');
+  $('#rechQ').value = q0; chercherPartout(q0); setTimeout(() => $('#rechQ').focus(), 30);
+}
+function fermerRecherche() { const d = $('#rechDlg'); if (d) d.hidden = true; document.body.classList.remove('rech-ouverte'); }
+async function allerA(tab, sel, avant) {
+  if (avant) avant();
+  showTab(tab);
+  if (!sel) return;
+  for (let i = 0; i < 40; i++) { const el = typeof sel === 'function' ? sel() : $(sel); if (el && el.offsetParent !== null) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash-cible'); setTimeout(() => el.classList.remove('flash-cible'), 1800); return; } await new Promise(r => setTimeout(r, 100)); }
+}
+async function ouvrirActuId(id) {
+  if (typeof ACTUS !== 'undefined' && ACTUS.some(x => x.id === id)) { ouvrirPublication(id); return; }
+  showTab('souvenirs'); for (let i = 0; i < 50 && !SOUVENIRS.some(x => x.id === id); i++) await new Promise(r => setTimeout(r, 100));
+  ouvrirPublication(id);
+}
+async function chercherPartout(q) {
+  const box = $('#rechRes'); const n = ++RECH.n; q = String(q || '').trim();
+  const t = sans(q), mots = t.split(/\s+/).filter(w => w.length > 1), ok = x => mots.every(w => sans(x).includes(w));
+  if (q.length < 2) {
+    box.innerHTML = `<p class="rech-titre">Rubriques</p>${ORDRE_CLAVIER.map((k, i) => `<button type="button" class="rech-l" data-rr data-go="${k}"><span class="rech-ic" style="--c:var(--tc)" data-tab="${k}">${i + 1}</span><span><b>${esc((INFO_ONGLETS[k] || k).split(' : ')[0])}</b><small>${esc((INFO_ONGLETS[k] || '').split(' : ')[1] || '')}</small></span></button>`).join('')}`;
+    box.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { fermerRecherche(); showTab(b.dataset.go); }));
+    return;
+  }
+  const G = [];   // [titre de groupe, [[libellé, détail, action]]]
+  const rub = Object.entries(INFO_ONGLETS).filter(([k, v]) => ok(v) && document.querySelector(`.tab[data-tab="${k}"]:not([hidden])`)).slice(0, 4);
+  if (rub.length) G.push(['Rubriques', rub.map(([k, v]) => [v.split(' : ')[0], v.split(' : ')[1] || '', () => showTab(k)])]);
+  const cours = COURS.filter(c => ok(c.nom + ' ' + profName(c.prof))).slice(0, 6);
+  if (cours.length) G.push(['Cours', cours.map(c => [c.nom, `${anLabel(c.an)} · ${c.sem === 2 ? '2e' : '1er'} semestre · ${profName(c.prof)}`, () => allerA('documents', null, () => { currentDoc = 'fiches'; docSearch = c.nom; })])]);
+  const profs = [...new Map(Object.entries(PROFS).filter(([k, p]) => p && p.n && ok(p.n)).map(([k, p]) => [p.n, p])).values()].slice(0, 5);
+  if (profs.length) G.push(['Professeurs et formateurs', profs.map(p => [p.n, p.r || 'Enseignant', () => allerA('documents', null, () => { currentDoc = 'enseignants'; })])]);
+  const aide = aideChercher(q);
+  if (aide.length) G.push(['Questions fréquentes', aide.map(a => [a.q, 'Aide pas à pas', () => { $('#aidePanel').hidden = false; $('#aideQ').value = a.q; $('#aideForm').requestSubmit(); }])]);
+  afficher(true);
+  // Recherches dans la base (livres, articles, agenda, actualités)
+  if (!sb) return;
+  const motif = '%' + q.replace(/[%_,()]/g, ' ').trim() + '%';
+  const [liv, art, ag, ac] = await Promise.all([
+    sb.rpc('chercher_livres', { p_q: q, p_filtre: 'tous' }).then(r => r, () => ({})),
+    (async () => { if (!articlesLoaded) await loadArticles(); return ARTICLES; })().catch(() => []),
+    sb.from('agenda').select('id, titre, debut, public, pour').ilike('titre', motif).gte('debut', iso(new Date(Date.now() - 31 * 864e5))).order('debut').limit(5).then(r => r, () => ({})),
+    sb.from('actualites').select('id, titre, date_evenement, publie_le, statut').ilike('titre', motif).order('publie_le', { ascending: false }).limit(5).then(r => r, () => ({}))]);
+  if (n !== RECH.n) return;
+  const livres = ((liv && liv.data) || []).slice(0, 5);
+  if (livres.length) G.push(['Bibliothèque', livres.map(l => [l.titre, [l.auteur, l.cote].filter(Boolean).join(' · ') || 'Livre', () => allerA('bibliotheque', '#bqRes', () => { BQ.q = q; try { $('#bqQ').value = q; } catch (_) {} })])]);
+  const arts = (art || []).filter(a => ok(a.titre + ' ' + (a.auteur || '') + ' ' + (a.resume || ''))).slice(0, 5);
+  if (arts.length) G.push(['Articles', arts.map(a => [a.titre, [a.auteur, artDate(a)].filter(Boolean).join(' · '), () => allerA('articles', '#artList', () => { try { $('#artSearch').value = a.titre; } catch (_) {} })])]);
+  const evs = [...((ag && ag.data) || []).filter(e => e.public || pourMoi(e.pour)), ...agendaAuto().filter(e => (e.fin || e.debut) >= TODAY && agVisible(e) && ok(e.titre))]
+    .sort((a, b) => a.debut.localeCompare(b.debut)).slice(0, 5);
+  if (evs.length) G.push(['Agenda', evs.map(e => [e.titre, fmtDate(e.debut, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), () => allerA('agenda', null, () => { AGENDA_VUE = 'mois'; AGENDA_MOIS = e.debut.slice(0, 7); })])]);
+  const acts = ((ac && ac.data) || []).filter(a => a.statut !== 'en_attente');
+  if (acts.length) G.push(['Actualités et souvenirs', acts.map(a => [a.titre, fmtDate(a.date_evenement || a.publie_le.slice(0, 10), { day: 'numeric', month: 'long', year: 'numeric' }), () => ouvrirActuId(a.id)])]);
+  afficher(false);
+  function afficher(enCours) {
+    const fn = [];
+    box.innerHTML = G.length ? G.map(([titre, l]) => `<p class="rech-titre">${esc(titre)}</p>${l.map(([lib, det, f]) => { fn.push(f); return `<button type="button" class="rech-l" data-rr data-i="${fn.length - 1}"><span><b>${esc(lib)}</b><small>${esc(det)}</small></span></button>`; }).join('')}`).join('')
+      + (enCours ? '<p class="rech-titre">Recherche dans les livres, articles et événements…</p>' : '')
+      : (enCours ? '<p class="rech-vide">Recherche…</p>' : `<p class="rech-vide">Rien trouvé pour « ${esc(q)} ». Essayez un autre mot, ou posez la question à <button type="button" class="linkbtn" id="rechAide">l’aide du site</button>.</p>`);
+    box.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => { fermerRecherche(); fn[+b.dataset.i](); }));
+    if ($('#rechAide')) $('#rechAide').addEventListener('click', () => { fermerRecherche(); $('#aidePanel').hidden = false; $('#aideQ').value = q; $('#aideForm').requestSubmit(); });
+  }
+}
+$('#rechBtn').addEventListener('click', () => ouvrirRecherche());
+$('#feuilleRech').addEventListener('click', () => { fermerFeuille(); ouvrirRecherche(); });
+
+/* ---------- 3. En-tête compact quand on descend ---------- */
+(function enteteCompact() {
+  let compact = false;
+  const maj = () => {
+    const y = window.scrollY, v = compact ? y > 40 : y > 160;
+    if (v === compact) return; compact = v; document.body.classList.toggle('entete-compact', v);
+    requestAnimationFrame(() => document.documentElement.style.setProperty('--haut-entete', document.querySelector('header').offsetHeight + 'px'));
+  };
+  window.addEventListener('scroll', maj, { passive: true }); maj();
+})();
+
+/* ---------- 4. Mes raccourcis (selon la personne connectée) ---------- */
+function mesRaccourcis() {
+  const p = state.profil; if (!p || p.type === 'inconnu') return [];
+  const L = [];
+  if (p.type === 'etudiant') L.push(['📊', 'Mes notes', () => allerA('etudiant', '#stuBulletin')], ['🗓️', 'Mon emploi du temps', () => allerA('etudiant', '#stuSemaine')],
+    ['📝', 'Mes devoirs', () => allerA('etudiant', '#stuDevoirs')], ['🪪', 'Ma carte', () => allerA('etudiant', '#stuCarte')], ['📚', 'Mes emprunts', () => allerA('bibliotheque', '#bqMes')],
+    ['💬', 'Rendez-vous', () => allerA('entretiens')]);
+  else if (['educateur', 'foyer'].includes(p.role)) L.push(['🤝', 'Mon portail', () => allerA('educateur')], ['💰', 'Économat', () => allerA('economat')], ['📅', 'Agenda', () => allerA('agenda')]);
+  else L.push(['✍️', 'Saisir les notes', () => allerA('professeur', '#courseSelect')], ['📂', 'Mes documents de cours', () => allerA('professeur', '#profDocs')],
+    ['📝', 'Devoirs', () => allerA('professeur', '#profDevoirs')], ['🗓️', 'Emploi du temps', () => allerA('documents', null, () => { currentDoc = 'edt'; })]);
+  if (isAdmin()) L.push(['📋', 'Tableau de bord', () => allerA('admin', null, () => setTimeout(() => { const b = document.querySelector('[data-adm="tableau"]'); if (b) b.click(); }, 60))],
+    ['✉️', 'Messages reçus', () => allerA('admin', null, () => setTimeout(() => { const b = document.querySelector('[data-adm="messages"]'); if (b) b.click(); }, 60))],
+    ['🎓', 'Demandes d’inscription', () => allerA('admin', null, () => setTimeout(() => { const b = document.querySelector('[data-adm="demandes"]'); if (b) b.click(); }, 60))]);
+  else if (BQ.biblio) L.push(['📚', 'Gestion de la bibliothèque', () => allerA('bibliotheque', '#bqGestion')]);
+  return L;
+}
+function majRaccourcis() {
+  const L = mesRaccourcis();
+  const html = L.length ? `<div class="mes-racc"><p class="mes-racc-t">Mes raccourcis</p><div class="mes-racc-l">${L.map(([ic, lib], i) => `<button type="button" data-racc="${i}" title="${esc(lib)}"><span aria-hidden="true">${ic}</span><span>${esc(lib)}</span></button>`).join('')}</div></div>` : '';
+  let zone = $('#navLatRacc');
+  if (!zone) { zone = document.createElement('div'); zone.id = 'navLatRacc'; $('#navLat').prepend(zone); }
+  const cle = L.map(x => x[1]).join('|');
+  [zone, $('#feuilleRacc')].forEach(z => { if (!z || z.dataset.cle === cle) return; z.dataset.cle = cle; z.innerHTML = html;
+    z.querySelectorAll('[data-racc]').forEach(b => b.addEventListener('click', () => { fermerFeuille(); L[+b.dataset.racc][2](); })); });
+}
+
+/* ---------- 6. Raccourcis clavier (ordinateur) ---------- */
+function aideClavier() {
+  let d = $('#clavDlg');
+  if (!d) { document.body.insertAdjacentHTML('beforeend', `<div id="clavDlg" class="rech-fond" hidden><div class="rech-boite" style="max-width:26rem" role="dialog" aria-label="Raccourcis clavier"><div class="p-5">
+    <h2 class="font-display text-2xl font-semibold mb-3">Raccourcis clavier</h2>
+    <table class="text-sm clav-t"><tbody><tr><td><kbd>/</kbd></td><td>Rechercher dans le site</td></tr>${ORDRE_CLAVIER.map((k, i) => `<tr><td><kbd>${i + 1}</kbd></td><td>${esc((INFO_ONGLETS[k] || k).split(' : ')[0])}</td></tr>`).join('')}
+    <tr><td><kbd>E</kbd></td><td>Mon espace (portail)</td></tr><tr><td><kbd>?</kbd></td><td>Cette liste</td></tr><tr><td><kbd>Échap</kbd></td><td>Fermer</td></tr></tbody></table>
+    <p class="text-xs text-muted mt-3">Les touches ne marchent pas pendant qu’on écrit dans un champ.</p><button type="button" class="btn btn-sm mt-3" id="clavX">Fermer</button></div></div></div>`);
+    d = $('#clavDlg'); d.addEventListener('click', e => { if (e.target === d || e.target.id === 'clavX') d.hidden = true; }); }
+  d.hidden = false; $('#clavX').focus();
+}
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+  const t = e.target, ecrit = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+  if (e.key === 'Escape') { if ($('#clavDlg') && !$('#clavDlg').hidden) $('#clavDlg').hidden = true; return; }
+  if (ecrit || document.querySelector('dialog[open]') || ($('#rechDlg') && !$('#rechDlg').hidden)) return;
+  if (e.key === '/') { e.preventDefault(); ouvrirRecherche(); return; }
+  if (e.key === '?') { e.preventDefault(); aideClavier(); return; }
+  if (/^[1-7]$/.test(e.key)) { const k = ORDRE_CLAVIER[+e.key - 1]; if (k) { e.preventDefault(); showTab(k); } return; }
+  if (e.key === 'e' || e.key === 'E') { e.preventDefault(); showTab(monPortail() || 'portails'); }
+});
 /* Barre du bas (téléphone) */
 function majBarreBas() {
   const t = currentTab, mon = monPortail();
@@ -7447,6 +7712,7 @@ function ouvrirFeuille() {
   $('#feuilleNotif').querySelectorAll('[data-tk]').forEach(b => b.addEventListener('click', () => { choisirTaille(+b.dataset.tk); $('#feuilleNotif').querySelectorAll('[data-tk]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); }));
   $('#feuilleScan').addEventListener('click', async () => { fermerFeuille(); const code = codeDeCarte(await scannerQR('Scannez le QR code d’une carte d’étudiant')); if (code) verifierCarte(code); });
   majBoutonsNotif();
+  try { majRaccourcis(); majPastilles(); } catch (e) {}
   $('#feuillePlus').hidden = false;
 }
 function fermerFeuille() { $('#feuillePlus').hidden = true; }
