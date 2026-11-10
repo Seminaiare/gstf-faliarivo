@@ -1281,7 +1281,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 113</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 114</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -4613,6 +4613,12 @@ async function loadAnnee() {
     cours.data.forEach(c => { if (c.syllabus) DATA.FICHES[c.id] = c.syllabus; });
   }
   if (!profs.error && Array.isArray(profs.data)) profs.data.forEach(p => { PROFS[p.id] = { ...(PROFS[p.id] || { r: '' }), n: p.nom }; });
+  // Professeur d’un cours encore inconnu (par ex. ajouté aujourd’hui) : son nom est lu directement
+  const manquants = [...new Set(COURS.map(c => c.prof).filter(k => k && k !== 'nc' && !(PROFS[k] && PROFS[k].n)))];
+  if (manquants.length) {
+    const r = await sb.from('enseignants').select('id, nom').in('id', manquants);
+    if (!r.error) (r.data || []).forEach(p => { PROFS[p.id] = { ...(PROFS[p.id] || { r: '' }), n: p.nom }; });
+  }
   // Calendrier
   if (!cal.error && cal.data && cal.data.valeur && cal.data.valeur.annee === ANNEE) {
     remplacer(CALENDRIER, { 1: cal.data.valeur[1], 2: cal.data.valeur[2] });
@@ -4721,6 +4727,7 @@ async function renderAdminAnnee() {
       if (!patch.nom || !(patch.heures > 0)) { toast('Nom ou heures manquants', '', 'bad'); return; }
       const { error } = await sb.from('cours').update(patch).eq('id', c.id);
       if (error) { toast('Enregistrement impossible', errText(error), 'bad'); return; }
+      if (patch.enseignant_id) { const pr = (ADM_PROFS_LISTE || []).find(x => String(x.id) === String(patch.enseignant_id)); if (pr) PROFS[pr.id] = { ...(PROFS[pr.id] || { r: '' }), n: pr.nom }; }
       Object.assign(c, patch); await loadAnnee(); toast('Cours enregistré', `${patch.nom} · ${patch.enseignant_id ? profName(patch.enseignant_id) : 'enseignant à confirmer'}`);
     }
     if (e.target.closest('.c-actif')) {
