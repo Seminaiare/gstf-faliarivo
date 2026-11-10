@@ -1134,7 +1134,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 100</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 101</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2943,19 +2943,31 @@ async function loadApparence() {
 try { const c = JSON.parse(localStorage.getItem('gstf-apparence') || 'null'); if (c) { APPARENCE = { ...APPARENCE_DEFAUT, ...c }; applyApparence(APPARENCE); } } catch (_) {}
 
 /* Réduction des photos avant envoi (1600 px, JPEG) */
-async function compressImage(file, max = 1600) {
+async function compressImage(file, max = 1600, qualite = .82) {
   const bmp = await createImageBitmap(file);
   const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
   const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
   c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
-  return await new Promise(r => c.toBlob(r, 'image/jpeg', .82));
+  return await new Promise(r => c.toBlob(r, 'image/jpeg', qualite));
+}
+/* Chaque photo est enregistrée deux fois : en grand (1600 px, pour l’ouverture en plein écran)
+   et en miniature (640 px, ~40 Ko, pour l’accueil et les listes). Le « _v » dans le nom
+   signale qu’une miniature existe : nom_v.jpg → nom_v-m.jpg. */
+const aMini = path => /_v\.jpg$/.test(String(path || ''));
+const cheminMini = path => String(path).replace(/_v\.jpg$/, '_v-m.jpg');
+const photoMini = path => photoUrl(aMini(path) ? cheminMini(path) : path);
+const avecMinis = liste => liste.flatMap(p => aMini(p) ? [p, cheminMini(p)] : [p]);
+async function envoyerDeuxTailles(source, path) {
+  const [grand, petit] = await Promise.all([compressImage(source), compressImage(source, 640, .72)]);
+  const opt = { contentType: 'image/jpeg', cacheControl: '31536000' };
+  const { error } = await sb.storage.from('actualites').upload(path, grand, opt);
+  if (error) throw error;
+  const r = await sb.storage.from('actualites').upload(cheminMini(path), petit, opt);
+  if (r.error) console.warn('miniature', r.error);
+  return path;
 }
 async function uploadPhoto(file, dossier) {
-  const blob = await compressImage(file);
-  const path = `${dossier}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-  const { error } = await sb.storage.from('actualites').upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000' });
-  if (error) throw error;
-  return path;
+  return envoyerDeuxTailles(file, `${dossier}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}_v.jpg`);
 }
 
 function renderAdminApparence() {
@@ -3144,7 +3156,7 @@ function renderActusAccueil() {
   el.innerHTML = list.length ? `<h2 class="h2 mb-4">Actualités</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${list.map(a => `<div class="bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
       <button type="button" class="text-left flex flex-col grow actu-open" data-actu="${a.id}">
-        ${a.photos.length ? `<span style="position:relative;display:block"><img src="${esc(photoUrl(a.photos[0]))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${lienVideo(a) ? '<span class="pill" style="position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff">▶ Vidéo</span>' : ''}</span>`
+        ${a.photos.length ? `<span style="position:relative;display:block"><img src="${esc(photoMini(a.photos[0]))}" alt="" loading="lazy" decoding="async" style="width:100%;aspect-ratio:4/3;object-fit:cover">${lienVideo(a) ? '<span class="pill" style="position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff">▶ Vidéo</span>' : ''}</span>`
           : ytPrincipal(a) ? `<span style="position:relative;display:block"><img src="${ytThumb(ytId(ytPrincipal(a)))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${playIcon}</span>`
           : fbPrincipal(a) ? `<span style="position:relative;display:block">${vignetteFb}${playIcon}</span>` : ''}
         <span class="p-4 flex flex-col gap-1 min-w-0">
@@ -3158,7 +3170,7 @@ function renderActusAccueil() {
   const g = $('#galerieAccueil'), photos = PUB.flatMap(a => a.photos.map(p => ({ p, a }))).slice(0, 16);
   g.hidden = photos.length < 2;
   g.innerHTML = photos.length < 2 ? '' : `<h2 class="h2 mb-4">Galerie photos</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${photos.map(x => `<button type="button" class="gal-open block rounded-md overflow-hidden" data-actu="${x.a.id}" title="${esc(x.a.titre)}"><img src="${esc(photoUrl(x.p))}" alt="${esc(x.a.titre)}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover"></button>`).join('')}</div>`;
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${photos.map(x => `<button type="button" class="gal-open block rounded-md overflow-hidden" data-actu="${x.a.id}" title="${esc(x.a.titre)}"><img src="${esc(photoMini(x.p))}" alt="${esc(x.a.titre)}" loading="lazy" decoding="async" style="width:100%;aspect-ratio:1;object-fit:cover"></button>`).join('')}</div>`;
   g.querySelectorAll('.gal-open').forEach(b => b.addEventListener('click', () => openActu(Number(b.dataset.actu))));
   // Vidéos
   // Vidéos : seulement celles qui ne sont pas déjà dans « Actualités » (jamais deux fois la même publication ni la même vidéo)
@@ -3187,7 +3199,7 @@ function openActu(id) {
     ${a.texte ? `<p class="whitespace-pre-line mb-4">${esc(a.texte)}</p>` : ''}
     ${mediaVideos(a).map(v => lecteurVideo(v, a.titre)).join('')}
     ${(a.documents || []).length ? `<div class="flex flex-col gap-2 mb-4">${a.documents.map(d => `<a class="flex items-center gap-3 p-3 rounded-lg border border-line bg-sunk hover:border-accent" href="${esc(photoUrl(d.path))}" target="_blank" rel="noopener"><span style="color:var(--bad)">${iconePdf}</span><span class="min-w-0"><span class="block font-semibold truncate">${esc(d.nom || 'Document PDF')}</span><span class="text-xs text-muted">PDF · ouvrir ou télécharger</span></span></a>`).join('')}</div>` : ''}
-    <div class="grid sm:grid-cols-2 gap-3">${a.photos.map(p => `<a href="${esc(photoUrl(p))}" target="_blank" rel="noopener"><img src="${esc(photoUrl(p))}" alt="" loading="lazy" class="rounded-lg" style="width:100%;object-fit:cover"></a>`).join('')}</div>
+    <div class="grid sm:grid-cols-2 gap-3">${a.photos.map(p => `<a href="${esc(photoUrl(p))}" target="_blank" rel="noopener"><img src="${esc(photoMini(p))}" alt="" loading="lazy" decoding="async" class="rounded-lg" style="width:100%;object-fit:cover"></a>`).join('')}</div>
     ${a.public ? `<div class="mt-5 pt-4 border-t border-line flex flex-wrap items-center gap-3 text-sm"><span class="font-semibold">Partager :</span>${boutonsPartage(a.titre, 'actu=' + a.id)}</div>` : ''}`;
   } catch (e) {
     html = `<h2 class="font-display text-3xl font-semibold mb-3">${esc(a.titre || '')}</h2>${(mediaVideos(a) || []).map(v => `<p><a class="linkbtn" href="${esc(v)}" target="_blank" rel="noopener">Voir la vidéo ↗</a></p>`).join('')}`;
@@ -3225,7 +3237,7 @@ async function renderSouvenirs() {
   const annees = [...new Set(SOUVENIRS.map(an))];
   el.innerHTML = annees.map(y => `<div class="souv-annee"><h2 class="souv-an font-display">${esc(y)}</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${SOUVENIRS.filter(a => an(a) === y).map(a => {
-      const img = a.photos.length ? photoUrl(a.photos[0]) : ytPrincipal(a) ? ytThumb(ytId(ytPrincipal(a))) : '';
+      const img = a.photos.length ? photoMini(a.photos[0]) : ytPrincipal(a) ? ytThumb(ytId(ytPrincipal(a))) : '';
       const yt = ytPrincipal(a), video = yt || mediaVideos(a).find(estFacebook) || null;
       return `<div class="souv-carte bg-surface border border-line rounded-lg overflow-hidden flex flex-col" data-souv-carte="${a.id}">
         ${img ? `<button type="button" class="souv-media block text-left" style="position:relative" data-souv="${a.id}" ${!a.photos.length && yt ? `data-jouer="${esc(ytId(yt))}"` : ''} aria-label="${!a.photos.length && yt ? 'Lire la vidéo' : 'Ouvrir'} : ${esc(a.titre)}"><img src="${esc(img)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">${!a.photos.length && yt ? playIcon : ''}<span class="souv-etoile" aria-hidden="true">★</span></button>` : video ? `<a class="souv-media block" style="position:relative" href="${esc(video)}" target="_blank" rel="noopener" aria-label="Regarder sur Facebook : ${esc(a.titre)}">${vignetteFb}${playIcon}</a>` : `<button type="button" class="souv-vide" data-souv="${a.id}" aria-label="Ouvrir : ${esc(a.titre)}">★</button>`}
@@ -3293,7 +3305,10 @@ function completerActu(a, box) {
 
 function renderAdminActus() {
   const box = $('#adm-actus');
-  box.innerHTML = `
+  const anciennes = ACTUS.reduce((n, a) => n + (a.photos || []).filter(p => !aMini(p)).length, 0);
+  box.innerHTML = `${anciennes ? `<div class="bg-surface border rounded-lg p-4 mb-6 flex flex-wrap items-center gap-3 justify-between" style="border-color:var(--gold)" id="allegerBox">
+      <p class="text-sm min-w-0" style="flex:1 1 22rem"><b>${anciennes} photo(s) publiée(s) avant la version 101</b> n’ont pas encore de petite copie : elles ralentissent l’accueil sur téléphone. Un clic les allège (le site doit rester ouvert pendant l’opération).</p>
+      <button type="button" class="btn btn-sm" id="allegerBtn">Alléger les anciennes photos</button></div>` : ''}
     <div class="grid lg:grid-cols-5 gap-8">
       <form id="acForm" class="lg:col-span-2 bg-surface border border-line rounded-lg p-5 flex flex-col gap-4 self-start" novalidate>
         <h2 class="h2">Nouvelle publication</h2>
@@ -3350,7 +3365,7 @@ function renderAdminActus() {
   const attente = ACTUS.filter(a => a.statut === 'en_attente');
   $('#acList').innerHTML = (attente.length ? `<div class="rounded-lg p-3 mb-3" style="background: color-mix(in srgb, var(--warn) 12%, transparent)"><p class="font-semibold mb-1">${attente.length} publication(s) des groupes à valider</p><p class="text-xs text-muted">Elles ne sont visibles sur le site qu’après « Approuver ».</p></div>` : '')
     + (ACTUS.length ? [...attente, ...ACTUS.filter(a => a.statut !== 'en_attente')].map(a => `<div class="bg-surface border border-line rounded-lg p-3 flex gap-3" data-ac="${a.id}" style="${a.statut === 'en_attente' ? 'border-color: var(--warn)' : ''}">
-      ${a.photos.length ? `<img src="${esc(photoUrl(a.photos[0]))}" alt="" style="width:88px;height:66px;object-fit:cover;border-radius:6px" loading="lazy">` : ''}
+      ${a.photos.length ? `<img src="${esc(photoMini(a.photos[0]))}" alt="" style="width:88px;height:66px;object-fit:cover;border-radius:6px" loading="lazy">` : ''}
       <div class="min-w-0 grow"><div class="font-semibold">${esc(a.titre)}</div>
         <div class="text-xs text-muted">${a.groupe ? esc(nomGroupe(a.groupe)) + (a.auteur_nom ? ' (' + esc(a.auteur_nom) + ')' : '') + ' · ' : ''}${esc(actuDate(a))} · ${a.photos.length} photo(s)${nbVideos(a) ? ' · ' + nbVideos(a) + ' vidéo(s)' : ''}${(a.documents || []).length ? ' · ' + a.documents.length + ' PDF' : ''} · ${a.public ? 'publique' : 'réservée aux connectés'}${a.statut === 'en_attente' ? ' · <b style="color:var(--warn)">en attente</b>' : ''}</div>
         <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 ac-actions">${a.statut === 'en_attente' ? '<button type="button" class="linkbtn text-sm ac-ok" style="color:var(--ok)">Approuver</button>' : ''}<button type="button" class="linkbtn text-sm ac-voir">Voir</button><button type="button" class="linkbtn text-sm ac-plus">+ Photos, vidéos, PDF</button><button type="button" class="linkbtn text-sm ac-inoub" style="color:var(--gold)">${a.inoubliable ? '★ Retirer des inoubliables' : '☆ Inoubliable'}</button><button type="button" class="linkbtn text-sm ac-vis">${a.public ? 'Réserver aux connectés' : 'Rendre publique'}</button><button type="button" class="linkbtn text-sm ac-del" style="color:var(--bad)">Retirer</button></div></div></div>`).join('')
@@ -3373,7 +3388,7 @@ function renderAdminActus() {
     });
     box.querySelector('.ac-del').addEventListener('click', async () => {
       if (!confirm(`Retirer « ${a.titre} » et ses photos ?`)) return;
-      const fich = [...a.photos, ...(a.documents || []).map(d => d.path)]; if (fich.length) await sb.storage.from('actualites').remove(fich);
+      const fich = [...avecMinis(a.photos), ...(a.documents || []).map(d => d.path)]; if (fich.length) await sb.storage.from('actualites').remove(fich);
       const { error } = await sb.from('actualites').delete().eq('id', a.id);
       if (error) { toast('Suppression impossible', errText(error), 'bad'); return; }
       ACTUS = ACTUS.filter(x => x.id !== a.id); renderAdminActus(); renderActusAccueil(); majBadgeActus();
@@ -4322,7 +4337,7 @@ async function renderPublierGroupe(host) {
     host.querySelectorAll('[data-pg]').forEach(row => row.querySelector('.pg-del').addEventListener('click', async () => {
       const a = ACTUS.find(x => x.id === Number(row.dataset.pg));
       if (!confirm(`Retirer « ${a.titre} » ?`)) return;
-      if (a.photos.length) await sb.storage.from('actualites').remove(a.photos);
+      if (a.photos.length) await sb.storage.from('actualites').remove(avecMinis(a.photos));
       const { error } = await sb.from('actualites').delete().eq('id', a.id);
       if (error) { toast('Suppression impossible', errText(error), 'bad'); return; }
       ACTUS = ACTUS.filter(x => x.id !== a.id); liste(); renderActusAccueil();
@@ -6591,7 +6606,7 @@ function renderPortrait() {
   const P = ACCUEIL.portrait || {};
   el.hidden = !P.nom; $('#accVie').classList.toggle('lg:grid-cols-2', !!P.nom);
   if (!P.nom) return;
-  el.innerHTML = `<p class="eyebrow mb-3">Portrait du mois</p><div class="flex gap-4 items-start">${P.photo ? `<img src="${esc(photoUrl(P.photo))}" alt="${esc(P.nom)}" class="acc-portrait-img" loading="lazy">` : ''}
+  el.innerHTML = `<p class="eyebrow mb-3">Portrait du mois</p><div class="flex gap-4 items-start">${P.photo ? `<img src="${esc(photoMini(P.photo))}" alt="${esc(P.nom)}" class="acc-portrait-img" loading="lazy">` : ''}
     <div class="min-w-0"><p class="font-display text-2xl font-semibold leading-tight">${esc(P.nom)}</p>${P.role ? `<p class="text-sm text-gold font-semibold mt-1">${esc(P.role)}</p>` : ''}
     ${P.texte ? `<p class="mt-2 whitespace-pre-line text-[15px]">${esc(P.texte)}</p>` : ''}</div></div>`;
 }
@@ -6795,6 +6810,35 @@ function armerDefilement() {
 ['pointerdown', 'wheel', 'keydown', 'touchstart'].forEach(t => window.addEventListener(t, () => {
   if (currentTab === 'accueil') { DEF.arrete = true; arreterDefilement(); }
 }, { capture: true, passive: true }));
+
+/* Admin > Actualités : créer les miniatures des photos publiées avant la v101 */
+async function allegerAnciennesPhotos() {
+  const btn = $('#allegerBtn'); if (!btn) return;
+  btn.disabled = true;
+  const aFaire = ACTUS.filter(a => (a.photos || []).some(p => !aMini(p)));
+  const total = aFaire.reduce((n, a) => n + a.photos.filter(p => !aMini(p)).length, 0);
+  let fait = 0, echecs = 0;
+  for (const a of aFaire) {
+    const nouvelles = [], aRetirer = [];
+    for (const p of a.photos) {
+      if (aMini(p)) { nouvelles.push(p); continue; }
+      btn.textContent = `Allègement… ${++fait}/${total}`;
+      try {
+        const rep = await fetch(photoUrl(p)); if (!rep.ok) throw new Error('HTTP ' + rep.status);
+        const neuf = await envoyerDeuxTailles(await rep.blob(), p.replace(/\.[a-z]+$/i, '') + '_v.jpg');
+        nouvelles.push(neuf); aRetirer.push(p);
+      } catch (e) { echecs++; nouvelles.push(p); console.warn(p, e); }
+    }
+    if (!aRetirer.length) continue;
+    const { error } = await sb.from('actualites').update({ photos: nouvelles }).eq('id', a.id);
+    if (error) { echecs += aRetirer.length; sb.storage.from('actualites').remove(avecMinis(nouvelles.filter(x => !a.photos.includes(x)))).catch(() => {}); continue; }
+    a.photos = nouvelles;
+    sb.storage.from('actualites').remove(aRetirer).catch(() => {});
+  }
+  SOUV_CHARGE = false; renderAdminActus(); renderActusAccueil();
+  toast(echecs ? 'Allègement presque terminé' : 'Photos allégées', echecs ? `${echecs} photo(s) n’ont pas pu être traitées : recliquez sur le bouton plus tard.` : `${total} photo(s) : l’accueil s’ouvre maintenant beaucoup plus vite.`, echecs ? 'warn' : '');
+}
+document.addEventListener('click', e => { if (e.target.closest('#allegerBtn')) allegerAnciennesPhotos(); });
 
 /* ---------- Soutenir le séminaire ---------- */
 async function renderSoutenir(edition) {
