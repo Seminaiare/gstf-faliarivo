@@ -338,10 +338,6 @@ const CONFIG = {
   .partage a { display: inline-flex; align-items: center; gap: .3rem; padding: .25rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; color: #fff; }
   .partage .p-wa { background: #1fa855; } .partage .p-fb { background: #1877f2; } .partage .p-yt { background: #d40000; }
   .partage a:hover { filter: brightness(1.1); }
-  #defBtn { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 40; display: inline-flex; align-items: center; gap: .45rem; padding: .55rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .9rem; background: var(--surface); color: var(--accent); border: 1px solid var(--line); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
-  #defBtn.actif { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  @media (max-width: 640px) { #defBtn { bottom: 76px; font-size: .82rem; } }
-  @media print { #defBtn { display: none !important; } }
   .revele { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
   .revele.apparu { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .revele { opacity: 1; transform: none; transition: none; } .acc-slide img, .acc-slide.actif img { transform: none; transition: none; } }
@@ -437,7 +433,6 @@ const CONFIG = {
 
     <!-- ================= 1. ACCUEIL ================= -->
     <section id="panel-accueil" class="flex flex-col gap-12" role="tabpanel">
-      <button type="button" id="defBtn" hidden>▶ Défilement automatique</button>
       <div id="accBandeau" class="acc-bandeau" hidden aria-roledescription="carrousel" aria-label="Photos du séminaire"></div>
       <div id="heroBanner" class="rounded-lg overflow-hidden border border-line" style="aspect-ratio: 16 / 5; margin-bottom: -1rem" hidden><img alt="Grand Séminaire de Théologie de Faliarivo" style="width:100%;height:100%;object-fit:cover"></div>
       <div class="grid lg:grid-cols-5 gap-8 items-end">
@@ -1139,7 +1134,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 99</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 100</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1506,8 +1501,8 @@ function showTab(name) {
   if (name === 'soutenir') name = 'economat';
   const versAnnuaire = name === 'annuaire'; if (versAnnuaire) name = 'contact';   // l’annuaire est dans l’onglet Contact   // « Soutenir le séminaire » est dans l’onglet Économat
   if (!TABS.includes(name)) name = 'accueil';
-  currentTab = name;
-  try { name === 'accueil' ? armerDefilement() : arreterDefilement(false); } catch (e) {}
+  const ongletAvant = currentTab; currentTab = name;
+  try { if (name === 'accueil') { if (ongletAvant !== 'accueil') DEF.arrete = false; armerDefilement(); } else arreterDefilement(); } catch (e) {}
   $('#pwPanel').hidden = true;
   TABS.forEach(t => { $('#panel-' + t).hidden = t !== name; const tb = $('#tab-' + t); if (tb) tb.setAttribute('aria-selected', t === name ? 'true' : 'false'); });
   { const nb = $('#navPlusBtn'); if (nb) nb.setAttribute('aria-selected', String(!!document.querySelector(`#navLat [data-tab="${name}"]`))); }
@@ -6755,19 +6750,15 @@ async function chargerIntentionsAdmin() {
 }
 
 
-/* Défilement automatique de l’accueil : démarre après 12 s sans geste, s’arrête au premier clic */
+/* Défilement automatique de l’accueil : il démarre seul quelques secondes après l’ouverture
+   de l’accueil et s’arrête au premier clic (ou toucher, molette, touche) n’importe où. */
 const DEF = { mode: false, raf: null, attente: null, inactif: null, arrete: false, last: 0, pos: 0 };
 const DEF_VITESSE = 0.045;   // pixels par milliseconde (≈ 45 px par seconde)
-function majBtnDef() {
-  const b = $('#defBtn'); if (!b) return;
-  b.hidden = currentTab !== 'accueil';
-  b.classList.toggle('actif', DEF.mode);
-  b.textContent = DEF.mode ? '⏸ Arrêter le défilement' : '▶ Défilement automatique';
-}
+const DEF_DELAI = 4000;      // attente avant de démarrer
 function lancerDefilement() {
-  if (currentTab !== 'accueil') return;
+  if (currentTab !== 'accueil' || DEF.arrete) return;
   cancelAnimationFrame(DEF.raf); clearTimeout(DEF.attente);
-  DEF.mode = true; DEF.arrete = false; DEF.last = performance.now(); DEF.pos = window.scrollY; majBtnDef();
+  DEF.mode = true; DEF.last = performance.now(); DEF.pos = window.scrollY;
   DEF.raf = requestAnimationFrame(pasDefilement);
 }
 function pasDefilement(now) {
@@ -6788,25 +6779,21 @@ function pasDefilement(now) {
   }
   DEF.raf = requestAnimationFrame(pasDefilement);
 }
-function arreterDefilement(parVisiteur) {
-  if (parVisiteur && DEF.mode) DEF.arrete = true;
+function arreterDefilement() {
   DEF.mode = false; cancelAnimationFrame(DEF.raf); clearTimeout(DEF.attente); clearTimeout(DEF.inactif);
-  majBtnDef();
-  if (!parVisiteur || !DEF.arrete) armerDefilement();
 }
 function armerDefilement() {
-  clearTimeout(DEF.inactif); majBtnDef();
+  clearTimeout(DEF.inactif);
   if (DEF.arrete || DEF.mode || currentTab !== 'accueil' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   DEF.inactif = setTimeout(() => {
     const f = document.activeElement;
-    if (f && /INPUT|TEXTAREA|SELECT/.test(f.tagName)) { armerDefilement(); return; }
+    if (f && /INPUT|TEXTAREA|SELECT/.test(f.tagName)) return;
     lancerDefilement();
-  }, 12000);
+  }, DEF_DELAI);
 }
-$('#defBtn').addEventListener('click', () => { if (DEF.mode) arreterDefilement(true); else lancerDefilement(); });
-['pointerdown', 'wheel', 'keydown', 'touchstart'].forEach(t => window.addEventListener(t, e => {
-  if (e.target.closest && e.target.closest('#defBtn')) return;
-  if (DEF.mode) arreterDefilement(true); else if (currentTab === 'accueil') armerDefilement();
+// Le visiteur prend la main : on s’arrête là où il est (jusqu’à son prochain retour sur l’accueil)
+['pointerdown', 'wheel', 'keydown', 'touchstart'].forEach(t => window.addEventListener(t, () => {
+  if (currentTab === 'accueil') { DEF.arrete = true; arreterDefilement(); }
 }, { capture: true, passive: true }));
 
 /* ---------- Soutenir le séminaire ---------- */
