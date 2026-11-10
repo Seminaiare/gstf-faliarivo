@@ -1281,7 +1281,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 112</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 113</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -4709,6 +4709,8 @@ async function renderAdminAnnee() {
   };
   renderCours();
   $('#anCoursAn').addEventListener('change', renderCours);
+  // Le professeur choisi s’enregistre tout de suite (pas besoin de cliquer « Enregistrer »)
+  tbody.addEventListener('change', e => { if (e.target.closest('.c-prof')) { const b = e.target.closest('tr[data-c]').querySelector('.c-save'); if (b) b.click(); } });
   $('#anCoursRetires').addEventListener('change', renderCours);
   tbody.addEventListener('click', async e => {
     const tr = e.target.closest('tr[data-c]'); if (!tr) return;
@@ -4719,7 +4721,7 @@ async function renderAdminAnnee() {
       if (!patch.nom || !(patch.heures > 0)) { toast('Nom ou heures manquants', '', 'bad'); return; }
       const { error } = await sb.from('cours').update(patch).eq('id', c.id);
       if (error) { toast('Enregistrement impossible', errText(error), 'bad'); return; }
-      Object.assign(c, patch); await loadAnnee(); toast('Cours enregistré', patch.nom);
+      Object.assign(c, patch); await loadAnnee(); toast('Cours enregistré', `${patch.nom} · ${patch.enseignant_id ? profName(patch.enseignant_id) : 'enseignant à confirmer'}`);
     }
     if (e.target.closest('.c-actif')) {
       const actif = c.actif === false;
