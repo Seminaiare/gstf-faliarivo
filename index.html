@@ -1059,7 +1059,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 93</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 94</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -3044,7 +3044,7 @@ function renderActusAccueil() {
           ${a.texte ? `<span class="text-sm text-muted" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(a.texte)}</span>` : ''}
         </span></button>
       ${ytPrincipal(a) ? `<a class="linkbtn text-sm px-4 pb-3" href="https://www.youtube.com/watch?v=${ytId(ytPrincipal(a))}" target="_blank" rel="noopener">▶ Regarder sur YouTube ↗</a>` : ''}</div>`).join('')}</div>` : '';
-  el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => openActu(Number(b.dataset.actu))));
+  el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
   // Galerie : les photos de toutes les publications, les plus récentes d'abord
   const g = $('#galerieAccueil'), photos = PUB.flatMap(a => a.photos.map(p => ({ p, a }))).slice(0, 16);
   g.hidden = photos.length < 2;
@@ -3052,13 +3052,23 @@ function renderActusAccueil() {
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${photos.map(x => `<button type="button" class="gal-open block rounded-md overflow-hidden" data-actu="${x.a.id}" title="${esc(x.a.titre)}"><img src="${esc(photoUrl(x.p))}" alt="${esc(x.a.titre)}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover"></button>`).join('')}</div>`;
   g.querySelectorAll('.gal-open').forEach(b => b.addEventListener('click', () => openActu(Number(b.dataset.actu))));
   // Vidéos
-  const vb = $('#videosAccueil'), deja = new Set(list.filter(a => ytPrincipal(a)).map(a => ytId(ytPrincipal(a)))),   // vidéos déjà visibles dans « Actualités » : pas en double
-        vids = PUB.filter(a => ytPrincipal(a) && !deja.has(ytId(ytPrincipal(a)))).filter((a, i, t) => t.findIndex(b => ytId(ytPrincipal(b)) === ytId(ytPrincipal(a))) === i).slice(0, 6);
+  // Vidéos : seulement celles qui ne sont pas déjà dans « Actualités » (jamais deux fois la même publication ni la même vidéo)
+  const deja = new Set(list.flatMap(a => mediaVideos(a).map(v => ytId(v)).filter(Boolean)));
+  const vb = $('#videosAccueil'),
+        vids = PUB.filter(a => ytPrincipal(a) && !list.includes(a) && !mediaVideos(a).some(v => deja.has(ytId(v))))
+                  .filter((a, i, t) => t.findIndex(b => ytId(ytPrincipal(b)) === ytId(ytPrincipal(a))) === i).slice(0, 6);
   vb.hidden = !vids.length;
   vb.innerHTML = vids.length ? `<h2 class="h2 mb-4">Vidéos</h2><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${vids.map(a => `
     <button type="button" class="text-left vid-open" data-actu="${a.id}"><span style="position:relative;display:block" class="rounded-lg overflow-hidden"><img src="${ytThumb(ytId(ytPrincipal(a)))}" alt="" loading="lazy" style="width:100%;aspect-ratio:16/9;object-fit:cover">${playIcon}</span>
       <span class="block font-semibold mt-1.5 leading-snug">${esc(a.titre)}</span><span class="text-xs text-muted">${esc(actuDate(a))}</span></button>`).join('')}</div>` : '';
-  vb.querySelectorAll('.vid-open').forEach(b => b.addEventListener('click', () => openActu(Number(b.dataset.actu))));
+  vb.querySelectorAll('.vid-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
+}
+// Une publication qui n'est qu'une vidéo YouTube s'ouvre directement sur YouTube ; sinon, la fenêtre complète
+function ouvrirPublication(id) {
+  const a = ACTUS.find(x => x.id === id) || SOUVENIRS.find(x => x.id === id); if (!a) return;
+  const yt = ytPrincipal(a);
+  if (yt && !a.photos.length && !(a.documents || []).length && mediaVideos(a).length === 1) { window.open('https://www.youtube.com/watch?v=' + ytId(yt), '_blank', 'noopener'); return; }
+  openActu(id);
 }
 function openActu(id) {
   const a = ACTUS.find(x => x.id === id) || SOUVENIRS.find(x => x.id === id); if (!a) return;
