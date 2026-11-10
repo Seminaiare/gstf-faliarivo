@@ -420,6 +420,22 @@ const CONFIG = {
   header nav .tab[data-tab][aria-selected="true"] { color: var(--tc, var(--accent)); }
   header nav .tab[data-tab][aria-selected="true"]::after { background: var(--tc, var(--accent)); }
   .feuille-grille [data-ft] .tab-ic { color: var(--tc, var(--accent)); background: color-mix(in srgb, var(--tc, var(--accent)) 14%, transparent); }
+  /* Menu vertical « Espace du séminaire » : une couleur par rubrique */
+  [data-tab="etudiant"], [data-ft="etudiant"] { --tc: #2563a8; }
+  [data-tab="professeur"], [data-ft="professeur"] { --tc: #2f7a4a; }
+  [data-tab="educateur"], [data-ft="educateur"] { --tc: #0e7c66; }
+  [data-tab="entretiens"], [data-ft="entretiens"] { --tc: #c0501a; }
+  [data-tab="economat"], [data-ft="economat"] { --tc: #a3650f; }
+  [data-tab="anciens"], [data-ft="anciens"] { --tc: #4b5aa8; }
+  [data-tab="archives"], [data-ft="archives"] { --tc: #5d6472; }
+  [data-tab="admin"], [data-ft="admin"] { --tc: #8c2a34; }
+  [data-tab="prieres"], [data-ft="prieres"] { --tc: #6b3fa0; }
+  [data-tab="souvenirs"], [data-ft="souvenirs"] { --tc: #b8861f; }
+  @media (prefers-color-scheme: dark) { [data-tab="etudiant"], [data-ft="etudiant"] { --tc: #7fb0ec; } [data-tab="professeur"], [data-ft="professeur"] { --tc: #6cc28c; } [data-tab="educateur"], [data-ft="educateur"] { --tc: #4fc7ad; } [data-tab="entretiens"], [data-ft="entretiens"] { --tc: #f08a5a; } [data-tab="economat"], [data-ft="economat"] { --tc: #e0a44a; } [data-tab="anciens"], [data-ft="anciens"] { --tc: #9aa6ec; } [data-tab="archives"], [data-ft="archives"] { --tc: #aab1bf; } [data-tab="admin"], [data-ft="admin"] { --tc: #e58a95; } [data-tab="prieres"], [data-ft="prieres"] { --tc: #b99be6; } [data-tab="souvenirs"], [data-ft="souvenirs"] { --tc: #e0b65a; } }
+  .nav-lat .tab[data-tab] .tab-ic { color: var(--tc, var(--accent)); background: color-mix(in srgb, var(--tc, var(--accent)) 14%, var(--surface)); }
+  .nav-lat .tab[data-tab]:hover { background: color-mix(in srgb, var(--tc, var(--accent)) 7%, var(--surface)); }
+  .nav-lat .tab[data-tab][aria-selected="true"] { background: color-mix(in srgb, var(--tc, var(--accent)) 13%, var(--surface)); color: var(--tc, var(--accent)); }
+  .nav-lat .tab[data-tab][aria-selected="true"] .tab-ic { background: var(--surface); }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -1340,7 +1356,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 117</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 118</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
