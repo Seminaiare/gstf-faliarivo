@@ -480,6 +480,8 @@ const CONFIG = {
   body.entete-compact header nav[aria-label="Sections"] .flex { margin-top: 0; }
   body.entete-compact header nav .tab { padding-top: .55rem; padding-bottom: .55rem; }
   @media (max-width: 767px) { body.entete-compact header .gutter > div:first-child { padding-top: .35rem; padding-bottom: .35rem; } }
+  .bq-cache { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.1rem; border: 1px dashed var(--line); border-radius: .8rem; background: var(--surface); }
+  .bq-cache > span { font-size: 1.6rem; line-height: 1; }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -1401,7 +1403,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 119</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 120</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -5461,6 +5463,13 @@ async function renderBibliotheque() {
 
 async function chercherLivres() {
   const box = $('#bqRes');
+  if (!String(BQ.q || '').trim() && !BQ.tout) {   // le catalogue reste caché : il s’affiche quand on cherche
+    box.innerHTML = `<div class="bq-cache"><span aria-hidden="true">🔎</span><div><p class="font-semibold">Tapez un titre, un auteur, un sujet ou une cote pour trouver un livre.</p>
+      <p class="text-sm text-muted">Le catalogue n’est pas affiché en entier : seuls les livres qui correspondent à votre recherche apparaissent.</p>
+      ${BQ.biblio ? '<button type="button" class="linkbtn text-sm mt-1" id="bqToutVoir">Afficher tout le catalogue (bibliothécaire)</button>' : ''}</div></div>`;
+    if ($('#bqToutVoir')) $('#bqToutVoir').addEventListener('click', () => { BQ.tout = true; chercherLivres(); });
+    return;
+  }
   const { data, error } = await sb.rpc('chercher_livres', { p_q: BQ.q, p_filtre: BQ.filtre, p_limite: BQ.q ? 200 : 60 });
   if (error) { box.innerHTML = `<p class="text-bad">${esc(/chercher_livres|function|schema cache/i.test(error.message) ? 'Exécutez d’abord 25_bibliotheque.sql dans Supabase.' : errText(error))}</p>`; return; }
   BQ.res = data || [];
@@ -5483,7 +5492,9 @@ async function chercherLivres() {
       <td class="whitespace-nowrap">${dispo(l)}</td>
       ${BQ.biblio ? `<td class="whitespace-nowrap text-right">${!l.sur_place && l.exemplaires > l.pretes ? `<button type="button" class="btn btn-sm" data-preter="${l.id}">Prêter</button> ` : ''}<button type="button" class="linkbtn text-xs" data-modif="${l.id}">Modifier</button></td>` : ''}
     </tr>`).join('')}</tbody></table></div>
-    ${BQ.res.length >= (BQ.q ? 200 : 60) ? '<p class="text-xs text-muted mt-2">Seuls les premiers résultats sont affichés : précisez la recherche.</p>' : ''}`;
+    ${BQ.res.length >= (BQ.q ? 200 : 60) ? '<p class="text-xs text-muted mt-2">Seuls les premiers résultats sont affichés : précisez la recherche.</p>' : ''}
+    ${BQ.tout && !BQ.q ? '<button type="button" class="linkbtn text-sm mt-2" id="bqToutCacher">Cacher le catalogue</button>' : ''}`;
+  if ($('#bqToutCacher')) $('#bqToutCacher').addEventListener('click', () => { BQ.tout = false; chercherLivres(); });
   box.querySelectorAll('[data-preter]').forEach(b => b.addEventListener('click', () => ouvrirPret(Number(b.dataset.preter))));
   box.querySelectorAll('[data-reserver]').forEach(b => b.addEventListener('click', () => reserverLivre(Number(b.dataset.reserver))));
   box.querySelectorAll('[data-modif]').forEach(b => b.addEventListener('click', async () => {
