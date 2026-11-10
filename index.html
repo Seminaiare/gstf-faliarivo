@@ -381,6 +381,12 @@ const CONFIG = {
   .bq-imp-btn:hover, .bq-imp-btn:focus-visible { border-color: var(--accent); }
   .bq-imp-btn:active { transform: scale(.98); }
   .bq-imp-btn span { font-size: 1.7rem; line-height: 1.2; } .bq-imp-btn b { font-size: 1rem; } .bq-imp-btn small { font-size: .72rem; color: var(--muted); text-align: center; }
+  .ag-souv { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .75rem; }
+  .ag-souv-c { display: flex; gap: .7rem; align-items: center; text-align: left; padding: .5rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); transition: border-color .15s; }
+  .ag-souv-c:hover, .ag-souv-c:focus-visible { border-color: var(--gold); }
+  .ag-souv-c img, .ag-souv-v { width: 4.2rem; height: 4.2rem; border-radius: .5rem; object-fit: cover; flex: none; }
+  .ag-souv-v { display: grid; place-items: center; background: var(--sunk); color: var(--gold); font-size: 1.6rem; }
+  .ag-souv-t { display: flex; flex-direction: column; min-width: 0; } .ag-souv-t b { line-height: 1.3; }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -1301,7 +1307,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 115</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 116</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -6669,7 +6675,7 @@ async function renderAdminEvaluation() {
  * =================================================================== */
 const AG_CAT = { recollection: 'Récollection', retraite: 'Retraite', examen: 'Examens', fete: 'Fête', ordination: 'Ordination', visite: 'Visite', autre: 'Autre' };
 const AG_COUL = { recollection: 'var(--accent)', retraite: 'var(--accent)', examen: 'var(--warn)', fete: 'var(--gold)', ordination: 'var(--gold)', visite: 'var(--ok)', autre: 'var(--muted)' };
-let AGENDA = [];
+let AGENDA = [], AGENDA_FILTRE = 'tous';
 
 /* Ajouter un événement au calendrier du téléphone (heure de Madagascar, UTC+3) */
 function heuresAgenda(h) {
@@ -6696,13 +6702,94 @@ function icsAgenda(e) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/calendar' })); a.download = `gstf-${e.debut.replace(/-/g, '')}.ics`; a.click();
   toast('Fichier calendrier prêt', 'Ouvrez-le : votre téléphone propose de l’ajouter à votre calendrier.');
 }
+/* ---------- Agenda automatique : calendrier académique, grandes fêtes, anniversaires du séminaire ---------- */
+const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function datePaques(an) {   // calcul grégorien (Meeus)
+  const a = an % 19, b = Math.floor(an / 100), c = an % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+    h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    mois = Math.floor((h + l - 7 * m + 114) / 31), jour = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(an, mois - 1, jour);
+}
+const plusJours = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+function finTexte(debut, t) {   // « jusqu’au 3 février » ou « (5 et 6 février) »
+  const m = t.match(/jusqu[’']au (\d{1,2}) (\p{L}+)/u) || t.match(/\(\d{1,2} et (\d{1,2}) (\p{L}+)\)/u);
+  if (!m) return null; const mo = MOIS_FR.indexOf(m[2].toLowerCase()); if (mo < 0) return null;
+  let an = +debut.slice(0, 4); if (mo + 1 < +debut.slice(5, 7)) an++;
+  return `${an}-${pad(mo + 1)}-${pad(+m[1])}`;
+}
+function catTexte(t) {
+  return /examen|grand oral/i.test(t) ? 'examen' : /ordination/i.test(t) ? 'ordination' : /retraite/i.test(t) ? 'retraite' : /récollection/i.test(t) ? 'recollection'
+    : /vacances|rentrée|reprise|début des cours|réunion|symposium/i.test(t) ? 'autre' : /visite|évêque|cardinal|nonce/i.test(t) ? 'visite' : /fête|messe|clôture|ascension|pentecôte|sakafo|noël|pâques/i.test(t) ? 'fete' : 'autre';
+}
+function agendaAuto() {
+  const depuis = iso(new Date(Date.now() - 31 * 864e5)), jusqua = iso(new Date(Date.now() + 400 * 864e5)), L = [];
+  const ajout = (id, titre, debut, cat, src, x = {}) => { if (debut >= depuis && debut <= jusqua) L.push({ id: 'auto-' + id, titre, debut, fin: null, heure: '', lieu: '', description: '', public: true, categorie: cat, auto: src, ...x }); };
+  // 1. Calendrier académique du livret
+  const cal = [...CALENDRIER[1].items, ...CALENDRIER[2].items].sort((a, b) => a[0].localeCompare(b[0]));
+  cal.forEach(([d, t], i) => {
+    let fin = finTexte(d, t), titre = t;
+    if (/^vacances/i.test(t)) { const r = cal.slice(i + 1).find(([, u]) => /rentrée|reprise/i.test(u)); if (r) fin = iso(plusJours(parseIso(r[0]), -1)); titre = t.replace(/\s*\(après-midi\)/, ''); }
+    const h = (t.match(/\b(\d{1,2}h\d{0,2})\b/) || [])[1] || '';
+    if (fin) titre = titre.replace(/,?\s*jusqu[’']au \d{1,2} \p{L}+/u, '').replace(/\s*\(\d{1,2} et \d{1,2} \p{L}+\)/u, '');
+    ajout('cal-' + d + '-' + i, titre, d, catTexte(t), 'Calendrier académique', { fin: fin && fin > d ? fin : null, heure: /, /.test(t) ? '' : h, lieu: 'Grand Séminaire de Faliarivo' });
+  });
+  // 2. Grandes fêtes de l’Église et de Madagascar
+  const dejaLeJour = (d, re) => cal.some(([c, t]) => c === d && re.test(t));
+  for (let an = +depuis.slice(0, 4); an <= +jusqua.slice(0, 4); an++) {
+    const P = datePaques(an), dP = n => iso(plusJours(P, n));
+    const noel = new Date(an, 11, 25), avent = plusJours(noel, -(noel.getDay() || 7) - 21);
+    [['01-01', 'Sainte Marie, Mère de Dieu'], ['03-19', 'Saint Joseph, époux de la Vierge Marie'], ['03-25', 'Annonciation du Seigneur'],
+     ['06-08', 'Bienheureux Jacques Berthieu, martyr de Madagascar'], ['06-26', 'Fête de l’Indépendance de Madagascar', 'autre'], ['06-29', 'Saints Pierre et Paul, apôtres'],
+     ['08-04', 'Saint Jean-Marie Vianney, patron des prêtres'], ['08-15', 'Assomption de la Vierge Marie'], ['08-21', 'Bienheureuse Victoire Rasoamanarivo'],
+     ['10-01', 'Sainte Thérèse de l’Enfant-Jésus, patronne du séminaire'], ['11-01', 'Toussaint'], ['11-02', 'Commémoration de tous les fidèles défunts'],
+     ['12-08', 'Immaculée Conception de la Vierge Marie'], ['12-25', 'Nativité du Seigneur (Noël)']].forEach(([md, t, c]) => { let d = `${an}-${md}`;
+      if (d >= dP(-7) && d <= dP(7)) { if (md === '03-25') d = dP(8); else if (md === '03-19') d = dP(-8); }   // fêtes déplacées hors de la Semaine sainte et de l’octave de Pâques
+      ajout(`lit-${an}-${md}`, t, d, c || 'fete', c ? 'Madagascar' : 'Liturgie'); });
+    [[-46, 'Mercredi des Cendres, entrée en Carême'], [-7, 'Dimanche des Rameaux'], [-3, 'Jeudi saint'], [-2, 'Vendredi saint'], [0, 'Pâques, Résurrection du Seigneur'],
+     [21, 'Journée mondiale de prière pour les vocations'], [39, 'Ascension du Seigneur', /ascension/i], [49, 'Pentecôte', /pentecôte/i], [68, 'Sacré-Cœur de Jésus, journée de sanctification des prêtres']]
+      .forEach(([n, t, re]) => { const d = dP(n); if (!re || !dejaLeJour(d, re)) ajout(`lit-${an}-p${n}`, t, d, 'fete', 'Liturgie'); });
+    ajout(`lit-${an}-avent`, 'Premier dimanche de l’Avent', iso(avent), 'fete', 'Liturgie');
+    ajout(`lit-${an}-roi`, 'Christ, Roi de l’univers', iso(plusJours(avent, -7)), 'fete', 'Liturgie');
+    // 3. Anniversaire du séminaire de Faliarivo (inauguré le 13 octobre 1998)
+    ajout(`anniv-${an}`, `Anniversaire du Grand Séminaire de Faliarivo : ${an - 1998} ans`, `${an}-10-13`, 'fete', 'Histoire du séminaire',
+      { description: 'Le 13 octobre 1998, le cardinal Armand Gaëtan Razafindratandra inaugurait le Grand Séminaire Théologique de Faliarivo.' });
+  }
+  // 4. Le grand événement annoncé sur la page d’accueil (compte à rebours)
+  const C = ACCUEIL.compte || {};
+  if (C.titre && C.date) ajout('compte', C.titre, C.date.slice(0, 10), catTexte(C.titre), 'Page d’accueil', { heure: C.date.length > 10 ? C.date.slice(11, 16).replace(':', 'h') : '' });
+  return L;
+}
+let AGENDA_AUTO_REG = { masques: [] };
+async function souvenirsAgenda() {
+  const box = $('#agSouv'); if (!box || !sb) return;
+  const { data, error } = await sb.from('actualites').select('id, titre, date_evenement, publie_le, photos, statut').eq('inoubliable', true)
+    .order('date_evenement', { ascending: false, nullsFirst: false }).limit(12);
+  const L = error ? [] : (data || []).filter(a => a.statut !== 'en_attente').slice(0, 6);
+  if (!L.length) { box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="flex flex-wrap items-baseline justify-between gap-2 mt-10 mb-3"><h2 class="font-display text-2xl font-semibold">★ Les grands moments vécus</h2><button type="button" class="linkbtn text-sm" id="agSouvTout">Tous les événements inoubliables →</button></div>
+    <div class="ag-souv">${L.map(a => { const ph = (a.photos || [])[0], d = a.date_evenement || (a.publie_le || '').slice(0, 10);
+      return `<button type="button" class="ag-souv-c" data-ag-souv="${a.id}">${ph ? `<img src="${esc(photoMini(ph))}" alt="" loading="lazy" decoding="async">` : '<span class="ag-souv-v" aria-hidden="true">★</span>'}
+        <span class="ag-souv-t"><span class="text-xs text-muted">${d ? fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' }) : ''}</span><b>${esc(a.titre)}</b></span></button>`; }).join('')}</div>`;
+  const aller = async id => { showTab('souvenirs'); if (id == null) return;
+    for (let i = 0; i < 50 && !SOUVENIRS.some(x => x.id === id); i++) await new Promise(r => setTimeout(r, 100));
+    ouvrirPublication(id); };
+  $('#agSouvTout').addEventListener('click', () => aller(null));
+  box.querySelectorAll('[data-ag-souv]').forEach(b => b.addEventListener('click', () => aller(Number(b.dataset.agSouv))));
+}
 async function renderAgenda() {
   const box = $('#agApp'); if (!sb) { box.innerHTML = ''; return; }
   const depuis = iso(new Date(Date.now() - 31 * 864e5));
   const { data, error } = await sb.from('agenda').select('*').gte('debut', depuis).order('debut');
   if (error) { box.innerHTML = `<p class="text-muted">${/agenda|schema cache/i.test(error.message) ? 'L’agenda sera bientôt disponible.' : esc(errText(error))}</p>`; return; }
-  AGENDA = (data || []).filter(e => (e.fin || e.debut) >= TODAY);
-  const parMois = {}; AGENDA.forEach(e => (parMois[e.debut.slice(0, 7)] ||= []).push(e));
+  if (!ACCUEIL_CHARGE) await loadAccueil();
+  const rg = await sb.from('reglages').select('valeur').eq('cle', 'agenda_auto').maybeSingle();
+  AGENDA_AUTO_REG = { masques: [], ...((rg.data && rg.data.valeur) || {}) };
+  const auto = agendaAuto().filter(e => !AGENDA_AUTO_REG.masques.includes(e.id)), nbMasques = AGENDA_AUTO_REG.masques.length;
+  const saisis = (data || []);
+  AGENDA = [...saisis, ...auto.filter(a => !saisis.some(e => e.debut === a.debut && sans(e.titre).slice(0, 12) === sans(a.titre).slice(0, 12)))]
+    .filter(e => (e.fin || e.debut) >= TODAY).sort((a, b) => a.debut.localeCompare(b.debut) || (a.auto ? 1 : 0) - (b.auto ? 1 : 0));
+  const filtre = AGENDA_FILTRE, vus = AGENDA.filter(e => filtre === 'tous' || (filtre === 'seminaire' ? e.auto !== 'Liturgie' && e.auto !== 'Madagascar' : filtre === 'liturgie' ? e.auto === 'Liturgie' : e.categorie === 'examen'));
+  const parMois = {}; vus.forEach(e => (parMois[e.debut.slice(0, 7)] ||= []).push(e));
   const quand = e => `${fmtDate(e.debut, { weekday: 'short', day: 'numeric', month: 'long' })}${e.fin && e.fin !== e.debut ? ' → ' + fmtDate(e.fin, { weekday: 'short', day: 'numeric', month: 'long' }) : ''}${e.heure ? ' · ' + esc(e.heure) : ''}`;
   box.innerHTML = `${isAdmin() ? `<details class="bg-surface border border-line rounded-lg p-4 mb-6" id="agFormBox"><summary class="font-semibold"><span class="chev">▸</span> Ajouter un événement</summary>
       <form id="agForm" class="grid sm:grid-cols-2 md:grid-cols-4 gap-3 mt-3">
@@ -6715,12 +6802,22 @@ async function renderAgenda() {
         <label class="text-sm md:col-span-3"><span class="block font-semibold mb-1">Description</span><textarea class="field" id="agDesc" rows="2" maxlength="2000"></textarea></label>
         <label class="text-sm flex items-center gap-2 mt-6"><input type="checkbox" id="agPublic" checked> Visible par le public</label>
         <div class="md:col-span-4"><button class="btn btn-sm">Ajouter à l’agenda</button></div></form></details>` : ''}
-    ${AGENDA.length ? Object.entries(parMois).map(([m, l]) => `<h3 class="font-display text-xl font-semibold mt-6 mb-2 capitalize">${moisLbl(m)}</h3><div class="flex flex-col gap-2">${l.map(e => `<div class="flex flex-wrap items-start justify-between gap-3 p-3 rounded-lg border border-line bg-surface" style="border-left:3px solid ${AG_COUL[e.categorie]}">
-      <div class="min-w-0"><span class="text-xs font-semibold uppercase tracking-wider" style="color:${AG_COUL[e.categorie]}">${AG_CAT[e.categorie]}</span>${e.public ? '' : ' <span class="pill bg-sunk">membres</span>'}
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-2"><div class="seg" id="agFiltre">${[['tous', 'Tout'], ['seminaire', 'Vie du séminaire'], ['examen', 'Examens'], ['liturgie', 'Fêtes liturgiques']].map(([k, l]) => `<button type="button" data-f="${k}" aria-pressed="${filtre === k}">${l}</button>`).join('')}</div>
+      ${isAdmin() && nbMasques ? `<button type="button" class="linkbtn text-xs" id="agReafficher">${nbMasques} événement(s) automatique(s) masqué(s) · tout réafficher</button>` : ''}</div>
+    <p class="text-xs text-muted mb-2">Le calendrier académique, les grandes fêtes de l’Église et les anniversaires du séminaire s’ajoutent ici automatiquement.${isAdmin() ? ' Un événement automatique inutile peut être masqué.' : ''}</p>
+    ${vus.length ? Object.entries(parMois).map(([m, l]) => `<h3 class="font-display text-xl font-semibold mt-6 mb-2 capitalize">${moisLbl(m)}</h3><div class="flex flex-col gap-2">${l.map(e => `<div class="flex flex-wrap items-start justify-between gap-3 p-3 rounded-lg border border-line bg-surface" style="border-left:3px solid ${AG_COUL[e.categorie]}">
+      <div class="min-w-0"><span class="text-xs font-semibold uppercase tracking-wider" style="color:${AG_COUL[e.categorie]}">${AG_CAT[e.categorie]}</span>${e.public ? '' : ' <span class="pill bg-sunk">membres</span>'}${e.auto ? ` <span class="text-xs text-muted">· ${esc(e.auto)}</span>` : ''}
         <div class="font-semibold">${esc(e.titre)}</div><div class="text-sm text-muted">${quand(e)}${e.lieu ? ' · ' + esc(e.lieu) : ''}</div>${e.description ? `<p class="text-sm mt-1 whitespace-pre-line">${esc(e.description)}</p>` : ''}</div>
-      <div class="flex flex-col items-end gap-1"><span class="ag-cal"><a class="btn btn-ghost btn-sm" href="${esc(lienGoogleAgenda(e))}" target="_blank" rel="noopener" title="Ouvre Google Agenda (téléphones Android)">📅 Google Agenda</a><button type="button" class="btn btn-ghost btn-sm" data-ag-ics="${e.id}" title="iPhone, Outlook, autres calendriers">📲 Autre calendrier</button></span>${isAdmin() ? `<button type="button" class="linkbtn text-xs text-bad" data-ag-suppr="${e.id}">Supprimer</button>` : ''}</div></div>`).join('')}</div>`).join('')
-      : '<p class="text-muted">Aucun événement à venir pour le moment.</p>'}`;
-  box.querySelectorAll('[data-ag-ics]').forEach(b => b.addEventListener('click', () => icsAgenda(AGENDA.find(e => e.id === Number(b.dataset.agIcs)))));
+      <div class="flex flex-col items-end gap-1"><span class="ag-cal"><a class="btn btn-ghost btn-sm" href="${esc(lienGoogleAgenda(e))}" target="_blank" rel="noopener" title="Ouvre Google Agenda (téléphones Android)">📅 Google Agenda</a><button type="button" class="btn btn-ghost btn-sm" data-ag-ics="${e.id}" title="iPhone, Outlook, autres calendriers">📲 Autre calendrier</button></span>${isAdmin() ? (e.auto ? `<button type="button" class="linkbtn text-xs text-muted" data-ag-masq="${e.id}">Masquer</button>` : `<button type="button" class="linkbtn text-xs text-bad" data-ag-suppr="${e.id}">Supprimer</button>`) : ''}</div></div>`).join('')}</div>`).join('')
+      : '<p class="text-muted">Aucun événement à venir pour le moment.</p>'}
+    <div id="agSouv"></div>`;
+  souvenirsAgenda();
+  box.querySelectorAll('#agFiltre [data-f]').forEach(b => b.addEventListener('click', () => { AGENDA_FILTRE = b.dataset.f; renderAgenda(); }));
+  const majMasques = async m => { const { error } = await sb.from('reglages').upsert({ cle: 'agenda_auto', valeur: { ...AGENDA_AUTO_REG, masques: m }, modifie_le: new Date().toISOString() });
+    if (error) { toast('Non enregistré', errText(error), 'bad'); return false; } return true; };
+  box.querySelectorAll('[data-ag-masq]').forEach(b => b.addEventListener('click', async () => { if (await majMasques([...new Set([...AGENDA_AUTO_REG.masques, b.dataset.agMasq])])) { toast('Événement masqué', 'Il n’apparaît plus dans l’agenda.'); renderAgenda(); } }));
+  if ($('#agReafficher')) $('#agReafficher').addEventListener('click', async () => { if (await majMasques([])) renderAgenda(); });
+  box.querySelectorAll('[data-ag-ics]').forEach(b => b.addEventListener('click', () => icsAgenda(AGENDA.find(e => String(e.id) === b.dataset.agIcs))));
   box.querySelectorAll('[data-ag-suppr]').forEach(b => b.addEventListener('click', async () => {
     if (!confirm('Supprimer cet événement ?')) return;
     const { error } = await sb.from('agenda').delete().eq('id', Number(b.dataset.agSuppr));
