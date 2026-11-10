@@ -374,6 +374,14 @@ const CONFIG = {
   .scan-cadre { position: relative; }
   .scan-cadre::after { content: ''; position: absolute; inset: 14%; border: 3px solid rgba(255,255,255,.85); border-radius: 14px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
   .ag-cal { display: flex; flex-wrap: wrap; gap: .35rem; justify-content: flex-end; }
+  .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
+  .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
+  .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
+  .zone-photos .zp-titre { font-size: .9rem; }
+  .zone-photos .zp-sous { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+  .zone-photos .zp-nb { font-size: .85rem; font-weight: 600; color: var(--ok); margin-top: .4rem; }
+  .zone-photos .zp-apercu { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: .5rem; }
+  .zone-photos .zp-apercu img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; }
   .barre-bas { display: none; }
   .feuille { position: fixed; inset: 0; z-index: 60; }
   .feuille-fond { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
@@ -1253,7 +1261,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 105</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 106</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -7296,6 +7304,49 @@ async function sauverActusHorsLigne(liste) {
   try { localStorage.setItem('gstf-actus', JSON.stringify({ liste: sortie, maj: Date.now() })); }
   catch (_) { try { localStorage.setItem('gstf-actus', JSON.stringify({ liste: sortie.map(x => ({ ...x, img: '' })), maj: Date.now() })); } catch (__) {} }
 }
+
+
+/* ---------- Dépôt des photos : coller (Ctrl+V) ou glisser-déposer ---------- */
+let ZONE_ACTIVE = null;
+function ajouterFichiers(inp, fichiers) {
+  const imgs = fichiers.filter(f => /^image\//.test(f.type)); if (!imgs.length) return 0;
+  const dt = new DataTransfer();
+  if (inp.multiple) [...inp.files].forEach(f => dt.items.add(f));
+  (inp.multiple ? imgs : imgs.slice(0, 1)).forEach((f, i) => dt.items.add(f.name && !/^image\.(png|jpe?g)$/i.test(f.name) ? f
+    : new File([f], `photo-collee-${Date.now()}-${i}.${(f.type.split('/')[1] || 'png').replace('jpeg', 'jpg')}`, { type: f.type })));
+  inp.files = dt.files; inp.dispatchEvent(new Event('change', { bubbles: true }));
+  return inp.multiple ? imgs.length : 1;
+}
+function zonePhotos(inp) {
+  if (inp.dataset.zone) return; inp.dataset.zone = '1';
+  const z = document.createElement('div'); z.className = 'zone-photos'; z.tabIndex = 0; z._inp = inp;
+  z.innerHTML = `<p class="zp-titre">📋 <b>Collez</b> vos photos ici (<b>Ctrl + V</b>) ou <b>glissez-les</b> depuis un dossier</p>
+    <p class="zp-sous">ou <button type="button" class="linkbtn zp-choisir">choisissez-les dans l’ordinateur</button> <button type="button" class="linkbtn zp-vider" hidden>· tout retirer</button></p><p class="zp-nb" hidden></p><div class="zp-apercu"></div>`;
+  inp.style.display = 'none';
+  (inp.closest('label') || inp).insertAdjacentElement('afterend', z);
+  const maj = () => { const n = inp.files.length; const nb = z.querySelector('.zp-nb'); nb.hidden = !n; nb.textContent = `✓ ${n} photo(s) prête(s)`; z.querySelector('.zp-vider').hidden = !n;
+    if (inp.id !== 'acPhotos') z.querySelector('.zp-apercu').innerHTML = [...inp.files].slice(0, 24).map(f => `<img src="${URL.createObjectURL(f)}" alt="">`).join(''); };
+  inp.addEventListener('change', maj);
+  z.querySelector('.zp-choisir').addEventListener('click', () => inp.click());
+  z.querySelector('.zp-vider').addEventListener('click', () => { inp.value = ''; inp.dispatchEvent(new Event('change', { bubbles: true })); });
+  ['focus', 'click', 'mouseenter'].forEach(t => z.addEventListener(t, () => { ZONE_ACTIVE = z; }));
+  z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('survol'); });
+  z.addEventListener('dragleave', () => z.classList.remove('survol'));
+  z.addEventListener('drop', e => { e.preventDefault(); z.classList.remove('survol'); const n = ajouterFichiers(inp, [...e.dataTransfer.files]); if (n) toast(`${n} photo(s) ajoutée(s)`, ''); else toast('Aucune photo', 'Seules les images sont acceptées ici.', 'warn'); });
+}
+const chercherChampsPhotos = racine => (racine.querySelectorAll ? racine.querySelectorAll('input[type=file][multiple][accept^="image"]:not([hidden]):not([data-zone])') : []).forEach(zonePhotos);
+chercherChampsPhotos(document);
+new MutationObserver(l => l.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && chercherChampsPhotos(n)))).observe(document.body, { childList: true, subtree: true });
+document.addEventListener('paste', e => {
+  const fichiers = [...((e.clipboardData && e.clipboardData.files) || [])].filter(f => /^image\//.test(f.type)); if (!fichiers.length) return;
+  const zones = [...document.querySelectorAll('.zone-photos')].filter(z => z.offsetParent);
+  let cible = ZONE_ACTIVE && ZONE_ACTIVE.offsetParent ? ZONE_ACTIVE._inp : zones.length ? zones[0]._inp : null;
+  if (!cible) cible = [...document.querySelectorAll('input[type=file][accept^="image"]')].find(i => { const l = i.closest('label'); return l && l.offsetParent; }) || null;
+  if (!cible) return;
+  e.preventDefault();
+  const n = ajouterFichiers(cible, fichiers);
+  if (n) toast(`${n} photo(s) collée(s)`, cible.multiple ? 'Vous pouvez en coller d’autres.' : '');
+});
 
 /* Notifications sur le téléphone */
 const VAPID_PUBLIC = 'BOh-mCBxZIrDVBHP82PJgCwS5QO_zUm0XVMlfsXG51z-N1cF0ShSU24uvhtR9T6_K_Uit-Loo_8O9yZ7V__aAmw';
