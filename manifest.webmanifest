@@ -1,20 +1,27 @@
 {
   "id": "/",
-  "name": "GSTF – Grand Séminaire de Théologie de Faliarivo",
-  "short_name": "GSTF",
-  "description": "Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus, Faliarivo – Antananarivo : portails, cours, bibliothèque, agenda, rendez-vous.",
+  "name": "GSTF Faliarivo – Grand Séminaire de Théologie",
+  "short_name": "GSTF Faliarivo",
+  "description": "Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus, Faliarivo – Antananarivo : actualités, portails, cours, bibliothèque, agenda, prières.",
   "lang": "fr",
   "start_url": "/?app=1",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#ffffff",
+  "background_color": "#8c2a34",
   "theme_color": "#8c2a34",
-  "categories": ["education"],
+  "categories": ["education", "lifestyle"],
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
     { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Mon espace", "short_name": "Mon espace", "description": "Mes notes, mes cours, ma carte", "url": "/?app=1#monespace", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Agenda", "short_name": "Agenda", "url": "/?app=1#agenda", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Prières du séminaire", "short_name": "Prières", "url": "/?app=1#prieres", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Confier une intention de prière", "short_name": "Intention", "url": "/?app=1#intention", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Bibliothèque", "short_name": "Bibliothèque", "url": "/?app=1#bibliotheque", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
   ]
 }
