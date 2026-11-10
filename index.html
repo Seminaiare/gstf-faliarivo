@@ -1062,7 +1062,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 95</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 96</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1079,7 +1079,7 @@ const CONFIG = {
     <h1 class="font-display text-3xl sm:text-4xl font-semibold mb-2">Connexion</h1>
     <p class="text-muted mb-5 lg-help"></p>
     <form class="bg-surface border border-line rounded-lg p-5 flex flex-col gap-4" novalidate>
-      <div><label class="block text-sm font-semibold mb-1">Nom ou identifiant<input class="field mt-1 lg-email" type="text" autocomplete="username" placeholder="ex. Razafiniarivo ou razafr@gstf-faliarivo.ovh" autocapitalize="none" spellcheck="false"></label></div>
+      <div><label class="block text-sm font-semibold mb-1">Nom, identifiant ou téléphone<input class="field mt-1 lg-email" type="text" autocomplete="username" placeholder="ex. Razafiniarivo, razafr@gstf-faliarivo.ovh ou 034 12 345 67" autocapitalize="none" spellcheck="false"></label></div>
       <div><label class="block text-sm font-semibold mb-1">Mot de passe<span class="pw-wrap"><input class="field mt-1 lg-pass" type="password" autocomplete="current-password"><button type="button" class="pw-oeil" aria-label="Afficher le mot de passe" title="Afficher ou masquer le mot de passe" onclick="const i=this.previousElementSibling;const v=i.type==='password';i.type=v?'text':'password';this.setAttribute('aria-pressed',v)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label></div>
       <p class="text-sm text-bad lg-err" hidden></p>
       <p class="text-sm text-ok lg-ok" hidden></p>
@@ -1317,14 +1317,14 @@ document.querySelectorAll('[data-login]').forEach(host => {
   const kind = host.dataset.login;
   host.appendChild($('#loginTpl').content.cloneNode(true));
   host.querySelector('.lg-eyebrow').textContent = kind === 'etudiant' ? 'Portail Étudiant' : kind === 'educateur' ? 'Portail Éducateurs' : 'Portail Professeur';
-  host.querySelector('.lg-help').textContent = 'Saisissez votre nom (ex. Razafiniarivo) votre identifiant (ex. razafr@gstf-faliarivo.ovh) ou votre adresse personnelle enregistrée sur le site, puis votre mot de passe. Une fois connecté, vous pouvez changer votre mot de passe.';
+  host.querySelector('.lg-help').textContent = 'Saisissez votre nom (ex. Razafiniarivo), votre identifiant (ex. razafr@gstf-faliarivo.ovh), votre adresse personnelle ou votre numéro de téléphone enregistrés sur le site, puis votre mot de passe. Une fois connecté, vous pouvez changer votre mot de passe.';
   const f = host.querySelector('form'), err = host.querySelector('.lg-err'), ok = host.querySelector('.lg-ok');
   const show = (el, t) => { err.hidden = ok.hidden = true; if (el) { el.textContent = t; el.hidden = false; } };
   f.addEventListener('submit', async e => {
     e.preventDefault();
     if (!sb) return show(err, 'Le site n’est pas encore relié à la base de données.');
     const saisi = host.querySelector('.lg-email').value.trim(), password = host.querySelector('.lg-pass').value;
-    if (!saisi || !password) return show(err, 'Saisissez votre nom (ou identifiant) et votre mot de passe.');
+    if (!saisi || !password) return show(err, 'Saisissez votre nom (ou identifiant, ou téléphone) et votre mot de passe.');
     const btn = host.querySelector('.lg-btn'); btn.disabled = true;
     // Valent : le nom, l’identifiant @gstf-faliarivo.ovh, ou l’adresse personnelle enregistrée sur le site
     let email = saisi.toLowerCase().replace(/\s+/g, '');
@@ -1336,6 +1336,12 @@ document.querySelectorAll('[data-login]').forEach(host => {
         if (!id) { btn.disabled = false; return show(err, e1 ? 'Écrivez votre nom ou votre identifiant @gstf-faliarivo.ovh.' : 'Cette adresse personnelle n’est pas enregistrée sur le site. Écrivez votre nom ou votre identifiant @gstf-faliarivo.ovh ; une fois connecté, enregistrez votre adresse dans « Mes coordonnées ».'); }
         email = id;
       }
+    } else if (/^\+?[\d\s().-]{9,}$/.test(saisi) && saisi.replace(/\D/g, '').length >= 9) {
+      // Numéro de téléphone enregistré sur le site (034 12 345 67, +261 34 12 345 67…)
+      const { data: id, error: e2 } = await sb.rpc('identifiant_par_telephone', { p_tel: saisi });
+      if (id === 'PLUSIEURS') { btn.disabled = false; return show(err, 'Ce numéro est enregistré pour plusieurs personnes : écrivez plutôt votre nom ou votre identifiant @gstf-faliarivo.ovh.'); }
+      if (!id) { btn.disabled = false; return show(err, e2 ? 'La connexion par téléphone n’est pas encore installée : écrivez votre nom ou votre identifiant.' : 'Ce numéro n’est pas enregistré sur le site. Écrivez votre nom ou votre identifiant ; une fois connecté, ajoutez votre numéro dans « Mes coordonnées ».'); }
+      email = id;
     } else {
       const { data: id } = await sb.rpc('identifiant_par_nom', { p_nom: saisi });
       if (id === 'PLUSIEURS') { btn.disabled = false; return show(err, 'Plusieurs personnes portent ce nom : ajoutez votre prénom (ex. Rodolphe Razafiniarivo) ou saisissez votre identifiant.'); }
@@ -3871,7 +3877,7 @@ async function renderEmailPerso(host) {
       <div class="grid sm:grid-cols-2 gap-3">
         <label class="text-sm"><span class="block mb-1 text-muted">Email personnel (annonces${ancien ? '' : ' et annuaire'})</span>
           <input class="field ep-in" type="email" value="${esc(c.email_perso || '')}" placeholder="votre adresse Gmail, Yahoo…" autocomplete="email"></label>
-        ${ancien ? '' : `<label class="text-sm"><span class="block mb-1 text-muted">Téléphone (annuaire)</span>
+        ${ancien ? '' : `<label class="text-sm"><span class="block mb-1 text-muted">Téléphone (annuaire et connexion)</span>
           <input class="field ep-tel" type="tel" maxlength="40" value="${esc(c.telephone || '')}" placeholder="Ex. 034 00 000 00" autocomplete="tel"></label>`}
       </div>
       ${ancien ? '' : `<label class="flex items-center gap-2 text-sm"><input type="checkbox" class="ep-masque" ${c.masque ? 'checked' : ''}>Ne pas afficher mon email ni mon téléphone dans l’annuaire</label>`}
