@@ -374,6 +374,13 @@ const CONFIG = {
   .scan-cadre { position: relative; }
   .scan-cadre::after { content: ''; position: absolute; inset: 14%; border: 3px solid rgba(255,255,255,.85); border-radius: 14px; box-shadow: 0 0 0 999px rgba(0,0,0,.25); pointer-events: none; }
   .ag-cal { display: flex; flex-wrap: wrap; gap: .35rem; justify-content: flex-end; }
+  .bq-import { border: 2px dashed color-mix(in srgb, var(--accent) 40%, var(--line)); border-radius: .8rem; padding: 1rem 1.1rem; background: var(--surface); transition: background .15s; }
+  .bq-import.survol { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+  .bq-imp-choix { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+  .bq-imp-btn { display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .8rem .4rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--sunk); cursor: pointer; transition: border-color .15s, transform .1s; }
+  .bq-imp-btn:hover, .bq-imp-btn:focus-visible { border-color: var(--accent); }
+  .bq-imp-btn:active { transform: scale(.98); }
+  .bq-imp-btn span { font-size: 1.7rem; line-height: 1.2; } .bq-imp-btn b { font-size: 1rem; } .bq-imp-btn small { font-size: .72rem; color: var(--muted); text-align: center; }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -772,6 +779,19 @@ const CONFIG = {
       <h1 class="font-display text-3xl sm:text-4xl font-semibold">Bibliothèque du séminaire</h1>
       <p class="text-muted" id="bqStats"></p></div>
       <div id="bqPratique" class="mb-8"></div>
+      <div id="bqImport" class="bq-import mb-8" hidden>
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1"><h2 class="font-semibold text-lg">📥 Ajouter une liste de livres au catalogue</h2><span class="text-xs text-muted">Réservé au bibliothécaire et aux administrateurs</span></div>
+        <p class="text-sm text-muted mb-3">Une ligne par livre, par exemple « La Bible de Jérusalem – École biblique – Cerf ». La liste lue s’affiche d’abord : vous corrigez, puis vous ajoutez.</p>
+        <div class="bq-imp-choix">
+          <button type="button" class="bq-imp-btn" data-imp="photo"><span aria-hidden="true">📷</span><b>Photo</b><small>avec la caméra du téléphone</small></button>
+          <button type="button" class="bq-imp-btn" data-imp="word"><span aria-hidden="true">📄</span><b>Word</b><small>fichier .docx</small></button>
+          <button type="button" class="bq-imp-btn" data-imp="pdf"><span aria-hidden="true">📕</span><b>PDF</b><small>fichier .pdf</small></button>
+        </div>
+        <input type="file" id="bqImpPhoto" accept="image/*" capture="environment" hidden>
+        <input type="file" id="bqImpWord" accept=".docx,.odt,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+        <input type="file" id="bqImpPdf" accept=".pdf,application/pdf" hidden>
+        <p class="text-xs text-muted mt-2">Vous pouvez aussi glisser un fichier Word, PDF ou une photo sur ce cadre. Pour une photo : feuille bien à plat, à la lumière du jour, texte net. L’écriture à la main est mal lue : vérifiez bien chaque ligne.</p>
+      </div>
       <div class="flex flex-wrap items-end gap-3 mb-2">
         <label class="text-sm grow max-w-2xl"><span class="block font-semibold mb-1">Rechercher un livre</span><input id="bqQ" class="field" type="search" placeholder="Titre, auteur, sujet ou cote" autocomplete="off"></label>
         <div class="seg" id="bqFiltre"><button type="button" data-f="tous" aria-pressed="true">Tous</button><button type="button" data-f="empruntables">Empruntables</button><button type="button" data-f="sur_place">Sur place seulement</button></div>
@@ -1281,7 +1301,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 114</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 115</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -5270,6 +5290,7 @@ async function excelEconomat() {
 /* =================================================================== *
  *  Bibliothèque : catalogue public, disponibilité, prêts et retours
  * =================================================================== */
+const BQ_COLS = { cote: 'cote', titre: 'titre', auteur: 'auteur', auteurs: 'auteur', editeur: 'editeur', annee: 'annee_pub', sujet: 'sujet', theme: 'sujet', exemplaires: 'exemplaires', nombre: 'exemplaires', rayon: 'emplacement', emplacement: 'emplacement', isbn: 'isbn', 'sur place': 'sur_place' };
 const BQ = { biblio: false, regles: { duree: 14, max: 3, prolongations: 1 }, q: '', filtre: 'tous', res: null, sous: 'prets', edit: null, timer: null };
 const jourCourt = d => d ? fmtDate(d, { day: 'numeric', month: 'short', year: 'numeric' }) : '';
 
@@ -5296,6 +5317,7 @@ async function renderBibliotheque() {
   chercherLivres();
   renderMesPrets();
   $('#bqGestion').hidden = !BQ.biblio;
+  $('#bqImport').hidden = !BQ.biblio;
   if (BQ.biblio) renderGestionBiblio();
 }
 
@@ -5529,7 +5551,7 @@ function gAjouter() {
     });
     return;
   }
-  const COLS = { cote: 'cote', titre: 'titre', auteur: 'auteur', auteurs: 'auteur', editeur: 'editeur', annee: 'annee_pub', sujet: 'sujet', theme: 'sujet', exemplaires: 'exemplaires', nombre: 'exemplaires', rayon: 'emplacement', emplacement: 'emplacement', isbn: 'isbn', 'sur place': 'sur_place' };
+  const COLS = BQ_COLS; const _cols_ = { cote: 'cote', titre: 'titre', auteur: 'auteur', auteurs: 'auteur', editeur: 'editeur', annee: 'annee_pub', sujet: 'sujet', theme: 'sujet', exemplaires: 'exemplaires', nombre: 'exemplaires', rayon: 'emplacement', emplacement: 'emplacement', isbn: 'isbn', 'sur place': 'sur_place' };
   $('#bqModele').addEventListener('click', async () => {
     try { await chargerScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'); } catch (_) { toast('Excel indisponible', 'Vérifiez la connexion Internet.', 'bad'); return; }
     const wb = XLSX.utils.book_new();
@@ -7570,6 +7592,18 @@ $('#importNotesBtn').addEventListener('click', () => {
 
 
 /* Bibliothèque : importer une liste de livres depuis Word, PDF ou une photo */
+(() => {
+  const box = $('#bqImport'); if (!box) return;
+  const champs = { photo: '#bqImpPhoto', word: '#bqImpWord', pdf: '#bqImpPdf' };
+  const lancer = f => { if (!f) return; if (!BQ.biblio) { toast('Réservé au bibliothécaire', 'Connectez-vous avec un compte autorisé.', 'warn'); return; }
+    if (!/\.(docx|odt|pdf)$/i.test(f.name || '') && !/^image\//.test(f.type || '')) { toast('Format non accepté', 'Choisissez une photo, un fichier Word (.docx) ou un PDF.', 'warn'); return; }
+    importerListeLivres(f, BQ_COLS); };
+  box.querySelectorAll('[data-imp]').forEach(b => b.addEventListener('click', () => $(champs[b.dataset.imp]).click()));
+  Object.values(champs).forEach(id => $(id).addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; lancer(f); }));
+  box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('survol'); });
+  box.addEventListener('dragleave', () => box.classList.remove('survol'));
+  box.addEventListener('drop', e => { e.preventDefault(); box.classList.remove('survol'); lancer(e.dataTransfer.files[0]); });
+})();
 function analyserLigneLivre(l) {
   let t = String(l || '').replace(/\s+/g, ' ').trim();
   if (t.replace(/[^A-Za-zÀ-ÿ]/g, '').length < 4) return null;
@@ -7619,7 +7653,7 @@ async function importerListeLivres(f, COLS) {
       for (let i = 0; i < lot.length; i += 300) { etat.textContent = `Ajout… ${ok}/${rows.length}`; const { error } = await fn(lot.slice(i, i + 300)); if (error) { etat.textContent = `Arrêté après ${ok} livre(s) : ${errText(error)}`; btn.disabled = false; return; } ok += Math.min(300, lot.length - i); }
     }
     fermer(); toast('Livres ajoutés au catalogue', `${ok} livre(s)`);
-    try { BQ.q = ''; $('#bqQ').value = ''; chercherLivres(); } catch (_) {}
+    try { BQ.q = ''; $('#bqQ').value = ''; renderBibliotheque(); } catch (_) {}
   });
 }
 
