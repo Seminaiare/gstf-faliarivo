@@ -1280,7 +1280,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 109</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 110</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -4157,7 +4157,14 @@ async function renderEmailPerso(host) {
       ${'public' in c ? `<label class="flex items-start gap-2 text-sm"><input type="checkbox" class="ep-public mt-1" ${c.public === false ? 'checked' : ''}><span>Retirer mon nom de l’annuaire public <span class="text-muted">(les visiteurs du site ne me verront plus ; les membres connectés me voient toujours)</span></span></label>` : ''}
       <div class="flex flex-wrap items-center gap-3"><button class="btn btn-ghost" type="submit">Enregistrer</button>
         <span class="text-xs text-muted">Les emails du site arrivent à cette adresse personnelle ; votre identifiant sert à vous connecter.${ancien ? '' : ' Vos coordonnées ne sont visibles dans l’annuaire que par les membres connectés du séminaire.'}</span></div>
-    </form>`;
+    </form>
+    <div class="bg-surface border border-line rounded-lg p-4 mt-4 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0"><div class="font-semibold">🔑 Mon compte</div>
+        <p class="text-sm text-muted">Identifiant : <span class="font-mono">${esc((state.profil && state.profil.email) || '')}</span> · changez votre mot de passe quand vous voulez ; personne d’autre ne le connaîtra.</p></div>
+      <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-sm mc-pw">Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm mc-out">Se déconnecter</button></div>
+    </div>`;
+  host.querySelector('.mc-pw').addEventListener('click', () => $('#changePwBtn').click());
+  host.querySelector('.mc-out').addEventListener('click', () => $('#logoutBtn').click());
   host.querySelector('form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = host.querySelector('.ep-in').value.trim();
