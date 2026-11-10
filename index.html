@@ -1062,7 +1062,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 96</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 97</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2997,6 +2997,10 @@ function videoChamp(cls) { return `<label class="text-sm"><span class="block fon
 const estFacebook = url => /^https:\/\/((www|m|web)\.)?(facebook\.com|fb\.watch)\//i.test(String(url || ''));
 const mediaVideos = a => [a.video, ...(a.videos || [])].filter(Boolean);
 const ytPrincipal = a => mediaVideos(a).find(ytId) || null;
+const fbPrincipal = a => mediaVideos(a).find(estFacebook) || null;
+const lienVideo = a => { const y = ytPrincipal(a); return y ? 'https://www.youtube.com/watch?v=' + ytId(y) : fbPrincipal(a); };
+const siteVideo = a => ytPrincipal(a) ? 'YouTube' : 'Facebook';
+const vignetteFb = '<span style="position:relative;display:block;width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#1877f2,#0b3d91)"><span style="position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;color:#fff;font-weight:600;font-size:14px"><svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></svg>Vidéo Facebook</span></span>';
 const nbVideos = a => mediaVideos(a).filter(v => ytId(v) || estFacebook(v)).length;
 function lireVideos(texte) {
   const l = String(texte || '').split(/[\s,]+/).map(x => x.trim()).filter(Boolean);
@@ -3063,14 +3067,15 @@ function renderActusAccueil() {
   el.innerHTML = list.length ? `<h2 class="h2 mb-4">Actualités</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${list.map(a => `<div class="bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
       <button type="button" class="text-left flex flex-col grow actu-open" data-actu="${a.id}">
-        ${a.photos.length ? `<span style="position:relative;display:block"><img src="${esc(photoUrl(a.photos[0]))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${ytPrincipal(a) ? '<span class="pill" style="position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff">▶ Vidéo</span>' : ''}</span>`
-          : ytPrincipal(a) ? `<span style="position:relative;display:block"><img src="${ytThumb(ytId(ytPrincipal(a)))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${playIcon}</span>` : ''}
+        ${a.photos.length ? `<span style="position:relative;display:block"><img src="${esc(photoUrl(a.photos[0]))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${lienVideo(a) ? '<span class="pill" style="position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff">▶ Vidéo</span>' : ''}</span>`
+          : ytPrincipal(a) ? `<span style="position:relative;display:block"><img src="${ytThumb(ytId(ytPrincipal(a)))}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover">${playIcon}</span>`
+          : fbPrincipal(a) ? `<span style="position:relative;display:block">${vignetteFb}${playIcon}</span>` : ''}
         <span class="p-4 flex flex-col gap-1 min-w-0">
           <span class="text-xs text-muted flex flex-wrap items-center gap-2">${badgeGroupe(a)}<span>${esc(actuDate(a))}${a.photos.length > 1 ? ` · ${a.photos.length} photos` : ''}${a.public ? '' : ' · réservé aux connectés'}</span></span>
           <span class="font-semibold leading-snug">${esc(a.titre)}</span>
           ${a.texte ? `<span class="text-sm text-muted" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(a.texte)}</span>` : ''}
         </span></button>
-      ${ytPrincipal(a) ? `<a class="linkbtn text-sm px-4 pb-3" href="https://www.youtube.com/watch?v=${ytId(ytPrincipal(a))}" target="_blank" rel="noopener">▶ Regarder sur YouTube ↗</a>` : ''}</div>`).join('')}</div>` : '';
+      ${lienVideo(a) ? `<a class="linkbtn text-sm px-4 pb-3" href="${esc(lienVideo(a))}" target="_blank" rel="noopener">▶ Regarder sur ${siteVideo(a)} ↗</a>` : ''}</div>`).join('')}</div>` : '';
   el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
   // Galerie : les photos de toutes les publications, les plus récentes d'abord
   const g = $('#galerieAccueil'), photos = PUB.flatMap(a => a.photos.map(p => ({ p, a }))).slice(0, 16);
@@ -3093,8 +3098,7 @@ function renderActusAccueil() {
 // Une publication qui n'est qu'une vidéo YouTube s'ouvre directement sur YouTube ; sinon, la fenêtre complète
 function ouvrirPublication(id) {
   const a = ACTUS.find(x => x.id === id) || SOUVENIRS.find(x => x.id === id); if (!a) return;
-  const yt = ytPrincipal(a);
-  if (yt && !a.photos.length && !(a.documents || []).length && mediaVideos(a).length === 1) { window.open('https://www.youtube.com/watch?v=' + ytId(yt), '_blank', 'noopener'); return; }
+  if (lienVideo(a) && !a.photos.length && !(a.documents || []).length && mediaVideos(a).length === 1) { window.open(lienVideo(a), '_blank', 'noopener'); return; }
   openActu(id);
 }
 function openActu(id) {
@@ -3146,7 +3150,7 @@ async function renderSouvenirs() {
       const img = a.photos.length ? photoUrl(a.photos[0]) : ytPrincipal(a) ? ytThumb(ytId(ytPrincipal(a))) : '';
       const yt = ytPrincipal(a), video = yt || mediaVideos(a).find(estFacebook) || null;
       return `<div class="souv-carte bg-surface border border-line rounded-lg overflow-hidden flex flex-col" data-souv-carte="${a.id}">
-        ${img ? `<button type="button" class="souv-media block text-left" style="position:relative" data-souv="${a.id}" ${!a.photos.length && yt ? `data-jouer="${esc(ytId(yt))}"` : ''} aria-label="${!a.photos.length && yt ? 'Lire la vidéo' : 'Ouvrir'} : ${esc(a.titre)}"><img src="${esc(img)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">${!a.photos.length && yt ? playIcon : ''}<span class="souv-etoile" aria-hidden="true">★</span></button>` : `<button type="button" class="souv-vide" data-souv="${a.id}" aria-label="Ouvrir : ${esc(a.titre)}">★</button>`}
+        ${img ? `<button type="button" class="souv-media block text-left" style="position:relative" data-souv="${a.id}" ${!a.photos.length && yt ? `data-jouer="${esc(ytId(yt))}"` : ''} aria-label="${!a.photos.length && yt ? 'Lire la vidéo' : 'Ouvrir'} : ${esc(a.titre)}"><img src="${esc(img)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">${!a.photos.length && yt ? playIcon : ''}<span class="souv-etoile" aria-hidden="true">★</span></button>` : video ? `<a class="souv-media block" style="position:relative" href="${esc(video)}" target="_blank" rel="noopener" aria-label="Regarder sur Facebook : ${esc(a.titre)}">${vignetteFb}${playIcon}</a>` : `<button type="button" class="souv-vide" data-souv="${a.id}" aria-label="Ouvrir : ${esc(a.titre)}">★</button>`}
         <button type="button" class="p-4 flex flex-col gap-1 min-w-0 text-left grow" data-souv="${a.id}">
           <span class="text-xs text-muted">${esc(actuDate(a))}${a.photos.length > 1 ? ` · ${a.photos.length} photos` : ''}${nbVideos(a) ? ` · ${nbVideos(a)} vidéo${nbVideos(a) > 1 ? 's' : ''}` : ''}${(a.documents || []).length ? ` · ${a.documents.length} PDF` : ''}${a.public ? '' : ' · réservé aux connectés'}</span>
           <span class="font-display text-lg font-semibold leading-snug">${esc(a.titre)}</span>
