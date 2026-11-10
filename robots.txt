@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gstf-faliarivo.ovh/sitemap.xml

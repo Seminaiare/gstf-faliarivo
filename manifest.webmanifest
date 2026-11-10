@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "GSTF – Grand Séminaire de Théologie de Faliarivo",
+  "short_name": "GSTF",
+  "description": "Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus, Faliarivo – Antananarivo : portails, cours, bibliothèque, agenda, rendez-vous.",
+  "lang": "fr",
+  "start_url": "/?app=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#8c2a34",
+  "categories": ["education"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
