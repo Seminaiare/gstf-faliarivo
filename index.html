@@ -1280,7 +1280,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 110</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 111</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -3617,7 +3617,7 @@ function renderAdminArticles() {
         <label class="text-sm"><span class="block font-semibold mb-1">Auteur</span><input id="arAuteur" class="field" maxlength="200" placeholder="Ex. P. Luca BANDIERA"></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Résumé</span><textarea id="arResume" class="field" rows="3" maxlength="2000" placeholder="Quelques lignes de présentation"></textarea></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Texte de l’article <span class="font-normal text-muted">(facultatif si vous joignez un PDF)</span></span><textarea id="arTexte" class="field" rows="8"></textarea></label>
-        <label class="text-sm"><span class="block font-semibold mb-1">Fichier PDF <span class="font-normal text-muted">(facultatif, 15 Mo au plus)</span></span><input id="arPdf" class="field" type="file" accept="application/pdf"></label>
+        <label class="text-sm"><span class="block font-semibold mb-1">Fichier PDF ou Word <span class="font-normal text-muted">(facultatif ; un PDF est joint à l’article, 15 Mo au plus ; un fichier Word remplit le texte de l’article)</span></span><input id="arPdf" class="field" type="file" accept="application/pdf,.docx"></label>
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="arPrive">Réservé aux étudiants et professeurs connectés</label>
         <p id="arErr" class="text-sm text-bad" hidden></p>
         <button class="btn" type="submit" id="arBtn">Publier l’article</button>
@@ -3651,6 +3651,7 @@ function renderAdminArticles() {
   $('#arForm').addEventListener('submit', async e => {
     e.preventDefault();
     const err = $('#arErr'), titre = $('#arTitre').value.trim(), pdf = $('#arPdf').files[0];
+    if (pdf && !/\.pdf$/i.test(pdf.name) && pdf.type !== 'application/pdf') { err.textContent = 'Seul un fichier PDF peut être joint à l’article.'; err.hidden = false; return; }
     const texte = $('#arTexte').value.trim();
     if (!titre) { err.textContent = 'Donnez un titre à l’article.'; err.hidden = false; return; }
     if (!texte && !pdf) { err.textContent = 'Écrivez le texte de l’article ou joignez un fichier PDF.'; err.hidden = false; return; }
@@ -7379,8 +7380,8 @@ chercherChampsPhotos(document);
 new MutationObserver(l => l.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && chercherChampsPhotos(n)))).observe(document.body, { childList: true, subtree: true });
 document.addEventListener('paste', e => {
   const fichiers = [...((e.clipboardData && e.clipboardData.files) || [])].filter(f => /^image\//.test(f.type)); if (!fichiers.length) return;
-  const zones = [...document.querySelectorAll('.zone-photos')].filter(z => z.offsetParent);
-  let cible = ZONE_ACTIVE && ZONE_ACTIVE.offsetParent ? ZONE_ACTIVE._inp : zones.length ? zones[0]._inp : null;
+  const zones = [...document.querySelectorAll('.zone-photos')].filter(z => z.offsetParent && /image/.test(z._inp.accept || ''));
+  let cible = ZONE_ACTIVE && ZONE_ACTIVE.offsetParent && /image/.test(ZONE_ACTIVE._inp.accept || '') ? ZONE_ACTIVE._inp : zones.length ? zones[0]._inp : null;
   if (!cible) cible = [...document.querySelectorAll('input[type=file][accept^="image"]')].find(i => { const l = i.closest('label'); return l && l.offsetParent; }) || null;
   if (!cible) return;
   e.preventDefault();
@@ -7618,6 +7619,56 @@ const ZONES_PROTEGEES = '.visio, #actuVue, #actusAccueil, #galerieAccueil, #souv
 ['contextmenu', 'dragstart'].forEach(t => document.addEventListener(t, e => {
   if (e.target.tagName === 'IMG' && e.target.closest(ZONES_PROTEGEES)) { e.preventDefault(); if (t === 'contextmenu') toast('Photo protégée', 'Les photos du séminaire ne peuvent pas être téléchargées.', 'warn'); }
 }));
+
+
+/* ---------- Dépôt de fichiers (PDF, Word, Excel…) : glisser-déposer ---------- */
+function accepteFichier(inp, f) {
+  const a = (inp.accept || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean); if (!a.length) return true;
+  const n = (f.name || '').toLowerCase(), t = (f.type || '').toLowerCase();
+  return a.some(x => x.startsWith('.') ? n.endsWith(x) : x.endsWith('/*') ? t.startsWith(x.slice(0, -1)) : t === x);
+}
+function zoneFichiers(inp) {
+  if (inp.dataset.zone) return; inp.dataset.zone = '1';
+  const plusieurs = inp.multiple, z = document.createElement('div'); z.className = 'zone-photos'; z.tabIndex = 0; z._inp = inp;
+  z.innerHTML = `<p class="zp-titre">📂 <b>Glissez ${plusieurs ? 'les fichiers' : 'le fichier'} ici</b> depuis un dossier</p>
+    <p class="zp-sous">ou <button type="button" class="linkbtn zp-choisir">${plusieurs ? 'choisissez-les' : 'choisissez-le'} dans l’ordinateur</button> <button type="button" class="linkbtn zp-vider" hidden>· retirer</button></p><p class="zp-nb" hidden></p>`;
+  inp.style.display = 'none';
+  (inp.closest('label') || inp).insertAdjacentElement('afterend', z);
+  const maj = () => { const l = [...inp.files], nb = z.querySelector('.zp-nb'); nb.hidden = !l.length; nb.textContent = l.length ? '✓ ' + l.map(f => f.name).join(' · ') : ''; z.querySelector('.zp-vider').hidden = !l.length; };
+  inp.addEventListener('change', maj);
+  z.querySelector('.zp-choisir').addEventListener('click', () => inp.click());
+  z.querySelector('.zp-vider').addEventListener('click', () => { inp.value = ''; inp.dispatchEvent(new Event('change', { bubbles: true })); });
+  z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('survol'); });
+  z.addEventListener('dragleave', () => z.classList.remove('survol'));
+  z.addEventListener('drop', e => {
+    e.preventDefault(); z.classList.remove('survol');
+    const ok = [...e.dataTransfer.files].filter(f => accepteFichier(inp, f)), refus = e.dataTransfer.files.length - ok.length;
+    if (!ok.length) { toast('Fichier non accepté ici', 'Formats possibles : ' + (inp.accept || 'tous').replace(/application\//g, '').replace(/,/g, ', '), 'warn'); return; }
+    const dt = new DataTransfer(); if (plusieurs) [...inp.files].forEach(f => dt.items.add(f));
+    (plusieurs ? ok : ok.slice(0, 1)).forEach(f => dt.items.add(f));
+    inp.files = dt.files; inp.dispatchEvent(new Event('change', { bubbles: true }));
+    if (refus) toast(`${refus} fichier(s) ignoré(s)`, 'Format non accepté ici.', 'warn');
+  });
+}
+const chercherChampsFichiers = racine => (racine.querySelectorAll ? racine.querySelectorAll('input[type=file]:not([hidden]):not([data-zone]):not([capture])') : [])
+  .forEach(i => { if (!(i.multiple && /^image/.test(i.accept || ''))) zoneFichiers(i); });
+chercherChampsFichiers(document);
+new MutationObserver(l => l.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && chercherChampsFichiers(n)))).observe(document.body, { childList: true, subtree: true });
+/* Article : un fichier Word glissé remplit le texte de l’article */
+document.addEventListener('change', async e => {
+  if (e.target.id !== 'arPdf') return;
+  const f = e.target.files[0]; if (!f || !/\.docx$/i.test(f.name)) return;
+  try {
+    await chargerScript(LIBS_IMPORT.mammoth);
+    const { value } = await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() });
+    const texte = value.replace(/\n{3,}/g, '\n\n').trim();
+    const t = $('#arTexte'); if (t.value.trim() && !confirm('Remplacer le texte déjà écrit par celui du document Word ?')) return;
+    t.value = texte;
+    if (!$('#arTitre').value.trim()) $('#arTitre').value = (texte.split('\n').find(l => l.trim()) || '').trim().slice(0, 250);
+    e.target.value = ''; e.target.dispatchEvent(new Event('change', { bubbles: true }));
+    toast('Texte du document Word repris', 'Il est dans « Texte de l’article » : relisez-le, puis publiez.');
+  } catch (err) { toast('Lecture du Word impossible', err.message || errText(err), 'bad'); }
+});
 
 /* Notifications sur le téléphone */
 const VAPID_PUBLIC = 'BOh-mCBxZIrDVBHP82PJgCwS5QO_zUm0XVMlfsXG51z-N1cF0ShSU24uvhtR9T6_K_Uit-Loo_8O9yZ7V__aAmw';
