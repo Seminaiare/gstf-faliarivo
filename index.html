@@ -409,6 +409,14 @@ const CONFIG = {
     .barre-bas .bb-ic { display: flex; align-items: center; justify-content: center; width: 52px; height: 30px; border-radius: 999px; transition: background .2s; }
     header nav[aria-label="Sections"] { display: none; }
     #tailleBtn { display: none; }
+    #sessionChip { display: none !important; }
+    .entete-adresse { display: none; }
+    header .langues button { padding: .28rem .42rem; font-size: .7rem; }
+    header .gutter > div:first-child { padding-top: .6rem; padding-bottom: .6rem; gap: .6rem; }
+    .aide-btn { font-size: 0 !important; padding: .55rem !important; gap: 0 !important; }
+    .aide-btn span { font-size: 1rem; }
+    .acc-perso .salut { font-size: clamp(1.35rem, 6.5vw, 1.9rem); }
+    .acc-fl { display: none; }
     #toastHost { bottom: calc(80px + env(safe-area-inset-bottom)) !important; z-index: 65 !important; }
     body { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
     .aide-btn { bottom: calc(78px + env(safe-area-inset-bottom)); padding: .5rem .85rem; font-size: .85rem; }
@@ -465,7 +473,7 @@ const CONFIG = {
         <div class="min-w-0">
           <div class="font-display text-lg sm:text-2xl font-semibold leading-tight">Grand Séminaire de Théologie</div>
           <div class="font-display text-base sm:text-lg italic leading-tight">Sainte Thérèse de l’Enfant-Jésus</div>
-          <div class="text-xs text-muted leading-snug">Faliarivo - Ambanidia · Lot VB 5 bis · 101 Antananarivo · Année <span class="annee-lib">2026–2027</span></div>
+          <div class="text-xs text-muted leading-snug entete-adresse">Faliarivo - Ambanidia · Lot VB 5 bis · 101 Antananarivo · Année <span class="annee-lib">2026–2027</span></div>
         </div>
       </div>
       <button type="button" id="installBtn" class="btn btn-sm shrink-0" hidden title="Installer l’application GSTF sur cet appareil" aria-label="Installer l’application GSTF">📲<span class="hidden sm:inline"> Installer l’application</span><span class="sm:hidden"> App</span></button>
@@ -1272,7 +1280,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 108</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 109</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -7120,7 +7128,9 @@ function ouvrirFeuille() {
   $('#feuilleGrille').innerHTML = tabs.map(b => { const ic = b.querySelector('.tab-ic'); return `<button type="button" data-ft="${b.dataset.tab}">${ic ? ic.outerHTML : ''}<span>${esc(b.textContent.trim())}</span></button>`; }).join('');
   $('#feuilleGrille').querySelectorAll('[data-ft]').forEach(b => b.addEventListener('click', () => { fermerFeuille(); showTab(b.dataset.ft); window.scrollTo(0, 0); }));
   $('#feuilleNotif').innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3 mb-3"><span class="text-sm font-semibold">Taille du texte</span><span class="taille-choix">${TAILLES.map((k, i) => `<button type="button" data-tk="${k}" aria-pressed="${k === tailleK()}" style="font-size:${.8 + i * .14}rem">A</button>`).join('')}</span></div>
-    <button type="button" class="btn btn-ghost btn-sm mb-3" id="feuilleScan">📷 Vérifier une carte d’étudiant</button><div class="notif-zone"></div>`;
+    <button type="button" class="btn btn-ghost btn-sm mb-3" id="feuilleScan">📷 Vérifier une carte d’étudiant</button><div class="notif-zone"></div>
+    ${state.profil ? `<div class="mt-4 pt-3 border-t border-line"><p class="text-sm mb-2">Connecté : <b>${esc($('#sessionName').textContent)}</b></p><div class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm" id="feuillePw">🔑 Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm" id="feuilleOut">↩ Se déconnecter</button></div></div>` : ''}`;
+  if ($('#feuillePw')) { $('#feuillePw').addEventListener('click', () => { fermerFeuille(); $('#changePwBtn').click(); }); $('#feuilleOut').addEventListener('click', () => { fermerFeuille(); $('#logoutBtn').click(); }); }
   $('#feuilleNotif').querySelectorAll('[data-tk]').forEach(b => b.addEventListener('click', () => { choisirTaille(+b.dataset.tk); $('#feuilleNotif').querySelectorAll('[data-tk]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); }));
   $('#feuilleScan').addEventListener('click', async () => { fermerFeuille(); const code = codeDeCarte(await scannerQR('Scannez le QR code d’une carte d’étudiant')); if (code) verifierCarte(code); });
   majBoutonsNotif();
@@ -7145,7 +7155,8 @@ async function renderPerso() {
   const p = state.profil;
   if (!p || p.type === 'inconnu') { el.hidden = true; el.innerHTML = ''; el.dataset.cle = ''; return; }
   if (PERSO_PRETS === null && sb) { PERSO_PRETS = []; sb.rpc('mes_prets').then(r => { PERSO_PRETS = (r.data || []).filter(l => !l.rendu_le); if (currentTab === 'accueil') renderPerso(); }, () => {}); }
-  const nom = p.type === 'etudiant' ? String(p.prenoms || p.nom || '').split(/\s+/)[0] : String(p.nom || '').trim();
+  const mots = String(p.type === 'etudiant' ? (p.prenoms || p.nom || '') : (p.nom || '')).trim().split(/\s+/);
+  const nom = /^(p|fr|fra|sr|mgr|dom|don|abbé|abbe|père|pere|frère|frere|sœur|soeur|r\.?p)\.?$/i.test(mots[0] || '') ? mots.slice(0, 2).join(' ') : mots[0] || '';
   // Cours du jour
   const e = typeof EDT !== 'undefined' ? EDT[TODAY] : null; let cours = [];
   try {
@@ -7164,7 +7175,7 @@ async function renderPerso() {
   if (el.dataset.cle === cle) return; el.dataset.cle = cle;
   const heure = new Date().getHours(), salut = heure < 5 || heure >= 18 ? 'Bonsoir' : 'Bonjour';
   el.innerHTML = `<p class="eyebrow mb-1">${esc(new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))}</p>
-    <p class="font-display text-3xl font-semibold leading-tight">${salut}, ${esc(nom)} 👋</p>
+    <p class="font-display text-3xl font-semibold leading-tight salut">${salut}, ${esc(nom)} 👋</p>
     <div class="grid sm:grid-cols-3 gap-3 mt-4">
       <div class="perso-bloc"><p class="eyebrow mb-1">Aujourd’hui</p>${cours.length ? `<ul>${cours.map(c => `<li>${c}</li>`).join('')}</ul>` : '<p>Pas de cours aujourd’hui.</p>'}</div>
       <div class="perso-bloc"><p class="eyebrow mb-1">Dernière annonce</p>${ann ? `<p class="font-semibold">${esc(ann.titre)}</p>${ann.texte ? `<p class="opacity-90" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(ann.texte)}</p>` : ''}` : '<p>Aucune annonce en cours.</p>'}</div>
