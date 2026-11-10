@@ -389,6 +389,7 @@ const CONFIG = {
   .imp-table tr.ok td:first-child { box-shadow: inset 3px 0 0 var(--ok); } .imp-table tr.doute td:first-child { box-shadow: inset 3px 0 0 var(--warn); } .imp-table tr.inconnu td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
   .imp-lu { font-family: ui-monospace, monospace; font-size: .78rem; color: var(--muted); max-width: 18rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .note-importee { background: color-mix(in srgb, var(--gold) 22%, transparent) !important; border-color: var(--gold) !important; }
+  img.photo-protegee, .visio img, #actuVue img, #actusAccueil img, #galerieAccueil img, #souvList img, #accBandeau img, .frise img, #accPortrait img { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
   .barre-bas { display: none; }
   .feuille { position: fixed; inset: 0; z-index: 60; }
   .feuille-fond { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
@@ -874,7 +875,7 @@ const CONFIG = {
       <div class="mb-8">
         <p class="eyebrow mb-1">Mémoire du séminaire</p>
         <h1 class="font-display text-3xl sm:text-4xl font-semibold">Événements inoubliables</h1>
-        <p class="text-muted mt-1 max-w-3xl">Ordinations, jubilés, visites, fêtes, pèlerinages : les grands moments vécus au Grand Séminaire de Faliarivo, en photos et en vidéos.</p>
+        <p class="text-muted mt-1 max-w-3xl">Ordinations, jubilés, visites, fêtes, pèlerinages : les grands moments vécus au Grand Séminaire de Faliarivo, en photos et en vidéos. Les actualités de plus de 3 mois sont rangées ici automatiquement et y restent pour toujours.</p>
       </div>
       <div id="souvList"></div>
     </section>
@@ -1271,7 +1272,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 107</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 108</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -3301,12 +3302,18 @@ function lireVideo(input) {
   const v = input.value.trim(); if (!v) return { ok: true, video: null };
   return ytId(v) ? { ok: true, video: v } : { ok: false };
 }
+function actuRecente(a) {   // moins de 3 mois (date de l’événement, sinon date de publication)
+  const lim = new Date(); lim.setMonth(lim.getMonth() - 3);
+  const d = a.date_evenement || String(a.publie_le || '').slice(0, 10);
+  return !d || d >= lim.toISOString().slice(0, 10);
+}
 const actuDate = a => a.date_evenement ? fmtDate(a.date_evenement, { day: 'numeric', month: 'long', year: 'numeric' }) : new Date(a.publie_le).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 function renderActusAccueil() {
   const el = $('#actusAccueil'); if (!el) return;
-  const PUB = ACTUS.filter(a => a.statut !== 'en_attente');
+  const PUB = ACTUS.filter(a => a.statut !== 'en_attente' && actuRecente(a));   // plus de 3 mois : seulement dans « Événements inoubliables »
+  const anciennes = ACTUS.some(a => a.statut !== 'en_attente' && !actuRecente(a));
   const list = PUB.slice(0, 9);
-  el.hidden = !list.length;
+  el.hidden = !list.length && !anciennes;
   el.innerHTML = list.length ? `<h2 class="h2 mb-4">Actualités</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${list.map(a => `<div class="bg-surface border border-line rounded-lg overflow-hidden flex flex-col">
       <button type="button" class="text-left flex flex-col grow actu-open" data-actu="${a.id}">
@@ -3319,6 +3326,7 @@ function renderActusAccueil() {
           ${a.texte ? `<span class="text-sm text-muted" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(a.texte)}</span>` : ''}
         </span></button>
       ${lienVideo(a) || a.public ? `<div class="px-4 pb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">${lienVideo(a) ? `<a class="linkbtn" href="${esc(lienVideo(a))}" target="_blank" rel="noopener">▶ Regarder sur ${siteVideo(a)} ↗</a>` : ''}${a.public ? boutonsPartage(a.titre, 'actu=' + a.id) : ''}</div>` : ''}</div>`).join('')}</div>` : '';
+  if (anciennes) el.insertAdjacentHTML('beforeend', `<p class="text-sm mt-4"><button type="button" class="linkbtn" onclick="showTab('souvenirs')">★ Les actualités de plus de 3 mois sont dans « Événements inoubliables » →</button></p>`);
   el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
   sauverActusHorsLigne(PUB.filter(a => a.public !== false || state.profil).slice(0, 8));
   // Galerie : les photos de toutes les publications, les plus récentes d'abord
@@ -3354,7 +3362,7 @@ function openActu(id) {
     ${a.texte ? `<p class="whitespace-pre-line mb-4">${esc(a.texte)}</p>` : ''}
     ${mediaVideos(a).map(v => lecteurVideo(v, a.titre)).join('')}
     ${(a.documents || []).length ? `<div class="flex flex-col gap-2 mb-4">${a.documents.map(d => `<a class="flex items-center gap-3 p-3 rounded-lg border border-line bg-sunk hover:border-accent" href="${esc(photoUrl(d.path))}" target="_blank" rel="noopener"><span style="color:var(--bad)">${iconePdf}</span><span class="min-w-0"><span class="block font-semibold truncate">${esc(d.nom || 'Document PDF')}</span><span class="text-xs text-muted">PDF · ouvrir ou télécharger</span></span></a>`).join('')}</div>` : ''}
-    <div class="grid sm:grid-cols-2 gap-3">${a.photos.map((p, i) => `<a href="${esc(photoUrl(p))}" target="_blank" rel="noopener" data-vis="${i}"><img src="${esc(photoMini(p))}" alt="" loading="lazy" decoding="async" class="rounded-lg" style="width:100%;object-fit:cover"></a>`).join('')}</div>
+    <div class="grid sm:grid-cols-2 gap-3">${a.photos.map((p, i) => `<a href="#" role="button" data-vis="${i}"><img src="${esc(photoMini(p))}" alt="" loading="lazy" decoding="async" class="rounded-lg" style="width:100%;object-fit:cover"></a>`).join('')}</div>
     ${a.public ? `<div class="mt-5 pt-4 border-t border-line flex flex-wrap items-center gap-3 text-sm"><span class="font-semibold">Partager :</span>${boutonsPartage(a.titre, 'actu=' + a.id)}</div>` : ''}`;
   } catch (e) {
     html = `<h2 class="font-display text-3xl font-semibold mb-3">${esc(a.titre || '')}</h2>${(mediaVideos(a) || []).map(v => `<p><a class="linkbtn" href="${esc(v)}" target="_blank" rel="noopener">Voir la vidéo ↗</a></p>`).join('')}`;
@@ -3381,8 +3389,9 @@ async function renderSouvenirs() {
   const el = $('#souvList'); if (!el) return;
   if (!SOUV_CHARGE && sb) {
     el.innerHTML = '<p class="text-muted">Chargement…</p>';
-    const { data, error } = await sb.from('actualites').select('*').eq('inoubliable', true).order('date_evenement', { ascending: false, nullsFirst: false }).order('publie_le', { ascending: false }).limit(300);
-    SOUVENIRS = error ? [] : (data || []).filter(a => a.statut !== 'en_attente' && a.inoubliable !== false); SOUV_CHARGE = !error;
+    // Marqués « inoubliables » + toutes les actualités de plus de 3 mois (rangées ici automatiquement, pour toujours)
+    const { data, error } = await sb.from('actualites').select('*').order('date_evenement', { ascending: false, nullsFirst: false }).order('publie_le', { ascending: false }).limit(1000);
+    SOUVENIRS = error ? [] : (data || []).filter(a => a.statut !== 'en_attente' && (a.inoubliable === true || !actuRecente(a))); SOUV_CHARGE = !error;
   }
   if (!SOUVENIRS.length) {
     el.innerHTML = `<div class="bg-surface border border-line rounded-lg p-6 max-w-3xl"><p class="font-semibold">Les premiers souvenirs arrivent bientôt.</p>
@@ -7584,6 +7593,13 @@ async function importerListeLivres(f, COLS) {
     try { BQ.q = ''; $('#bqQ').value = ''; chercherLivres(); } catch (_) {}
   });
 }
+
+
+/* Photos du séminaire : pas d’enregistrement par clic droit, appui long ou glisser */
+const ZONES_PROTEGEES = '.visio, #actuVue, #actusAccueil, #galerieAccueil, #souvList, #accBandeau, .frise, #accPortrait, #videosAccueil';
+['contextmenu', 'dragstart'].forEach(t => document.addEventListener(t, e => {
+  if (e.target.tagName === 'IMG' && e.target.closest(ZONES_PROTEGEES)) { e.preventDefault(); if (t === 'contextmenu') toast('Photo protégée', 'Les photos du séminaire ne peuvent pas être téléchargées.', 'warn'); }
+}));
 
 /* Notifications sur le téléphone */
 const VAPID_PUBLIC = 'BOh-mCBxZIrDVBHP82PJgCwS5QO_zUm0XVMlfsXG51z-N1cF0ShSU24uvhtR9T6_K_Uit-Loo_8O9yZ7V__aAmw';
