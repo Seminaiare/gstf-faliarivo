@@ -1284,6 +1284,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         <div id="profAnnonces" class="mb-8" hidden></div>
         <div id="profGroupe" class="mb-8" hidden></div>
         <div id="profEmailPerso" class="mb-8"></div>
+        <div id="profPlagiat" class="mb-8"></div>
         <div id="profTeach">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <div id="profPickWrap" hidden><label for="profSelect" class="block text-sm font-semibold mb-1">Enseignant</label><select id="profSelect" class="field"></select></div>
@@ -1342,6 +1343,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         </div>
         <div id="eduAnnonces" class="mb-8" hidden></div>
         <div class="mb-8"><h2 class="h2 mb-2">Étudiants à suivre</h2><div id="eduSuivi"></div></div>
+        <div id="eduPlagiat" class="mb-8"></div>
         <div id="eduGroupe" class="mb-8" hidden></div>
         <div id="eduEmailPerso" class="mb-8"></div>
         <div id="suiviBox" class="mb-10"></div>
@@ -1376,6 +1378,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         <button type="button" data-adm="nouveau" aria-pressed="false">Nouvelle inscription</button>
         <button type="button" data-adm="enseignants" aria-pressed="false">Enseignants</button>
         <button type="button" data-adm="suivi" aria-pressed="false">Étudiants à suivre</button>
+        <button type="button" data-adm="plagiat" aria-pressed="false">Plagiat<span id="admPlagCount"></span></button>
         <button type="button" data-adm="corrections" aria-pressed="false">Corrections demandées<span id="admCorCount"></span></button>
         <button type="button" data-adm="annonces" aria-pressed="false">Annonces</button>
         <button type="button" data-adm="actus" aria-pressed="false">Actualités et photos<span id="admActusCount"></span></button>
@@ -1468,6 +1471,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
       <div id="adm-corrections" hidden></div>
       <div id="adm-etat" hidden></div>
       <div id="adm-suivi" hidden></div>
+      <div id="adm-plagiat" hidden></div>
 
       <div id="adm-apparence" hidden></div>
 
@@ -1518,7 +1522,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 139</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 140</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2134,7 +2138,7 @@ async function renderProfPanel() {
     $('#profNot').innerHTML = 'Ce portail est réservé aux enseignants. <button type="button" class="linkbtn" onclick="showTab(\'educateur\')">Ouvrir le Portail Éducateurs →</button>';
     $('#profNot').hidden = false; return;
   }
-  renderAnnoncesBox($('#profAnnonces'), annoncesPour('enseignant')); renderEmailPerso($('#profEmailPerso')); setTimeout(() => { if (currentTab === 'professeur') lancerVisite('enseignant'); }, 2500); renderPublierGroupe($('#profGroupe'));
+  renderAnnoncesBox($('#profAnnonces'), annoncesPour('enseignant')); renderEmailPerso($('#profEmailPerso')); renderPlagiatPortail($('#profPlagiat')); setTimeout(() => { if (currentTab === 'professeur') lancerVisite('enseignant'); }, 2500); renderPublierGroupe($('#profGroupe'));
   $('#profPickWrap').hidden = !isAdmin();
   if (isAdmin() && !$('#profSelect').options.length) {
     const keys = Object.keys(PROFS).filter(x => COURS.some(c => c.prof === x)).sort((a, b) => PROFS[a].n.replace(/^P\. /, '').localeCompare(PROFS[b].n.replace(/^P\. /, ''), 'fr'));
@@ -2371,13 +2375,14 @@ const ADM_IC = {
   stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   accueil: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 13h5M7 16.5h8"/><circle cx="16.5" cy="14" r="1.6"/>',
   etat: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  plagiat: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5.5 5.5M8 10.5h5M10.5 8v5"/>',
   suivi: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/><path d="M18 3.5v4M16 5.5h4"/>',
   corrections: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
   sauvegarde: '<ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>'
 };
 const ADM_GROUPES = [
   ['', ['tableau']],
-  ['Scolarité', ['etudiants', 'suivi', 'demandes', 'nouveau', 'enseignants', 'corrections', 'annee', 'releves', 'cartes', 'historique', 'evaluation', 'edt']],
+  ['Scolarité', ['etudiants', 'suivi', 'plagiat', 'demandes', 'nouveau', 'enseignants', 'corrections', 'annee', 'releves', 'cartes', 'historique', 'evaluation', 'edt']],
   ['Communication', ['accueil', 'annonces', 'actus', 'articles', 'actes', 'messages', 'groupes', 'stats']],
   ['Paramètres', ['apparence', 'sauvegarde', 'etat']]
 ];
@@ -2403,6 +2408,7 @@ const ADM_DESC = {
   sauvegarde: 'la sauvegarde des données du séminaire',
   etat: 'la vérification de l’installation du site',
   suivi: 'les étudiants qui ont besoin d’un soutien et les actions de suivi',
+  plagiat: 'la vérification des travaux, la base de comparaison, les seuils et les recours des étudiants',
   corrections: 'les corrections de nom ou de diocèse demandées par les personnes',
   accueil: 'le bandeau de photos, la parole de la semaine, le compte à rebours, le portrait du mois, les intentions de prière et les liens de la page d’accueil',
   stats: 'le nombre de visiteurs du site, les pages vues, les pays et la provenance des visites'
@@ -2536,6 +2542,9 @@ const AIDE_ADMIN = {
     etapes: ['Remplissez titre, auteur, résumé ; écrivez le texte ou joignez un PDF (un fichier Word remplit le texte).', 'Article payant : cochez « 💰 Article payant » et indiquez les prix (consulter sur le site, télécharger le PDF). Le texte et le PDF sont alors protégés.', 'Indiquez une fois le numéro MVola du secrétariat (en haut), puis « Enregistrer ».', 'Le lecteur paie par MVola puis envoie la capture du SMS de Yas : si le montant, le numéro du secrétariat et la référence sont lus, l’article s’ouvre tout de suite pour 7 jours (🤖).', 'Si la capture n’est pas lisible, le paiement arrive dans « À vérifier » : comparez avec le SMS reçu par le secrétariat, puis « ✓ Paiement reçu » ou « Refuser ».', 'Contrôlez de temps en temps les captures (🤖 « Voir la capture ») ; « Retirer l’accès » si l’une est fausse.'],
     boutons: [['💰 Modifier les prix', 'change les prix d’un article payant (consultation, PDF)'], ['Rendre payant / Rendre gratuit', 'change le statut d’un article déjà publié'], ['Réserver aux connectés', 'cache l’article aux visiteurs'], ['Retirer', 'supprime l’article']],
     attention: 'Ne validez un paiement qu’après avoir vu l’argent sur le compte MVola. L’explication « Comment payer » se modifie dans le cadre des paiements.' },
+  plagiat: { t: 'Plagiat', but: 'Vérifier l’originalité d’un travail, enrichir la base de comparaison et répondre aux recours des étudiants.',
+    etapes: ['« 🔍 Vérifier un document » : choisissez le fichier (PDF, Word ou photo), l’auteur et le titre, puis « Vérifier ». Le rapport s’exporte en Word ou en PDF.', 'Les travaux rendus en ligne se vérifient aussi depuis chaque cours (Portail Professeur › Devoirs et travaux › « 🔍 Plagiat »).', '« 📂 Importer d’anciens mémoires » et « ➕ Ajouter les articles et les actes du site » enrichissent la base.', 'Les recours des étudiants s’affichent en haut : répondez par écrit.'],
+    attention: 'Tous les enseignants ont accès à la vérification, dans leur portail. Le rapport est une aide : la décision revient au professeur, après avoir entendu l’étudiant.' },
   suivi: { t: 'Étudiants à suivre', but: 'Repérer tôt les séminaristes en difficulté pour les aider avant l’examen.',
     etapes: ['Le site liste tout seul les étudiants dont la moyenne est sous 10, qui ont au moins deux notes sous 10, trois absences ou plus en 30 jours, ou un devoir non rendu.', 'Après un entretien ou une décision (tutorat, rattrapage…), « 📝 Noter une action » : l’équipe formatrice voit l’historique.', 'Chaque lundi, la liste part par email au Père Préfet. Les éducateurs la voient aussi dans leur portail.'],
     attention: 'Ces informations sont confidentielles : elles ne sont visibles que par l’administration et les éducateurs.' },
@@ -3023,7 +3032,7 @@ async function renderAdmin() {
   }
   $('#admModeEmploi').innerHTML = modeEmploi(admView); brancherModeEmploi($('#admModeEmploi'));
   if (['tableau', 'stats'].includes(admView)) { const me = $('#admModeEmploi details'); if (me) me.open = false; }
-  ['tableau', 'etudiants', 'demandes', 'nouveau', 'enseignants', 'annonces', 'actus', 'articles', 'apparence', 'groupes', 'annee', 'sauvegarde', 'releves', 'cartes', 'evaluation', 'historique', 'edt', 'messages', 'stats', 'accueil', 'actes', 'corrections', 'etat', 'suivi'].forEach(k => $('#adm-' + k).hidden = k !== admView);
+  ['tableau', 'etudiants', 'demandes', 'nouveau', 'enseignants', 'annonces', 'actus', 'articles', 'apparence', 'groupes', 'annee', 'sauvegarde', 'releves', 'cartes', 'evaluation', 'historique', 'edt', 'messages', 'stats', 'accueil', 'actes', 'corrections', 'etat', 'suivi', 'plagiat'].forEach(k => $('#adm-' + k).hidden = k !== admView);
   if (admView === 'stats') renderAdminStats();
   if (admView === 'accueil') renderAdminAccueil();
   if (admView !== 'demandes' && DEMANDES === null) loadDemandes();
@@ -3038,6 +3047,7 @@ async function renderAdmin() {
   if (admView === 'corrections') renderAdminCorrections(); else majBadgeCorrections();
   if (admView === 'etat') renderAdminEtat();
   if (admView === 'suivi') renderSuivi($('#adm-suivi'));
+  if (admView === 'plagiat') renderAdminPlagiat();
   if (admView === 'apparence') renderAdminApparence();
   if (admView === 'groupes') renderAdminGroupes();
   if (admView === 'annee') renderAdminAnnee();
@@ -5285,7 +5295,7 @@ function renderEduPanel() {
   if (p && !suit) { $('#eduNot').textContent = 'Ce portail est réservé aux éducateurs et aux responsables de foyers.'; return; }
   if (!suit) return;
   $('#eduSub').textContent = `${p.nom} · ${ROLE_LBL[p.role] || ''}${p.foyer ? ' · foyer ' + p.foyer : ''}`;
-  renderAnnoncesBox($('#eduAnnonces'), annoncesPour('enseignant')); renderSuivi($('#eduSuivi')); renderEmailPerso($('#eduEmailPerso')); renderPublierGroupe($('#eduGroupe'));
+  renderAnnoncesBox($('#eduAnnonces'), annoncesPour('enseignant')); renderSuivi($('#eduSuivi')); renderPlagiatPortail($('#eduPlagiat')); renderEmailPerso($('#eduEmailPerso')); renderPublierGroupe($('#eduGroupe'));
   renderSuivi();
   if (p.role === 'educateur') renderStuDocs($('#eduDocs'), 'Documents de cours envoyés par les professeurs'); else $('#eduDocs').hidden = true;
 }
@@ -7334,7 +7344,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 139, VERSION_FONCTION_ATTENDUE = 27;
+const VERSION_SITE = 140, VERSION_FONCTION_ATTENDUE = 27;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -7674,7 +7684,7 @@ async function renderSuivi(box) {
   const badges = x => [x.nb_notes >= 2 && x.moyenne < 10 ? `<span class="pill" style="background:color-mix(in srgb, var(--bad) 14%, var(--surface));color:var(--bad)">📉 moyenne ${String(x.moyenne).replace('.', ',')}</span>` : '',
     x.sous10 >= 2 ? `<span class="pill bg-sunk">${x.sous10} notes sous 10</span>` : '', x.absences >= 3 ? `<span class="pill" style="background:color-mix(in srgb, var(--warn) 16%, var(--surface));color:var(--warn)">🚫 ${x.absences} absences (30 j)</span>` : '',
     x.non_rendus ? `<span class="pill bg-sunk" title="${esc((x.devoirs || []).join(' · '))}">📝 ${x.non_rendus} devoir(s) non rendu(s)</span>` : ''].filter(Boolean).join(' ');
-  box.innerHTML = `<div id="recoursBox"></div><p class="text-sm text-muted mb-4">Les séminaristes qui ont besoin d’un soutien : moyenne sous 10, au moins deux notes sous 10, trois absences ou plus en 30 jours, ou un devoir non rendu. Aidez avant l’examen, pas après. Chaque lundi, cette liste part aussi par email au Père Préfet.</p>
+  box.innerHTML = `<p class="text-sm text-muted mb-4">Les séminaristes qui ont besoin d’un soutien : moyenne sous 10, au moins deux notes sous 10, trois absences ou plus en 30 jours, ou un devoir non rendu. Aidez avant l’examen, pas après. Chaque lundi, cette liste part aussi par email au Père Préfet.</p>
     <p class="font-semibold mb-3">${L.length ? `${L.length} étudiant(s) à suivre` : '✅ Aucun étudiant en difficulté pour le moment.'}</p>
     <div class="flex flex-col gap-3 max-w-3xl">${L.map(x => `<div class="bg-surface border border-line rounded-lg p-4" data-suivi="${x.id}">
       <div class="flex flex-wrap justify-between gap-2"><b>${esc(x.nom)} ${esc(x.prenoms || '')}</b><span class="text-xs text-muted">${an(x.annee)} · ${esc(x.origine || '')}</span></div>
@@ -7683,7 +7693,6 @@ async function renderSuivi(box) {
       <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn btn-ghost btn-sm" data-suivi-note>📝 Noter une action</button><button type="button" class="linkbtn text-sm" data-suivi-hist>Historique</button></div>
       <div data-suivi-z></div></div>`).join('')}</div>
     ${isAdmin() ? '<button type="button" class="linkbtn text-sm mt-5" id="suiviMail">📧 M’envoyer cette liste par email maintenant</button>' : ''}`;
-  blocRecoursAdmin($('#recoursBox'));
   box.querySelectorAll('[data-suivi]').forEach(z => {
     const id = Number(z.dataset.suivi), zone = z.querySelector('[data-suivi-z]');
     z.querySelector('[data-suivi-note]').addEventListener('click', () => {
@@ -8173,6 +8182,21 @@ async function blocRecoursAdmin(box) {
   }));
 }
 
+
+// Plagiat pour tous les enseignants : en haut du Portail Professeur, du Portail Éducateurs, et dans Admin › Plagiat
+function renderPlagiatPortail(box, ouvert) {
+  if (!box) return;
+  document.querySelectorAll('#plagDoc').forEach(d => { if (!box.contains(d)) d.remove(); });   // un seul bloc à la fois
+  box.innerHTML = blocPlagiatDocument();
+  const d = box.querySelector('#plagDoc'); if (d) { d.classList.remove('mt-6'); if (ouvert) d.open = true; }
+  brancherPlagiatDocument();
+}
+function renderAdminPlagiat() {
+  const box = $('#adm-plagiat'); if (!box) return;
+  box.innerHTML = '<div id="plagRecoursAdm"></div><div id="plagOutilAdm"></div>';
+  renderPlagiatPortail($('#plagOutilAdm'), true);
+  blocRecoursAdmin($('#plagRecoursAdm'));
+}
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
 const BIBNUM_DEFAUT = [
   ['Magistère', 'Le Saint-Siège : documents des papes', 'https://www.vatican.va/content/vatican/fr.html', 'Encycliques, exhortations, lettres et discours, en français.'],
@@ -9089,7 +9113,7 @@ const AIDE = [
   { q: 'Faire un retour détaillé sur un devoir (professeur)', r: ['prof', 'admin'], k: 'retour devoir corriger commentaire copie annotee note travail rendu correction',
     e: ['Portail Professeur › votre cours › « Devoirs et travaux » › ouvrez le devoir.', 'Pour chaque travail rendu : « ✍️ Retour détaillé ».', 'Note, points forts, à améliorer, commentaire, et si vous voulez la copie annotée (PDF ou photo). « Envoyer le retour » : l’étudiant est prévenu sur son téléphone.', 'Vous voyez ensuite « 👁 lu par l’étudiant ».'], go: { tab: 'professeur' } },
   { q: 'Plagiat : vérifier l’originalité d’un travail', r: ['prof', 'admin'], k: 'plagiat copie copier originalite verifier travail internet tricherie fraude copie colle memoire',
-    e: ['Portail Professeur › votre cours › « Devoirs et travaux » : sur chaque travail rendu, « 🔍 Plagiat ».', 'Le rapport montre : 1. le pourcentage du texte retrouvé dans d’autres travaux du séminaire (année en cours et années passées), avec les passages surlignés ; 2. les phrases retrouvées sur internet (ou des boutons pour les chercher sur Google) ; 3. les signaux d’alerte : citations longues sans référence, changements brusques de style, bibliographie peu utilisée.', 'Pour un document reçu autrement (mémoire, email, papier scanné) : « 🔍 Plagiat : vérifier un document », en bas de la même page. L’administration peut y ajouter les anciens mémoires à la base de comparaison.', 'Le rapport est une aide : le professeur décide, au besoin après un entretien avec l’étudiant.'], go: { tab: 'professeur' } },
+    e: ['Portail Professeur › votre cours › « Devoirs et travaux » : sur chaque travail rendu, « 🔍 Plagiat ».', 'Le rapport montre : 1. le pourcentage du texte retrouvé dans d’autres travaux du séminaire (année en cours et années passées), avec les passages surlignés ; 2. les phrases retrouvées sur internet (ou des boutons pour les chercher sur Google) ; 3. les signaux d’alerte : citations longues sans référence, changements brusques de style, bibliographie peu utilisée.', 'Pour un document reçu autrement (mémoire, email, papier scanné) : « 🔍 Plagiat : vérifier un document », en haut du Portail Professeur (éducateurs : dans leur portail ; administration : Admin › Plagiat). L’administration peut y ajouter les anciens mémoires à la base de comparaison.', 'Le rapport est une aide : le professeur décide, au besoin après un entretien avec l’étudiant.'], go: { tab: 'professeur' } },
   { q: 'Tester mon travail avant de le déposer (plagiat)', r: ['etudiant'], k: 'tester brouillon plagiat verifier avant depot citation copie originalite',
     e: ['Portail étudiant › « Mes devoirs » › « 🔍 Tester mon brouillon ».', 'Choisissez votre fichier (PDF ou Word) : le site montre les passages trop proches d’autres travaux, des phrases à vérifier sur internet et les citations sans référence.', 'Rien n’est envoyé au professeur. Corrigez : guillemets et note de bas de page, ou vraie reformulation.', 'Au dépôt, cochez la déclaration « Je certifie que ce travail est personnel… ».'], go: { tab: 'etudiant' } },
   { q: 'Quel pourcentage de plagiat est inacceptable ?', r: ['prof', 'admin', 'etudiant'], k: 'pourcentage plagiat seuil inacceptable taux acceptable combien',
@@ -9099,7 +9123,7 @@ const AIDE = [
   { q: 'Plagiat : mes données et mes droits', r: ['etudiant', 'prof', 'admin'], k: 'donnees personnelles droits notice plagiat conservation effacement cmil loi confidentialite',
     e: ['Avant le premier dépôt, le site montre la notice « Vos données et le contrôle du plagiat ».', 'Le site garde l’empreinte de chaque travail (des nombres), jamais une copie lisible pour les autres ; elle est effacée automatiquement après la durée de conservation (5 ans par défaut).', 'Aucune décision n’est prise par l’ordinateur : le professeur décide, l’étudiant peut contester.', 'Pour voir ou corriger vos données : le Père Préfet des études. Plainte possible auprès de la CMIL.'] },
   { q: 'Répondre à un recours plagiat (administration)', r: ['admin'], k: 'recours plagiat contester repondre decision etudiant appel',
-    e: ['Une tuile « recours plagiat en attente » apparaît sur le tableau de bord.', 'Admin › « Étudiants à suivre » › « ⚖️ Recours plagiat ».', 'Maintenir, modifier ou annuler la décision, avec une réponse écrite : l’étudiant la voit dans « Mes devoirs ».'], go: { tab: 'admin', adm: 'suivi' } },
+    e: ['Une tuile « recours plagiat en attente » apparaît sur le tableau de bord.', 'Admin › « Plagiat » : les recours s’affichent en haut.', 'Maintenir, modifier ou annuler la décision, avec une réponse écrite : l’étudiant la voit dans « Mes devoirs ».'], go: { tab: 'admin', adm: 'plagiat' } },
   { q: 'Plagiat : recherche automatique sur internet', r: ['admin'], k: 'plagiat internet automatique cle brave recherche api',
     e: ['Sans réglage, le rapport donne des boutons « Chercher sur Google » (gratuit, à cliquer).', 'Pour que la recherche se fasse toute seule : créez un compte sur api-dashboard.search.brave.com (carte bancaire demandée, environ 1 000 recherches gratuites par mois, soit environ 80 travaux).', 'Copiez la clé, puis dans Supabase › Edge Functions › Secrets, ajoutez BRAVE_API_KEY avec cette clé.', 'Admin › État du site indique si la recherche automatique est réglée.'] },
   { q: 'Voir les étudiants en difficulté (suivi précoce)', r: ['admin', 'educ'], k: 'suivi difficulte etudiant moyenne absences devoirs non rendus aider soutien alerte',
@@ -9504,8 +9528,8 @@ async function renderProfDevoirs(c) {
       <label class="text-sm"><span class="block font-semibold mb-1">Type</span><select class="field" id="dvType"><option value="devoir">Devoir</option><option value="memoire">Mémoire</option></select></label>
       <label class="text-sm"><span class="block font-semibold mb-1">Pour</span><select class="field" id="dvPour"><option value="">Tous les étudiants de ${anLabel(c.an)}</option>${roster.map(s => `<option value="${s.id}">${esc(s.nom)} ${esc(s.prenoms)}</option>`).join('')}</select></label>
       <label class="text-sm sm:col-span-2"><span class="block font-semibold mb-1">Sujet <span class="font-normal text-muted">(PDF, facultatif)</span></span><input class="field" id="dvFichier" type="file" accept="application/pdf"></label>
-      <div class="sm:col-span-2"><button class="btn btn-sm">Publier le devoir</button></div></form>${blocPlagiatDocument()}`;
-  brancherPlagiatDocument();
+      <div class="sm:col-span-2"><button class="btn btn-sm">Publier le devoir</button></div></form>
+      <p class="text-xs text-muted mt-4">🔍 Pour vérifier un document reçu autrement (mémoire, email, papier) : « Plagiat », en haut de votre portail.</p>`;
   box.querySelectorAll('[data-tv]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); ouvrirTravail(b.dataset.tv); }));
   box.querySelectorAll('[data-rplag]').forEach(b => b.addEventListener('click', () => {
     const x = (rm || []).find(y => y.id === Number(b.dataset.rplag)), d = dv.find(y => y.id === x.devoir_id);
@@ -11504,7 +11528,7 @@ async function renderTbPlus(tuile) {
     sb.from('plagiat_recours').select('id', { count: 'exact', head: true }).eq('statut', 'en_attente').then(r => r, () => ({ error: true }))]);
   let html = '';
   if (su && !su.error && Array.isArray(su.data)) html += tuile(su.data.length, 'étudiant(s) à suivre (difficultés)', 'adm:suivi', 'bad', 'suivi');
-  if (rc && !rc.error && rc.count) html += tuile(rc.count, 'recours plagiat en attente', 'adm:suivi', 'bad', 'suivi');
+  if (rc && !rc.error && rc.count) html += tuile(rc.count, 'recours plagiat en attente', 'adm:plagiat', 'bad', 'plagiat');
   if (!it.error && it.count) html += tuile(it.count, 'nouvelle(s) intention(s) de prière', 'adm:accueil', 'warn', 'accueil');
   majBadgeIntentions(it.error ? 0 : it.count);
   if (!ep.error && Array.isArray(ep.data)) { SANS_EP = ep.data; html += tuile(SANS_EP.length, 'personne(s) sans adresse email personnelle', 'emails', 'warn', 'messages'); }
