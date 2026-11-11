@@ -1456,7 +1456,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 127</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 128</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -7330,8 +7330,8 @@ const AIDE = [
     e: ['Cliquez sur l’onglet « Inscription », puis sur votre espace : Étudiant, Professeur ou Éducateurs.', 'Écrivez votre nom (ex. Razafiniarivo) ou votre identifiant (ex. razafr@gstf-faliarivo.ovh), puis votre mot de passe.', 'Si plusieurs personnes portent le même nom, ajoutez votre prénom.'], go: { tab: 'portails' } },
   { q: 'J’ai oublié mon mot de passe', r: ['tous'], k: 'oublie oublier mot passe perdu reinitialiser retrouver password mdp',
     e: ['Inscription > votre espace > « Mot de passe oublié ? ».', 'Saisissez votre adresse email personnelle (celle enregistrée sur le site) et cliquez sur « Recevoir le lien ».', 'Ouvrez l’email et cliquez sur « Choisir mon nouveau mot de passe » (lien valable 1 heure).', 'Pas d’adresse personnelle enregistrée ? Le Père Préfet ou le secrétariat vous remet une nouvelle fiche.'], go: { tab: 'portails' } },
-  { q: 'Changer mon mot de passe', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'changer modifier mot passe nouveau securite password mdp',
-    e: ['Une fois connecté, cliquez en haut à droite sur « Changer mon mot de passe ».', 'Choisissez un mot de passe d’au moins 8 caractères et enregistrez.', 'Vous êtes alors déconnecté de vos autres appareils.'] },
+  { q: 'Changer mon mot de passe', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'changer modifier mot passe nouveau securite password mdp compte deconnecter',
+    e: ['Une fois connecté, cliquez en haut à droite sur votre nom ou votre photo : votre portail s’ouvre.', 'Dans le cadre « 🔑 Mon compte », cliquez sur « Changer mon mot de passe ».', 'Choisissez un mot de passe d’au moins 8 caractères et enregistrez ; vous êtes alors déconnecté de vos autres appareils.', 'Le bouton « Se déconnecter » est dans le même cadre.'], go: { tab: 'portails' } },
   { q: 'Enregistrer mon adresse email personnelle', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'email mail adresse personnelle gmail yahoo coordonnees recevoir annonces rappel',
     e: ['Ouvrez votre portail (Inscription > votre espace).', 'Dans « Mes coordonnées », écrivez votre adresse Gmail, Yahoo… et enregistrez.', 'Elle sert pour les annonces, les rappels (rendez-vous, bibliothèque) et le mot de passe oublié.'] },
   { q: 'Ajouter ou changer ma photo', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'photo portrait image profil ajouter changer visage',
@@ -7354,10 +7354,10 @@ const AIDE = [
     e: ['Portail Étudiant > « Ma carte d’étudiant ».', 'Complétez vous-même la photo, la date et le lieu de naissance s’ils manquent ; le matricule est inscrit par le secrétariat.', 'Bouton « Imprimer / enregistrer en PDF ».'], go: { tab: 'etudiant' } },
   { q: 'Prendre rendez-vous avec le Père Préfet', r: ['etudiant'], k: 'rendez vous entretien prefet rencontrer parler reserver creneau',
     e: ['Onglet « Rendez-vous ».', 'Choisissez un jour ouvert, puis un créneau libre ; indiquez votre téléphone et, si vous voulez, le motif.', 'Vous recevez la confirmation par email ; annulation possible jusqu’à 12 h avant.', 'Deux entretiens par année académique.'], go: { tab: 'entretiens' } },
-  { q: 'Emprunter ou réserver un livre', r: ['etudiant', 'prof', 'educ', 'tous'], k: 'emprunter livre bibliotheque reserver pret disponible lire',
-    e: ['Onglet « Bibliothèque » : cherchez le livre (titre, auteur, sujet ou cote).', 'S’il est disponible, prenez-le au rayon et présentez-vous au bibliothécaire, qui enregistre le prêt.', 'S’il est prêté, cliquez sur « Réserver » : vous serez prévenu par email à son retour (gardé 1 jour).'], go: { tab: 'bibliotheque' } },
-  { q: 'Prolonger un livre emprunté', r: ['etudiant', 'prof', 'educ'], k: 'prolonger livre emprunt retour date bibliotheque',
-    e: ['Bibliothèque > « Mes emprunts » > « Prolonger » (une fois, avant la date de retour).'], go: { tab: 'bibliotheque' } },
+  { q: 'Emprunter ou réserver un livre', r: ['etudiant', 'prof', 'educ', 'tous', 'visiteur'], k: 'emprunter livre bibliotheque reserver pret disponible lire demander garder exterieur',
+    e: ['Onglet « Bibliothèque » : tapez un titre, un auteur, un sujet ou une cote (le catalogue entier n’est pas affiché).', 'Livre disponible : « 📥 Emprunter » ; écrivez nom, prénom, téléphone et diocèse ou congrégation : le livre vous est gardé 3 jours.', 'Livre déjà prêté : « 📌 Réserver » : vous entrez dans la file d’attente et le bibliothécaire vous prévient à son retour.', 'Venez le prendre aux heures d’ouverture avec une pièce d’identité.'], go: { tab: 'bibliotheque' } },
+  { q: 'Prolonger (renouveler) un livre emprunté', r: ['etudiant', 'prof', 'educ', 'tous', 'visiteur'], k: 'prolonger renouveler renouvellement livre emprunt retour date bibliotheque',
+    e: ['Membre du séminaire : Bibliothèque > « Mes emprunts » > « Prolonger ».', 'Lecteur sans compte : Bibliothèque > « 🔁 Renouveler mon emprunt » : téléphone et nom donnés à l’emprunt, puis « Renouveler ».', 'Une seule fois, avant la date de retour, et seulement si personne n’attend ce livre.'], go: { tab: 'bibliotheque' } },
   { q: 'Voir l’emploi du temps', r: ['tous'], k: 'emploi temps horaire cours semaine planning',
     e: ['Onglet « Cours » : l’emploi du temps de la semaine, par année.', 'Les étudiants le voient aussi dans leur portail.'], go: { tab: 'documents' } },
 
@@ -7396,10 +7396,10 @@ const AIDE = [
     e: ['Admin > « Évaluation des cours » (réservé au Père Préfet).', 'Ouvrez ou fermez l’évaluation et choisissez le semestre.', 'Les réponses s’affichent cours par cours, avec le nom de chaque étudiant ; imprimables.'], go: { tab: 'admin', adm: 'evaluation' } },
   { q: 'Voir qui a modifié une note', r: ['admin'], k: 'historique note modifiee changee qui quand ancienne nouvelle trace controle',
     e: ['Admin > « Historique des notes ».', 'Choisissez un étudiant ou un cours : date, ancienne et nouvelle note, et l’auteur du changement.'], go: { tab: 'admin', adm: 'historique' } },
-  { q: 'Voir l’agenda de la communauté', r: ['tous'], k: 'agenda calendrier date recollection retraite examen fete ordination visite evenement',
-    e: ['Onglet « Agenda » : les événements à venir, mois par mois.', '« Ajouter à mon agenda » les met dans le calendrier du téléphone, avec un rappel la veille.'], go: { tab: 'agenda' } },
-  { q: 'Ajouter un événement à l’agenda', r: ['admin'], k: 'ajouter evenement agenda calendrier date recollection retraite',
-    e: ['Onglet « Agenda » > « Ajouter un événement ».', 'Titre, catégorie, dates, lieu ; décochez « Visible par le public » pour le réserver aux membres.'], go: { tab: 'agenda' } },
+  { q: 'Voir l’agenda de la communauté', r: ['tous'], k: 'agenda calendrier date recollection retraite examen fete ordination visite evenement mois liste',
+    e: ['Onglet « Agenda » : le calendrier académique, les grandes fêtes et les événements du séminaire s’y ajoutent tout seuls.', 'Boutons « ☰ Liste » ou « ▦ Mois » ; filtres « Vie du séminaire », « Examens », « Fêtes liturgiques ».', '« 📅 Google Agenda » ou « 📲 Autre calendrier » ajoute un événement à votre téléphone ; « 🖨 Programme du mois » imprime une page A4.'], go: { tab: 'agenda' } },
+  { q: 'Ajouter un événement à l’agenda', r: ['admin'], k: 'ajouter evenement agenda calendrier date recollection retraite rappel groupe',
+    e: ['Onglet « Agenda » > « Ajouter un événement ».', 'Titre, catégorie, dates, heures, lieu ; « Qui le voit » : public ou un groupe (étudiants, professeurs, éducateurs).', 'Cochez « 🔔 Rappel la veille » pour prévenir les téléphones abonnés.', 'Les dates de l’année (rentrées, examens, vacances) se changent dans Admin > « Année académique » > « Calendrier académique ».'], go: { tab: 'agenda' } },
   { q: 'Faire un don au séminaire', r: ['tous'], k: 'don donner soutenir aider bienfaiteur mvola orange money virement banque offrande',
     e: ['Onglet « Économat » : nos besoins et les coordonnées MVola, Orange Money et bancaires.', 'Chaque don est enregistré à l’économat. Merci !'], go: { tab: 'economat' } },
   { q: 'Modifier la page Soutenir le séminaire', r: ['admin'], k: 'modifier soutenir don mvola orange iban banque besoins',
@@ -7461,6 +7461,36 @@ const AIDE = [
   { q: 'Choisir les rédacteurs d’un groupe d’activité', r: ['admin'], k: 'groupe activite redacteur liturgie service sport environnement info culturel publier',
     e: ['Admin > « Groupes d’activité ».', 'Pour chaque groupe, écrivez les identifiants des rédacteurs (un par ligne), puis « Enregistrer les groupes ».'], go: { tab: 'admin', adm: 'groupes' } },
 
+  // ---------- Nouveautés du site (novembre 2026)
+  { q: 'Rechercher dans tout le site', r: ['tous'], k: 'rechercher chercher trouver loupe recherche site cours livre article evenement professeur',
+    e: ['Cliquez sur la loupe 🔍 en haut (sur téléphone : « Plus » > « Rechercher dans le site… »), ou appuyez sur la touche / de l’ordinateur.', 'Tapez un mot : cours, professeurs, livres, articles, événements, actualités et questions de l’aide s’affichent.', 'Cliquez sur un résultat pour y aller.'] },
+  { q: 'Les raccourcis clavier', r: ['tous'], k: 'raccourcis clavier touches ordinateur rapide',
+    e: ['Sur ordinateur : / pour rechercher, 1 à 7 pour les rubriques du menu, E pour mon espace, ? pour la liste des touches.', 'Les touches ne marchent pas pendant qu’on écrit dans un champ.'] },
+  { q: 'Mes raccourcis (selon mon compte)', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'raccourcis mes notes emploi temps carte devoirs rapide menu',
+    e: ['Une fois connecté, « Mes raccourcis » s’affichent en haut du menu de gauche (sur téléphone : « Plus »).', 'Étudiant : mes notes, mon emploi du temps, mes devoirs, ma carte… ; professeur : saisir les notes, mes documents… ; administration : tableau de bord, messages, demandes.'] },
+  { q: 'Le point rouge sur un onglet', r: ['tous'], k: 'point rouge pastille nouveau nouveaute onglet',
+    e: ['Un point rouge sur « Accueil », « Agenda » ou « Articles » signale une nouveauté depuis votre dernière visite.', 'Il disparaît dès que vous avez ouvert la rubrique.'] },
+  { q: 'Recevoir les notifications sur mon téléphone', r: ['tous'], k: 'notification notifier alerte telephone message push recevoir',
+    e: ['Installez d’abord l’application (voir « Installer l’application GSTF »).', 'Menu « Plus » (ou votre portail) > « 🔔 Activer les notifications », puis acceptez.', 'Vous recevez les annonces, les rappels de l’agenda et de la bibliothèque.'] },
+  { q: 'S’abonner à l’agenda dans mon téléphone', r: ['tous'], k: 'abonner abonnement agenda calendrier google iphone outlook synchroniser',
+    e: ['Onglet « Agenda », tout en bas : « 📲 Tout l’agenda dans mon téléphone ».', 'Android : « 📅 Google Agenda » ; iPhone : « 🍎 iPhone, Mac, Outlook ».', 'Ensuite les événements publics arrivent tout seuls (la mise à jour peut prendre quelques heures).'], go: { tab: 'agenda' } },
+  { q: 'Voir le résumé d’un livre', r: ['tous'], k: 'resume livre contenu couverture savoir quoi parle',
+    e: ['Bibliothèque : cherchez le livre.', 'Sous son titre : sa couverture et « 📖 Résumé » (cherché automatiquement sur internet, avec sa source).'], go: { tab: 'bibliotheque' } },
+  { q: 'Citer un livre dans un devoir ou un mémoire', r: ['tous'], k: 'citer citation reference note bas page bibliographie normes methodologie memoire',
+    e: ['Bibliothèque : cherchez le livre, puis « ❝ Citer ce livre ».', 'Trois références prêtes : note de bas de page, notes suivantes (op. cit.) et bibliographie, aux normes du cours de Méthodologie (prénom abrégé, nom en petites capitales, titre en italique, date, édition, page).', '« 📋 Copier » puis collez dans Word : la mise en forme est gardée.'], go: { tab: 'bibliotheque' } },
+  { q: 'La bibliothèque numérique (ressources gratuites)', r: ['tous'], k: 'bibliotheque numerique ressources gratuites vatican catechisme bible peres lire en ligne',
+    e: ['Bibliothèque, en bas de la page : « 🌐 Bibliothèque numérique ».', 'Magistère, Vatican II, Catéchisme, Code de droit canonique, Bible et liturgie du jour, Pères de l’Église, revues.', 'L’administration modifie la liste avec « Modifier la liste ».'], go: { tab: 'bibliotheque' } },
+  { q: 'Lire ou télécharger un article payant', r: ['tous', 'visiteur'], k: 'article payant acheter payer mvola consulter telecharger pdf 500 1000 ariary code capture',
+    e: ['Onglet « Articles » : sur l’article, « 📖 Consulter » ou « ⬇️ PDF ».', 'Payez par MVola le montant indiqué au numéro du secrétariat (les étapes sont expliquées).', 'Envoyez la capture d’écran (ou la photo) du SMS de confirmation de Yas : l’article s’ouvre aussitôt pour 7 jours.', 'Votre code d’accès est gardé sur votre téléphone : « 🔓 Ouvrir avec mon code » pour revenir.'], go: { tab: 'articles' } },
+  { q: 'Vendre un article et vérifier les paiements MVola', r: ['admin'], k: 'article payant vendre prix mvola paiement verifier capture valider refuser secretariat numero',
+    e: ['Admin > « Articles » : numéro MVola du secrétariat et texte « Comment payer » (en haut), puis « Enregistrer ».', 'Nouvel article : cochez « 💰 Article payant » et les prix ; article déjà publié : « Rendre payant » ; « 💰 Modifier les prix » à tout moment.', 'Les paiements reconnus par la capture (🤖) s’ouvrent seuls ; les autres sont « À vérifier » : comparez avec le SMS reçu, puis « ✓ Paiement reçu » ou « Refuser ».', '« Voir la capture » et « Retirer l’accès » pour contrôler.'], go: { tab: 'admin', adm: 'articles' } },
+  { q: 'Préparer les actes du symposium', r: ['admin'], k: 'actes symposium livret livre imprimer couverture preface contributions bibliographie plier a5',
+    e: ['Admin > « Actes du symposium » > « ＋ Nouveau livret ».', 'Remplissez couverture, page de titre, préface, contributions (coller, importer un Word ou scanner), bibliographie, auteurs, 4e de couverture.', '« 📖 Fabriquer le livret » : le livre mis en page s’ouvre ; « Imprimer en livret plié » (recto verso, bord court) ou PDF pour l’imprimeur.'], go: { tab: 'admin', adm: 'actes' } },
+  { q: 'Préparer le calendrier de l’année', r: ['admin'], k: 'calendrier academique annee dates rentree examens vacances fete patronale nouvelle annee',
+    e: ['Admin > « Année académique » > « Calendrier académique ».', 'Une ligne par date : date, « au » (dernier jour), événement, catégorie, qui le voit, ★.', '« Reprendre les dates de l’année précédente » prépare la nouvelle année ; vérifiez puis « Enregistrer le calendrier ».', 'Ces dates remplissent l’Agenda, l’accueil et le livret.'], go: { tab: 'admin', adm: 'annee' } },
+  { q: 'Le mode d’emploi des rubriques de l’Admin', r: ['admin'], k: 'mode emploi guide aide administration rubrique explication bouton',
+    e: ['Chaque rubrique de l’Admin s’ouvre avec un cadre bleu « ℹ️ Mode d’emploi » : à quoi elle sert, les étapes, les boutons et les précautions.', 'Cliquez sur son titre pour le replier ou le rouvrir.'], go: { tab: 'admin' } },
+
   // ---------- Éducateurs, économat
   { q: 'Suivre un séminariste (notes, absences)', r: ['educ', 'admin'], k: 'suivi seminariste etudiant absences notes educateur foyer',
     e: ['Inscription > Éducateurs, connectez-vous.', '« Suivi des étudiants » : cliquez sur un nom pour voir son bulletin et ses absences.'], go: { tab: 'educateur' } },
@@ -7468,12 +7498,12 @@ const AIDE = [
     e: ['Onglet « Économat » (économe ou administration).', '« Nouvelle opération » : date, catégorie, montant, libellé, photo du reçu, puis « Enregistrer ».', 'Le 1er du mois : clôturer le mois écoulé, imprimer le rapport.'], go: { tab: 'economat' } },
 
   // ---------- Bibliothécaire
-  { q: 'Enregistrer un prêt de livre', r: ['biblio', 'admin'], k: 'preter pret livre enregistrer emprunt lecteur bibliothecaire',
-    e: ['Bibliothèque : cherchez le livre, cliquez sur « Prêter ».', 'Tapez le nom du lecteur, choisissez-le.', 'Vérifiez nom, prénom(s), classe et diocèse ou congrégation, puis « Confirmer le prêt ».'], go: { tab: 'bibliotheque' } },
+  { q: 'Enregistrer un prêt de livre', r: ['biblio', 'admin'], k: 'preter pret livre enregistrer emprunt lecteur bibliothecaire demande site reservation',
+    e: ['Lecteur venu demander un livre : Bibliothèque, cherchez le livre, « Prêter » ; tapez le nom du lecteur, vérifiez ses informations, « Confirmer le prêt ».', 'Demande faite sur le site (🌐) : Gestion > « Réservations » > « Prêter » quand le lecteur vient avec sa pièce d’identité.'], go: { tab: 'bibliotheque' } },
   { q: 'Enregistrer le retour d’un livre', r: ['biblio', 'admin'], k: 'retour rendre rendu livre bibliotheque',
     e: ['Bibliothèque > Gestion > « Prêts en cours » > « Rendu » sur la ligne du livre.', 'Si quelqu’un l’a réservé, il est prévenu par email.'], go: { tab: 'bibliotheque', sous: 'prets' } },
-  { q: 'Ajouter des livres au catalogue', r: ['biblio', 'admin'], k: 'ajouter livre catalogue importer excel liste bibliotheque inserer',
-    e: ['Bibliothèque > Gestion > « Ajouter / importer ».', 'Un livre : remplissez le formulaire, « Ajouter le livre ».', 'Beaucoup de livres : « Télécharger le modèle », remplissez une ligne par livre, puis importez le fichier.'], go: { tab: 'bibliotheque', sous: 'ajouter' } },
+  { q: 'Ajouter des livres au catalogue', r: ['biblio', 'admin'], k: 'ajouter livre catalogue importer excel liste bibliotheque inserer word pdf photo scanner',
+    e: ['Le plus simple : page Bibliothèque > cadre « 📥 Ajouter une liste de livres » : 📷 Photo, 📄 Word ou 📕 PDF ; vérifiez la liste lue, puis ajoutez.', 'Un seul livre : Bibliothèque > Gestion > « Ajouter / importer » > formulaire, « Ajouter le livre ».', 'Le résumé et la couverture de chaque nouveau livre sont cherchés tout seuls sur internet dans l’heure.', '« 🧹 Remettre en ordre le catalogue » sépare l’auteur, le titre, l’éditeur et l’année des livres mal importés.'], go: { tab: 'bibliotheque', sous: 'ajouter' } },
   { q: 'Voir les livres sortis et les retards', r: ['biblio', 'admin'], k: 'livres sortis retard prets cours qui emprunte controle liste imprimer',
     e: ['Bibliothèque > Gestion > « Prêts en cours » : qui a quel livre, jusqu’à quand ; retards en rouge.', '« Imprimer la liste », « Excel », ou « Relancer par email ».'], go: { tab: 'bibliotheque', sous: 'prets' } },
   { q: 'Modifier les horaires de la bibliothèque', r: ['biblio', 'admin'], k: 'horaires ouverture bibliotheque permanence reglement semaine modifier',
@@ -7498,8 +7528,47 @@ function aideRoles() {
   if (typeof BQ !== 'undefined' && BQ.biblio) r.add('biblio');
   return r;
 }
-let AIDE_IDF = null;
+let AIDE_IDF = null, AIDE_PRET = false, AIDE_PLUS = [];
+/* Le site se connaît : l’aide reprend aussi les modes d’emploi de l’Admin et les réponses ajoutées par l’administration */
+function aidePreparer() {
+  if (AIDE_PRET) return; AIDE_PRET = true;
+  try {
+    const mots = A => sans([A.t, A.but, ...A.etapes, ...(A.boutons || []).flat()].join(' ')).replace(/[^a-z0-9 ]+/g, ' ');
+    Object.entries(AIDE_ADMIN).forEach(([k, A]) => AIDE.push({ q: `${A.t} : mode d’emploi (Admin)`, r: ['admin'], k: mots(A), e: [A.but, ...A.etapes, ...(A.attention ? ['⚠️ ' + A.attention] : [])], go: { tab: 'admin', adm: k }, gen: true }));
+    Object.entries(AIDE_AUTRES).forEach(([k, A]) => AIDE.push({ q: `${A.t} : mode d’emploi`, r: ['admin', 'biblio'], k: mots(A), e: [A.but, ...A.etapes], go: { tab: k === 'agenda' ? 'agenda' : 'bibliotheque' }, gen: true }));
+  } catch (e) {}
+  aideAppliquerPlus();
+}
+function aideAppliquerPlus() {
+  AIDE_PLUS.forEach(x => { if (!x || !x.q || !Array.isArray(x.e)) return; const ent = { q: x.q, r: x.r && x.r.length ? x.r : ['tous'], k: x.k || '', e: x.e, ajout: true };
+    const i = AIDE.findIndex(a => sans(a.q) === sans(x.q)); if (i >= 0) AIDE[i] = { ...AIDE[i], ...ent }; else AIDE.push(ent); });
+  AIDE_IDF = null;
+}
+async function chargerAidePlus() {
+  if (!sb) return;
+  const r = await sb.from('reglages').select('valeur').eq('cle', 'aide_plus').maybeSingle();
+  AIDE_PLUS = (r.data && Array.isArray(r.data.valeur)) ? r.data.valeur : [];
+  if (AIDE_PRET) aideAppliquerPlus();
+}
+setTimeout(chargerAidePlus, 3000);
+function editerAidePlus() {
+  const lignes = AIDE_PLUS.map(x => [x.q, x.k || '', (x.e || []).join(' ; '), (x.r || ['tous']).join(' ')].join(' | ')).join('\n');
+  dialogueBiblio(`<p class="eyebrow mb-1">Aide du site</p><h2 class="font-display text-2xl font-semibold mb-2">Ajouter ou corriger une réponse</h2>
+    <p class="text-sm text-muted mb-2">Une réponse par ligne : <span class="font-mono text-xs">Question | mots-clés | étape 1 ; étape 2 ; étape 3 | pour qui</span>. « Pour qui » : tous, visiteur, etudiant, prof, educ, biblio, admin (plusieurs séparés par des espaces). Si la question est exactement celle d’une réponse existante, votre texte la remplace.</p>
+    <textarea class="field font-mono text-xs" rows="10" id="aidePlusTxt" placeholder="Horaires du secrétariat | secretariat horaires ouvert bureau | Du lundi au vendredi, 8 h – 12 h et 14 h – 17 h ; Le samedi matin, 8 h – 11 h | tous">${esc(lignes)}</textarea>
+    <p class="text-sm text-bad mt-2" id="aidePlusErr" hidden></p>
+    <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn" id="aidePlusOk">Enregistrer</button><button type="button" class="btn btn-ghost" data-dl-fermer>Annuler</button></div>`);
+  $('#aidePlusOk').addEventListener('click', async () => {
+    const bad = [], L = $('#aidePlusTxt').value.split('\n').map(x => x.trim()).filter(Boolean).map(l => { const p = l.split('|').map(x => x.trim());
+      if (p.length < 3 || !p[0] || !p[2]) { bad.push(l); return null; } return { q: p[0].slice(0, 160), k: sans(p[1] || '').slice(0, 400), e: p[2].split(/\s*;\s*/).filter(Boolean).slice(0, 8), r: (p[3] || 'tous').split(/\s+/).filter(x => ['tous', 'visiteur', 'etudiant', 'prof', 'educ', 'biblio', 'admin'].includes(x)) }; }).filter(Boolean);
+    if (bad.length) { $('#aidePlusErr').textContent = 'Lignes non comprises : ' + bad.slice(0, 2).join(' / '); $('#aidePlusErr').hidden = false; return; }
+    const { error } = await sb.from('reglages').upsert({ cle: 'aide_plus', valeur: L, modifie_le: new Date().toISOString() });
+    if (error) { $('#aidePlusErr').textContent = errText(error); $('#aidePlusErr').hidden = false; return; }
+    AIDE_PLUS = L; AIDE.splice(0, AIDE.length, ...AIDE.filter(a => !a.ajout)); aideAppliquerPlus(); $('#dlDlg').hidden = true; toast('Aide mise à jour', `${L.length} réponse(s) ajoutée(s) par l’administration.`);
+  });
+}
 function aideChercher(q) {
+  aidePreparer();
   let mots = [...new Set(aideMots(q))]; const R = aideRoles();
   if (!mots.includes('passe')) mots = mots.filter(w => w !== 'oublie' && w !== 'oublier');   // « j’ai oublié comment… » ≠ mot de passe oublié
   if (!mots.length) return [];
@@ -7513,6 +7582,7 @@ function aideChercher(q) {
       else if (w.length >= 5) { const c = [...cles[i]].find(c => c.length >= 5 && (c.startsWith(w.slice(0, 5)) || w.startsWith(c.slice(0, 5)))); if (c) s += poids(c) * 0.6; }
     }
     if (s && a.r.some(x => R.has(x))) s *= 1.25;
+    if (a.gen) s *= sans(a.q).includes(mots.join(' ').slice(0, 6)) ? 1 : 0.6;   // les modes d’emploi passent après les réponses précises
     return { a, s };
   }).filter(x => x.s >= 1.2).sort((x, y) => y.s - x.s).slice(0, 3).map(x => x.a);
 }
@@ -7536,12 +7606,12 @@ function aideRepHtml(a) {
 }
 function aideBrancher(box) { box.querySelectorAll('[data-aide-go]').forEach(b => b.addEventListener('click', () => aideAller(AIDE[Number(b.dataset.aideGo)].go))); }
 const AIDE_TOP = {
-  admin: ['Voir tout ce qui attend l’administration', 'Modifier les informations d’un professeur', 'Accepter une demande d’inscription', 'Publier une annonce', 'Imprimer les bulletins / relevés de notes', 'Donner un nouveau mot de passe à quelqu’un', 'Ouvrir mes jours de rendez-vous'],
+  admin: ['Voir tout ce qui attend l’administration', 'Le mode d’emploi des rubriques de l’Admin', 'Vendre un article et vérifier les paiements MVola', 'Modifier les informations d’un professeur', 'Accepter une demande d’inscription', 'Publier une annonce', 'Imprimer les bulletins / relevés de notes', 'Donner un nouveau mot de passe à quelqu’un', 'Ouvrir mes jours de rendez-vous'],
   biblio: ['Enregistrer un prêt de livre', 'Enregistrer le retour d’un livre', 'Ajouter des livres au catalogue', 'Voir les livres sortis et les retards', 'Modifier les horaires de la bibliothèque'],
   prof: ['Saisir les notes et les présences', 'Envoyer un document de cours aux étudiants', 'Donner un devoir et recevoir les travaux', 'Ajouter des livres à la bibliographie de mon cours', 'Changer mon mot de passe'],
   educ: ['Suivre un séminariste (notes, absences)', 'Enregistrer une dépense ou une entrée (économat)', 'Imprimer les bulletins / relevés de notes', 'Changer mon mot de passe'],
   etudiant: ['Voir ma semaine', 'Voir mes notes et mon bulletin', 'Prendre rendez-vous avec le Père Préfet', 'Voir ma carte d’étudiant', 'Emprunter ou réserver un livre', 'Remettre un devoir ou mon mémoire'],
-  visiteur: ['S’inscrire comme nouvel étudiant', 'Comment me connecter au site ?', 'J’ai oublié mon mot de passe', 'Voir l’agenda de la communauté', 'Faire un don au séminaire', 'Contacter le séminaire'],
+  visiteur: ['S’inscrire comme nouvel étudiant', 'Comment me connecter au site ?', 'Rechercher dans tout le site', 'Emprunter ou réserver un livre', 'Lire ou télécharger un article payant', 'Voir l’agenda de la communauté', 'Faire un don au séminaire', 'Contacter le séminaire'],
 };
 function aideSuggestions() {
   const R = aideRoles(), role = ['admin', 'biblio', 'prof', 'educ', 'etudiant', 'visiteur'].find(x => R.has(x)) || 'visiteur';
@@ -7549,8 +7619,10 @@ function aideSuggestions() {
 }
 function aideOuvrir() {
   const P = $('#aidePanel'); P.hidden = false;
+  aidePreparer();
   $('#aideRes').innerHTML = `<p class="text-xs text-muted mb-2">Questions fréquentes :</p><div class="flex flex-col gap-1.5">${aideSuggestions().map(a => `<button type="button" class="aide-sug text-left text-sm p-2 rounded-md border border-line bg-surface hover:border-accent" data-sug="${AIDE.indexOf(a)}">${esc(a.q)}</button>`).join('')}</div>`;
-  $('#aideRes').querySelectorAll('[data-sug]').forEach(b => b.addEventListener('click', () => { const a = AIDE[Number(b.dataset.sug)]; $('#aideRes').innerHTML = aideRepHtml(a); aideBrancher($('#aideRes')); }));
+  $('#aideRes').querySelectorAll('[data-sug]').forEach(b => b.addEventListener('click', () => { const a = AIDE[Number(b.dataset.sug)]; $('#aideRes').innerHTML = aideRepHtml(a); aideBrancher($('#aideRes')); aideLienAdmin(a.q); }));
+  aideLienAdmin('');
   setTimeout(() => $('#aideQ').focus(), 50);
 }
 $('#aideBtn').addEventListener('click', () => { if ($('#aidePanel').hidden) aideOuvrir(); else $('#aidePanel').hidden = true; });
@@ -7587,7 +7659,13 @@ $('#aideForm').addEventListener('submit', e => {
     : `<p class="text-sm">Je n’ai pas trouvé de réponse à « ${esc(q)} ».</p><p class="text-sm text-muted mt-1">Essayez avec d’autres mots (ex. « mot de passe », « notes », « livre »), ou écrivez au secrétariat.</p><button type="button" class="btn btn-ghost btn-sm mt-3" data-aide-contact>Écrire au secrétariat</button>`;
   aideBrancher($('#aideRes'));
   const c = $('#aideRes').querySelector('[data-aide-contact]'); if (c) c.addEventListener('click', () => { $('#aidePanel').hidden = true; showTab('contact'); });
+  aideLienAdmin(q);
 });
+function aideLienAdmin(q) {   // l’administration complète l’aide elle-même
+  if (!isAdmin()) return;
+  $('#aideRes').insertAdjacentHTML('beforeend', `<p class="text-xs mt-3 pt-2 border-t border-line"><button type="button" class="linkbtn text-xs" id="aideEditer">✏️ ${q ? 'Ajouter ou corriger cette réponse' : 'Ajouter ou corriger une réponse de l’aide'}</button></p>`);
+  $('#aideEditer').addEventListener('click', () => { if (q && !AIDE_PLUS.some(x => sans(x.q) === sans(q))) AIDE_PLUS = [...AIDE_PLUS, { q, k: sans(q), e: ['…'], r: ['tous'] }]; editerAidePlus(); });
+}
 
 /* =================================================================== *
  *  Devoirs et dépôt des travaux · Évaluation des cours                 *
