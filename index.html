@@ -1423,7 +1423,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 123</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 124</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -5743,33 +5743,41 @@ async function remettreEnOrdre() {
   });
 }
 
-/* ---------- Citer ce livre (devoirs, mémoires) ---------- */
-function auteurBiblio(a, ordre) {   // ordre = 'nom' : « MAKARIAN Christian » ; sinon « Christian MAKARIAN »
-  a = String(a || '').trim(); if (!a) return '';
-  const collectif = /congr[ée]gation|conseil|commission|conf[ée]rence|[ée]cole|institut|synode|concile|[ée]glise|saint-si[èe]ge|collectif|colloque|\(dir|dir\.|\bet al/i.test(a);
-  if (collectif) return a;
-  return a.split(/\s*[,;/]\s*|\s+et\s+/).filter(Boolean).map(n => {
-    const m = n.trim().split(/\s+/); if (m.length < 2 || m.length > 5) return n.trim();
-    const nom = m.pop().toUpperCase(), pre = m.join(' ');
-    return ordre === 'nom' ? `${nom} ${pre}` : `${pre} ${nom}`;
-  }).join(ordre === 'nom' ? ' ; ' : ', ');
+/* ---------- Citer ce livre (normes du cours de Méthodologie du GSTF) ----------
+   Note de bas de page : Prénom abrégé, NOM (petites capitales), Titre (italique), date, édition, page.
+   Bibliographie       : NOM (petites capitales) Prénom abrégé, Titre (italique), date, édition, pages. */
+function personnesAuteur(a) {
+  a = String(a || '').trim(); if (!a) return [];
+  if (/congr[ée]gation|conseil|commission|conf[ée]rence|[ée]cole|institut|synode|concile|[ée]glise|saint-si[èe]ge|collectif|colloque|dicast[èe]re|acad[ée]mie|soci[ée]t[ée]/i.test(a)) return [{ coll: a }];
+  const dir = /\(dir\.?\)|\bdir\./i.test(a) ? ' (dir.)' : '';
+  return a.replace(/\(dir\.?\)|\bdir\./ig, '').split(/\s*[,;/&]\s*|\s+et\s+/).map(x => x.trim()).filter(Boolean).map(n => {
+    const m = n.split(/\s+/); if (m.length > 5) return { coll: n };
+    if (m.length === 1) return { pre: '', nom: m[0] };
+    const nom = m.pop(), pre = m.map(w => w.split('-').map(x => /\.$/.test(x) ? x : x.charAt(0).toUpperCase() + '.').join('-')).join(' ');
+    return { pre, nom: nom.charAt(0).toUpperCase() + nom.slice(1), dir };
+  }).map((x, i, l) => i === l.length - 1 && dir ? { ...x, dir } : { ...x, dir: '' });
 }
+const petCap = (n, html) => html ? `<span style="font-variant:small-caps">${esc(n)}</span>` : n.toUpperCase();
+function auteursCitation(a, ordre, html) {
+  return personnesAuteur(a).map(p => p.coll ? (html ? esc(p.coll) : p.coll)
+    : (ordre === 'nom' ? `${petCap(p.nom, html)}${p.pre ? ' ' + (html ? esc(p.pre) : p.pre) : ''}` : `${p.pre ? (html ? esc(p.pre) : p.pre) + ' ' : ''}${petCap(p.nom, html)}`) + (p.dir || '')).join(', ');
+}
+function auteurBiblio(a, ordre) { return auteursCitation(a, ordre, false); }
 function citerLivre(l) {
   if (!l) return;
-  const ed = [l.editeur, l.annee_pub].filter(Boolean).join(', ') || 's. éd., s. d.';
-  const formats = [
-    ['Bibliographie (à la fin du travail)', auteurBiblio(l.auteur, 'nom'), ed.endsWith('.') ? ed : `${ed}.`],
-    ['Note de bas de page (1re citation)', auteurBiblio(l.auteur), `${ed}, p. …`],
-    ['Note de bas de page (citations suivantes)', auteurBiblio(l.auteur), 'op. cit., p. …', true]];
-  const html = (a, rest, court) => `${a ? esc(a) + ', ' : ''}<i>${esc(court ? l.titre.split(/[:.]/)[0].trim() : l.titre)}</i>, ${esc(rest)}`;
-  const texte = (a, rest, court) => `${a ? a + ', ' : ''}${court ? l.titre.split(/[:.]/)[0].trim() : l.titre}, ${rest}`;
+  const date = l.annee_pub ? String(l.annee_pub) : 's. d.', edit = l.editeur || 's. éd.';
+  const court = String(l.titre).split(/\s[:–—]\s|[:.]\s/)[0].trim();
+  const F = [
+    ['Note de bas de page (1re citation)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(l.titre)}</i>` : l.titre}, ${date}, ${h ? esc(edit) : edit}, p. …`],
+    ['Note de bas de page (citations suivantes)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(court)}</i>, <i>op. cit.</i>` : court + ', op. cit.'}, p. …`],
+    ['Bibliographie (à la fin du travail)', h => `${auteursCitation(l.auteur, 'nom', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(l.titre)}</i>` : l.titre}, ${date}, ${h ? esc(edit) : edit}, … p.`]];
   dialogueBiblio(`<p class="eyebrow mb-1">Bibliothèque · citer ce livre</p><h2 class="font-display text-2xl font-semibold mb-3">${esc(l.titre)}</h2>
-    ${formats.map(([lib, a, rest, court], i) => `<div class="cit-bloc"><p class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">${lib}</p>
-      <p class="cit-ref" id="cit${i}">${html(a, rest, court)}</p><button type="button" class="btn btn-ghost btn-sm mt-1" data-cit="${i}">📋 Copier</button></div>`).join('')}
-    <p class="text-xs text-muted mt-3">Le titre est en <i>italique</i> : collé dans Word, il le reste. Vérifiez le lieu d’édition et les pages sur le livre lui-même, et suivez les consignes du cours de Méthodologie.</p>
+    ${F.map(([lib, f], i) => `<div class="cit-bloc"><p class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">${lib}</p>
+      <p class="cit-ref">${f(true)}</p><button type="button" class="btn btn-ghost btn-sm mt-1" data-cit="${i}">📋 Copier</button></div>`).join('')}
+    <p class="text-xs text-muted mt-3">Normes du cours de Méthodologie : prénom abrégé, nom en <span style="font-variant:small-caps">petites capitales</span>, titre en <i>italique</i>, date, édition, page. Collé dans Word, la mise en forme est gardée. Remplacez « … » par la page citée (note) ou le nombre de pages du livre (bibliographie), et vérifiez sur le livre lui-même.</p>
     <button type="button" class="btn btn-sm mt-3" data-dl-fermer>Fermer</button>`);
   document.querySelectorAll('[data-cit]').forEach(b => b.addEventListener('click', async () => {
-    const [, a, rest, court] = formats[+b.dataset.cit], h = html(a, rest, court), t = texte(a, rest, court);
+    const f = F[+b.dataset.cit][1], h = `<span style="font-family:'Times New Roman',serif">${f(true)}</span>`, t = f(false);
     try { await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([h], { type: 'text/html' }), 'text/plain': new Blob([t], { type: 'text/plain' }) })]); }
     catch (_) { try { await navigator.clipboard.writeText(t); } catch (e) { prompt('Copiez la référence :', t); return; } }
     b.textContent = '✓ Copié'; setTimeout(() => { b.textContent = '📋 Copier'; }, 1800);
