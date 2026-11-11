@@ -1484,7 +1484,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 131</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 132</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2497,7 +2497,7 @@ const AIDE_ADMIN = {
     boutons: [['✓ Valider la correction', 'corrige la fiche de la personne'], ['✗ Refuser', 'garde la fiche telle qu’elle est']],
     attention: 'L’année, la fonction et le rôle ne se demandent pas ici : ils se changent dans Étudiants ou Enseignants.' },
   actes: { t: 'Actes du symposium', but: 'Préparer le livret des actes du symposium et l’imprimer en feuilles A4 pliées (format A5), comme les livrets du séminaire.',
-    etapes: ['« ＋ Nouveau livret » : donnez le thème du symposium.', 'Remplissez les blocs dans l’ordre : couverture (avec la photo), page de titre et mentions, préface, contributions, conclusion, bibliographie, auteurs, quatrième de couverture. Plusieurs administrateurs peuvent y travailler ; pensez à « 💾 Enregistrer » (le site enregistre aussi tout seul).', 'Pour une contribution : collez le texte, ou « 📄 Importer un Word » (les notes de bas de page sont gardées), ou « 📷 Scanner une page » imprimée (à relire).', 'Dans les textes : « ## » pour un titre de partie, « ((…)) » pour une note de bas de page, « *…* » pour l’italique, « > » pour une citation longue.', 'Bibliographie : une ligne par livre (NOM | Prénom | Titre | date | édition | pages) : le site applique les normes du séminaire.', '« 📖 Fabriquer le livret » ouvre le livre mis en page (couverture, sommaire avec numéros de pages, notes, en-têtes). Choisissez « Imprimer en livret plié » : recto verso, retourner sur le bord court, puis pliez et agrafez. Ou « Enregistrer en PDF » pour l’imprimeur.'],
+    etapes: ['« ＋ Nouveau livret » : donnez le thème du symposium.', 'Remplissez les blocs dans l’ordre : couverture (avec la photo), page de titre et mentions, préface, contributions, conclusion, bibliographie, auteurs, quatrième de couverture. Plusieurs administrateurs peuvent y travailler ; pensez à « 💾 Enregistrer » (le site enregistre aussi tout seul).', 'Pour une contribution : collez le texte, ou « 📄 Importer un Word » (les notes de bas de page sont gardées), ou « 📷 Scanner une page » imprimée (à relire).', 'Dans les textes : « ## » pour un titre de partie, « ((…)) » pour une note de bas de page, « *…* » pour l’italique, « > » pour une citation longue.', 'Bibliographie : une ligne par livre (NOM | Prénom | Titre | date | édition | pages) : le site applique les normes du séminaire.', '« 📖 Fabriquer » : choisissez le format. Livret A5 plié (comme le Programme : recto verso, retourner sur le bord court, pliez et agrafez), document A4 en 1 ou 2 colonnes, dépliant plié en 2 ou en 3 (couverture, programme, résumés, intervenants), ou fichier Word (A4 ou A5) à corriger. Pour un PDF : « Imprimer » puis « Enregistrer au format PDF ».'],
     attention: 'Autorisez les fenêtres (pop-up) pour le site, sinon le livret ne peut pas s’ouvrir. Un modèle Word du même livret existe aussi (fichier à garder sur le Drive).' },
   messages: { t: 'Messages reçus', but: 'Lire et répondre aux messages envoyés par le formulaire « Contact ».',
     etapes: ['Ouvrez un message pour le lire.', 'Écrivez la réponse et cliquez « Envoyer la réponse » : elle part par email à la personne.', 'Les messages traités restent dans l’historique.'] },
@@ -2583,7 +2583,7 @@ async function renderAdminActes() {
   box.innerHTML = `<div class="flex flex-wrap items-center gap-2 mb-4">
       <select class="field" id="acteChoix" style="width:auto;min-width:14rem">${ACTES.map(a => `<option value="${a.id}" ${D && a.id === D.id ? 'selected' : ''}>${esc(a.titre_court)}</option>`).join('')}${ACTES.length ? '' : '<option>(aucun livret)</option>'}</select>
       <button type="button" class="btn btn-ghost btn-sm" id="acteNouveau">＋ Nouveau livret</button>
-      ${D ? `<button type="button" class="btn btn-sm" id="acteSave">💾 Enregistrer</button><button type="button" class="btn btn-sm" id="acteLivre">📖 Fabriquer le livret (PDF)</button>
+      ${D ? `<button type="button" class="btn btn-sm" id="acteSave">💾 Enregistrer</button><button type="button" class="btn btn-sm" id="acteLivre">📖 Fabriquer : livret, A4, dépliant, Word…</button>
       <button type="button" class="linkbtn text-xs text-bad" id="acteSuppr">Supprimer ce livret</button><span class="text-xs text-muted" id="acteEtat"></span>` : ''}</div>
     ${!D ? '<p class="text-muted">Aucun livret pour l’instant : cliquez « ＋ Nouveau livret ».</p>' : `
     <div class="cadre-info mb-4 text-sm"><b>Pour écrire les textes :</b> un paragraphe par ligne · <span class="font-mono">## Titre</span> pour une partie · <span class="font-mono">### Sous-titre</span> · <span class="font-mono">&gt; texte</span> pour une citation longue · <span class="font-mono">*mot*</span> pour l’<em>italique</em> · <span class="font-mono">((texte de la note))</span> pour une <b>note de bas de page</b>, à l’endroit de l’appel. Vous pouvez aussi importer un fichier Word (les notes sont gardées) ou scanner une page imprimée.</div>
@@ -2626,7 +2626,7 @@ async function renderAdminActes() {
   };
   clearInterval(renderAdminActes.t); renderAdminActes.t = setInterval(() => { if (ACTE_MODIF && admView === 'actes' && currentTab === 'admin') enregistrer(true); }, 45000);
   $('#acteSave').addEventListener('click', () => enregistrer());
-  $('#acteLivre').addEventListener('click', async () => { const w = window.open('', '_blank'); if (!w) { toast('Fenêtre bloquée', 'Autorisez les fenêtres (pop-up) pour ce site.', 'warn'); return; } if (ACTE_MODIF) await enregistrer(true); fabriquerLivret(D, w); });
+  $('#acteLivre').addEventListener('click', () => choisirFormatActes(D, enregistrer));
   $('#acteSuppr').addEventListener('click', async () => { if (!confirm(`Supprimer définitivement le livret « ${D.theme || 'sans titre'} » ?`)) return; await sb.from('actes_symposium').delete().eq('id', D.id); ACTES = ACTES.filter(x => x.id !== D.id); ACTE = null; renderAdminActes(); });
   $('#acteAjoutC').addEventListener('click', () => { D.contributions.push({ titre: '', prenom: '', nom: '', fonction: '', resume: '', texte: '' }); ACTE_MODIF = true; renderAdminActes(); });
   box.querySelectorAll('[data-retirer-c]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.retirerC; if (!confirm(`Retirer la contribution ${i + 1} « ${D.contributions[i].titre || 'sans titre'} » ?`)) return; D.contributions.splice(i, 1); ACTE_MODIF = true; renderAdminActes(); }));
@@ -2677,9 +2677,155 @@ async function wordVersTexte(f) {   // Word → texte avec ## titres, *italique*
   return L.join('\n');
 }
 
+/* ---------- Choix du format : livret A5, document A4 (1 ou 2 colonnes), dépliant, Word ---------- */
+const ACTES_FMT = { f: 'a5', colA4: '1', volets: '3', taille: 'a4' };
+function choisirFormatActes(D, enregistrer) {
+  try { Object.assign(ACTES_FMT, JSON.parse(localStorage.getItem('gstf-actes-format') || '{}')); } catch (_) {}
+  const opt = (v, l, d, extra) => `<label class="flex items-start gap-3 p-3 rounded-lg border border-line mb-2 cursor-pointer"><input type="radio" name="afmt" value="${v}" class="mt-1" ${ACTES_FMT.f === v ? 'checked' : ''}><span class="grow"><b>${l}</b><span class="block text-sm text-muted">${d}</span>${extra || ''}</span></label>`;
+  const sel = (id, v, L) => `<select class="field py-1 mt-2" id="${id}" style="width:auto">${L.map(([k, l]) => `<option value="${k}" ${String(v) === k ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+  dialogueBiblio(`<p class="eyebrow mb-1">Actes du symposium</p><h2 class="font-display text-2xl font-semibold mb-3">Quel format voulez-vous ?</h2>
+    ${opt('a5', '📖 Livret A5 plié', 'Comme le Programme : des feuilles A4 imprimées recto verso, pliées au milieu et agrafées.')}
+    ${opt('a4', '📄 Document A4', 'Pages A4 classiques, avec sommaire, notes et numéros de pages.', sel('afCol', ACTES_FMT.colA4, [['1', '1 colonne'], ['2', '2 colonnes (style revue)']]))}
+    ${opt('depliant', '🗞 Dépliant', 'Une feuille A4 en largeur, pliée : couverture, programme, résumés des interventions, intervenants. Pour annoncer ou accompagner le symposium.', sel('afVol', ACTES_FMT.volets, [['2', '2 colonnes (plié en deux)'], ['3', '3 colonnes (plié en trois)']]))}
+    ${opt('word', '📝 Word (.docx)', 'Le livre complet dans un fichier Word, pour corriger ou l’envoyer à l’imprimeur.', sel('afTaille', ACTES_FMT.taille, [['a4', 'pages A4'], ['a5', 'pages A5']]))}
+    <p class="text-xs text-muted mt-2">📕 <b>PDF</b> : chaque format (sauf Word) s’ouvre avec un bouton « Imprimer » ; dans la fenêtre d’impression, choisissez « Enregistrer au format PDF ». Autorisez les fenêtres (pop-up) pour ce site.</p>
+    <div class="flex flex-wrap gap-2 mt-4"><button type="button" class="btn" id="afGo">Fabriquer</button><button type="button" class="btn btn-ghost" data-dl-fermer>Annuler</button></div>`);
+  $('#afGo').addEventListener('click', async () => {
+    const f = (document.querySelector('input[name="afmt"]:checked') || {}).value || 'a5';
+    Object.assign(ACTES_FMT, { f, colA4: $('#afCol').value, volets: $('#afVol').value, taille: $('#afTaille').value });
+    try { localStorage.setItem('gstf-actes-format', JSON.stringify(ACTES_FMT)); } catch (_) {}
+    $('#dlDlg').hidden = true;
+    if (f === 'word') { if (ACTE_MODIF) await enregistrer(true); fabriquerWordActes(D, ACTES_FMT.taille); return; }
+    const w = window.open('', '_blank'); if (!w) { toast('Fenêtre bloquée', 'Autorisez les fenêtres (pop-up) pour ce site.', 'warn'); return; }
+    if (ACTE_MODIF) await enregistrer(true);
+    if (f === 'depliant') fabriquerDepliant(D, w, Number(ACTES_FMT.volets)); else fabriquerLivret(D, w, { format: f, colonnes: ACTES_FMT.colA4 });
+  });
+}
+
+/* ---------- Dépliant : A4 en largeur, plié en 2 ou en 3 ---------- */
+async function fabriquerDepliant(D, w, volets) {
+  w.document.write('<!doctype html><meta charset="utf-8"><title>Préparation du dépliant…</title><p style="font-family:sans-serif;padding:2rem">Préparation du dépliant…</p>');
+  volets = volets === 2 ? 2 : 3;
+  const charge = async u => { try { const r = await fetch(u); return r.ok ? await versDataUrl(await r.blob()) : ''; } catch (_) { return ''; } };
+  const [logo, therese] = await Promise.all([charge('icon-512.png'), charge('therese.jpg')]);
+  let photo = ''; if (D.photo) { const dl = await sb.storage.from('photos').download(D.photo); if (!dl.error) photo = await versDataUrl(dl.data); }
+  const coul = /^#[0-9a-f]{6}$/i.test(D.couleur || '') ? D.couleur : '#2E74B5', theme = esc(D.theme || 'Thème du symposium');
+  const lignes = t => String(t || '').split('\n').map(x => x.trim()).filter(Boolean);
+  const C = D.contributions.filter(c => c.titre || c.texte);
+  const extrait = c => c.resume ? enLigne(c.resume) : esc(String(c.texte || '').replace(/\(\([\s\S]+?\)\)/g, '').replace(/^#+\s*/gm, '').replace(/[*>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 420).replace(/\s\S*$/, '')) + (c.texte && !c.resume ? '…' : '');
+  const couv = `<div class="volet couv"><div class="tete"><img src="${logo}" alt=""><div>GRAND SÉMINAIRE<br>DE THÉOLOGIE<br>FALIARIVO</div><img src="${therese}" alt=""></div>
+      <div class="photo" ${photo ? `style="background-image:url(${photo})"` : ''}></div><p class="kicker">${esc(D.titre || 'Actes du symposium')}</p><h1>${theme}</h1>${D.sous_titre ? `<p class="st">${esc(D.sous_titre)}</p>` : ''}
+      <p class="quand">${esc([D.dates, D.lieu].filter(Boolean).join(' · '))}</p></div>`;
+  const dos = `<div class="volet dos">${D.quatrieme ? `<h2>Présentation</h2>${texteVersHtml(D.quatrieme)}` : ''}
+      <div class="contact"><img src="${logo}" alt=""><p><b>Grand Séminaire de Théologie<br>Sainte Thérèse de l’Enfant-Jésus</b></p><p>Lot VB 5 bis, Faliarivo – Ambanidia<br>101 Antananarivo, Madagascar</p><p>☎ +261 38 21 220 21<br>gstf-faliarivo.ovh</p></div></div>`;
+  const rabat = `<div class="volet rabat"><h2>Les intervenants</h2>${(lignes(D.auteurs).length ? lignes(D.auteurs).map(l => { const [a, b] = l.split('|').map(x => x.trim()); return `<p><b>${esc(a)}</b>${b ? '<br><span>' + enLigne(b) + '</span>' : ''}</p>`; }) : C.map(c => `<p><b>${esc([c.prenom, c.nom].filter(Boolean).join(' '))}</b>${c.fonction ? '<br><span>' + esc(c.fonction) + '</span>' : ''}</p>`)).join('')}
+      ${D.coord_nom ? `<p class="coord">Coordination : ${esc([D.coord_prenom, D.coord_nom].filter(Boolean).join(' '))}</p>` : ''}</div>`;
+  const interieur = `${D.programme ? `<h2>Programme</h2>${lignes(D.programme).map(l => `<p class="prog">${enLigne(l)}</p>`).join('')}` : ''}
+    ${C.length ? `<h2>Les interventions</h2>${C.map(c => `<div class="interv"><h3>${esc(c.titre || '')}</h3><p class="aut">${esc([c.prenom, c.nom].filter(Boolean).join(' '))}${c.fonction ? ' · ' + esc(c.fonction) : ''}</p><p>${extrait(c)}</p></div>`).join('')}` : ''}
+    ${volets === 2 && (lignes(D.auteurs).length || C.length) ? rabat.replace('class="volet rabat"', 'class="rabat-in"') : ''}`;
+  const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>${theme} – dépliant</title><style>
+@page { size: 297mm 210mm; margin: 0; }
+* { box-sizing: border-box; } body { margin: 0; font: 9.5pt/1.38 Garamond, 'EB Garamond', 'Times New Roman', Georgia, serif; color: #111; }
+.face { width: 297mm; height: 210mm; display: flex; overflow: hidden; break-after: page; background: #fff; position: relative; }
+.volet { width: calc(297mm / ${volets}); height: 210mm; padding: 11mm 10mm; overflow: hidden; display: flex; flex-direction: column; }
+.couv { text-align: center; } .tete { display: grid; grid-template-columns: 15mm 1fr 13mm; gap: 2mm; align-items: center; font: 700 8pt/1.3 'Trebuchet MS', sans-serif; color: #555; letter-spacing: .04em; } .tete img { width: 100%; }
+.photo { flex: 1; margin: 6mm 0; border-radius: 1.5mm; background: #e7eef5 center/cover no-repeat; min-height: 40mm; }
+.kicker { font: 600 8pt 'Trebuchet MS', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: ${coul}; margin: 0; }
+h1 { font-size: ${volets === 2 ? 22 : 18}pt; line-height: 1.12; color: ${coul}; margin: 2mm 0 1mm; } .st { font-style: italic; margin: 0; } .quand { margin: 3mm 0 0; font-weight: 600; }
+h2 { font-size: 12pt; color: ${coul}; margin: 0 0 2.5mm; border-bottom: .5pt solid ${coul}; padding-bottom: 1mm; break-after: avoid; } h3 { font-size: 10pt; margin: 0 0 .5mm; break-after: avoid; }
+p { margin: 0 0 1.6mm; text-align: justify; hyphens: auto; } .dos h2 { margin-top: 0; } .contact { margin-top: auto; text-align: center; font-size: 8.5pt; } .contact img { width: 16mm; } .contact p { text-align: center; }
+.rabat p span { font-style: italic; color: #444; font-size: 8.5pt; } .coord { margin-top: auto; font-style: italic; font-size: 8.5pt; }
+.interieur { width: 297mm; height: 210mm; padding: 11mm 10mm; column-count: ${volets}; column-gap: 20mm; column-fill: auto; overflow: hidden; }
+.interv { break-inside: avoid; margin-bottom: 3mm; } .interv .aut { font-style: italic; color: #444; text-align: left; margin-bottom: .8mm; } .prog { text-align: left; } .rabat-in { break-before: column; }
+.pli { position: absolute; top: 0; bottom: 0; border-left: .3pt dashed #ccc; } @media print { .pli { display: none; } .barre { display: none !important; } }
+.barre { position: fixed; top: 0; left: 0; right: 0; z-index: 9; background: #1F4E79; color: #fff; font: 14px system-ui, sans-serif; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.barre button { font: inherit; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; background: #fff; color: #1F4E79; font-weight: 600; }
+@media screen { body { background: #6b7280; padding: 64px 14px 14px; } .face { margin: 0 auto 14px; box-shadow: 0 2px 10px rgba(0,0,0,.35); } }
+</style></head><body>
+<div class="barre"><button onclick="window.print()">🖨 Imprimer ou enregistrer en PDF</button><span id="info">Feuille A4 en largeur, recto verso (« retourner sur le bord court »), puis pliez en ${volets === 2 ? 'deux' : 'trois'}.</span></div>
+<div class="face">${volets === 3 ? rabat + dos + couv : dos + couv}${Array.from({ length: volets - 1 }, (_, i) => `<div class="pli" style="left:calc(297mm * ${i + 1} / ${volets})"></div>`).join('')}</div>
+<div class="face"><div class="interieur" id="int">${interieur}</div>${Array.from({ length: volets - 1 }, (_, i) => `<div class="pli" style="left:calc(297mm * ${i + 1} / ${volets})"></div>`).join('')}</div>
+<script>
+(function ajuster() {   // le texte intérieur doit tenir sur une face : on réduit la taille si besoin
+  const z = document.getElementById('int'); let t = 9.5;
+  const deborde = () => { const r = z.getBoundingClientRect(); return [...z.querySelectorAll('h2,h3,p')].some(e => e.getBoundingClientRect().right > r.right + 2); };
+  while (deborde() && t > 6.6) { t -= .3; z.style.fontSize = t + 'pt'; }
+  if (deborde()) document.getElementById('info').textContent = '⚠️ Le texte est trop long pour le dépliant : raccourcissez les résumés des interventions (champ « Résumé ») ou choisissez 3 colonnes.';
+})();
+<\/script></body></html>`;
+  const url = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' })); w.location.href = url; setTimeout(() => URL.revokeObjectURL(url), 120000);
+}
+
+/* ---------- Word (.docx) : le livre complet, modifiable ---------- */
+async function fabriquerWordActes(D, taille) {
+  toast('Préparation du fichier Word…', 'Quelques secondes.');
+  try { await chargerScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js'); } catch (_) { toast('Word indisponible', 'Vérifiez la connexion internet.', 'bad'); return; }
+  const X = window.docx, A5 = taille === 'a5', notes = [], coul = (/^#[0-9a-f]{6}$/i.test(D.couleur || '') ? D.couleur : '#1F4E79').slice(1);
+  const lignes = t => String(t || '').split('\n').map(x => x.trim()).filter(Boolean);
+  const runs = (t, o = {}, sansNotes) => { const out = [], re = /\(\(([\s\S]+?)\)\)|\*([^*\n]+)\*/g; let i = 0, m; t = String(t || '');
+    while ((m = re.exec(t))) { if (m.index > i) out.push(new X.TextRun({ text: t.slice(i, m.index), ...o }));
+      if (m[1] !== undefined) { if (!sansNotes) { notes.push(m[1]); out.push(new X.FootnoteReferenceRun(notes.length)); } } else out.push(new X.TextRun({ text: m[2], italics: true, ...o }));
+      i = m.index + m[0].length; }
+    if (i < t.length) out.push(new X.TextRun({ text: t.slice(i), ...o })); return out; };
+  const P = (t, o = {}) => new X.Paragraph({ alignment: X.AlignmentType.JUSTIFIED, indent: { firstLine: 340 }, spacing: { after: 80 }, ...o, children: typeof t === 'string' ? runs(t) : t });
+  const C0 = (t, o = {}, r = {}) => new X.Paragraph({ alignment: X.AlignmentType.CENTER, spacing: { after: 120 }, ...o, children: typeof t === 'string' ? runs(t, r) : t });
+  const H1 = t => new X.Paragraph({ heading: X.HeadingLevel.HEADING_1, pageBreakBefore: true, alignment: X.AlignmentType.CENTER, children: [new X.TextRun(t)] });
+  const texte = t => lignes(t).map(l => /^###\s/.test(l) ? new X.Paragraph({ heading: X.HeadingLevel.HEADING_3, children: runs(l.slice(4)) })
+    : /^##\s/.test(l) ? new X.Paragraph({ heading: X.HeadingLevel.HEADING_2, children: runs(l.slice(3)) })
+    : /^>\s?/.test(l) ? new X.Paragraph({ alignment: X.AlignmentType.JUSTIFIED, indent: { left: 567, right: 340 }, spacing: { after: 120 }, children: runs(l.replace(/^>\s?/, ''), { size: A5 ? 18 : 21 }) }) : P(l));
+  const nom = (p, n, o = {}) => [new X.TextRun({ text: (p ? p + ' ' : ''), ...o }), new X.TextRun({ text: n || '', smallCaps: true, ...o })];
+  const bib = (t, r) => lignes(t).map(l => { const p = l.split('|').map(x => x.trim()); if (p.length < 3) return new X.Paragraph({ indent: { left: 397, hanging: 397 }, children: runs(l) });
+    const [n, pr, ti, ...reste] = p, ch = [];
+    if (n) ch.push(new X.TextRun({ text: n, smallCaps: true }), new X.TextRun((pr ? ' ' + prenomAbrege(pr) : '') + ', '));
+    ch.push(r === 'articles' ? new X.TextRun('« ' + ti + ' »') : new X.TextRun({ text: ti, italics: true }));
+    reste.filter(Boolean).forEach((x, i) => ch.push(r === 'articles' && i === 0 ? new X.TextRun(', dans ') : new X.TextRun(', '), r === 'articles' && i === 0 ? new X.TextRun({ text: x, italics: true }) : new X.TextRun(/^\d[\d\s]*$/.test(x) && i === reste.length - 1 ? x + ' p.' : x)));
+    ch.push(new X.TextRun('.')); return new X.Paragraph({ indent: { left: 397, hanging: 397 }, spacing: { after: 80 }, children: ch }); });
+  const C = D.contributions.filter(c => c.titre || c.texte), theme = D.theme || 'Thème du symposium';
+  let photo = null; if (D.photo) { const dl = await sb.storage.from('photos').download(D.photo); if (!dl.error) photo = await dl.data.arrayBuffer(); }
+  const corps = [
+    C0('GRAND SÉMINAIRE DE THÉOLOGIE', { spacing: { before: 0, after: 0 } }, { bold: true, color: '555555' }), C0('FALIARIVO – AMBANIDIA', { spacing: { after: 400 } }, { bold: true, color: '555555' }),
+    ...(photo ? [C0([new X.ImageRun({ data: photo, transformation: A5 ? { width: 330, height: 230 } : { width: 480, height: 330 } })])] : []),
+    C0(D.titre || 'ACTES DU SYMPOSIUM', { spacing: { before: 400, after: 80 } }, { bold: true, size: A5 ? 34 : 44, color: coul }),
+    C0(theme, {}, { size: A5 ? 26 : 32, color: coul }), ...(D.sous_titre ? [C0(D.sous_titre, {}, { italics: true })] : []),
+    C0([D.lieu, D.dates].filter(Boolean).join(', ')),
+    ...(D.coord_nom ? [C0('Textes réunis et présentés par', { spacing: { before: 300, after: 0 } }, { italics: true }), C0(nom(D.coord_prenom, D.coord_nom))] : []),
+    new X.Paragraph({ heading: X.HeadingLevel.HEADING_1, pageBreakBefore: true, alignment: X.AlignmentType.CENTER, children: [new X.TextRun('Sommaire')] }),
+    new X.TableOfContents('Sommaire', { hyperlink: true, headingStyleRange: '1-1' }),
+    C0('(Si le sommaire est vide : clic droit dessus › « Mettre à jour les champs ».)', {}, { italics: true, size: 16, color: '888888' })];
+  if (D.preface.texte) corps.push(H1('Préface'), ...texte(D.preface.texte), ...(D.preface.auteur ? [new X.Paragraph({ alignment: X.AlignmentType.RIGHT, spacing: { before: 240 }, children: [new X.TextRun(D.preface.auteur), ...(D.preface.fonction ? [new X.TextRun({ text: D.preface.fonction, italics: true, break: 1 })] : [])] })] : []));
+  if (D.sigles) corps.push(H1('Sigles et abréviations'), ...lignes(D.sigles).map(l => { const [a, b] = l.split('|').map(x => x.trim()); return new X.Paragraph({ children: [new X.TextRun({ text: a + '\t', bold: true }), new X.TextRun({ text: b || '', italics: true })], tabStops: [{ type: X.TabStopType.LEFT, position: 1134 }] }); }));
+  if (D.introduction.texte) corps.push(H1('Introduction'), ...texte(D.introduction.texte));
+  C.forEach((c, i) => { corps.push(H1(c.titre || 'Contribution ' + (i + 1)));
+    if (c.nom || c.prenom) corps.push(C0(nom(c.prenom, c.nom), { spacing: { after: 0 } }));
+    if (c.fonction) corps.push(C0(c.fonction, { spacing: { after: 240 } }, { italics: true, color: '555555', size: A5 ? 18 : 20 }));
+    if (c.resume) corps.push(new X.Paragraph({ alignment: X.AlignmentType.JUSTIFIED, indent: { left: 340, right: 340 }, spacing: { after: 240 }, border: { top: { style: X.BorderStyle.SINGLE, size: 4, color: 'BBBBBB', space: 4 }, bottom: { style: X.BorderStyle.SINGLE, size: 4, color: 'BBBBBB', space: 4 } }, children: [new X.TextRun({ text: 'Résumé. ', bold: true, size: A5 ? 18 : 20 }), ...runs(c.resume, { size: A5 ? 18 : 20 }, true)] }));
+    corps.push(...texte(c.texte)); });
+  if (D.conclusion.texte) corps.push(H1('Synthèse et conclusion'), ...texte(D.conclusion.texte));
+  if (D.biblio_magistere || D.biblio_ouvrages || D.biblio_articles) { corps.push(H1('Bibliographie générale'));
+    [['biblio_magistere', 'Écriture sainte et Magistère', 'magistere'], ['biblio_ouvrages', 'Ouvrages', 'ouvrages'], ['biblio_articles', 'Articles', 'articles']].forEach(([k, t, r]) => { if (D[k]) corps.push(new X.Paragraph({ spacing: { before: 200, after: 100 }, children: [new X.TextRun({ text: t, bold: true, smallCaps: true })] }), ...bib(D[k], r)); }); }
+  if (D.auteurs) corps.push(H1('Les auteurs'), ...lignes(D.auteurs).map(l => { const [a, b] = l.split('|').map(x => x.trim()); const m = a.split(/\s+/), n = m.length > 1 ? m.pop() : a; return new X.Paragraph({ spacing: { after: 100 }, children: [...nom(n !== a ? m.join(' ') : '', n, { bold: true }), ...(b ? [new X.TextRun(' : '), ...runs(b, {}, true)] : [])] }); }));
+  if (D.programme) corps.push(H1('Annexe : programme du symposium'), ...lignes(D.programme).map(l => new X.Paragraph({ spacing: { after: 60 }, children: runs(l, {}, true) })));
+  if (D.quatrieme) corps.push(new X.Paragraph({ pageBreakBefore: true, alignment: X.AlignmentType.CENTER, spacing: { after: 240 }, children: [new X.TextRun({ text: theme, bold: true, size: A5 ? 26 : 30, color: coul })] }), ...texte(D.quatrieme),
+    C0('Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus · Faliarivo – Antananarivo · gstf-faliarivo.ovh', { spacing: { before: 600 } }, { size: 16, color: '555555' }));
+  const footnotes = {}; notes.forEach((n, i) => { footnotes[i + 1] = { children: [new X.Paragraph({ alignment: X.AlignmentType.JUSTIFIED, children: runs(n, { size: A5 ? 15 : 17 }, true) })] }; });
+  const doc = new X.Document({ creator: 'Grand Séminaire de Faliarivo', title: theme, features: { updateFields: true }, footnotes,
+    styles: { default: { document: { run: { font: 'Garamond', size: A5 ? 21 : 24 } } },
+      paragraphStyles: [{ id: 'Heading1', name: 'Heading 1', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { font: 'Garamond', size: A5 ? 30 : 34, bold: true, color: '1F4E79' }, paragraph: { spacing: { before: A5 ? 1200 : 1600, after: 360 }, alignment: X.AlignmentType.CENTER, keepNext: true, outlineLevel: 0 } },
+        { id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { font: 'Garamond', size: A5 ? 23 : 26, bold: true }, paragraph: { spacing: { before: 280, after: 120 }, keepNext: true, outlineLevel: 1 } },
+        { id: 'Heading3', name: 'Heading 3', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { font: 'Garamond', size: A5 ? 21 : 24, italics: true }, paragraph: { spacing: { before: 220, after: 100 }, keepNext: true, outlineLevel: 2 } }] },
+    sections: [{ properties: { page: { size: A5 ? { width: 8391, height: 11906 } : { width: 11906, height: 16838 }, margin: A5 ? { top: 1020, bottom: 960, left: 1020, right: 850 } : { top: 1418, bottom: 1300, left: 1418, right: 1247 } } },
+      footers: { default: new X.Footer({ children: [new X.Paragraph({ alignment: X.AlignmentType.CENTER, children: [new X.TextRun({ children: [X.PageNumber.CURRENT], size: 18 })] })] }) },
+      children: corps }] });
+  const blob = await X.Packer.toBlob(doc), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `Actes_${(D.theme || 'symposium').replace(/[^\p{L}\p{N}]+/gu, '_').slice(0, 50)}_${A5 ? 'A5' : 'A4'}.docx`; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  toast('Fichier Word prêt', 'Il est dans vos téléchargements. À l’ouverture, Word peut demander de mettre à jour le sommaire : répondez « Oui ».');
+}
+
 /* ---------- Mise en page du livret (Paged.js) ---------- */
 const PAGED_JS = 'https://cdn.jsdelivr.net/npm/pagedjs@0.4.3/dist/paged.polyfill.min.js';
-async function fabriquerLivret(D, w) {
+async function fabriquerLivret(D, w, opts = {}) {
+  const A4 = opts.format === 'a4', COLS = A4 && String(opts.colonnes) === '2' ? 2 : 1, k = v => A4 ? Math.round(v * 1.41) : v;
   w.document.write('<!doctype html><meta charset="utf-8"><title>Préparation du livret…</title><p style="font-family:sans-serif;padding:2rem">Préparation du livret… (quelques secondes)</p>'); 
   const charge = async u => { try { const r = await fetch(u); return r.ok ? await versDataUrl(await r.blob()) : ''; } catch (_) { return ''; } };
   const [logo, therese] = await Promise.all([charge('icon-512.png'), charge('therese.jpg')]);
@@ -2693,19 +2839,19 @@ async function fabriquerLivret(D, w) {
   const biblio = (t, r) => lignes(t).map(l => biblioLigne(l, r)).join('');
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>${theme} – Actes du symposium</title>
 <style>
-@page { size: 148mm 210mm; margin: 18mm 15mm 17mm 18mm; @bottom-center { content: counter(page); font: 9pt Garamond, 'EB Garamond', Georgia, serif; } @footnote { border-top: .4pt solid #888; padding-top: 2mm; margin-top: 3mm; } }
-@page :left { margin-left: 15mm; margin-right: 18mm; @top-left { content: string(theme); font: italic 8pt Garamond, Georgia, serif; color: #555; } }
+@page { size: ${A4 ? '210mm 297mm; margin: 24mm 20mm 22mm 23mm' : '148mm 210mm; margin: 18mm 15mm 17mm 18mm'}; @bottom-center { content: counter(page); font: 9pt Garamond, 'EB Garamond', Georgia, serif; } @footnote { border-top: .4pt solid #888; padding-top: 2mm; margin-top: 3mm; } }
+@page :left { margin-left: ${A4 ? '20mm; margin-right: 23mm' : '15mm; margin-right: 18mm'}; @top-left { content: string(theme); font: italic 8pt Garamond, Georgia, serif; color: #555; } }
 @page :right { @top-right { content: string(titre); font: italic 8pt Garamond, Georgia, serif; color: #555; } }
 @page couverture { margin: 9mm; @bottom-center { content: none; } @top-left { content: none; } @top-right { content: none; } }
 @page liminaire { @bottom-center { content: counter(page); } @top-left { content: none; } @top-right { content: none; } }
 @page muette { @bottom-center { content: none; } @top-left { content: none; } @top-right { content: none; } }
 @page :blank { @bottom-center { content: none; } @top-left { content: none; } @top-right { content: none; } }
 @page ouverture { @top-left { content: none; } @top-right { content: none; } }
-html { font: 10.5pt/1.42 Garamond, 'EB Garamond', 'Times New Roman', Georgia, serif; color: #111; }
+html { font: ${A4 ? (COLS === 2 ? '10.5pt/1.4' : '12pt/1.45') : '10.5pt/1.42'} Garamond, 'EB Garamond', 'Times New Roman', Georgia, serif; color: #111; }
 body { margin: 0; } p { margin: 0 0 .35em; text-align: justify; text-indent: 1.2em; hyphens: auto; orphans: 2; widows: 2; }
 .sc { font-variant: small-caps; } em { font-style: italic; }
 .theme-run { string-set: theme content(text); height: 0; overflow: hidden; font-size: 0; }
-.couv { page: couverture; height: 192mm; display: flex; flex-direction: column; font-family: 'Times New Roman', serif; }
+.couv { page: couverture; height: ${A4 ? 278 : 192}mm; display: flex; flex-direction: column; font-family: 'Times New Roman', serif; }
 .couv-tete { display: grid; grid-template-columns: 26mm 1fr 22mm; align-items: center; gap: 2mm; }
 .couv-tete img { width: 100%; } .couv-gs { text-align: center; font: 700 12.5pt/1.35 'Copperplate Gothic Bold', 'Copperplate', 'Trebuchet MS', sans-serif; color: #555; letter-spacing: .04em; }
 .couv-nom { text-align: right; margin: 4mm 14mm 0 0; color: ${coul}; font-size: 11pt; line-height: 1.2; } .couv-nom .sc { display: block; margin-right: 8mm; font-size: 9pt; }
@@ -2713,10 +2859,10 @@ body { margin: 0; } p { margin: 0 0 .35em; text-align: justify; text-indent: 1.2
 .couv-titre { text-align: center; color: ${coul}; font: 700 19pt/1.15 'Times New Roman', serif; } .couv-titre small { display: block; font-size: 13pt; margin-top: 2mm; }
 .page-muette { page: muette; break-before: page; } .liminaire { page: liminaire; }
 .ouverture { page: ouverture; }
-.faux-titre { text-align: center; padding-top: 55mm; font-size: 16pt; font-weight: 700; }
+.faux-titre { text-align: center; padding-top: ${k(55)}mm; font-size: 16pt; font-weight: 700; }
 .titre-page { text-align: center; } .titre-page p { text-align: center; text-indent: 0; }
-.mentions { padding-top: 95mm; font-size: 8pt; } .mentions p { text-indent: 0; text-align: left; margin: 0 0 1.2mm; }
-.dedicace { padding: 60mm 0 0 45mm; font-style: italic; text-align: right; }
+.mentions { padding-top: ${k(95)}mm; font-size: 8pt; } .mentions p { text-indent: 0; text-align: left; margin: 0 0 1.2mm; }
+.dedicace { padding: ${k(60)}mm 0 0 ${k(45)}mm; font-style: italic; text-align: right; }
 h1 { font-size: 15pt; text-align: center; color: #1F4E79; margin: 18mm 0 6mm; string-set: titre content(text); break-before: right; line-height: 1.2; }
 h1.liminaire-h { break-before: page; } h2 { font-size: 11.5pt; margin: 5mm 0 2mm; break-after: avoid; } h3 { font-size: 10.5pt; font-style: italic; margin: 4mm 0 1.5mm; break-after: avoid; }
 blockquote { margin: 2mm 6mm 3mm 9mm; font-size: 9.5pt; text-align: justify; }
@@ -2731,8 +2877,10 @@ blockquote { margin: 2mm 6mm 3mm 9mm; font-size: 9.5pt; text-align: justify; }
 .sommaire .som-aut { font-style: italic; color: #555; }
 .sigles p, .bib, .aut p { text-indent: 0; } .sigles b { display: inline-block; width: 18mm; }
 .bib { padding-left: 7mm; text-indent: -7mm !important; text-align: left; font-size: 9.5pt; margin-bottom: 1.6mm; } .rub { font-variant: small-caps; font-weight: 700; margin: 4mm 0 2mm; }
-.acheve { page: muette; break-before: page; padding-top: 150mm; text-align: center; font-style: italic; font-size: 8.5pt; } .acheve p { text-align: center; text-indent: 0; }
-.dos { page: muette; break-before: left; display: flex; flex-direction: column; height: 172mm; }
+.acheve { page: muette; break-before: page; padding-top: ${k(150)}mm; text-align: center; font-style: italic; font-size: 8.5pt; } .acheve p { text-align: center; text-indent: 0; }
+.dos { page: muette; break-before: left; display: flex; flex-direction: column; height: ${A4 ? 250 : 172}mm; }
+${A4 ? `h1 { font-size: 18pt; } .couv-titre { font-size: 26pt; } .couv-titre small { font-size: 17pt; } .couv-gs { font-size: 16pt; } .couv-tete { grid-template-columns: 36mm 1fr 30mm; }` : ''}
+${COLS === 2 ? `.corps { column-count: 2; column-gap: 7mm; } .corps p { text-indent: .9em; } .notes-fin { column-span: all; font-size: 8.5pt; border-top: .4pt solid #888; margin-top: 4mm; padding-top: 2mm; } .notes-fin p { text-indent: 0; margin-bottom: 1mm; }` : ''}
 .dos h2 { text-align: center; font-size: 14pt; color: ${coul}; margin: 8mm 0 6mm; } .dos .pres { font-size: 10.5pt; } .dos .bas { margin-top: auto; text-align: center; font-size: 8.5pt; } .dos .bas img { width: 18mm; }
 .dos .bas p { text-align: center; text-indent: 0; margin: 0; }
 .barre { position: fixed; top: 0; left: 0; right: 0; z-index: 9; background: #1F4E79; color: #fff; font: 14px system-ui, sans-serif; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -2767,7 +2915,7 @@ blockquote { margin: 2mm 6mm 3mm 9mm; font-size: 9.5pt; text-align: justify; }
 </section>
 <main>
 ${C.map((c, i) => `<section class="contrib"><h1 id="c${i}">${esc(c.titre || 'Contribution ' + (i + 1))}</h1>${c.nom || c.prenom ? `<p class="auteur">${nomC(c.prenom, c.nom)}</p>` : ''}${c.fonction ? `<p class="fonction">${esc(c.fonction)}</p>` : '<p class="fonction"></p>'}
-  ${c.resume ? `<p class="resume"><b>Résumé.</b> ${enLigne(c.resume)}</p>` : ''}${texteVersHtml(c.texte)}</section>`).join('')}
+  ${c.resume ? `<p class="resume"><b>Résumé.</b> ${enLigne(c.resume)}</p>` : ''}<div class="corps">${texteVersHtml(c.texte)}</div></section>`).join('')}
 ${D.conclusion.texte ? `<section class="contrib"><h1 id="conclusion">Synthèse et conclusion</h1>${texteVersHtml(D.conclusion.texte)}${D.conclusion.auteur ? `<p class="signature">${esc(D.conclusion.auteur)}</p>` : ''}</section>` : ''}
 ${D.biblio_magistere || D.biblio_ouvrages || D.biblio_articles ? `<section><h1 id="bibliographie">Bibliographie générale</h1>${D.biblio_magistere ? `<p class="rub">Écriture sainte et Magistère</p>${biblio(D.biblio_magistere, 'magistere')}` : ''}${D.biblio_ouvrages ? `<p class="rub">Ouvrages</p>${biblio(D.biblio_ouvrages, 'ouvrages')}` : ''}${D.biblio_articles ? `<p class="rub">Articles</p>${biblio(D.biblio_articles, 'articles')}` : ''}</section>` : ''}
 ${D.auteurs ? `<section class="aut"><h1 id="auteurs">Les auteurs</h1>${lignes(D.auteurs).map(l => { const [a, b] = l.split('|').map(x => x.trim()); const m = a.split(/\s+/), n = m.length > 1 ? m.pop() : a; return `<p><b>${m.length && n !== a ? esc(m.join(' ')) + ' ' : ''}<span class="sc">${esc(n)}</span></b>${b ? ' : ' + enLigne(b) : ''}</p>`; }).join('')}</section>` : ''}
@@ -2777,14 +2925,17 @@ ${D.programme ? `<section><h1 id="annexes">Annexe : programme du symposium</h1>$
 <div class="dos"><h2>${theme}</h2><div class="pres">${texteVersHtml(D.quatrieme)}</div>
   ${C.length ? `<p style="text-indent:0;font-size:9pt;margin-top:3mm"><b>Avec les contributions de :</b> ${C.map(c => esc([c.prenom, c.nom].filter(Boolean).join(' '))).filter(Boolean).join(', ')}.</p>` : ''}
   <div class="bas"><img src="${logo}" alt=""><p>Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus</p><p>Faliarivo – Antananarivo · gstf-faliarivo.ovh</p>${D.isbn || D.prix ? `<p style="margin-top:2mm">${D.isbn ? 'ISBN ' + esc(D.isbn) : ''}${D.isbn && D.prix ? ' · ' : ''}${D.prix ? 'Prix : ' + esc(D.prix) : ''}</p>` : ''}</div></div>
+${COLS === 2 ? `<script>document.querySelectorAll('.contrib').forEach(s => { const fns = [...s.querySelectorAll('.fn')]; if (!fns.length) return; const box = document.createElement('div'); box.className = 'notes-fin'; box.innerHTML = '<p><b>Notes</b></p>';
+  fns.forEach((f, i) => { const sup = document.createElement('sup'); sup.textContent = i + 1; sup.style.fontSize = '65%'; f.replaceWith(sup); const p = document.createElement('p'); p.innerHTML = (i + 1) + '. ' + f.innerHTML; box.appendChild(p); }); s.appendChild(box); });<\/script>` : ''}
 <script>
 window.apresMiseEnPage = () => {
   const pages = [...document.querySelectorAll('.pagedjs_page')], n = pages.length, barre = document.createElement('div'); barre.className = 'barre'; barre.id = 'barre'; document.body.prepend(barre);
   document.querySelectorAll('.pagedjs_page .sommaire a').forEach(a => { const id = a.getAttribute('href').slice(1), t = document.getElementById(id) || document.querySelector('[data-id="' + id + '"]'), pg = t && t.closest('.pagedjs_page');
     const sp = document.createElement('span'); sp.textContent = pg ? (pg.dataset.pageNumber || (pages.indexOf(pg) + 1)) : ''; a.classList.add('num-ok'); a.appendChild(sp); });
-  barre.innerHTML = '<button id="bLivret">🖨 Imprimer en livret plié (feuilles A4)</button><button id="bA5">🖨 Imprimer page par page (A5)</button><span>' + n + ' pages · Pour le livret : imprimante en recto verso, « retourner sur le bord court », puis pliez les feuilles au milieu et agrafez.</span>';
+  barre.innerHTML = ${A4 ? `'<button id="bA5">🖨 Imprimer ou enregistrer en PDF (A4)</button><span>' + n + ' pages A4${COLS === 2 ? ' en 2 colonnes' : ''} · Pour un fichier PDF : dans la fenêtre d’impression, choisissez « Enregistrer au format PDF ».</span>'`
+    : `'<button id="bLivret">🖨 Imprimer en livret plié (feuilles A4)</button><button id="bA5">🖨 Imprimer page par page ou PDF (A5)</button><span>' + n + ' pages · Pour le livret : imprimante en recto verso, « retourner sur le bord court », puis pliez les feuilles au milieu et agrafez. Pour un PDF : « Enregistrer au format PDF ».</span>'`};
   document.getElementById('bA5').onclick = () => { document.body.classList.remove('mode-livret'); window.print(); };
-  document.getElementById('bLivret').onclick = () => { imposer(); window.print(); };
+  const bl = document.getElementById('bLivret'); if (bl) bl.onclick = () => { imposer(); window.print(); };
   function imposer() {
     if (document.querySelector('.livret')) return;
     const L = pages.slice(), dos = L.pop(); while ((L.length + 1) % 4) L.push(null); L.push(dos);
@@ -8193,7 +8344,7 @@ const AIDE = [
   { q: 'Vendre un article et vérifier les paiements MVola', r: ['admin'], k: 'article payant vendre prix mvola paiement verifier capture valider refuser secretariat numero',
     e: ['Admin > « Articles » : numéro MVola du secrétariat et texte « Comment payer » (en haut), puis « Enregistrer ».', 'Nouvel article : cochez « 💰 Article payant » et les prix ; article déjà publié : « Rendre payant » ; « 💰 Modifier les prix » à tout moment.', 'Les paiements reconnus par la capture (🤖) s’ouvrent seuls ; les autres sont « À vérifier » : comparez avec le SMS reçu, puis « ✓ Paiement reçu » ou « Refuser ».', '« Voir la capture » et « Retirer l’accès » pour contrôler.'], go: { tab: 'admin', adm: 'articles' } },
   { q: 'Préparer les actes du symposium', r: ['admin'], k: 'actes symposium livret livre imprimer couverture preface contributions bibliographie plier a5',
-    e: ['Admin > « Actes du symposium » > « ＋ Nouveau livret ».', 'Remplissez couverture, page de titre, préface, contributions (coller, importer un Word ou scanner), bibliographie, auteurs, 4e de couverture.', '« 📖 Fabriquer le livret » : le livre mis en page s’ouvre ; « Imprimer en livret plié » (recto verso, bord court) ou PDF pour l’imprimeur.'], go: { tab: 'admin', adm: 'actes' } },
+    e: ['Admin > « Actes du symposium » > « ＋ Nouveau livret ».', 'Remplissez couverture, page de titre, préface, contributions (coller, importer un Word ou scanner), bibliographie, auteurs, 4e de couverture.', '« 📖 Fabriquer » : choisissez livret A5 plié, document A4 (1 ou 2 colonnes), dépliant (2 ou 3 colonnes) ou Word (A4 ou A5).', 'Pour un PDF : « Imprimer » puis « Enregistrer au format PDF ».'], go: { tab: 'admin', adm: 'actes' } },
   { q: 'Préparer le calendrier de l’année', r: ['admin'], k: 'calendrier academique annee dates rentree examens vacances fete patronale nouvelle annee',
     e: ['Admin > « Année académique » > « Calendrier académique ».', 'Une ligne par date : date, « au » (dernier jour), événement, catégorie, qui le voit, ★.', '« Reprendre les dates de l’année précédente » prépare la nouvelle année ; vérifiez puis « Enregistrer le calendrier ».', 'Ces dates remplissent l’Agenda, l’accueil et le livret.'], go: { tab: 'admin', adm: 'annee' } },
   { q: 'Le mode d’emploi des rubriques de l’Admin', r: ['admin'], k: 'mode emploi guide aide administration rubrique explication bouton',
