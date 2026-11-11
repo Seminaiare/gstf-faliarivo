@@ -1585,7 +1585,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 152</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 153</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -8010,7 +8010,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 152, VERSION_FONCTION_ATTENDUE = 30;
+const VERSION_SITE = 153, VERSION_FONCTION_ATTENDUE = 30;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]],["70_economat_plus","Économat : comptes, accords, pensions, stocks, historique",[["t","economat_demandes"],["t","economat_journal"],["f","economat_pensions"],["c","economat_ops.compte"]]],["71_echeances","Échéances et abonnements",[["t","echeances"],["t","echeances_paiements"],["f","echeance_payer"]]],["72_departs","Retirer une personne : date et motif",[["t","departs"]]],["73_pages","Créateur de pages (menus…)",[["t","pages_site"],["f","page_contenu"]]],["74_cours_plus","Cours : crédits ECTS, syllabus par le professeur",[["c","cours.credits"],["f","cours_syllabus"]]],["75_contact","Contact : objet, numéro de suivi, coordonnées",[["c","messages_contact.objet"],["f","contact_envoyer"]]],["76_paiement_sans_capture","Article payant : coller le SMS ou taper la référence",[["c","achats_articles.source"],["f","payer_article_sans_capture"]]],["77_vitesse","Mesure de la vitesse du site",[["t","perf_mesures"],["f","perf_resume"]]],["78_agenda_signature","Agenda (Je participe, répétition, services liturgiques) et signature",[["c","agenda.recurrence"],["t","agenda_participants"],["t","liturgie_services"],["t","signatures"],["f","agenda_inscrire"]]],["79_alertes","Alertes au Préfet par mail et WhatsApp",[["t","alertes"],["f","alerte_nouvelle"],["j","gstf-alertes"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -9207,12 +9207,282 @@ async function renderContactPlus() {
 }
 document.addEventListener('toggle', e => { const d = e.target; if (d.classList && d.classList.contains('ag-menu') && d.open) document.querySelectorAll('details.ag-menu[open]').forEach(x => { if (x !== d) x.open = false; }); }, true);
 document.addEventListener('click', e => { if (!e.target.closest('details.ag-menu')) document.querySelectorAll('details.ag-menu[open]').forEach(x => { x.open = false; }); });
+/* ---------- Calendrier romain général (saints, fêtes, mémoires) : rang S solennité, L fête du Seigneur, F fête, M mémoire, m facultative ; couleur b blanc, r rouge, v violet ---------- */
+const CAL_ROMAIN_TXT = `01-01 S b Sainte Marie, Mère de Dieu
+01-02 M b Saint Basile le Grand et saint Grégoire de Nazianze, évêques et docteurs de l’Église
+01-03 m b Le Saint Nom de Jésus
+01-07 m b Saint Raymond de Penyafort, prêtre
+01-13 m b Saint Hilaire, évêque et docteur de l’Église
+01-17 M b Saint Antoine, abbé
+01-20 m r Saint Fabien, pape et martyr
+01-20 m r Saint Sébastien, martyr
+01-21 M r Sainte Agnès, vierge et martyre
+01-22 m r Saint Vincent, diacre et martyr
+01-24 M b Saint François de Sales, évêque et docteur de l’Église
+01-25 F b La Conversion de saint Paul, apôtre
+01-26 M b Saint Timothée et saint Tite, évêques
+01-27 m b Sainte Angèle Merici, vierge
+01-28 M b Saint Thomas d’Aquin, prêtre et docteur de l’Église
+01-31 M b Saint Jean Bosco, prêtre
+02-02 L b La Présentation du Seigneur au Temple
+02-03 m r Saint Blaise, évêque et martyr
+02-03 m b Saint Anschaire, évêque
+02-05 M r Sainte Agathe, vierge et martyre
+02-06 M r Saint Paul Miki et ses compagnons, martyrs
+02-08 m b Saint Jérôme Émilien
+02-08 m b Sainte Joséphine Bakhita, vierge
+02-10 M b Sainte Scholastique, vierge
+02-11 m b Notre-Dame de Lourdes
+02-14 M b Saint Cyrille, moine, et saint Méthode, évêque
+02-17 m b Les sept saints fondateurs des Servites de Marie
+02-21 m b Saint Pierre Damien, évêque et docteur de l’Église
+02-22 F b La Chaire de saint Pierre, apôtre
+02-23 M r Saint Polycarpe, évêque et martyr
+02-27 m b Saint Grégoire de Narek, abbé et docteur de l’Église
+03-04 m b Saint Casimir
+03-07 M r Sainte Perpétue et sainte Félicité, martyres
+03-08 m b Saint Jean de Dieu, religieux
+03-09 m b Sainte Françoise Romaine, religieuse
+03-17 m b Saint Patrick, évêque
+03-18 m b Saint Cyrille de Jérusalem, évêque et docteur de l’Église
+03-19 S b Saint Joseph, époux de la Vierge Marie
+03-23 m b Saint Turibio de Mogrovejo, évêque
+03-25 S b L’Annonciation du Seigneur
+04-02 m b Saint François de Paule, ermite
+04-04 m b Saint Isidore, évêque et docteur de l’Église
+04-05 m b Saint Vincent Ferrier, prêtre
+04-07 M b Saint Jean-Baptiste de La Salle, prêtre
+04-11 M r Saint Stanislas, évêque et martyr
+04-13 m r Saint Martin Ier, pape et martyr
+04-21 m b Saint Anselme, évêque et docteur de l’Église
+04-23 m r Saint Georges, martyr
+04-23 m r Saint Adalbert, évêque et martyr
+04-24 m r Saint Fidèle de Sigmaringen, prêtre et martyr
+04-25 F r Saint Marc, évangéliste
+04-28 m r Saint Pierre Chanel, prêtre et martyr
+04-28 m b Saint Louis-Marie Grignion de Montfort, prêtre
+04-29 M b Sainte Catherine de Sienne, vierge et docteur de l’Église
+04-30 m b Saint Pie V, pape
+05-01 m b Saint Joseph, travailleur
+05-02 M b Saint Athanase, évêque et docteur de l’Église
+05-03 F r Saint Philippe et saint Jacques, apôtres
+05-10 m b Saint Jean d’Avila, prêtre et docteur de l’Église
+05-12 m r Saint Nérée et saint Achille, martyrs
+05-12 m r Saint Pancrace, martyr
+05-13 m b Notre-Dame de Fatima
+05-14 F r Saint Matthias, apôtre
+05-18 m r Saint Jean Ier, pape et martyr
+05-20 m b Saint Bernardin de Sienne, prêtre
+05-21 m r Saint Christophe Magallanes, prêtre, et ses compagnons, martyrs
+05-22 m b Sainte Rita de Cascia, religieuse
+05-25 m b Saint Bède le Vénérable, prêtre et docteur de l’Église
+05-25 m b Saint Grégoire VII, pape
+05-25 m b Sainte Marie-Madeleine de Pazzi, vierge
+05-26 M b Saint Philippe Néri, prêtre
+05-27 m b Saint Augustin de Cantorbéry, évêque
+05-29 m b Saint Paul VI, pape
+05-31 F b La Visitation de la Vierge Marie
+06-01 M r Saint Justin, martyr
+06-02 m r Saint Marcellin et saint Pierre, martyrs
+06-03 M r Saint Charles Lwanga et ses compagnons, martyrs
+06-05 M r Saint Boniface, évêque et martyr
+06-06 m b Saint Norbert, évêque
+06-08 M r Bienheureux Jacques Berthieu, prêtre et martyr de Madagascar
+06-09 m b Saint Éphrem, diacre et docteur de l’Église
+06-11 M r Saint Barnabé, apôtre
+06-13 M b Saint Antoine de Padoue, prêtre et docteur de l’Église
+06-19 m b Saint Romuald, abbé
+06-21 M b Saint Louis de Gonzague, religieux
+06-22 m b Saint Paulin de Nole, évêque
+06-22 m r Saint Jean Fisher, évêque, et saint Thomas More, martyrs
+06-24 S b La Nativité de saint Jean-Baptiste
+06-27 m b Saint Cyrille d’Alexandrie, évêque et docteur de l’Église
+06-28 M r Saint Irénée, évêque, martyr et docteur de l’Église
+06-29 S r Saint Pierre et saint Paul, apôtres
+06-30 m r Les premiers martyrs de l’Église de Rome
+07-03 F r Saint Thomas, apôtre
+07-04 m b Sainte Élisabeth de Portugal
+07-05 m b Saint Antoine-Marie Zaccaria, prêtre
+07-06 m r Sainte Maria Goretti, vierge et martyre
+07-09 m r Saint Augustin Zhao Rong, prêtre, et ses compagnons, martyrs
+07-11 M b Saint Benoît, abbé
+07-13 m b Saint Henri
+07-14 m b Saint Camille de Lellis, prêtre
+07-15 M b Saint Bonaventure, évêque et docteur de l’Église
+07-16 m b Notre-Dame du Mont-Carmel
+07-20 m r Saint Apollinaire, évêque et martyr
+07-21 m b Saint Laurent de Brindes, prêtre et docteur de l’Église
+07-22 F b Sainte Marie Madeleine
+07-23 m b Sainte Brigitte, religieuse
+07-24 m b Saint Charbel Makhlouf, prêtre
+07-25 F r Saint Jacques, apôtre
+07-26 M b Saint Joachim et sainte Anne, parents de la Vierge Marie
+07-29 M b Sainte Marthe, sainte Marie et saint Lazare
+07-30 m b Saint Pierre Chrysologue, évêque et docteur de l’Église
+07-31 M b Saint Ignace de Loyola, prêtre
+08-01 M b Saint Alphonse-Marie de Liguori, évêque et docteur de l’Église
+08-02 m b Saint Eusèbe de Verceil, évêque
+08-02 m b Saint Pierre-Julien Eymard, prêtre
+08-04 M b Saint Jean-Marie Vianney, prêtre
+08-05 m b La Dédicace de la basilique Sainte-Marie-Majeure
+08-06 L b La Transfiguration du Seigneur
+08-07 m r Saint Sixte II, pape, et ses compagnons, martyrs
+08-07 m b Saint Gaétan, prêtre
+08-08 M b Saint Dominique, prêtre
+08-09 m r Sainte Thérèse-Bénédicte de la Croix, vierge et martyre
+08-10 F r Saint Laurent, diacre et martyr
+08-11 M b Sainte Claire, vierge
+08-12 m b Sainte Jeanne-Françoise de Chantal, religieuse
+08-13 m r Saint Pontien, pape, et saint Hippolyte, prêtre, martyrs
+08-14 M r Saint Maximilien-Marie Kolbe, prêtre et martyr
+08-15 S b L’Assomption de la Vierge Marie
+08-16 m b Saint Étienne de Hongrie
+08-19 m b Saint Jean Eudes, prêtre
+08-20 M b Saint Bernard, abbé et docteur de l’Église
+08-21 M b Saint Pie X, pape
+08-22 M b La Vierge Marie Reine
+08-23 m b Sainte Rose de Lima, vierge
+08-24 F r Saint Barthélemy, apôtre
+08-25 m b Saint Louis
+08-25 m b Saint Joseph de Calasanz, prêtre
+08-27 M b Sainte Monique
+08-28 M b Saint Augustin, évêque et docteur de l’Église
+08-29 M r La Passion de saint Jean-Baptiste
+09-03 M b Saint Grégoire le Grand, pape et docteur de l’Église
+09-08 F b La Nativité de la Vierge Marie
+09-09 m b Saint Pierre Claver, prêtre
+09-12 m b Le Saint Nom de Marie
+09-13 M b Saint Jean Chrysostome, évêque et docteur de l’Église
+09-14 L r La Croix glorieuse
+09-15 M b Notre-Dame des Douleurs
+09-16 M r Saint Corneille, pape, et saint Cyprien, évêque, martyrs
+09-17 m b Saint Robert Bellarmin, évêque et docteur de l’Église
+09-17 m b Sainte Hildegarde de Bingen, vierge et docteur de l’Église
+09-19 m r Saint Janvier, évêque et martyr
+09-20 M r Saint André Kim Tae-gon, saint Paul Chong Ha-sang et leurs compagnons, martyrs
+09-21 F r Saint Matthieu, apôtre et évangéliste
+09-23 M b Saint Pio de Pietrelcina, prêtre
+09-26 m r Saint Côme et saint Damien, martyrs
+09-27 M b Saint Vincent de Paul, prêtre
+09-28 m r Saint Venceslas, martyr
+09-28 m r Saint Laurent Ruiz et ses compagnons, martyrs
+09-29 F b Saint Michel, saint Gabriel et saint Raphaël, archanges
+09-30 M b Saint Jérôme, prêtre et docteur de l’Église
+10-01 S b Sainte Thérèse de l’Enfant-Jésus, vierge et docteur de l’Église, patronne du séminaire
+10-02 M b Les saints Anges gardiens
+10-04 M b Saint François d’Assise
+10-05 m b Sainte Faustine Kowalska, vierge
+10-06 m b Saint Bruno, prêtre
+10-07 M b Notre-Dame du Rosaire
+10-09 m r Saint Denis, évêque, et ses compagnons, martyrs
+10-09 m b Saint Jean Leonardi, prêtre
+10-11 m b Saint Jean XXIII, pape
+10-14 m r Saint Calliste Ier, pape et martyr
+10-15 M b Sainte Thérèse d’Avila, vierge et docteur de l’Église
+10-16 m b Sainte Edwige, religieuse
+10-16 m b Sainte Marguerite-Marie Alacoque, vierge
+10-17 M r Saint Ignace d’Antioche, évêque et martyr
+10-18 F r Saint Luc, évangéliste
+10-19 m r Saint Jean de Brébeuf, saint Isaac Jogues et leurs compagnons, martyrs
+10-19 m b Saint Paul de la Croix, prêtre
+10-22 m b Saint Jean-Paul II, pape
+10-23 m b Saint Jean de Capistran, prêtre
+10-24 m b Saint Antoine-Marie Claret, évêque
+10-28 F r Saint Simon et saint Jude, apôtres
+11-01 S b Tous les Saints
+11-02 S v Commémoration de tous les fidèles défunts
+11-03 m b Saint Martin de Porrès, religieux
+11-04 M b Saint Charles Borromée, évêque
+11-09 L b La Dédicace de la basilique du Latran
+11-10 M b Saint Léon le Grand, pape et docteur de l’Église
+11-11 M b Saint Martin de Tours, évêque
+11-12 M r Saint Josaphat, évêque et martyr
+11-15 m b Saint Albert le Grand, évêque et docteur de l’Église
+11-16 m b Sainte Marguerite d’Écosse
+11-16 m b Sainte Gertrude, vierge
+11-17 M b Sainte Élisabeth de Hongrie, religieuse
+11-18 m b La Dédicace des basiliques de saint Pierre et de saint Paul
+11-21 M b La Présentation de la Vierge Marie
+11-22 M r Sainte Cécile, vierge et martyre
+11-23 m r Saint Clément Ier, pape et martyr
+11-23 m b Saint Colomban, abbé
+11-24 M r Saint André Dung-Lac, prêtre, et ses compagnons, martyrs
+11-25 m r Sainte Catherine d’Alexandrie, vierge et martyre
+11-30 F r Saint André, apôtre
+12-03 M b Saint François Xavier, prêtre
+12-04 m b Saint Jean de Damas, prêtre et docteur de l’Église
+12-06 m b Saint Nicolas, évêque
+12-07 M b Saint Ambroise, évêque et docteur de l’Église
+12-08 S b L’Immaculée Conception de la Vierge Marie
+12-09 m b Saint Juan Diego Cuauhtlatoatzin
+12-10 m b Notre-Dame de Lorette
+12-11 m b Saint Damase Ier, pape
+12-12 m b Notre-Dame de Guadalupe
+12-13 M r Sainte Lucie, vierge et martyre
+12-14 M b Saint Jean de la Croix, prêtre et docteur de l’Église
+12-21 m b Saint Pierre Canisius, prêtre et docteur de l’Église
+12-23 m b Saint Jean de Kenty, prêtre
+12-25 S b La Nativité du Seigneur
+12-26 F r Saint Étienne, premier martyr
+12-27 F b Saint Jean, apôtre et évangéliste
+12-28 F r Les saints Innocents, martyrs
+12-29 m r Saint Thomas Becket, évêque et martyr
+12-31 m b Saint Sylvestre Ier, pape`;
+const CAL_ROMAIN = {};
+CAL_ROMAIN_TXT.split('\n').forEach(l => { const [md, rang, c, ...n] = l.trim().split(' '); (CAL_ROMAIN[md] = CAL_ROMAIN[md] || []).push({ rang, c, nom: n.join(' ') }); });
+const COUL_LIT = { b: 'blanche', r: 'rouge', v: 'violette' };
+const RANG_LIT = { S: 'Solennité', L: 'Fête du Seigneur', F: 'Fête', M: 'Mémoire', m: 'Mémoire facultative' };
+// Célébrations à date mobile et solennités déplacées, pour une année
+function calMobile(an) {
+  const P = datePaques(an), k = d => iso(d), M = {};
+  const n = new Date(an, 11, 25), avent = plusJours(n, -(n.getDay() || 7) - 21), j2 = new Date(an, 0, 2), epi = plusJours(j2, (7 - j2.getDay()) % 7);
+  const ajout = (d, rang, c, nom) => { (M[k(d)] = M[k(d)] || []).push({ rang, c, nom }); };
+  ajout(epi, 'S', 'b', 'L’Épiphanie du Seigneur');
+  ajout(plusJours(epi, epi.getDate() >= 7 ? 1 : 7), 'L', 'b', 'Le Baptême du Seigneur');
+  ajout(plusJours(P, 39), 'S', 'b', 'L’Ascension du Seigneur');
+  ajout(plusJours(P, 50), 'M', 'b', 'La Bienheureuse Vierge Marie, Mère de l’Église');
+  ajout(plusJours(P, 56), 'S', 'b', 'La Sainte Trinité');
+  ajout(plusJours(P, 63), 'S', 'b', 'Le Saint-Sacrement du Corps et du Sang du Christ');
+  ajout(plusJours(P, 68), 'S', 'b', 'Le Sacré-Cœur de Jésus');
+  ajout(plusJours(P, 69), 'M', 'b', 'Le Cœur immaculé de Marie');
+  ajout(plusJours(avent, -7), 'S', 'b', 'Notre-Seigneur Jésus Christ, Roi de l’univers');
+  const dimOct = [26, 27, 28, 29, 30, 31].map(j => new Date(an, 11, j)).find(d => d.getDay() === 0);
+  ajout(dimOct || new Date(an, 11, 30), 'L', 'b', 'La Sainte Famille de Jésus, Marie et Joseph');
+  return { M, P, avent };
+}
+const CAL_CACHE = {};
+// La célébration du jour selon l'ordre de préséance (simplifié) du calendrier romain
+function celebrationDuJour(d, temps, dim) {
+  const D = parseIso(d), an = D.getFullYear(), Y = CAL_CACHE[an] || (CAL_CACHE[an] = calMobile(an)), P = Y.P;
+  const D0 = new Date(an, D.getMonth(), D.getDate()), e = x => Math.round((D0 - new Date(x.getFullYear(), x.getMonth(), x.getDate())) / 864e5);
+  const eP = e(P), md = d.slice(5);
+  const fort = (eP >= -46 && eP <= -43) || (eP >= -7 && eP <= 7);    // Cendres, Semaine sainte, octave de Pâques : rien ne les remplace
+  const dimFort = dim && ['Avent', 'Carême', 'Semaine sainte', 'Temps pascal'].includes(temps);
+  let L = [...(Y.M[d] || []), ...(CAL_ROMAIN[md] || [])];
+  // Solennités déplacées : saint Joseph et l'Annonciation (Carême, Semaine sainte, octave de Pâques), Immaculée Conception (dimanche de l'Avent)
+  const transfert = (mmdd, nom) => { const o = new Date(an, +mmdd.slice(0, 2) - 1, +mmdd.slice(3)), eo = e(o);
+    const x = Math.round((o - new Date(P.getFullYear(), P.getMonth(), P.getDate())) / 864e5); let cible = null;
+    if (x >= -7 && x <= 7) cible = mmdd === '03-19' ? plusJours(P, -8) : plusJours(P, 8);
+    else if (o.getDay() === 0 && (x < 0 && x >= -46 || mmdd === '12-08')) cible = plusJours(o, 1);
+    if (cible) { if (eo === 0) L = L.filter(c => c.nom !== nom); if (iso(cible) === d) L.unshift({ rang: 'S', c: 'b', nom: nom + ' (reportée)' }); } };
+  transfert('03-19', 'Saint Joseph, époux de la Vierge Marie'); transfert('03-25', 'L’Annonciation du Seigneur'); transfert('12-08', 'L’Immaculée Conception de la Vierge Marie');
+  const ordre = { S: 0, L: 1, F: 2, M: 3, m: 4 };
+  L.sort((a, b) => ordre[a.rang] - ordre[b.rang]);
+  const top = L[0];
+  if (!top) return null;
+  if (fort || dimFort) return top.nom.includes('reportée') ? top : null;   // seules les solennités reportées y trouvent place
+  if (dim && !['S', 'L'].includes(top.rang)) return null;                       // le dimanche l'emporte sur les fêtes et mémoires
+  const avPrive = (temps === 'Carême') || (temps === 'Avent' && D.getMonth() === 11 && D.getDate() >= 17);
+  if (top.rang === 'M' && avPrive) return { ...top, rang: 'm', commemoration: true };   // en Carême et du 17 au 24 décembre : simple commémoraison
+  return { ...top, autres: ['M', 'm'].includes(top.rang) ? L.slice(1).filter(c => c.rang === 'm' || c.rang === top.rang) : [] };
+}
+
 /* ---------- Liturgie du jour : temps liturgique, couleur, fête, lectures (AELF) ---------- */
 const LIT_COUL = { verte: '#2e7d32', violette: '#6a1b9a', blanche: '#efe8d2', rouge: '#c62828', rose: '#e58fb0' };
 const JOURS_FR = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 const ordinal = n => n === 1 ? '1re' : n + 'e';
 function liturgieDuJour(d = TODAY) {
-  const D = parseIso(d), an = D.getFullYear(), ecart = x => Math.round((D - new Date(x.getFullYear(), x.getMonth(), x.getDate())) / 864e5);
+  const D = parseIso(d), an = D.getFullYear(), D0 = new Date(an, D.getMonth(), D.getDate()), ecart = x => Math.round((D0 - new Date(x.getFullYear(), x.getMonth(), x.getDate())) / 864e5);
   const aventDe = a => { const n = new Date(a, 11, 25); return plusJours(n, -(n.getDay() || 7) - 21); };
   const P = datePaques(an), cendres = plusJours(P, -46), avent = aventDe(an), roi = plusJours(avent, -7), noel = new Date(an, 11, 25);
   const j2 = new Date(an, 0, 2), epi = plusJours(j2, (7 - j2.getDay()) % 7), bapt = plusJours(epi, epi.getDate() >= 7 ? 1 : 7);
@@ -9233,15 +9503,21 @@ function liturgieDuJour(d = TODAY) {
     libelle = e === 0 ? 'Dimanche de Pâques' : e === 49 ? 'Pentecôte' : e < 7 ? `${J} de l’octave de Pâques` : dim ? `${ordinal(s)} dimanche de Pâques` : `${J} de la ${ordinal(s)} semaine de Pâques`; }
   else { const s = ecart(roi) >= 0 ? 34 : 34 - Math.ceil(-ecart(roi) / 7); temps = 'Temps ordinaire';
     libelle = ecart(roi) === 0 ? 'Christ, Roi de l’univers' : dim ? `${ordinal(s)} dimanche du temps ordinaire` : `${J} de la ${ordinal(s)} semaine du temps ordinaire`; }
-  const fete = agendaAuto(d, d).find(e => e.auto === 'Liturgie' && !/Pâques, Résurrection|Pentecôte|Rameaux|Jeudi saint|Vendredi saint|Cendres|Christ, Roi|Premier dimanche de l’Avent/.test(e.titre));
-  if (fete) couleur = /martyr|apôtres|Pierre et Paul|Pentecôte/i.test(fete.titre) ? 'rouge' : /défunts/i.test(fete.titre) ? 'violette' : /vocations/i.test(fete.titre) ? couleur : 'blanche';
-  return { temps, libelle, couleur, fete: fete ? fete.titre : '', aelf: `https://www.aelf.org/${d}/romain/messe` };
+  const cel = celebrationDuJour(d, temps, dim);
+  let fete = '', rang = '', facult = [];
+  if (cel) {
+    if (cel.rang === 'm') facult = [cel, ...(cel.autres || [])].filter(x => x.rang === 'm');
+    else { fete = cel.nom; rang = RANG_LIT[cel.rang]; couleur = COUL_LIT[cel.c] || couleur; facult = (cel.autres || []).filter(x => x.rang === 'm'); }
+  }
+  if (!fete && !facult.length && temps === 'Temps ordinaire' && D.getDay() === 6) facult = [{ nom: 'Sainte Marie le samedi', c: 'b' }];
+  return { temps, libelle, couleur, fete, rang, facult: facult.map(x => x.nom + (x.commemoration ? ' (commémoraison)' : '')), aelf: `https://www.aelf.org/${d}/romain/messe` };
 }
 function liturgieBandeau(d = TODAY, court = false) {
   const L = liturgieDuJour(d);
   return `<div class="lit-b${court ? ' lit-b-court' : ''}"><span class="lit-pastille" style="background:${LIT_COUL[L.couleur]}" title="Couleur liturgique : ${L.couleur}"></span>
     <div class="min-w-0 flex-1"><div class="text-xs font-semibold uppercase tracking-wider text-muted">${d === TODAY ? 'Aujourd’hui' : esc(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }))} · ${esc(L.temps)}</div>
-      <div class="font-semibold">${esc(L.fete || L.libelle)}</div>${L.fete ? `<div class="text-sm text-muted">${esc(L.libelle)}</div>` : ''}<div class="text-xs text-muted">Couleur liturgique : ${L.couleur}</div></div>
+      <div class="font-semibold">${esc(L.fete || L.libelle)}</div>${L.fete ? `<div class="text-sm text-muted">${esc(L.rang)} · ${esc(L.libelle)}</div>` : ''}
+      ${L.facult.length ? `<div class="text-sm text-muted">Ou mémoire facultative : ${esc(L.facult.join(' ; '))}</div>` : ''}<div class="text-xs text-muted">Couleur liturgique : ${L.couleur}</div></div>
     <a class="btn btn-ghost btn-sm" href="${L.aelf}" target="_blank" rel="noopener">📖 Lectures du jour</a></div>`;
 }
 
