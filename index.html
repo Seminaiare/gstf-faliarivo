@@ -482,6 +482,22 @@ const CONFIG = {
   @media (max-width: 767px) { body.entete-compact header .gutter > div:first-child { padding-top: .35rem; padding-bottom: .35rem; } }
   .bq-cache { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.1rem; border: 1px dashed var(--line); border-radius: .8rem; background: var(--surface); }
   .bq-cache > span { font-size: 1.6rem; line-height: 1; }
+  .art-couv { float: right; width: 92px; margin: 0 0 .6rem 1rem; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+  .outil-box { padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--surface); }
+  .ref-l { display: flex; gap: .6rem; align-items: flex-start; padding: .45rem 0; border-bottom: 1px dashed var(--line); }
+  .ref-l:last-child { border-bottom: 0; }
+  .ref-txt { font-family: 'EB Garamond', Georgia, serif; font-size: 1.05rem; line-height: 1.4; }
+  .ref-alerte { font-size: .76rem; color: var(--warn); }
+  .ref-net { font-size: .76rem; color: var(--muted); }
+  .rev-carte { min-height: 13rem; display: flex; flex-direction: column; justify-content: center; gap: .8rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); box-shadow: 0 4px 18px rgba(0,0,0,.06); }
+  .rev-q { font-family: 'EB Garamond', Georgia, serif; font-size: 1.3rem; font-weight: 600; line-height: 1.35; }
+  .rev-r { border-top: 1px solid var(--line); padding-top: .8rem; white-space: pre-line; }
+  .rev-opt { display: block; width: 100%; text-align: left; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--bg); margin-top: .45rem; }
+  .rev-opt:hover:not([disabled]) { border-color: var(--accent); }
+  .rev-opt.bon { border-color: #2e7d32; background: rgba(46,125,50,.12); }
+  .rev-opt.faux { border-color: var(--bad); background: rgba(198,40,40,.10); }
+  .rev-plan li { display: flex; gap: .5rem; align-items: flex-start; padding: .3rem 0; }
+  .ail-it-sel { flex: none; margin-top: .3rem; }
   .ailleurs { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--surface); }
   .ailleurs h3 { font-weight: 600; margin-bottom: .2rem; }
   .ail-res { display: grid; gap: .6rem; margin: .8rem 0; }
@@ -623,7 +639,7 @@ const CONFIG = {
   @media (prefers-reduced-motion: reduce) { .revele { opacity: 1; transform: none; transition: none; } .acc-slide img, .acc-slide.actif img { transform: none; transition: none; } }
   @media print { .revele { opacity: 1 !important; transform: none !important; } }
 </style>
-<style>/* Tailwind 3.4.17 compilé */*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Source Sans\ 3,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:IBM Plex Mono,ui-monospace,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.invisible{visibility:hidden}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.z-20{z-index:20}.z-30{z-index:30}.col-span-2{grid-column:span 2/span 2}.mx-auto{margin-left:auto;margin-right:auto}.my-3{margin-top:.75rem;margin-bottom:.75rem}.-mt-1{margin-top:-.25rem}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mt-0{margin-top:0}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-3{height:.75rem}.h-40{height:10rem}.h-full{height:100%}.max-h-80{max-height:20rem}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-32{width:8rem}.w-36{width:9rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.min-w-0{min-width:0}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.max-w-\[14rem\]{max-width:14rem}.max-w-\[62ch\]{max-width:62ch}.max-w-\[70ch\]{max-width:70ch}.max-w-\[75ch\]{max-width:75ch}.max-w-\[80ch\]{max-width:80ch}.max-w-\[90ch\]{max-width:90ch}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink,.shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.border-collapse{border-collapse:collapse}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;-moz-user-select:all;user-select:all}.resize{resize:both}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-px{gap:1px}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-x-8{-moz-column-gap:2rem;column-gap:2rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.gap-y-6{row-gap:1.5rem}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-line>:not([hidden])~:not([hidden]){border-color:var(--line)}.self-start{align-self:flex-start}.self-end{align-self:flex-end}.justify-self-start{justify-self:start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.text-wrap{text-wrap:wrap}.break-all{word-break:break-all}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-gold{border-color:var(--gold)}.border-line{border-color:var(--line)}.bg-accent-soft{background-color:var(--accent-soft)}.bg-bg{background-color:var(--bg)}.bg-line{background-color:var(--line)}.bg-sunk{background-color:var(--sunk)}.bg-surface{background-color:var(--surface)}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:.5rem}.pb-3{padding-bottom:.75rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pl-10{padding-left:2.5rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pr-4{padding-right:1rem}.pt-0{padding-top:0}.pt-0\.5{padding-top:.125rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.font-display{font-family:var(--font-title)}.font-mono{font-family:IBM Plex Mono,ui-monospace,monospace}.font-sans{font-family:Source Sans\ 3,system-ui,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.capitalize{text-transform:capitalize}.italic{font-style:italic}.not-italic{font-style:normal}.leading-\[1\],.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wider{letter-spacing:.05em}.text-accent{color:var(--accent)}.text-bad{color:var(--bad)}.text-gold{color:var(--gold)}.text-ink{color:var(--ink)}.text-muted{color:var(--muted)}.text-ok{color:var(--ok)}.text-warn{color:var(--warn)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.accent-ink{accent-color:var(--ink)}.opacity-60{opacity:.6}.opacity-75{opacity:.75}.opacity-80{opacity:.8}.opacity-90{opacity:.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.grayscale{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%)}.sepia{--tw-sepia:sepia(100%)}.filter,.sepia{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-accent:hover{border-color:var(--accent)}.hover\:bg-sunk:hover{background-color:var(--sunk)}.hover\:text-accent:hover{color:var(--accent)}.hover\:underline:hover{text-decoration-line:underline}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:col-span-5{grid-column:span 5/span 5}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.sm\:gap-8{gap:2rem}.sm\:p-5{padding:1.25rem}.sm\:p-6{padding:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:col-span-4{grid-column:span 4/span 4}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:grid-cols-\[1fr\2c 1fr\]{grid-template-columns:1fr 1fr}.md\:grid-cols-\[auto\2c auto\2c 1fr\]{grid-template-columns:auto auto 1fr}}@media (min-width:1024px){.lg\:sticky{position:sticky}.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:grid-cols-\[14rem\2c 1fr\]{grid-template-columns:14rem 1fr}.lg\:flex-col{flex-direction:column}}@media (min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+<style>/* Tailwind 3.4.17 compilé */*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Source Sans\ 3,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:IBM Plex Mono,ui-monospace,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.invisible{visibility:hidden}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.z-20{z-index:20}.z-30{z-index:30}.col-span-2{grid-column:span 2/span 2}.mx-auto{margin-left:auto;margin-right:auto}.my-3{margin-top:.75rem;margin-bottom:.75rem}.-mt-1{margin-top:-.25rem}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mt-0{margin-top:0}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-3{height:.75rem}.h-40{height:10rem}.h-full{height:100%}.max-h-80{max-height:20rem}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-32{width:8rem}.w-36{width:9rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.min-w-0{min-width:0}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.max-w-\[14rem\]{max-width:14rem}.max-w-\[62ch\]{max-width:62ch}.max-w-\[70ch\]{max-width:70ch}.max-w-\[75ch\]{max-width:75ch}.max-w-\[80ch\]{max-width:80ch}.max-w-\[90ch\]{max-width:90ch}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink,.shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.border-collapse{border-collapse:collapse}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;-moz-user-select:all;user-select:all}.resize{resize:both}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-px{gap:1px}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-x-8{-moz-column-gap:2rem;column-gap:2rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.gap-y-6{row-gap:1.5rem}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-line>:not([hidden])~:not([hidden]){border-color:var(--line)}.self-start{align-self:flex-start}.self-end{align-self:flex-end}.justify-self-start{justify-self:start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.text-wrap{text-wrap:wrap}.break-all{word-break:break-all}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-gold{border-color:var(--gold)}.border-line{border-color:var(--line)}.bg-accent-soft{background-color:var(--accent-soft)}.bg-bg{background-color:var(--bg)}.bg-line{background-color:var(--line)}.bg-sunk{background-color:var(--sunk)}.bg-surface{background-color:var(--surface)}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:.5rem}.pb-3{padding-bottom:.75rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pl-10{padding-left:2.5rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pl-6{padding-left:1.5rem}.pr-4{padding-right:1rem}.pt-0{padding-top:0}.pt-0\.5{padding-top:.125rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.font-display{font-family:var(--font-title)}.font-mono{font-family:IBM Plex Mono,ui-monospace,monospace}.font-sans{font-family:Source Sans\ 3,system-ui,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.capitalize{text-transform:capitalize}.italic{font-style:italic}.not-italic{font-style:normal}.leading-\[1\],.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wider{letter-spacing:.05em}.text-accent{color:var(--accent)}.text-bad{color:var(--bad)}.text-gold{color:var(--gold)}.text-ink{color:var(--ink)}.text-muted{color:var(--muted)}.text-ok{color:var(--ok)}.text-warn{color:var(--warn)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.accent-ink{accent-color:var(--ink)}.opacity-60{opacity:.6}.opacity-75{opacity:.75}.opacity-80{opacity:.8}.opacity-90{opacity:.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.grayscale{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%)}.sepia{--tw-sepia:sepia(100%)}.filter,.sepia{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-accent:hover{border-color:var(--accent)}.hover\:bg-sunk:hover{background-color:var(--sunk)}.hover\:text-accent:hover{color:var(--accent)}.hover\:underline:hover{text-decoration-line:underline}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:col-span-5{grid-column:span 5/span 5}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.sm\:gap-8{gap:2rem}.sm\:p-5{padding:1.25rem}.sm\:p-6{padding:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:col-span-4{grid-column:span 4/span 4}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:grid-cols-\[1fr\2c 1fr\]{grid-template-columns:1fr 1fr}.md\:grid-cols-\[auto\2c auto\2c 1fr\]{grid-template-columns:auto auto 1fr}}@media (min-width:1024px){.lg\:sticky{position:sticky}.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:grid-cols-\[14rem\2c 1fr\]{grid-template-columns:14rem 1fr}.lg\:flex-col{flex-direction:column}}@media (min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
 </head>
 <body>
 <div id="splash" class="splash" hidden aria-hidden="true"><div><img src="icon-192.png" alt=""><p class="splash-t">Grand Séminaire de Théologie</p><p class="splash-s">Sainte Thérèse de l’Enfant-Jésus · Faliarivo</p><p class="splash-d">Fides quaerens intellectum</p></div></div>
@@ -1466,7 +1482,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 129</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 130</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1923,7 +1939,7 @@ function noterVisite(page) {
 }
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
 document.querySelectorAll('.portail-choix').forEach(b => b.addEventListener('click', () => showTab(b.dataset.aller)));
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h.startsWith('carte=')) { verifierCarte(decodeURIComponent(h.slice(6))); return; } if (h.startsWith('actu=')) { showTab('accueil'); openActu(Number(h.slice(5))); return; } if (['monespace', 'macarte', 'intention'].includes(h)) { allerRaccourci(h); return; } if (TABS.includes(h) || h === 'soutenir' || h === 'annuaire') showTab(h); if (h === 'inscription') { showTab('etudiant'); openInscription(); } });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (/^(article|livre|evt)=/.test(h)) { ouvrirLienDirect(h); return; } if (h.startsWith('carte=')) { verifierCarte(decodeURIComponent(h.slice(6))); return; } if (h.startsWith('actu=')) { showTab('accueil'); openActu(Number(h.slice(5))); return; } if (['monespace', 'macarte', 'intention'].includes(h)) { allerRaccourci(h); return; } if (TABS.includes(h) || h === 'soutenir' || h === 'annuaire') showTab(h); if (h === 'inscription') { showTab('etudiant'); openInscription(); } });
 document.addEventListener('click', e => { if (e.target.closest('[data-ag-acc]')) { showTab('agenda'); return; } const b = e.target.closest('[data-goto-doc]'); if (b) { currentDoc = b.dataset.gotoDoc; showTab('documents'); } });
 
 /* =================================================================== *
@@ -2185,7 +2201,8 @@ $('#saveRoster').addEventListener('click', async () => {
  * =================================================================== */
 const DOCS = [
   ['fiches', 'Syllabus des cours'], ['edt', 'Emploi du temps'], ['calendrier', 'Calendrier académique'],
-  ['volume', 'Volume horaire'], ['reglement', 'Règlement des études'], ['enseignants', 'Corps enseignant']
+  ['volume', 'Volume horaire'], ['reglement', 'Règlement des études'], ['enseignants', 'Corps enseignant'],
+  ['memoire', '🎓 Assistant de mémoire'], ['correcteur', '✍️ Correcteur de bibliographie'], ['revision', '🧠 Révision des cours']
 ];
 let currentDoc = 'fiches', docYear = 0, docSearch = '', docWeek = defaultWeek();
 function renderDocNav() {
@@ -2237,6 +2254,9 @@ function renderDoc() {
   } else if (currentDoc === 'reglement') {
     v.innerHTML = docHead('Règlement des études', 'Notes disciplinaires retenues par le conseil des professeurs.') +
       `<ol class="flex flex-col gap-3 max-w-[70ch]">${REGLEMENT.map((r, i) => `<li class="flex gap-4"><span class="font-display text-2xl text-gold num w-8 shrink-0 leading-none">${i + 1}</span><span>${esc(r)}</span></li>`).join('')}</ol>`;
+  } else if (currentDoc === 'memoire') { renderAssistantMemoire(v);
+  } else if (currentDoc === 'correcteur') { renderCorrecteur(v);
+  } else if (currentDoc === 'revision') { renderRevision(v);
   } else if (currentDoc === 'enseignants') {
     const keys = Object.keys(PROFS).sort((a, b) => PROFS[a].n.replace(/^P\. /, '').localeCompare(PROFS[b].n.replace(/^P\. /, ''), 'fr'));
     v.innerHTML = docHead('Corps enseignant', `${keys.length} enseignants et leurs matières en ${anneeTiret()}.`) +
@@ -3893,7 +3913,7 @@ function renderActusAccueil() {
           <span class="font-semibold leading-snug">${esc(a.titre)}</span>
           ${a.texte ? `<span class="text-sm text-muted" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(a.texte)}</span>` : ''}
         </span></button>
-      ${lienVideo(a) || a.public ? `<div class="px-4 pb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">${lienVideo(a) ? `<a class="linkbtn" href="${esc(lienVideo(a))}" target="_blank" rel="noopener">▶ Regarder sur ${siteVideo(a)} ↗</a>` : ''}${a.public ? boutonsPartage(a.titre, 'actu=' + a.id) : ''}</div>` : ''}</div>`).join('')}</div>` : '';
+      ${lienVideo(a) || a.public ? `<div class="px-4 pb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">${lienVideo(a) ? `<a class="linkbtn" href="${esc(lienVideo(a))}" target="_blank" rel="noopener">▶ Regarder sur ${siteVideo(a)} ↗</a>` : ''}${a.public ? boutonsPartage(msgPartage('📰', a.titre, ['🗓 ' + actuDate(a)], a.texte), 'actu=' + a.id) : ''}</div>` : ''}</div>`).join('')}</div>` : '';
   if (anciennes) el.insertAdjacentHTML('beforeend', `<p class="text-sm mt-4"><button type="button" class="linkbtn" onclick="showTab('souvenirs')">★ Les actualités de plus de 3 mois sont dans « Événements inoubliables » →</button></p>`);
   el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
   sauverActusHorsLigne(PUB.filter(a => a.public !== false || state.profil).slice(0, 8));
@@ -3927,11 +3947,11 @@ function openActu(id) {
   try { html = `
     <p class="text-sm text-muted flex flex-wrap items-center gap-2">${badgeGroupe(a)}<span>${esc(actuDate(a))}${a.auteur_nom ? ' · ' + esc(a.auteur_nom) : ''}</span></p>
     <h2 class="font-display text-3xl font-semibold mb-3">${esc(a.titre)}</h2>
-    ${a.texte ? `<p class="whitespace-pre-line mb-4">${esc(a.texte)}</p>` : ''}
+    ${a.texte ? `<p class="mb-2">${boutonEcouter(a.titre + '. ' + a.texte, 'text-sm')}</p><p class="whitespace-pre-line mb-4">${esc(a.texte)}</p>` : ''}
     ${mediaVideos(a).map(v => lecteurVideo(v, a.titre)).join('')}
     ${(a.documents || []).length ? `<div class="flex flex-col gap-2 mb-4">${a.documents.map(d => `<a class="flex items-center gap-3 p-3 rounded-lg border border-line bg-sunk hover:border-accent" href="${esc(photoUrl(d.path))}" target="_blank" rel="noopener"><span style="color:var(--bad)">${iconePdf}</span><span class="min-w-0"><span class="block font-semibold truncate">${esc(d.nom || 'Document PDF')}</span><span class="text-xs text-muted">PDF · ouvrir ou télécharger</span></span></a>`).join('')}</div>` : ''}
     <div class="grid sm:grid-cols-2 gap-3">${a.photos.map((p, i) => `<a href="#" role="button" data-vis="${i}"><img src="${esc(photoMini(p))}" alt="" loading="lazy" decoding="async" class="rounded-lg" style="width:100%;object-fit:cover"></a>`).join('')}</div>
-    ${a.public ? `<div class="mt-5 pt-4 border-t border-line flex flex-wrap items-center gap-3 text-sm"><span class="font-semibold">Partager :</span>${boutonsPartage(a.titre, 'actu=' + a.id)}</div>` : ''}`;
+    ${a.public ? `<div class="mt-5 pt-4 border-t border-line flex flex-wrap items-center gap-3 text-sm"><span class="font-semibold">Partager :</span>${boutonsPartage(msgPartage('📰', a.titre, ['🗓 ' + actuDate(a)], a.texte), 'actu=' + a.id)}</div>` : ''}`;
   } catch (e) {
     html = `<h2 class="font-display text-3xl font-semibold mb-3">${esc(a.titre || '')}</h2>${(mediaVideos(a) || []).map(v => `<p><a class="linkbtn" href="${esc(v)}" target="_blank" rel="noopener">Voir la vidéo ↗</a></p>`).join('')}`;
   }
@@ -3943,7 +3963,7 @@ function openActu(id) {
   corps.querySelectorAll('[data-vis]').forEach(l => l.addEventListener('click', ev => { ev.preventDefault(); ouvrirVisionneuse(a.photos.map(photoUrl), +l.dataset.vis, a.titre); }));
 }
 function fermerActu() {
-  const v = $('#actuVue'); if (!v || v.hidden) return;
+  const v = $('#actuVue'); if (!v || v.hidden) return; arreterEcoute();
   v.hidden = true; document.body.style.overflow = '';
   v.querySelector('.ad-body').innerHTML = '';   // arrête la vidéo
 }
@@ -4144,6 +4164,56 @@ async function loadArticles() {
   ARTICLES = error ? [] : data; articlesLoaded = true;
 }
 const artDate = a => new Date(a.publie_le).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+/* Couverture d’un article : photo fournie, ou 1re page du PDF, ou couverture fabriquée avec le titre */
+function lignesCanvas(ctx, texte, larg, max) {
+  const mots = String(texte).split(/\s+/), L = []; let l = '';
+  for (const m of mots) { const t = l ? l + ' ' + m : m; if (ctx.measureText(t).width > larg && l) { L.push(l); l = m; } else l = t; }
+  if (l) L.push(l);
+  if (L.length > max) { L.length = max; L[max - 1] = L[max - 1].replace(/\s*\S*$/, '') + '…'; }
+  return L;
+}
+async function imageCouverture(titre, auteur, pdf, photo) {
+  if (photo) { const b = await createImageBitmap(photo); const k = Math.min(1, 900 / b.width), c = document.createElement('canvas'); c.width = Math.round(b.width * k); c.height = Math.round(b.height * k); c.getContext('2d').drawImage(b, 0, 0, c.width, c.height); return c; }
+  if (pdf && /pdf/i.test(pdf.type || pdf.name)) {
+    await chargerScript(LIBS_IMPORT.pdf); pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS_IMPORT.pdfWorker;
+    const doc = await pdfjsLib.getDocument({ data: await pdf.arrayBuffer() }).promise, p = await doc.getPage(1), v0 = p.getViewport({ scale: 1 }), v = p.getViewport({ scale: 900 / v0.width });
+    const c = document.createElement('canvas'); c.width = v.width; c.height = v.height; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+    await p.render({ canvasContext: x, viewport: v }).promise; return c;
+  }
+  const c = document.createElement('canvas'); c.width = 600; c.height = 850; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 850); g.addColorStop(0, '#8c2a34'); g.addColorStop(1, '#5a161f'); x.fillStyle = g; x.fillRect(0, 0, 600, 850);
+  x.strokeStyle = '#c9a24a'; x.lineWidth = 3; x.strokeRect(28, 28, 544, 794); x.lineWidth = 1; x.strokeRect(38, 38, 524, 774);
+  x.fillStyle = '#e9d9a8'; x.textAlign = 'center'; x.font = '600 19px "Source Sans 3", Arial, sans-serif'; x.fillText('GRAND SÉMINAIRE DE FALIARIVO', 300, 100);
+  try { const logo = await new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = '/icon-192.png'; }); x.drawImage(logo, 250, 130, 100, 100); } catch (_) {}
+  x.fillStyle = '#fff'; x.font = '600 46px "Cormorant Garamond", Georgia, serif';
+  const L = lignesCanvas(x, titre, 470, 7); L.forEach((l, i) => x.fillText(l, 300, 330 + i * 54));
+  if (auteur) { x.fillStyle = '#e9d9a8'; x.font = 'italic 26px "EB Garamond", Georgia, serif'; x.fillText(auteur, 300, 330 + L.length * 54 + 40); }
+  x.fillStyle = '#e9d9a8'; x.font = '18px "Source Sans 3", Arial, sans-serif'; x.fillText('Article', 300, 780);
+  return c;
+}
+function afficheNotification(couv, titre, auteur) {     // image en largeur (2:1) : la couverture entière + le titre
+  const c = document.createElement('canvas'); c.width = 1200; c.height = 600; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 1200, 600); g.addColorStop(0, '#5a161f'); g.addColorStop(1, '#8c2a34'); x.fillStyle = g; x.fillRect(0, 0, 1200, 600);
+  const h = 520, w = Math.min(420, Math.round(couv.width * h / couv.height));
+  x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 24; x.drawImage(couv, 60, 40, w, h); x.shadowBlur = 0;
+  const gx = 60 + w + 50, larg = 1200 - gx - 50; x.textAlign = 'left';
+  x.fillStyle = '#e9d9a8'; x.font = '600 26px "Source Sans 3", Arial, sans-serif'; x.fillText('📰 NOUVEL ARTICLE', gx, 120);
+  x.fillStyle = '#fff'; x.font = '600 50px "Cormorant Garamond", Georgia, serif';
+  const L = lignesCanvas(x, titre, larg, 5); L.forEach((l, i) => x.fillText(l, gx, 200 + i * 58));
+  if (auteur) { x.fillStyle = '#e9d9a8'; x.font = 'italic 30px "EB Garamond", Georgia, serif'; x.fillText(lignesCanvas(x, auteur, larg, 1)[0], gx, 200 + L.length * 58 + 30); }
+  x.fillStyle = 'rgba(255,255,255,.75)'; x.font = '22px "Source Sans 3", Arial, sans-serif'; x.fillText('Grand Séminaire de Faliarivo · gstf-faliarivo.ovh', gx, 550);
+  return c;
+}
+async function couverturesArticle(titre, auteur, pdf, photo) {
+  const couv = await imageCouverture(titre, auteur, pdf, photo), aff = afficheNotification(couv, titre, auteur), r = {};
+  const base = `couvertures/${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  for (const [k, cv, q] of [['couverture', couv, .82], ['affiche', aff, .8]]) {
+    const blob = await new Promise(ok => cv.toBlob(ok, 'image/jpeg', q)); if (!blob) continue;
+    const up = await sb.storage.from('documents').upload(`${base}-${k}.jpg`, blob, { contentType: 'image/jpeg' });
+    if (!up.error) r[k] = docUrl(`${base}-${k}.jpg`);
+  }
+  return r;
+}
 async function renderArticlesPage() {
   const el = $('#artList');
   if (!articlesLoaded) { el.innerHTML = '<p class="text-muted">Chargement…</p>'; await loadArticles(); }
@@ -4152,7 +4222,8 @@ async function renderArticlesPage() {
   const q = $('#artSearch').value.trim().toLowerCase();
   const list = ARTICLES.filter(a => !q || (a.titre + ' ' + a.auteur + ' ' + a.resume).toLowerCase().includes(q));
   el.innerHTML = list.length ? list.map(a => `
-    <article class="bg-surface border border-line rounded-lg p-5">
+    <article class="bg-surface border border-line rounded-lg p-5" data-article="${a.id}">
+      ${a.couverture ? `<img class="art-couv" src="${esc(a.couverture)}" alt="Couverture" loading="lazy">` : ''}
       <h2 class="font-display text-2xl font-semibold leading-snug">${esc(a.titre)}</h2>
       <p class="text-sm text-muted">${a.payant ? '<span class="pill art-pill">💰 Article payant</span> ' : ''}${a.auteur ? esc(a.auteur) + ' · ' : ''}${esc(artDate(a))}${a.public ? '' : ' · réservé aux connectés'}</p>
       ${a.resume ? `<p class="mt-2">${esc(a.resume)}</p>` : ''}
@@ -4160,6 +4231,8 @@ async function renderArticlesPage() {
       <div class="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-sm">
         ${a.texte ? `<button type="button" class="linkbtn art-lire">Lire l’article</button>` : ''}
         ${a.fichier ? `<a class="linkbtn" href="${esc(docUrl(a.fichier))}" target="_blank" rel="noopener">Ouvrir le PDF${a.fichier_nom ? ' (' + esc(a.fichier_nom) + ')' : ''}</a>` : ''}
+        ${boutonEcouter([a.titre, a.auteur && 'par ' + a.auteur, a.resume, a.payant ? '' : a.texte].filter(Boolean).join('. '))}
+        ${a.public ? boutonsPartage(msgPartage('📖', a.titre, [a.auteur ? '✍️ ' + a.auteur : '', a.payant ? '💰 À lire sur le site : ' + ar(a.prix_lecture) : '📗 Lecture gratuite'], a.resume), 'article=' + a.id, true) : ''}
       </div>
       <div class="mt-3 whitespace-pre-line art-texte max-w-[75ch]" hidden>${esc(a.texte || '')}</div>
     </article>`).join('') : `<p class="text-muted">${q ? 'Aucun article ne correspond à cette recherche.' : 'Aucun article publié pour l’instant.'}</p>`;
@@ -4195,34 +4268,38 @@ const AILLEURS_SITES = {
     ['HAL (articles libres)', 'https://hal.science/search/index/?q=']]
 };
 const AILLEURS_CACHE = {};
-async function ailleursMeilleurs(q, genre) {
-  const cle = genre + '|' + sans(q);
+async function ailleursMeilleurs(q, genre, combien) {
+  const cle = genre + '|' + sans(q) + '|' + (combien || 6);
   if (AILLEURS_CACHE[cle]) return AILLEURS_CACHE[cle];
   const t = (u, ms = 9000) => fetch(u, { signal: AbortSignal.timeout(ms) }).then(r => r.ok ? r.json() : null).catch(() => null);
   let L = [];
   if (genre === 'livre') {
     const [gb, ol] = await Promise.all([
-      t(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=10&printType=books`),
+      t(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=${combien > 8 ? 20 : 10}&printType=books`),
       t(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=8&fields=key,title,author_name,first_publish_year,cover_i,ebook_access,publisher`)]);
     ((gb && gb.items) || []).forEach((it, i) => { const v = it.volumeInfo || {}, a = it.accessInfo || {};
       L.push({ titre: v.title + (v.subtitle ? ' : ' + v.subtitle : ''), det: [(v.authors || []).join(', '), v.publisher, (v.publishedDate || '').slice(0, 4)].filter(Boolean).join(' · '),
         lien: v.infoLink || v.previewLink, image: v.imageLinks && (v.imageLinks.smallThumbnail || '').replace('http:', 'https:'), source: 'Google Livres',
-        libre: a.viewability === 'ALL_PAGES' ? 'Lecture libre' : a.viewability === 'PARTIAL' ? 'Extraits' : '', rang: i, fr: v.language === 'fr' }); });
+        libre: a.viewability === 'ALL_PAGES' ? 'Lecture libre' : a.viewability === 'PARTIAL' ? 'Extraits' : '', rang: i, fr: v.language === 'fr',
+        ref: { type: 'livre', aut: (v.authors || []).slice(0, 4).flatMap(personnesAuteur), titre: v.title + (v.subtitle ? '. ' + v.subtitle : ''), date: (v.publishedDate || '').slice(0, 4), ed: v.publisher || '', nbp: v.pageCount || '' } }); });
     ((ol && ol.docs) || []).forEach((d, i) => L.push({ titre: d.title, det: [(d.author_name || []).slice(0, 2).join(', '), (d.publisher || [])[0], d.first_publish_year].filter(Boolean).join(' · '),
       lien: 'https://openlibrary.org' + d.key, image: d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-S.jpg` : '', source: 'Open Library',
-      libre: d.ebook_access === 'public' ? 'Lecture libre' : d.ebook_access === 'borrowable' ? 'Prêt en ligne' : '', rang: i + .5, fr: false }));
+      libre: d.ebook_access === 'public' ? 'Lecture libre' : d.ebook_access === 'borrowable' ? 'Prêt en ligne' : '', rang: i + .5, fr: false,
+      ref: { type: 'livre', aut: (d.author_name || []).slice(0, 4).flatMap(personnesAuteur), titre: d.title, date: d.first_publish_year ? String(d.first_publish_year) : '', ed: (d.publisher || [])[0] || '' } }));
     const vus = new Set(); L = L.filter(x => { const k = sans(x.titre).replace(/[^a-z0-9]/g, '').slice(0, 40); if (!x.titre || vus.has(k)) return false; vus.add(k); return true; });
   } else {
-    const oa = await t(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=12&select=title,authorships,publication_year,primary_location,open_access,doi,cited_by_count,language`);
+    const oa = await t(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=${combien > 8 ? 20 : 12}&select=title,authorships,publication_year,primary_location,open_access,doi,cited_by_count,language,biblio`);
     ((oa && oa.results) || []).forEach((w, i) => { const loc = w.primary_location || {}, src = loc.source || {}, acc = w.open_access || {};
       L.push({ titre: w.title, det: [(w.authorships || []).slice(0, 2).map(a => a.author && a.author.display_name).filter(Boolean).join(', '), src.display_name, w.publication_year, w.cited_by_count ? `cité ${w.cited_by_count} fois` : ''].filter(Boolean).join(' · '),
-        lien: acc.oa_url || loc.landing_page_url || w.doi, source: 'OpenAlex', libre: acc.is_oa ? 'Accès libre' : '', rang: i, fr: w.language === 'fr' }); });
+        lien: acc.oa_url || loc.landing_page_url || w.doi, source: 'OpenAlex', libre: acc.is_oa ? 'Accès libre' : '', rang: i, fr: w.language === 'fr',
+        ref: { type: 'article', aut: (w.authorships || []).slice(0, 4).flatMap(a => personnesAuteur(a.author && a.author.display_name)), titre: w.title, date: w.publication_year ? String(w.publication_year) : '', revue: src.display_name || '',
+          num: [w.biblio && w.biblio.volume && 'vol. ' + w.biblio.volume, w.biblio && w.biblio.issue && 'n° ' + w.biblio.issue].filter(Boolean).join(', '), pages: w.biblio && w.biblio.first_page ? w.biblio.first_page + (w.biblio.last_page && w.biblio.last_page !== w.biblio.first_page ? '–' + w.biblio.last_page : '') : '' } }); });
     L = L.filter(x => x.titre && x.lien);
   }
   // les meilleurs : pertinence d'abord, puis bonus pour l'accès libre et le français
   L.forEach(x => x.score = x.rang - (x.libre ? 2 : 0) - (x.fr ? 1.5 : 0));
   L.sort((a, b) => a.score - b.score);
-  return (AILLEURS_CACHE[cle] = L.slice(0, 6));
+  return (AILLEURS_CACHE[cle] = L.slice(0, combien || 6));
 }
 function ailleursHtml(q, genre, rien) {
   const sites = AILLEURS_SITES[genre].map(([n, u, fin]) => `<a href="${esc(u + encodeURIComponent(q) + (fin || ''))}" target="_blank" rel="noopener">${esc(n)} ↗</a>`).join('');
@@ -4390,7 +4467,7 @@ async function ouvrirAvecCode(a, code, z, attendre) {
 async function afficherContenuPayant(z, d) {
   const zone = z.querySelector('.art-payant-contenu'); zone.hidden = false;
   zone.innerHTML = `${d.expire_le ? `<p class="text-xs text-muted mb-2">🔓 Accès ouvert jusqu’au ${esc(new Date(d.expire_le).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }))}</p>` : ''}${d.formule === 'pdf' && d.pdf ? `<a class="btn btn-sm mb-3" href="${esc(d.pdf)}" ${d.admin ? 'target="_blank" rel="noopener"' : ''}>⬇️ Télécharger le PDF</a>` : ''}
-    ${d.texte ? `<div class="art-texte-payant whitespace-pre-line max-w-[75ch]">${esc(d.texte)}</div>` : ''}
+    ${d.texte ? `<p class="mb-2">${boutonEcouter(d.titre + '. ' + d.texte, 'text-sm')}</p><div class="art-texte-payant whitespace-pre-line max-w-[75ch]">${esc(d.texte)}</div>` : ''}
     ${d.pdf && !d.texte ? '<div class="art-pdf-pages" aria-label="Pages de l’article"><p class="text-sm text-muted">Chargement des pages…</p></div>' : ''}`;
   if (d.pdf && !d.texte) {
     try {
@@ -4484,7 +4561,9 @@ function renderAdminArticles() {
         <label class="text-sm"><span class="block font-semibold mb-1">Résumé</span><textarea id="arResume" class="field" rows="3" maxlength="2000" placeholder="Quelques lignes de présentation"></textarea></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Texte de l’article <span class="font-normal text-muted">(facultatif si vous joignez un PDF)</span></span><textarea id="arTexte" class="field" rows="8"></textarea></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Fichier PDF ou Word <span class="font-normal text-muted">(facultatif ; un PDF est joint à l’article, 15 Mo au plus ; un fichier Word remplit le texte de l’article)</span></span><input id="arPdf" class="field" type="file" accept="application/pdf,.docx"></label>
+        <label class="text-sm"><span class="block font-semibold mb-1">🖼 Page de couverture <span class="font-normal text-muted">(facultatif : photo de la couverture ; sinon le site prend la 1re page du PDF, ou fabrique une couverture avec le titre)</span></span><input id="arCouv" class="field" type="file" accept="image/*"></label>
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="arPrive">Réservé aux étudiants et professeurs connectés</label>
+        <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="arPush" checked>📱 Prévenir les connectés par une notification, avec la couverture</label>
         <div class="art-vente"><label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" id="arPayant">💰 Article payant (paiement MVola)</label>
           <div class="grid grid-cols-2 gap-3 mt-2" id="arPrix" hidden><label class="text-sm"><span class="block mb-1">Consulter sur le site (Ar)</span><input id="arPrixL" class="field" type="number" min="0" step="100" value="500"></label>
           <label class="text-sm"><span class="block mb-1">Télécharger le PDF (Ar)</span><input id="arPrixP" class="field" type="number" min="0" step="100" value="1000"></label>
@@ -4555,15 +4634,26 @@ function renderAdminArticles() {
       fichier = path;
     }
     const base = { titre, auteur: $('#arAuteur').value.trim(), resume: $('#arResume').value.trim(), public: !$('#arPrive').checked };
+    btn.textContent = 'Préparation de la couverture…';
+    try { Object.assign(base, await couverturesArticle(titre, base.auteur, pdf, $('#arCouv').files[0])); } catch (_) {}
+    btn.textContent = 'Publication…';
     let { data, error } = payant
       ? await sb.from('articles').insert({ ...base, texte: '', fichier: null, fichier_nom: null, payant: true, prix_lecture: Math.max(0, Number($('#arPrixL').value) || 0), prix_pdf: Math.max(0, Number($('#arPrixP').value) || 0), pdf_payant: !!fichier, texte_payant: !!texte }).select().single()
       : await sb.from('articles').insert({ ...base, texte, fichier, fichier_nom: pdf ? pdf.name : null }).select().single();
+    if (error && base.couverture && /couverture|affiche|column|schema cache/i.test(error.message || '')) {   // 62_couvertures_et_revision.sql pas encore exécuté
+      delete base.couverture; delete base.affiche; toast('Couverture non enregistrée', 'Exécutez d’abord 62_couvertures_et_revision.sql dans Supabase.', 'warn');
+      ({ data, error } = payant
+        ? await sb.from('articles').insert({ ...base, texte: '', fichier: null, fichier_nom: null, payant: true, prix_lecture: Math.max(0, Number($('#arPrixL').value) || 0), prix_pdf: Math.max(0, Number($('#arPrixP').value) || 0), pdf_payant: !!fichier, texte_payant: !!texte }).select().single()
+        : await sb.from('articles').insert({ ...base, texte, fichier, fichier_nom: pdf ? pdf.name : null }).select().single());
+    }
     if (!error && payant) { const r2 = await sb.from('articles_payants').insert({ article_id: data.id, texte, fichier, fichier_nom: pdf ? pdf.name : null }); if (r2.error) { await sb.from('articles').delete().eq('id', data.id); error = r2.error; } }
     if (error && fichier) { await sb.storage.from(seau).remove([fichier]); fichier = null; }
     btn.disabled = false; btn.textContent = 'Publier l’article';
     if (error) { err.textContent = /payant|articles_payants|bucket/i.test(error.message || '') ? 'Pour vendre des articles, exécutez d’abord 59_articles_payants.sql dans Supabase.' : /articles|relation|schema cache/i.test(error.message) ? 'Exécutez d’abord 11_articles.sql dans Supabase.' : errText(error); err.hidden = false; return; }
+    const prevenir = $('#arPush').checked;
     ARTICLES.unshift(data); e.target.reset(); list();
     toast('Article publié', titre);
+    if (prevenir) envoyerPushPublication('article', data.id);
   });
 }
 
@@ -6249,7 +6339,8 @@ async function chercherLivres() {
       <td class="font-mono text-xs whitespace-nowrap">${esc(l.cote || '')}</td>
       <td><div class="bq-livre">${l.couverture ? `<img class="bq-couv" src="${esc(l.couverture)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<div class="min-w-0"><div class="font-semibold">${esc(l.titre)}</div><div class="text-muted">${esc([l.auteur, l.editeur, l.annee_pub].filter(Boolean).join(' · '))}</div>
         <button type="button" class="linkbtn text-xs bq-citer" data-citer="${l.id}" title="Référence prête à copier pour un devoir ou un mémoire">❝ Citer ce livre</button>
-        ${l.resume ? `<details class="bq-resume"><summary>📖 Résumé</summary><p>${esc(l.resume)}</p>${l.resume_source && l.resume_source !== 'Bibliothèque' ? `<p class="text-xs text-muted">Source : ${l.resume_lien ? `<a href="${esc(l.resume_lien)}" target="_blank" rel="noopener" class="underline">${esc(l.resume_source)}</a>` : esc(l.resume_source)}</p>` : ''}</details>` : ''}</div></div>
+        ${boutonsPartage(msgPartage('📚', l.titre, [l.auteur ? '✍️ ' + l.auteur : '', '🏛 À la bibliothèque du Grand Séminaire de Faliarivo' + (l.cote ? ' (cote ' + l.cote + ')' : '')], l.resume), 'livre=' + l.id, true)}
+        ${l.resume ? `<details class="bq-resume"><summary>📖 Résumé</summary><p>${esc(l.resume)}</p><p>${boutonEcouter(l.titre + '. ' + l.resume, 'text-xs')}</p>${l.resume_source && l.resume_source !== 'Bibliothèque' ? `<p class="text-xs text-muted">Source : ${l.resume_lien ? `<a href="${esc(l.resume_lien)}" target="_blank" rel="noopener" class="underline">${esc(l.resume_source)}</a>` : esc(l.resume_source)}</p>` : ''}</details>` : ''}</div></div>
         ${l.sujet || l.emplacement ? `<div class="text-xs text-muted">${esc([l.sujet, l.emplacement && 'Rayon ' + l.emplacement].filter(Boolean).join(' · '))}</div>` : ''}</div></div></td>
       <td class="whitespace-nowrap">${dispo(l)}${!BQ.biblio && !l.sur_place && l.exemplaires > 0 ? `<div class="mt-2">${l.exemplaires - l.pretes - (l.gardes || 0) - (l.attente || 0) > 0
         ? `<button type="button" class="btn btn-sm" data-demander="${l.id}" title="Le livre vous est gardé 3 jours à la bibliothèque">📥 Emprunter</button>`
@@ -6524,6 +6615,429 @@ function citerLivre(l) {
   }));
 }
 
+/* =================================================================== *
+ *  Outils de travail : assistant de mémoire, correcteur de             *
+ *  bibliographie (normes du GSTF), révision des cours                  *
+ * =================================================================== */
+const STOP_FR = new Set('le la les un une des de du et ou en au aux dans sur sous pour par avec chez selon entre vers ces cet cette son ses leur leurs que qui quoi dont est sont the of and'.split(' '));
+function persRef(aut, ordre, h) {
+  const L = (aut || []).filter(p => p && (p.nom || p.coll));
+  const f = p => p.coll ? (h ? esc(p.coll) : p.coll) : ordre === 'nom' ? `${petCap(p.nom, h)}${p.pre ? ' ' + (h ? esc(p.pre) : p.pre) : ''}` : `${p.pre ? (h ? esc(p.pre) : p.pre) + ' ' : ''}${petCap(p.nom, h)}`;
+  if (L.length > 3) return f(L[0]) + (h ? ' <i>et alii</i>' : ' et alii');
+  return L.map(f).join(', ') + (L.some(p => p.dir) ? ' (dir.)' : '');
+}
+// Une référence aux normes du GSTF. mode : 'note' (1re citation), 'court' (citations suivantes), 'biblio'
+function refTexte(r, mode, h, page) {
+  const E = x => h ? esc(String(x)) : String(x), I = x => h ? `<i>${esc(String(x))}</i>` : String(x);
+  const art = r.type === 'article', p = [], aut = persRef(r.aut, mode === 'biblio' ? 'nom' : 'pre', h);
+  if (aut) p.push(aut);
+  if (mode === 'court') {
+    const tc = String(r.titre || '').split(/\s[:–—]\s|[:.]\s/)[0].trim();
+    p.push(art ? `« ${E(tc)} »` : I(tc)); p.push(h ? '<i>op. cit.</i>' : 'op. cit.');
+  } else {
+    p.push(art ? `« ${E(r.titre || '[titre ?]')} »` : I(r.titre || '[titre ?]'));
+    if (art && r.revue) p.push('dans ' + I(r.revue) + (r.num ? ' ' + E(r.num) : ''));
+    p.push(r.date ? E(r.date) : 's. d.');
+    if (!art) p.push(r.ed ? E(r.ed) : 's. éd.');
+  }
+  if (mode === 'biblio') { if (art && r.pages) p.push('p. ' + E(r.pages)); else if (!art && r.nbp) p.push(E(r.nbp) + ' p.'); }
+  else { const pg = page || r.page || (art ? r.pages : ''); p.push('p. ' + (pg ? E(pg) : '…')); }
+  const t = p.join(', '); return /…$/.test(t) ? t : t.replace(/\.\s*$/, '') + '.';
+}
+const cleRef = r => sans(((r.aut || [])[0] || {}).nom || ((r.aut || [])[0] || {}).coll || '') + '|' + sans(r.titre).replace(/[^a-z0-9]/g, '').slice(0, 30);
+const triRefs = L => L.slice().sort((a, b) => sans(persRef(a.aut, 'nom', false) || a.titre).localeCompare(sans(persRef(b.aut, 'nom', false) || b.titre)));
+async function copierRiche(html, texte, btn) {
+  const h = `<div style="font-family:'Times New Roman',serif;font-size:12pt">${html}</div>`;
+  try { await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([h], { type: 'text/html' }), 'text/plain': new Blob([texte], { type: 'text/plain' }) })]); }
+  catch (_) { try { await navigator.clipboard.writeText(texte); } catch (e) { prompt('Copiez :', texte); return; } }
+  if (btn) { const t = btn.textContent; btn.textContent = '✓ Copié : collez dans Word'; setTimeout(() => { btn.textContent = t; }, 2200); }
+}
+function bibliographieHtml(refs, h) {   // Ouvrages puis Articles, par ordre alphabétique
+  const g = [['Ouvrages', triRefs(refs.filter(r => r.type !== 'article'))], ['Articles', triRefs(refs.filter(r => r.type === 'article'))]].filter(x => x[1].length);
+  return h ? g.map(([t, l]) => `<p style="font-weight:bold;margin:12pt 0 6pt">${t}</p>${l.map(r => `<p style="margin:0 0 6pt 1.25cm;text-indent:-1.25cm">${refTexte(r, 'biblio', true)}</p>`).join('')}`).join('')
+    : g.map(([t, l]) => t + '\n' + l.map(r => refTexte(r, 'biblio', false)).join('\n')).join('\n\n');
+}
+const lsLire = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (_) { return d; } };
+const lsEcrire = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };
+function melanger(L) { const a = L.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ---------- 1. Assistant de mémoire ---------- */
+const MEM = { q: '', res: null };
+function renderAssistantMemoire(v) {
+  v.innerHTML = docHead('🎓 Assistant de mémoire', 'Tapez le sujet de votre mémoire ou de votre travail : le site prépare une première bibliographie avec les livres de notre bibliothèque et les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.') +
+    `<form id="memForm" class="flex flex-wrap gap-2 mb-2"><input id="memSujet" class="field" style="max-width:34rem" maxlength="200" placeholder="ex. La miséricorde dans l’évangile de Luc" value="${esc(MEM.q)}"><button class="btn">🎓 Préparer ma bibliographie</button></form>
+    <p class="text-xs text-muted mb-4">Conseil : 3 à 6 mots importants (« Eucharistie Pères de l’Église », « vocation sacerdotale Madagascar »). Cochez ce que vous gardez, puis copiez dans Word.</p><div id="memRes"></div>`;
+  $('#memForm').addEventListener('submit', e => { e.preventDefault(); MEM.q = $('#memSujet').value.trim(); if (MEM.q.length >= 3) chercherMemoire(); });
+  if (MEM.res) afficherMemoire();
+}
+async function chercherMemoire() {
+  const box = $('#memRes'); box.innerHTML = '<p class="text-muted">Recherche dans notre bibliothèque et sur internet… (quelques secondes)</p>';
+  const mots = [...new Set(sans(MEM.q).replace(/[’'`]/g, ' ').split(/[^a-z0-9-]+/).filter(w => w.length > 2 && !STOP_FR.has(w)))].slice(0, 6);
+  const cat = async () => {
+    if (!sb) return [];
+    const lots = await Promise.all([MEM.q, ...mots].map(m => sb.rpc('chercher_livres', { p_q: m, p_filtre: 'tous', p_limite: 40 }).then(r => r.data || [], () => [])));
+    const M = new Map(); lots.flat().forEach(l => M.set(l.id, l));
+    return [...M.values()].map(l => { const t = sans([l.titre, l.auteur, l.sujet, l.resume].join(' ')); return { l, n: mots.filter(w => t.includes(w)).length + (mots[0] && sans(l.titre).includes(mots[0]) ? .5 : 0) }; })
+      .filter(x => mots.length <= 1 || x.n >= Math.min(2, mots.length)).sort((a, b) => b.n - a.n).slice(0, 15).map(x => x.l);
+  };
+  const [livres, netL, netA] = await Promise.all([cat().catch(() => []), ailleursMeilleurs(MEM.q, 'livre', 10).catch(() => []), ailleursMeilleurs(MEM.q, 'article', 10).catch(() => [])]);
+  const refL = l => ({ type: 'livre', aut: personnesAuteur(l.auteur), titre: l.titre, date: l.annee_pub ? String(l.annee_pub) : '', ed: l.editeur || '' });
+  MEM.res = [
+    ['📚 Dans notre bibliothèque', 'Vous pouvez les emprunter ; la cote aide à les trouver sur les rayons.', livres.map((l, i) => ({ ref: refL(l), info: [l.cote && 'cote ' + l.cote, l.sur_place ? 'sur place seulement' : ''].filter(Boolean).join(' · '), on: i < 10 }))],
+    ['🌍 Livres trouvés sur internet', 'À chercher dans une autre bibliothèque, ou à lire en ligne quand c’est gratuit.', netL.filter(x => x.ref).map((x, i) => ({ ref: x.ref, lien: x.lien, info: [x.libre, x.source].filter(Boolean).join(' · '), on: i < 4 }))],
+    ['📰 Articles de revues', 'Les plus pertinents d’abord ; « Accès libre » se lit gratuitement.', netA.filter(x => x.ref).map((x, i) => ({ ref: x.ref, lien: x.lien, info: [x.libre, x.ref.revue].filter(Boolean).join(' · '), on: i < 4 }))]];
+  afficherMemoire();
+}
+function afficherMemoire() {
+  const box = $('#memRes'); if (!box || !MEM.res) return;
+  const tous = MEM.res.flatMap(g => g[2]);
+  box.innerHTML = tous.length ? MEM.res.map(([t, sous, l], gi) => `<div class="outil-box mb-4"><h3 class="font-semibold">${t} <span class="text-muted font-normal">(${l.length})</span></h3><p class="text-xs text-muted mb-2">${sous}</p>
+      ${l.length ? l.map((x, i) => `<label class="ref-l"><input type="checkbox" class="ail-it-sel" data-mem="${gi}-${i}" ${x.on ? 'checked' : ''}><span class="min-w-0"><span class="ref-txt">${refTexte(x.ref, 'biblio', true)}</span>
+        <span class="block text-xs text-muted">${esc(x.info || '')}${x.lien ? ` · <a href="${esc(x.lien)}" target="_blank" rel="noopener" class="underline">ouvrir ↗</a>` : ''}</span></span></label>`).join('') : '<p class="text-sm text-muted">Rien trouvé ici.</p>'}</div>`).join('') +
+    `<div class="flex flex-wrap gap-2"><button type="button" class="btn" id="memCopier">📋 Copier la bibliographie cochée</button><button type="button" class="btn btn-ghost" id="memCorr">✍️ Vérifier dans le correcteur</button></div>
+     <p class="text-xs text-muted mt-2">Normes du GSTF : nom en <span style="font-variant:small-caps">petites capitales</span>, prénom abrégé, titre en <i>italique</i>, date, édition, page. Les informations venues d’internet peuvent être incomplètes : vérifiez chaque référence sur le livre ou l’article lui-même.</p>`
+    : '<p class="text-muted">Rien trouvé : essayez d’autres mots, plus simples.</p>';
+  box.querySelectorAll('[data-mem]').forEach(c => c.addEventListener('change', () => { const [g, i] = c.dataset.mem.split('-').map(Number); MEM.res[g][2][i].on = c.checked; }));
+  const choisis = () => tous.filter(x => x.on).map(x => x.ref);
+  if ($('#memCopier')) $('#memCopier').addEventListener('click', e => { const L = choisis(); if (!L.length) { toast('Rien de coché', '', 'warn'); return; } copierRiche(bibliographieHtml(L, true), bibliographieHtml(L, false), e.currentTarget); });
+  if ($('#memCorr')) $('#memCorr').addEventListener('click', () => { COR.txt = choisis().map(r => refTexte(r, 'biblio', false)).join('\n'); COR.mode = 'biblio'; COR.refs = null; currentDoc = 'correcteur'; renderDoc(); });
+}
+
+/* ---------- 2. Correcteur de bibliographie ---------- */
+const COR = { txt: '', mode: 'biblio', refs: null };
+const VILLES = new Set(['paris', 'rome', 'roma', 'lyon', 'bruxelles', 'namur', 'louvain', 'louvain-la-neuve', 'montreal', 'quebec', 'geneve', 'antananarivo', 'tananarive', 'fianarantsoa', 'antsirabe', 'madrid', 'milan', 'milano', 'torino', 'turin', 'londres', 'london', 'new york', 'oxford', 'cambridge', 'tournai', 'strasbourg', 'toulouse', 'fribourg', 'bologna', 'firenze', 'nairobi', 'kinshasa', 'abidjan', 'dakar', 'yaounde', 'ottawa', 'berlin', 'freiburg', 'munich', 'vatican', 'cite du vatican', 'citta del vaticano', 'lille', 'marseille', 'bordeaux', 'lourdes', 'ars', 'perpignan', 'chambray', 'chambray-les-tours', 'mulhouse', 'kinshasa-gombe', 'brescia', 'padova', 'grand rapids', 'maryknoll', 'collegeville', 'paris-tournai', 'paris-namur']);
+const EDITEURS_RX = /(cerf|descl[ée]e|ambozontany|\bpuf\b|presses|seuil|fayard|bayard|salvator|m[ée]diaspaul|lessius|parole et silence|beauchesne|vrin|lethielleux|\bmame\b|t[ée]qui|droz|gallimard|albin|plon|centurion|[ée]ditions|[ée]d\.|\bpress\b|verlag|libreria|\blev\b|editrice|karthala|harmattan|\bcl[ée]\b|fides|novalis|artège|emmanuel|paulines|brepols|peeters|herder|marietti|dehoniane|queriniana|paoline|san paolo|routledge|eerdmans|orbis|fortress|brill|mohr|university)/i;
+const estMaj = w => { const x = w.replace(/[.,;:’'()]/g, ''); return x.length >= 2 && /\p{Lu}/u.test(x) && x === x.toUpperCase() && !/^[IVXLC]+$/.test(x); };
+const estInitiale = w => /^\p{Lu}[a-z]?\.(-\p{Lu}\.)?$/u.test(w) || /^\p{Lu}$/u.test(w);
+function abregerPrenom(p) { return p.split(/\s+/).filter(Boolean).map(w => estInitiale(w) ? w : /^\p{Lu}$/u.test(w) ? w + '.' : w.split('-').map(x => x.charAt(0).toUpperCase() + '.').join('-')).join(' '); }
+function lirePersonne(seg) {
+  let t = String(seg).trim(); const dir = /\(dir|\bdir\.|\(éd|\(ed\b/i.test(t) ? ' (dir.)' : '';
+  t = t.replace(/\((dir|éd|ed)\.?\)|\bdir\./gi, '').trim();
+  if (/congr[ée]g|conseil|commission|conf[ée]rence|concile|synode|[ée]glise|saint-si[èe]ge|dicast|acad[ée]mie|soci[ée]t[ée]|institut|universit/i.test(t)) return { coll: t };
+  t = t.replace(/^(P\.|Père|Mgr|Fr\.|Frère|Sr|Sœur|Card\.|Cardinal|Dom|Abbé|Pr\.|Prof\.|Dr\.?)\s+(?=\S+\s+\S)/i, '');
+  const w = t.split(/\s+/).filter(Boolean); if (!w.length) return null;
+  let nom = [], pre = [];
+  if (w.some(estMaj) && !w.every(estMaj)) w.forEach(x => (estMaj(x) ? nom : pre).push(x));
+  else if (w.length > 1 && w.some(estInitiale)) w.forEach(x => (estInitiale(x) ? pre : nom).push(x));
+  else { let k = w.length - 1; while (k > 0 && /^(de|du|des|von|van|der|da|di|del|della|d’|d')$/i.test(w[k - 1])) k--; nom = w.slice(k); pre = w.slice(0, k); }
+  if (!nom.length) { nom = [w[w.length - 1]]; pre = w.slice(0, -1); }
+  const N = nom.join(' ').toLowerCase().replace(/(^|[\s’'-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase()).replace(/\b(De|Du|Des|Von|Van|Der|Da|Di|Del|Della)(?=\s)/g, x => x.toLowerCase());
+  return { pre: abregerPrenom(pre.join(' ')), nom: N, dir };
+}
+const ressembleNom = (s, strict) => {
+  const x = s.trim(), w = x.split(/\s+/);
+  if (!x || w.length > 6 || /\d/.test(x) || !/^\p{Lu}/u.test(x) || EDITEURS_RX.test(x) || VILLES.has(sans(x))) return false;
+  if (/congr[ée]g|conseil|commission|concile|synode|[ée]glise|saint-si[èe]ge|dicast/i.test(x)) return !strict;
+  return w.some(estMaj) || w.some(estInitiale) || (!strict && w.length <= 3 && w.every(y => /^\p{Lu}[\p{L}’'-]*$/u.test(y) || /^(de|du|des|von|van|der|d’)$/i.test(y)));
+};
+function personnesDe(seg) { return seg.split(/\s+et\s+|\s*&\s*|\s*\/\s*/).map(lirePersonne).filter(Boolean); }
+function analyserRef(ligne) {
+  const src = String(ligne).trim();
+  let t = src.replace(/^\s*(?:\[\d+\]|\(\d+\)|\d{1,3}[.)]|\d{1,3}\s(?=\p{Lu})|[-–•*·▪])\s*/u, '').replace(/\s+/g, ' ').trim();
+  const r = { src, type: 'livre', aut: [], titre: '', date: '', ed: '', revue: '', num: '', pages: '', page: '', nbp: '', reste: [] };
+  if (/^(ibid|ibidem|id\.)/i.test(t)) { r.ibid = true; r.page = ((t.match(/p\.\s*(\d+(?:\s*[-–]\s*\d+)?)/i) || [])[1] || '').replace(/\s/g, '').replace('-', '–'); return r; }
+  t = t.replace(/,?\s*op\.\s*cit\.?/i, '');
+  let m = t.match(/[,.]?\s*\b(?:pp?\.|pages?)\s*(\d+(?:\s*[-–]\s*\d+)?)\s*\.?\s*$/i);
+  if (m) { const v = m[1].replace(/\s/g, '').replace('-', '–'); if (v.includes('–')) r.pages = v; else r.page = v; t = t.slice(0, m.index); }
+  m = t.match(/[,.]?\s*(\d{2,4})\s*p\.?\s*$/i); if (m) { r.nbp = m[1]; t = t.slice(0, m.index); }
+  const P = x => x.replace(/\b(dir|éd|ed|coll|vol|trad|n|no|op|cit|cf|Mgr|St|Ste|Card|Fr|Sr|Pr|Prof|Dr|t)\./gi, '$1§').replace(/(^|[\s(-])(\p{Lu}[a-z]?)\.(?=[\s-]|$)/gu, '$1$2§');
+  const U = x => x.replace(/§/g, '.').trim();
+  const decoupe = x => P(x).split(/\s*[,;]\s*|\.\s+|\s+:\s+|\s*[()]\s*/).map(U).map(y => y.replace(/^[.,:;\s]+|[,:;\s]+$/g, '').replace(/(\p{L}{2,}|[)»”"\d])\.$/u, '$1')).filter(Boolean);
+  const q = t.match(/[«“"]\s*([^»”"]+?)\s*[»”"]/), it = q ? null : t.match(/(?:\*|_)([^*_]+)(?:\*|_)/);
+  let segs;
+  const lireAuteurs = as => {
+    if (!as.length) return;
+    if (as.length > 1 && as[0].split(/\s+/).length <= 2 && /^(\p{Lu}[\p{L}’'.-]*)(\s\p{Lu}[\p{L}’'.-]*){0,2}$/u.test(as[1]) && !estMaj(as[1].split(' ')[0])) { r.aut.push(...personnesDe(as[1] + ' ' + as[0].toUpperCase())); as.splice(0, 2); }   // « NOM, Prénom »
+    while (as.length) r.aut.push(...personnesDe(as.shift()));
+  };
+  if (q || it) {
+    const x = q || it; r.titre = x[1].trim(); if (q) r.type = 'article';
+    lireAuteurs(decoupe(t.slice(0, x.index))); segs = decoupe(t.slice(x.index + x[0].length));
+  } else {
+    segs = decoupe(t); const as = [];
+    if (segs.length > 1 && ressembleNom(segs[0])) {
+      as.push(segs.shift());
+      if (segs.length > 1 && /^\S+$/.test(as[0]) && /^\p{Lu}[\p{L}’'-]+(\s\p{Lu}[\p{L}’'-]+)?$/u.test(segs[0]) && !estMaj(segs[0].split(' ')[0])) as.push(segs.shift());   // « NOM, Prénom »
+      while (segs.length > 1 && ressembleNom(segs[0], true)) as.push(segs.shift());
+    }
+    lireAuteurs(as); r.titre = segs.shift() || '';
+  }
+  for (let s of segs) {
+    const y = s.match(/\b(1[5-9]\d\d|20[0-4]\d)\b/);
+    if (y && !r.date) { r.date = y[1]; s = s.replace(y[0], '').replace(/^[\s,.:;-]+|[\s,.:;-]+$/g, ''); if (!s) continue; }
+    if (/^(dans|in)\s+/i.test(s)) { r.type = 'article'; r.revue = s.replace(/^(dans|in)\s+/i, ''); continue; }
+    if (/^(n°|no\.?|n\.|vol\.?|t\.|tome|fasc\.?)\s*\d/i.test(s) || (r.type === 'article' && /^\d{1,4}(\s*\/\s*\d+)?$/.test(s))) { r.num = r.num ? r.num + ', ' + s : s; continue; }
+    if (VILLES.has(sans(s)) || VILLES.has(sans(s.split(/\s*[-–]\s*/)[0]))) continue;
+    if (/^(coll\.|collection)\s/i.test(s)) continue;
+    if (r.type === 'article' && !r.revue && !EDITEURS_RX.test(s)) { r.revue = s; continue; }
+    if (r.type !== 'article' && !r.ed) { r.ed = s.replace(/^([ée]ditions|[ée]d\.)\s+/i, ''); continue; }
+    r.reste.push(s);
+  }
+  if (r.revue) { const n = r.revue.match(/\s+((?:n°|no|vol\.?|t\.)?\s*\d+(?:\s*[/,]\s*\d+)?)$/i); if (n && !r.num) { r.num = n[1]; r.revue = r.revue.slice(0, n.index); } }
+  r.titre = r.titre.replace(/[.,;:\s]+$/, '');
+  return r;
+}
+function manquesRef(r, mode) {
+  if (r.ibid) return [];
+  const M = [];
+  if (!r.aut.length) M.push('auteur');
+  if (!r.titre) M.push('titre');
+  if (!r.date) M.push('date');
+  if (r.type === 'article' ? !r.revue : !r.ed) M.push(r.type === 'article' ? 'revue' : 'édition (éditeur)');
+  if (mode === 'notes' && !r.page && !(r.type === 'article' && r.pages)) M.push('page citée');
+  if (mode === 'biblio' && r.type !== 'article' && !r.nbp) M.push('nombre de pages');
+  return M;
+}
+function renderCorrecteur(v) {
+  v.innerHTML = docHead('✍️ Correcteur de bibliographie', 'Collez vos références, une par ligne, ou importez votre travail : le site les remet aux normes du GSTF (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) et signale ce qui manque.') +
+    `<div class="seg mb-3" id="corMode"><button type="button" data-m="biblio" aria-pressed="${COR.mode === 'biblio'}">📚 Bibliographie</button><button type="button" data-m="notes" aria-pressed="${COR.mode === 'notes'}">¹ Notes de bas de page</button></div>
+    <textarea id="corTxt" class="field font-mono text-sm" rows="9" placeholder="Une référence par ligne, par exemple :&#10;Joseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.&#10;RAHNER Karl. Traité fondamental de la foi. Centurion 1983&#10;Ibid., p. 52.">${esc(COR.txt)}</textarea>
+    <div class="flex flex-wrap gap-2 mt-2"><button type="button" class="btn" id="corGo">✍️ Corriger</button><button type="button" class="btn btn-ghost" id="corImp">📄 Importer (Word, PDF, photo)</button><input type="file" id="corImpF" accept=".docx,.pdf,.txt,image/*" hidden></div>
+    <p id="corEtat" class="text-sm text-muted mt-1"></p><div id="corRes" class="mt-4"></div>`;
+  $('#corMode').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; COR.mode = b.dataset.m; setPressed($('#corMode'), b); if (COR.refs) afficherCorrection(); });
+  $('#corGo').addEventListener('click', corriger);
+  $('#corImp').addEventListener('click', () => $('#corImpF').click());
+  $('#corImpF').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return; const etat = m => { $('#corEtat').textContent = m; };
+    try { const L = await lignesDepuisFichier(f, etat); $('#corTxt').value = L.map(x => String(x).replace(/\t/g, ' ').trim()).filter(x => x.length > 12).join('\n'); etat('Lu : vérifiez le texte, puis « Corriger ». Gardez seulement les lignes de références.'); }
+    catch (er) { etat(er.message || 'Lecture impossible.'); }
+    e.target.value = '';
+  });
+  if (COR.txt && COR.refs !== undefined) corriger();
+}
+function corriger() {
+  COR.txt = $('#corTxt').value;
+  COR.refs = COR.txt.split(/\n/).map(x => x.trim()).filter(x => x.length > 4).map(analyserRef);
+  afficherCorrection();
+}
+function afficherCorrection() {
+  const box = $('#corRes'), R = COR.refs || []; if (!box) return;
+  if (!R.length) { box.innerHTML = '<p class="text-muted">Collez au moins une référence.</p>'; return; }
+  const alerte = (m, r) => `${m.length ? `<span class="ref-alerte block">⚠️ À compléter : ${esc(m.join(', '))}</span>` : ''}${r && r.net ? '<span class="ref-net block">ℹ️ Complété par internet : vérifiez.</span>' : ''}${r && r.reste && r.reste.length ? `<span class="ref-alerte block">❓ Non reconnu : ${esc(r.reste.join(' ; '))}</span>` : ''}`;
+  let lignes;
+  if (COR.mode === 'notes') {
+    const vus = new Map(); let prec = null;
+    lignes = R.map(r => {
+      const ib = pg => ({ h: `<i>Ibid.</i>${pg ? ', p. ' + esc(pg) : ''}.`, t: `Ibid.${pg ? ', p. ' + pg : ''}.` });
+      if (r.ibid) return prec ? { ...ib(r.page), m: [], r } : { h: '<i>Ibid.</i>', t: 'Ibid.', m: ['aucune note avant « Ibid. »'], r };
+      const k = cleRef(r);
+      if (prec && cleRef(prec) === k && r.titre) { prec = vus.get(k) || r; return { ...ib(r.page), m: [], r }; }
+      if (vus.has(k) && r.titre) { const base = vus.get(k); prec = base; return { h: refTexte(base, 'court', true, r.page), t: refTexte(base, 'court', false, r.page), m: r.page ? [] : ['page citée'], r }; }
+      vus.set(k, r); prec = r; return { h: refTexte(r, 'note', true), t: refTexte(r, 'note', false), m: manquesRef(r, 'notes'), r };
+    });
+    box.innerHTML = `<div class="outil-box"><h3 class="font-semibold mb-2">Notes de bas de page corrigées</h3><ol class="list-decimal pl-6">${lignes.map(x => `<li class="ref-l" style="display:list-item"><span class="ref-txt">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></li>`).join('')}</ol>
+      <p class="text-xs text-muted mt-2">1re citation : référence complète ; même ouvrage juste avant : <i>Ibid.</i> ; ouvrage déjà cité plus haut : titre court + <i>op. cit.</i></p></div>`;
+  } else {
+    const M = new Map(); R.filter(r => !r.ibid && r.titre).forEach(r => { const k = cleRef(r), o = M.get(k); if (!o || Object.values(r).filter(Boolean).length > Object.values(o).filter(Boolean).length) M.set(k, r); });
+    const U = [...M.values()];
+    lignes = triRefs(U).map(r => ({ h: refTexte(r, 'biblio', true), t: refTexte(r, 'biblio', false), m: manquesRef(r, 'biblio'), r }));
+    const groupe = (titre, f) => { const l = lignes.filter(x => f(x.r)); return l.length ? `<p class="font-semibold mt-3 mb-1">${titre}</p>${l.map(x => `<div class="ref-l" style="display:block"><span class="ref-txt">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></div>`).join('')}` : ''; };
+    box.innerHTML = `<div class="outil-box"><h3 class="font-semibold">Bibliographie corrigée <span class="text-muted font-normal">(${U.length}, par ordre alphabétique)</span></h3>${groupe('Ouvrages', r => r.type !== 'article')}${groupe('Articles', r => r.type === 'article')}</div>`;
+  }
+  const aCompleter = R.some(r => !r.ibid && r.titre && (!r.date || (r.type === 'article' ? !r.revue : !r.ed)));
+  box.insertAdjacentHTML('beforeend', `<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn" id="corCopier">📋 Copier pour Word</button>${aCompleter ? '<button type="button" class="btn btn-ghost" id="corNet">🔎 Compléter par internet (date, éditeur, revue)</button>' : ''}</div>
+    <p class="text-xs text-muted mt-2">Le site devine l’auteur, le titre, l’éditeur… à partir de ce que vous avez écrit : relisez chaque ligne. « s. d. » = sans date ; « s. éd. » = sans éditeur.</p>`);
+  $('#corCopier').addEventListener('click', e => {
+    const html = COR.mode === 'notes' ? lignes.map(x => `<p style="margin:0 0 4pt">${x.h}</p>`).join('') : bibliographieHtml(lignes.map(x => x.r), true);
+    const txt = COR.mode === 'notes' ? lignes.map(x => x.t).join('\n') : bibliographieHtml(lignes.map(x => x.r), false);
+    copierRiche(html, txt, e.currentTarget);
+  });
+  if ($('#corNet')) $('#corNet').addEventListener('click', e => completerRefs(e.currentTarget));
+}
+const titreProche = (a, b) => { const A = new Set(sans(a).split(/[^a-z0-9]+/).filter(w => w.length > 3)), B = sans(b).split(/[^a-z0-9]+/).filter(w => w.length > 3); return A.size > 0 && B.filter(w => A.has(w)).length / A.size >= .6; };
+async function completerRefs(btn) {
+  const R = (COR.refs || []).filter(r => !r.ibid && r.titre && (!r.date || (r.type === 'article' ? !r.revue : !r.ed))).slice(0, 25);
+  btn.disabled = true; let n = 0, ok = 0;
+  const j = u => fetch(u, { signal: AbortSignal.timeout(9000) }).then(x => x.ok ? x.json() : {}).catch(() => ({}));
+  for (const r of R) {
+    btn.textContent = `Recherche sur internet… ${++n}/${R.length}`;
+    const nom = (r.aut[0] || {}).nom || '';
+    if (r.type === 'article') {
+      const d = await j(`https://api.openalex.org/works?search=${encodeURIComponent(r.titre)}&per-page=5&select=title,publication_year,primary_location,biblio`);
+      const w = (d.results || []).find(w => titreProche(r.titre, w.title || '')); if (!w) continue;
+      const src = (w.primary_location || {}).source || {};
+      if (!r.date && w.publication_year) { r.date = String(w.publication_year); r.net = true; }
+      if (!r.revue && src.display_name) { r.revue = src.display_name; r.net = true; }
+      if (!r.pages && w.biblio && w.biblio.first_page && w.biblio.last_page) { r.pages = w.biblio.first_page + '–' + w.biblio.last_page; r.net = true; }
+    } else {
+      const d = await j(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent('intitle:' + r.titre + (nom ? ' inauthor:' + nom : ''))}&maxResults=5&printType=books`);
+      const vi = (d.items || []).map(i => i.volumeInfo || {}).find(vi => titreProche(r.titre, (vi.title || '') + ' ' + (vi.subtitle || ''))); if (!vi) continue;
+      if (!r.date && vi.publishedDate) { r.date = vi.publishedDate.slice(0, 4); r.net = true; }
+      if (!r.ed && vi.publisher) { r.ed = vi.publisher; r.net = true; }
+      if (!r.nbp && vi.pageCount) { r.nbp = String(vi.pageCount); r.net = true; }
+      if (!r.aut.length && vi.authors) { r.aut = vi.authors.slice(0, 4).flatMap(personnesAuteur); r.net = true; }
+    }
+    if (r.net) ok++;
+  }
+  afficherCorrection();
+  toast(ok ? `${ok} référence(s) complétée(s)` : 'Rien trouvé sur internet', ok ? 'Vérifiez les lignes marquées ℹ️.' : 'Complétez à la main, avec le livre sous les yeux.', ok ? '' : 'warn');
+}
+
+/* ---------- 3. Révision des cours ---------- */
+const REV = { cours: null, qs: [], mode: 'cartes', file: [], i: 0, score: 0, total: 0, manque: false };
+const peutPreparer = cid => isAdmin() || !!(state.profil && state.profil.type === 'enseignant' && C[cid] && C[cid].prof === state.profil.id);
+function renderRevision(v) {
+  const an = state.profil && state.profil.type === 'etudiant' ? state.profil.annee : 0;
+  const mesC = state.profil && state.profil.type === 'enseignant' ? COURS.filter(c => c.prof === state.profil.id) : [];
+  if (!REV.cours || !C[REV.cours]) REV.cours = (mesC[0] || COURS.find(c => an && c.an === an) || COURS[0] || {}).id;
+  const opt = c => `<option value="${c.id}" ${c.id === REV.cours ? 'selected' : ''}>${esc(c.nom)}</option>`;
+  v.innerHTML = docHead('🧠 Révision des cours', 'Avant les examens : des cartes questions-réponses et des quiz pour chaque cours. Le professeur prépare les questions ; chacun peut aussi fabriquer les siennes à partir de ses notes.') +
+    `<div class="flex flex-wrap gap-2 items-center mb-4"><select id="revCours" class="field" style="max-width:26rem" aria-label="Cours">${mesC.length ? `<optgroup label="Mes cours">${mesC.map(opt).join('')}</optgroup>` : ''}${[1, 2, 3].map(a => `<optgroup label="${anLabel(a)}">${COURS.filter(c => c.an === a && !mesC.includes(c)).map(opt).join('')}</optgroup>`).join('')}</select>
+      <div class="seg" id="revMode">${[['cartes', '🃏 Cartes'], ['quiz', '✅ Quiz'], ['plan', '📋 Plan de révision']].map(([k, l]) => `<button type="button" data-m="${k}" aria-pressed="${REV.mode === k}">${l}</button>`).join('')}</div></div>
+    <div id="revZone"></div><div id="revPrep" class="mt-8"></div>`;
+  $('#revCours').addEventListener('change', e => { REV.cours = e.target.value; chargerRevision(); });
+  $('#revMode').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; REV.mode = b.dataset.m; setPressed($('#revMode'), b); lancerRevision(); });
+  chargerRevision();
+}
+async function chargerRevision() {
+  const cid = REV.cours; $('#revZone').innerHTML = '<p class="text-muted">Chargement…</p>';
+  let prof = [];
+  if (sb && estMembre()) {
+    const { data, error } = await sb.from('revision_questions').select('*').eq('cours_id', cid).order('id');
+    if (!error) prof = data || []; REV.manque = !!(error && /revision_questions|schema cache|relation/i.test(error.message));
+  }
+  if (cid !== REV.cours) return;
+  REV.qs = [...prof.map(x => ({ id: 'p' + x.id, q: x.question, r: x.reponse, db: x.id })), ...lsLire('gstf_rev_' + cid, []).map(x => ({ id: 'm' + sans(x.q).slice(0, 50), q: x.q, r: x.r, perso: true }))];
+  lancerRevision(); renderPrep();
+}
+function lancerRevision() {
+  const z = $('#revZone'), cid = REV.cours; if (!z) return; arreterEcoute();
+  if (REV.mode === 'plan') {
+    const items = (DATA.FICHES[cid] || []).filter(([t]) => t === 'li').map(([, x]) => x), fait = lsLire('gstf_plan_' + cid, {});
+    if (!items.length) { z.innerHTML = '<p class="text-muted">Le syllabus de ce cours n’a pas encore de contenu détaillé : utilisez les cartes ou le quiz.</p>'; return; }
+    const n = items.filter((x, i) => fait[i]).length;
+    z.innerHTML = `<div class="outil-box"><p class="text-sm mb-2">Le contenu du cours, d’après le syllabus. Cochez ce que vous maîtrisez : <b>${n} / ${items.length}</b>${n === items.length ? ' 🎉' : ''}</p>
+      <ul class="rev-plan">${items.map((x, i) => `<li><input type="checkbox" data-plan="${i}" ${fait[i] ? 'checked' : ''} id="pl${i}"><label for="pl${i}">${esc(x)}</label></li>`).join('')}</ul></div>`;
+    z.querySelectorAll('[data-plan]').forEach(c => c.addEventListener('change', () => { fait[c.dataset.plan] = c.checked; lsEcrire('gstf_plan_' + cid, fait); lancerRevision(); }));
+    return;
+  }
+  if (!REV.qs.length) {
+    z.innerHTML = `<div class="outil-box"><p>Pas encore de questions pour ce cours.</p><p class="text-sm text-muted mt-1">${estMembre() ? (REV.manque ? 'La révision sera bientôt disponible (62_couvertures_et_revision.sql).' : 'Le professeur peut les préparer ci-dessous.') : 'Connectez-vous pour voir les questions préparées par le professeur.'} Vous pouvez aussi fabriquer vos propres questions à partir de vos notes, plus bas.</p></div>`;
+    return;
+  }
+  if (REV.mode === 'quiz') {
+    if (REV.qs.length < 4) { z.innerHTML = '<p class="text-muted">Il faut au moins 4 questions pour un quiz : utilisez les cartes.</p>'; return; }
+    REV.file = melanger(REV.qs).slice(0, 10); REV.i = 0; REV.score = 0; questionQuiz(); return;
+  }
+  const etat = lsLire('gstf_rev_etat', {}), now = Date.now();
+  const dues = REV.qs.filter(x => !etat[x.id] || etat[x.id].t <= now);
+  REV.file = melanger(dues.length ? dues : REV.qs); REV.i = 0; REV.score = 0; REV.total = REV.file.length; REV.toutes = !dues.length;
+  carteRevision();
+}
+function carteRevision() {
+  const z = $('#revZone'), c = REV.file[REV.i];
+  if (!c) {
+    z.innerHTML = `<div class="rev-carte text-center"><p class="rev-q">🎉 Bravo !</p><p>${REV.score} carte(s) sue(s) sur ${REV.total}. Revenez demain : le site vous remontrera celles à revoir.</p><div><button type="button" class="btn btn-sm" id="revRe">Recommencer</button></div></div>`;
+    $('#revRe').addEventListener('click', () => { lsEcrire('gstf_rev_etat', {}); lancerRevision(); }); return;
+  }
+  z.innerHTML = `<p class="text-xs text-muted mb-2">Carte ${Math.min(REV.i + 1, REV.file.length)} / ${REV.file.length} · ✓ ${REV.score} sue(s)${REV.toutes ? ' · tout est à jour, révision libre' : ''}${c.perso ? ' · 📝 ma question' : ''}</p>
+    <div class="rev-carte"><p class="rev-q">${esc(c.q)}</p><p class="text-sm">${boutonEcouter(c.q)}</p>
+      <div id="revR" hidden><div class="rev-r">${esc(c.r)}</div><div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn btn-sm" id="revOui">✓ Je savais</button><button type="button" class="btn btn-ghost btn-sm" id="revNon">↻ À revoir</button></div></div>
+      <div id="revVoirB"><button type="button" class="btn btn-sm" id="revVoir">Voir la réponse</button></div></div>`;
+  $('#revVoir').addEventListener('click', () => { $('#revR').hidden = false; $('#revVoirB').hidden = true; });
+  const noter = su => {
+    const etat = lsLire('gstf_rev_etat', {}), b = su ? Math.min(5, ((etat[c.id] || {}).b || 0) + 1) : 0;
+    etat[c.id] = { b, t: Date.now() + (su ? [1, 2, 4, 8, 16, 30][b] * 864e5 : 0) }; lsEcrire('gstf_rev_etat', etat);
+    if (su) REV.score++; else if (!c.revu) { c.revu = true; REV.file.push(c); }
+    REV.i++; carteRevision();
+  };
+  $('#revOui').addEventListener('click', () => noter(true)); $('#revNon').addEventListener('click', () => noter(false));
+}
+function questionQuiz() {
+  const z = $('#revZone'), c = REV.file[REV.i];
+  if (!c) { z.innerHTML = `<div class="rev-carte text-center"><p class="rev-q">${REV.score >= REV.file.length * .8 ? '🎉' : REV.score >= REV.file.length / 2 ? '👍' : '📖'} ${REV.score} / ${REV.file.length}</p><p>${REV.score >= REV.file.length * .8 ? 'Excellent, vous êtes prêt !' : REV.score >= REV.file.length / 2 ? 'Bien : revoyez les questions manquées avec les cartes.' : 'Continuez à réviser avec les cartes, puis refaites le quiz.'}</p><div><button type="button" class="btn btn-sm" id="revRe">Refaire un quiz</button></div></div>`; $('#revRe').addEventListener('click', lancerRevision); return; }
+  const court = x => x.length > 170 ? x.slice(0, 167).replace(/\s\S*$/, '') + '…' : x;
+  const estAn = x => /^\s*\d{3,4}\s*$/.test(x), autres = melanger(REV.qs.filter(x => x !== c && sans(x.r) !== sans(c.r)));
+  const proches = autres.filter(x => estAn(x.r) === estAn(c.r));
+  const choix = melanger([c, ...[...proches, ...autres.filter(x => !proches.includes(x))].slice(0, 3)]);
+  z.innerHTML = `<p class="text-xs text-muted mb-2">Question ${REV.i + 1} / ${REV.file.length} · score ${REV.score}</p><div class="rev-carte"><p class="rev-q">${esc(c.q)}</p>
+    <div>${choix.map((x, i) => `<button type="button" class="rev-opt" data-o="${i}">${esc(court(x.r))}</button>`).join('')}</div><div id="revSuite" hidden><button type="button" class="btn btn-sm mt-2" id="revNext">Question suivante →</button></div></div>`;
+  z.querySelectorAll('[data-o]').forEach(b => b.addEventListener('click', () => {
+    const bon = choix[+b.dataset.o] === c; if (bon) REV.score++;
+    z.querySelectorAll('[data-o]').forEach(o => { o.disabled = true; if (choix[+o.dataset.o] === c) o.classList.add('bon'); }); if (!bon) b.classList.add('faux');
+    $('#revSuite').hidden = false; $('#revNext').focus();
+  }));
+  $('#revNext').addEventListener('click', () => { REV.i++; questionQuiz(); });
+}
+/* Fabrication automatique de questions à partir d’un texte de cours */
+function genererQuestions(texte) {
+  const brut = String(texte).replace(/\r/g, '').split(/\n+/).map(x => x.trim()).filter(Boolean), out = [], vus = new Set();
+  const add = (q, r, k) => { q = q.replace(/\s+/g, ' ').trim(); r = String(r).replace(/\s+/g, ' ').trim(); const c = sans(q).slice(0, 70); if (!r || r.length < 2 || vus.has(c) || q.length > 600 || r.length > 2000) return; vus.add(c); out.push({ q, r, k }); };
+  const phrases = t => (t.match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || []).map(x => x.trim()).filter(x => x.length > 25);
+  const estTitre = l => /^#/.test(l) || (l.length < 90 && !/[.;,!?]$/.test(l) && /^[\p{Lu}0-9IVX]/u.test(l) && l.split(/\s+/).length <= 12);
+  const corps = [];
+  brut.forEach((l, i) => {
+    if (estTitre(l) && brut[i + 1] && brut[i + 1].length > 60 && !estTitre(brut[i + 1])) {
+      const t = l.replace(/^#+\s*/, '').replace(/^([IVX]+|\d+(\.\d+)*|[A-Za-z])[.)–-]\s*/, '');
+      if (t.length > 3) add(`Expliquez : ${t}.`, phrases(brut[i + 1]).slice(0, 2).join(' ') || brut[i + 1].slice(0, 400), 'titre');
+    } else if (!estTitre(l)) corps.push(l);
+  });
+  const nombres = { deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9, dix: 10 };
+  for (const p of phrases(corps.join(' '))) {
+    let m = p.match(/^((?:(?:Le|La|Les|L’|L'|Un|Une)\s*)?[^,;:]{2,70}?)\s+(est|sont|désigne|désignent|signifie|signifient|consiste à|consistent à|se définit comme|se définissent comme)\s+(.{12,320})$/u);
+    if (m && m[1].split(/\s+/).length <= 8 && !/^(il|elle|ils|elles|ce|cela|c’|ceci|on|nous|vous|tout|toute|cette|cet|ces|celui|celle|ceux|qui|dont|où|mais|donc|or|car|ainsi|en effet|aussi)\b/i.test(m[1])) {
+      const suj = m[1].trim(), art = /^(Le|La|Les|L’|L'|Un|Une)\b/.test(suj), min = suj.charAt(0).toLowerCase() + suj.slice(1), plur = /(sont|ent)$/.test(m[2].split(' ')[0]);
+      let q = /^consist/.test(m[2]) ? `En quoi consiste${plur ? 'nt' : ''} ${art ? min : '« ' + suj + ' »'} ?`
+        : art ? (plur ? `Que sont ${min} ?` : `Qu’est-ce que ${min} ?`) : `Présentez « ${suj} ».`;
+      q = q.replace(/que (un|une)\b/, 'qu’$1');
+      add(q, p, 'def'); continue;
+    }
+    m = p.match(/\b(deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\s+([^:.;]{3,70}?)\s*:\s*(.{8,400})$/i);
+    if (m) { add(`Citez les ${m[1].toLowerCase()} ${m[2].trim()}.`, m[3].replace(/[.;]$/, ''), 'liste'); continue; }
+    m = p.match(/^(.{0,200}?)\b(1\d{3}|20[0-4]\d|[2-9]\d{2})\b(.{0,200})$/);
+    if (m && p.length < 260 && /\b(en|vers|de|depuis|jusqu’en|année|siècle|né|mort|meurt|concile|fonde|publi|écrit|promulg)/i.test(p) && !/\bp\.\s*$/.test(m[1])) { add(`Complétez : ${m[1]}……${m[3]}`, m[2], 'date'); continue; }
+    m = p.match(/^(.{12,}?)\b((?:saint|sainte|concile|pape|Concile|Saint|Sainte)\s+\p{Lu}[\p{L}-]+(?:\s+(?:de|d’|du|des)\s*\p{Lu}[\p{L}-]+)?)(.*)$/u);
+    if (m && p.length < 260) add(`Complétez : ${m[1]}……${m[3]}`, m[2], 'nom');
+  }
+  const rang = { def: 0, liste: 1, titre: 2, date: 3, nom: 4 };
+  return out.sort((a, b) => rang[a.k] - rang[b.k]).slice(0, 40);
+}
+function zoneGenerateur(cont, prefixe, enregistrer, libelle) {
+  cont.innerHTML = `<textarea class="field text-sm" rows="7" id="${prefixe}Txt" placeholder="Collez ici le texte du cours (ou vos notes), ou importez un fichier Word, PDF ou une photo."></textarea>
+    <div class="flex flex-wrap gap-2 mt-2"><button type="button" class="btn btn-sm" id="${prefixe}Gen">✨ Fabriquer les questions</button><button type="button" class="btn btn-ghost btn-sm" id="${prefixe}Imp">📄 Importer</button><input type="file" id="${prefixe}ImpF" accept=".docx,.pdf,.txt,image/*" hidden></div>
+    <p class="text-xs text-muted mt-1" id="${prefixe}Etat"></p><div id="${prefixe}Res"></div>`;
+  const etat = m => { $('#' + prefixe + 'Etat').textContent = m; };
+  $('#' + prefixe + 'Imp').addEventListener('click', () => $('#' + prefixe + 'ImpF').click());
+  $('#' + prefixe + 'ImpF').addEventListener('change', async e => { const f = e.target.files[0]; if (!f) return; try { $('#' + prefixe + 'Txt').value = (await lignesDepuisFichier(f, etat)).join('\n'); etat('Texte lu : cliquez « Fabriquer les questions ».'); } catch (er) { etat(er.message || 'Lecture impossible.'); } e.target.value = ''; });
+  $('#' + prefixe + 'Gen').addEventListener('click', () => {
+    const L = genererQuestions($('#' + prefixe + 'Txt').value), res = $('#' + prefixe + 'Res');
+    if (!L.length) { res.innerHTML = '<p class="text-sm text-muted mt-2">Aucune question trouvée : le texte doit contenir des phrases complètes (définitions « X est… », dates, titres suivis d’un paragraphe).</p>'; return; }
+    res.innerHTML = `<p class="text-sm mt-3 mb-1"><b>${L.length} question(s) proposée(s).</b> Corrigez-les si besoin, décochez celles qui ne conviennent pas.</p>
+      ${L.map((x, i) => `<div class="ref-l"><input type="checkbox" class="ail-it-sel" data-g="${i}" checked><div class="grow grid gap-1"><input class="field text-sm" data-gq="${i}" value="${esc(x.q)}"><textarea class="field text-sm" rows="2" data-gr="${i}">${esc(x.r)}</textarea></div></div>`).join('')}
+      <button type="button" class="btn btn-sm mt-2" id="${prefixe}Save">${libelle}</button>`;
+    $('#' + prefixe + 'Save').addEventListener('click', () => {
+      const ch = L.map((x, i) => ({ q: res.querySelector(`[data-gq="${i}"]`).value.trim(), r: res.querySelector(`[data-gr="${i}"]`).value.trim(), on: res.querySelector(`[data-g="${i}"]`).checked })).filter(x => x.on && x.q && x.r);
+      if (!ch.length) { toast('Rien de coché', '', 'warn'); return; } enregistrer(ch);
+    });
+  });
+}
+function renderPrep() {
+  const box = $('#revPrep'), cid = REV.cours; if (!box) return;
+  const prof = REV.qs.filter(x => x.db), perso = lsLire('gstf_rev_' + cid, []), peut = estMembre() && peutPreparer(cid) && !REV.manque;
+  box.innerHTML = `${peut ? `<details class="outil-box mb-4" ${prof.length ? '' : 'open'}><summary class="font-semibold"><span class="chev">▸</span> ✏️ Préparer les questions de ce cours (professeur) · ${prof.length}</summary>
+      <p class="text-sm text-muted mt-2 mb-2">Les étudiants connectés les verront dans « Cartes » et « Quiz ». Écrivez une question par ligne : <span class="font-mono text-xs">Question ? | Réponse</span></p>
+      <textarea class="field text-sm" rows="4" id="rpMain" placeholder="Qu’est-ce que la Tradition ? | La transmission vivante de la Parole de Dieu…"></textarea>
+      <button type="button" class="btn btn-sm mt-2" id="rpMainSave">Enregistrer</button>
+      <p class="font-semibold mt-5 mb-1">✨ Ou : fabriquer les questions à partir du cours</p><div id="rpGen"></div>
+      ${prof.length ? `<p class="font-semibold mt-5 mb-1">Questions enregistrées</p>${prof.map(x => `<div class="ref-l"><div class="grow"><b class="text-sm">${esc(x.q)}</b><div class="text-sm text-muted">${esc(x.r)}</div></div><button type="button" class="linkbtn text-xs text-bad" data-rpdel="${x.db}">Retirer</button></div>`).join('')}` : ''}</details>` : ''}
+    <details class="outil-box"><summary class="font-semibold"><span class="chev">▸</span> 📝 Mes questions, à partir de mes notes · ${perso.length}</summary>
+      <p class="text-sm text-muted mt-2 mb-2">Collez vos notes de cours : le site fabrique des questions, que vous gardez sur ce téléphone pour réviser avec les cartes et le quiz.</p><div id="rpPerso"></div>
+      ${perso.length ? `<button type="button" class="linkbtn text-xs text-bad mt-3" id="rpPersoDel">Effacer mes ${perso.length} question(s) de ce cours</button>` : ''}</details>`;
+  const enregistrerDb = async L => {
+    const { error } = await sb.from('revision_questions').insert(L.map(x => ({ cours_id: cid, question: x.q.slice(0, 600), reponse: x.r.slice(0, 2000) })));
+    if (error) { toast('Non enregistré', /revision_questions|schema cache/i.test(error.message) ? 'Exécutez d’abord 62_couvertures_et_revision.sql dans Supabase.' : errText(error), 'bad'); return; }
+    toast(`${L.length} question(s) enregistrée(s)`, C[cid].nom); chargerRevision();
+  };
+  if (peut) {
+    $('#rpMainSave').addEventListener('click', () => { const L = $('#rpMain').value.split('\n').map(l => l.split('|')).filter(p => p.length >= 2 && p[0].trim() && p.slice(1).join('|').trim()).map(p => ({ q: p[0].trim(), r: p.slice(1).join('|').trim() })); if (!L.length) { toast('Format : Question ? | Réponse', '', 'warn'); return; } enregistrerDb(L); });
+    zoneGenerateur($('#rpGen'), 'rpg', enregistrerDb, 'Enregistrer les questions cochées pour les étudiants');
+    box.querySelectorAll('[data-rpdel]').forEach(b => b.addEventListener('click', async () => { if (!confirm('Retirer cette question ?')) return; const { error } = await sb.from('revision_questions').delete().eq('id', Number(b.dataset.rpdel)); if (error) toast('Impossible', errText(error), 'bad'); else chargerRevision(); }));
+  }
+  zoneGenerateur($('#rpPerso'), 'rpm', L => { const anc = lsLire('gstf_rev_' + cid, []); lsEcrire('gstf_rev_' + cid, [...anc, ...L.map(x => ({ q: x.q, r: x.r }))].slice(-300)); toast(`${L.length} question(s) gardée(s) sur ce téléphone`, 'Révisez-les avec « Cartes » ou « Quiz ».'); chargerRevision(); }, 'Garder ces questions sur ce téléphone');
+  if ($('#rpPersoDel')) $('#rpPersoDel').addEventListener('click', () => { if (confirm('Effacer vos questions de ce cours ?')) { lsEcrire('gstf_rev_' + cid, []); chargerRevision(); } });
+}
+
+
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
 const BIBNUM_DEFAUT = [
   ['Magistère', 'Le Saint-Siège : documents des papes', 'https://www.vatican.va/content/vatican/fr.html', 'Encycliques, exhortations, lettres et discours, en français.'],
@@ -6544,10 +7058,14 @@ async function renderBiblioNumerique() {
   if (!box) { box = document.createElement('section'); box.id = 'bqNum'; box.className = 'mb-10'; $('#bqRenouv').insertAdjacentElement('afterend', box); }
   if (!BIBNUM) { const r = await sb.from('reglages').select('valeur').eq('cle', 'biblio_numerique').maybeSingle(); BIBNUM = (r.data && Array.isArray(r.data.valeur) && r.data.valeur.length) ? r.data.valeur : BIBNUM_DEFAUT; }
   const groupes = BIBNUM.reduce((g, x) => { (g[x[0]] ||= []).push(x); return g; }, {});
-  box.innerHTML = `<div class="flex flex-wrap items-baseline justify-between gap-2 mb-1"><h2 class="font-display text-2xl font-semibold">🌐 Bibliothèque numérique</h2>${isAdmin() ? '<button type="button" class="linkbtn text-sm" id="bnModif">Modifier la liste</button>' : ''}</div>
+  box.innerHTML = `<div class="outil-box mb-8"><p class="font-semibold mb-1">🎓 Pour vos travaux et vos examens</p><div class="flex flex-wrap gap-2">
+      <button type="button" class="btn btn-ghost btn-sm" data-outil="memoire">🎓 Assistant de mémoire</button><button type="button" class="btn btn-ghost btn-sm" data-outil="correcteur">✍️ Correcteur de bibliographie</button><button type="button" class="btn btn-ghost btn-sm" data-outil="revision">🧠 Révision des cours</button></div>
+      <p class="text-xs text-muted mt-1">Une bibliographie de départ sur votre sujet, vos références remises aux normes du GSTF, des cartes et des quiz pour réviser.</p></div>
+    <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1"><h2 class="font-display text-2xl font-semibold">🌐 Bibliothèque numérique</h2>${isAdmin() ? '<button type="button" class="linkbtn text-sm" id="bnModif">Modifier la liste</button>' : ''}</div>
     <p class="text-sm text-muted mb-4">Des ressources gratuites et sûres, à lire même quand la bibliothèque est fermée.</p>
     ${Object.entries(groupes).map(([g, l]) => `<h3 class="bn-groupe">${esc(g)}</h3><div class="bn-grille">${l.map(([, t, u, d]) => `<a class="bn-lien" href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(t)}</b>${d ? `<span>${esc(d)}</span>` : ''}<small>${esc(u.replace(/^https?:\/\/(www\.)?/, '').split('/')[0])} ↗</small></a>`).join('')}</div>`).join('')}
     <div id="bnEdit"></div>`;
+  box.querySelectorAll('[data-outil]').forEach(b => b.addEventListener('click', () => allerA('documents', '#docView', () => { currentDoc = b.dataset.outil; })));
   if ($('#bnModif')) $('#bnModif').addEventListener('click', () => {
     $('#bnEdit').innerHTML = `<div class="bg-surface border border-line rounded-lg p-4 mt-4"><p class="text-sm mb-2">Une ressource par ligne : <span class="font-mono text-xs">Rubrique | Titre | adresse https://… | description</span></p>
       <textarea class="field font-mono text-xs" rows="12" id="bnTxt">${esc(BIBNUM.map(x => x.join(' | ')).join('\n'))}</textarea>
@@ -6666,6 +7184,7 @@ function gAjouter() {
         <label class="text-sm grow"><span class="block font-semibold mb-1">📖 Résumé <span class="font-normal text-muted" id="bqResSrc">${l.resume_source ? '· ' + esc(l.resume_source) : '(cherché automatiquement sur internet, ou écrit à la main)'}</span></span>
         <textarea class="field" id="bqResume" rows="4" maxlength="4000" placeholder="Laissez vide : le site cherchera le résumé sur internet dans l’heure.">${esc(l.resume || '')}</textarea></label>
         ${l.id ? '<button type="button" class="btn btn-ghost btn-sm self-end" id="bqResChercher">🔎 Chercher sur internet</button>' : ''}</div>
+      ${l.id ? '' : '<label class="md:col-span-4 text-sm flex items-center gap-2"><input type="checkbox" id="bqPush" checked> 📱 Annoncer ce nouveau livre aux connectés (notification avec la photo de la couverture)</label>'}
       <div class="md:col-span-4 flex flex-wrap gap-3 items-center"><button class="btn">${l.id ? 'Enregistrer les modifications' : 'Ajouter le livre'}</button>
         ${l.id ? '<button type="button" class="btn btn-ghost btn-sm" id="bqAnnuler">Annuler</button><button type="button" class="linkbtn text-xs text-bad" id="bqSuppr">Retirer du catalogue</button>' : ''}</div>
     </form>
@@ -6689,11 +7208,13 @@ function gAjouter() {
     if (txt !== (RES.resume || '')) Object.assign(res, txt ? { resume: txt, resume_source: 'Bibliothèque', resume_lien: null, resume_cherche_le: new Date().toISOString() } : { resume: null, resume_source: null, resume_lien: null, resume_cherche_le: new Date().toISOString() });
     else if (RES.trouve) Object.assign(res, { resume: RES.resume, resume_source: RES.resume_source, resume_lien: RES.resume_lien, resume_cherche_le: new Date().toISOString() });
     if (RES.couverture !== (l.couverture || null)) res.couverture = RES.couverture;
-    const envoyer = r => l.id ? sb.from('livres').update(r).eq('id', l.id) : sb.from('livres').insert(r);
-    let { error } = await envoyer({ ...row, ...res });
-    if (error && Object.keys(res).length && /resume|couverture|column|schema cache/i.test(error.message)) { ({ error } = await envoyer(row)); if (!error) toast('Résumé non enregistré', 'Exécutez d’abord 58_resumes_livres.sql dans Supabase.', 'warn'); }
+    const envoyer = r => l.id ? sb.from('livres').update(r).eq('id', l.id) : sb.from('livres').insert(r).select('id').single();
+    const annoncer = !l.id && $('#bqPush') && $('#bqPush').checked;
+    let { data: nouv, error } = await envoyer({ ...row, ...res });
+    if (error && Object.keys(res).length && /resume|couverture|column|schema cache/i.test(error.message)) { ({ data: nouv, error } = await envoyer(row)); if (!error) toast('Résumé non enregistré', 'Exécutez d’abord 58_resumes_livres.sql dans Supabase.', 'warn'); }
     if (error) { toast('Non enregistré', /duplicate|livres_cote/i.test(error.message) ? 'Cette cote est déjà utilisée par un autre livre.' : errText(error), 'bad'); return; }
     toast(l.id ? 'Livre modifié' : 'Livre ajouté', row.titre); BQ.edit = null; renderBibliotheque();
+    if (annoncer && nouv && nouv.id) envoyerPushPublication('livre', nouv.id);
   });
   if ($('#bqResChercher')) $('#bqResChercher').addEventListener('click', async () => {
     const b = $('#bqResChercher'); b.disabled = true; b.textContent = 'Recherche…';
@@ -6756,21 +7277,27 @@ function gAjouter() {
     if (!rows.length) { etat('Aucune ligne avec un titre : vérifiez que la première ligne contient les noms des colonnes (Titre, Auteur…).'); return; }
     if (!confirm(`Importer ${rows.length} livre(s) ?`)) return;
     const avecCote = rows.filter(r => r.cote), sansCote = rows.filter(r => !r.cote);
-    let ok = 0;
+    let ok = 0; const ids = [];
     for (let i = 0; i < avecCote.length; i += 500) {
       etat(`Import… ${ok}/${rows.length}`);
-      const { error } = await sb.from('livres').upsert(avecCote.slice(i, i + 500), { onConflict: 'cote' });
-      if (error) { etat(`Arrêté après ${ok} livre(s) : ${errText(error)}`); return; } ok += Math.min(500, avecCote.length - i);
+      const { data: dd, error } = await sb.from('livres').upsert(avecCote.slice(i, i + 500), { onConflict: 'cote' }).select('id');
+      if (error) { etat(`Arrêté après ${ok} livre(s) : ${errText(error)}`); return; } ok += Math.min(500, avecCote.length - i); (dd || []).forEach(x => ids.push(x.id));
     }
     for (let i = 0; i < sansCote.length; i += 500) {
       etat(`Import… ${ok}/${rows.length}`);
-      const { error } = await sb.from('livres').insert(sansCote.slice(i, i + 500));
-      if (error) { etat(`Arrêté après ${ok} livre(s) : ${errText(error)}`); return; } ok += Math.min(500, sansCote.length - i);
+      const { data: dd, error } = await sb.from('livres').insert(sansCote.slice(i, i + 500)).select('id');
+      if (error) { etat(`Arrêté après ${ok} livre(s) : ${errText(error)}`); return; } ok += Math.min(500, sansCote.length - i); (dd || []).forEach(x => ids.push(x.id));
     }
     etat(`${ok} livre(s) importé(s).`); toast('Import terminé', `${ok} livre(s)`); BQ.q = ''; $('#bqQ').value = ''; chercherLivres();
+    proposerAnnonceLivres(ids);
   });
 }
 
+const IMPORT_IDS = [];
+function proposerAnnonceLivres(ids) {
+  if (!ids || !ids.length || ids.length > 300) return;
+  if (confirm(`📱 Annoncer ${ids.length > 1 ? 'ces ' + ids.length + ' nouveaux livres' : 'ce nouveau livre'} aux connectés par une notification (avec la photo de la couverture) ?`)) envoyerPushPublication(ids.length > 1 ? 'livres' : 'livre', ids[0], ids);
+}
 async function gReglages() {
   const box = $('#bqGBox');
   const { data: bibs } = await sb.from('bibliothecaires').select('*').order('nom');
@@ -7559,13 +8086,25 @@ const AIDE = [
   { q: 'Le point rouge sur un onglet', r: ['tous'], k: 'point rouge pastille nouveau nouveaute onglet',
     e: ['Un point rouge sur « Accueil », « Agenda » ou « Articles » signale une nouveauté depuis votre dernière visite.', 'Il disparaît dès que vous avez ouvert la rubrique.'] },
   { q: 'Recevoir les notifications sur mon téléphone', r: ['tous'], k: 'notification notifier alerte telephone message push recevoir',
-    e: ['Installez d’abord l’application (voir « Installer l’application GSTF »).', 'Menu « Plus » (ou votre portail) > « 🔔 Activer les notifications », puis acceptez.', 'Vous recevez les annonces, les rappels de l’agenda et de la bibliothèque.'] },
+    e: ['Installez d’abord l’application (voir « Installer l’application GSTF »).', 'Menu « Plus » (ou votre portail) > « 🔔 Activer les notifications », puis acceptez.', 'Vous recevez les annonces, les rappels de l’agenda et de la bibliothèque, et chaque nouvel article ou nouveau livre avec la photo de sa couverture.'] },
   { q: 'S’abonner à l’agenda dans mon téléphone', r: ['tous'], k: 'abonner abonnement agenda calendrier google iphone outlook synchroniser',
     e: ['Onglet « Agenda », tout en bas : « 📲 Tout l’agenda dans mon téléphone ».', 'Android : « 📅 Google Agenda » ; iPhone : « 🍎 iPhone, Mac, Outlook ».', 'Ensuite les événements publics arrivent tout seuls (la mise à jour peut prendre quelques heures).'], go: { tab: 'agenda' } },
   { q: 'Voir le résumé d’un livre', r: ['tous'], k: 'resume livre contenu couverture savoir quoi parle',
     e: ['Bibliothèque : cherchez le livre.', 'Sous son titre : sa couverture et « 📖 Résumé » (cherché automatiquement sur internet, avec sa source).'], go: { tab: 'bibliotheque' } },
   { q: 'Citer un livre dans un devoir ou un mémoire', r: ['tous'], k: 'citer citation reference note bas page bibliographie normes methodologie memoire',
     e: ['Bibliothèque : cherchez le livre, puis « ❝ Citer ce livre ».', 'Trois références prêtes : note de bas de page, notes suivantes (op. cit.) et bibliographie, aux normes du cours de Méthodologie (prénom abrégé, nom en petites capitales, titre en italique, date, édition, page).', '« 📋 Copier » puis collez dans Word : la mise en forme est gardée.'], go: { tab: 'bibliotheque' } },
+  { q: 'Préparer la bibliographie de mon mémoire (assistant de mémoire)', r: ['tous'], k: 'memoire assistant bibliographie sujet travail recherche these livres articles preparer',
+    e: ['Documents › « 🎓 Assistant de mémoire » (ou Bibliothèque › « Pour vos travaux »).', 'Tapez votre sujet en quelques mots, puis « Préparer ma bibliographie ».', 'Le site montre les livres de notre bibliothèque (avec la cote), puis les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.', 'Cochez ce que vous gardez, puis « 📋 Copier la bibliographie cochée » et collez dans Word. Vérifiez chaque référence sur le livre lui-même.'], go: { tab: 'documents' } },
+  { q: 'Corriger ma bibliographie ou mes notes de bas de page', r: ['tous'], k: 'correcteur corriger bibliographie notes bas page normes methodologie ibid op cit reference citation format',
+    e: ['Documents › « ✍️ Correcteur de bibliographie ».', 'Choisissez « Bibliographie » ou « Notes de bas de page », puis collez vos références (une par ligne) ou importez votre travail (Word, PDF, photo).', '« ✍️ Corriger » : chaque référence est remise aux normes (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) ; ⚠️ signale ce qui manque. En notes, le site met Ibid. et op. cit. tout seul.', '« 🔎 Compléter par internet » trouve la date, l’éditeur ou la revue qui manquent ; « 📋 Copier pour Word » garde la mise en forme.'], go: { tab: 'documents' } },
+  { q: 'Réviser un cours avant les examens (cartes et quiz)', r: ['tous'], k: 'reviser revision examen cartes quiz questions cours preparer apprendre memoriser flashcard',
+    e: ['Documents › « 🧠 Révision des cours », puis choisissez le cours.', '🃏 Cartes : lisez la question, « Voir la réponse », puis « Je savais » ou « À revoir » ; le site vous remontre les cartes au bon moment.', '✅ Quiz : 10 questions à choix multiple, avec votre score. 📋 Plan de révision : le contenu du syllabus à cocher.', 'Le professeur prépare les questions (ou les fait fabriquer à partir de son cours) ; chacun peut aussi fabriquer les siennes à partir de ses notes.'], go: { tab: 'documents' } },
+  { q: 'Écouter un article ou un texte (lecture à voix haute)', r: ['tous'], k: 'ecouter voix haute lire audio son entendre lecture article resume',
+    e: ['Sous un article, une actualité ou un résumé de livre : « 🔊 Écouter ».', 'Le téléphone lit le texte à voix haute ; « ⏹ Arrêter la lecture » pour arrêter.'], go: { tab: 'articles' } },
+  { q: 'Partager un événement, un article ou un livre sur WhatsApp', r: ['tous'], k: 'partager whatsapp facebook envoyer message lien evenement article livre',
+    e: ['Sur l’événement (Agenda), l’article ou le livre : « Partager ».', 'WhatsApp s’ouvre avec un message tout prêt : titre, date, lieu, quelques lignes et le lien direct vers le site.', '« ⤴ » pour une autre application (Messenger, SMS…).'], go: { tab: 'agenda' } },
+  { q: 'Annoncer un nouvel article ou un nouveau livre aux connectés', r: ['admin'], k: 'annoncer notification nouveau livre article couverture prevenir telephone push message',
+    e: ['Article (Admin › Articles) : laissez cochée « 📱 Prévenir les connectés ». Ajoutez si vous voulez la photo de la couverture ; sinon le site prend la 1re page du PDF ou fabrique une couverture avec le titre.', 'Livre (Bibliothèque › Gestion) : laissez cochée « 📱 Annoncer ce nouveau livre » ; la couverture est cherchée sur internet. Après un import de plusieurs livres, le site propose un seul message groupé.', 'Les téléphones abonnés aux notifications reçoivent un message du GSTF avec l’image ; en le touchant, on arrive sur l’article ou le livre.'], go: { tab: 'admin' } },
   { q: 'Trouver ailleurs un livre ou un article que la bibliothèque n’a pas', r: ['tous'], k: 'ailleurs internet trouver livre article absent pas manque autre site google scholar persee cairn gallica open library',
     e: ['Bibliothèque (pour un livre) ou Articles (pour un article) : tapez le titre, l’auteur ou le sujet.', 'Si nous ne l’avons pas, le site cherche tout seul sur internet et montre les meilleurs résultats, en commençant par ceux qu’on peut lire gratuitement (« Lecture libre », « Accès libre »).', 'Si nous avons des résultats mais pas le bon : « 🌍 Chercher aussi ailleurs sur internet ».', 'En dessous, des boutons ouvrent la même recherche sur Google Livres, Gallica, Persée, Cairn, Google Scholar…'], go: { tab: 'bibliotheque' } },
   { q: 'La bibliothèque numérique (ressources gratuites)', r: ['tous'], k: 'bibliotheque numerique ressources gratuites vatican catechisme bible peres lire en ligne',
@@ -8055,7 +8594,7 @@ function agCarte(e) {
   return `<div class="flex flex-wrap items-start justify-between gap-3 p-3 rounded-lg border border-line bg-surface" style="border-left:3px solid ${AG_COUL[e.categorie]}">
       <div class="min-w-0"><span class="text-xs font-semibold uppercase tracking-wider" style="color:${AG_COUL[e.categorie]}">${AG_CAT[e.categorie]}</span>${e.public ? '' : ` <span class="pill bg-sunk">${esc(e.pour && e.pour !== 'tous' ? POUR_LBL[e.pour] : 'membres')}</span>`}${e.auto ? ` <span class="text-xs text-muted">· ${esc(e.auto)}</span>` : ''}
         <div class="font-semibold">${esc(e.titre)}</div><div class="text-sm text-muted">${agQuand(e)}${e.lieu ? ' · ' + esc(e.lieu) : ''}</div>${e.description ? `<p class="text-sm mt-1 whitespace-pre-line">${esc(e.description)}</p>` : ''}</div>
-      <div class="flex flex-col items-end gap-1"><span class="ag-cal"><a class="btn btn-ghost btn-sm" href="${esc(lienGoogleAgenda(e))}" target="_blank" rel="noopener" title="Ouvre Google Agenda (téléphones Android)">📅 Google Agenda</a><button type="button" class="btn btn-ghost btn-sm" data-ag-ics="${esc(String(e.id))}" title="iPhone, Outlook, autres calendriers">📲 Autre calendrier</button></span>${isAdmin() ? (e.auto ? `<button type="button" class="linkbtn text-xs text-muted" data-ag-masq="${esc(String(e.id))}">Masquer</button>` : `<button type="button" class="linkbtn text-xs text-bad" data-ag-suppr="${e.id}">Supprimer</button>`) : ''}</div></div>`;
+      <div class="flex flex-col items-end gap-1">${e.public || e.auto ? boutonsPartage(msgPartage('📅', e.titre, ['🗓 ' + texteSimple(agQuand(e)), e.lieu ? '📍 ' + e.lieu : '', '⛪ Grand Séminaire de Faliarivo'], e.description), 'evt=' + e.debut, true) : ''}<span class="ag-cal"><a class="btn btn-ghost btn-sm" href="${esc(lienGoogleAgenda(e))}" target="_blank" rel="noopener" title="Ouvre Google Agenda (téléphones Android)">📅 Google Agenda</a><button type="button" class="btn btn-ghost btn-sm" data-ag-ics="${esc(String(e.id))}" title="iPhone, Outlook, autres calendriers">📲 Autre calendrier</button></span>${isAdmin() ? (e.auto ? `<button type="button" class="linkbtn text-xs text-muted" data-ag-masq="${esc(String(e.id))}">Masquer</button>` : `<button type="button" class="linkbtn text-xs text-bad" data-ag-suppr="${e.id}">Supprimer</button>`) : ''}</div></div>`;
 }
 function agGrille(liste, m) {   // vue « mois » : lundi → dimanche
   const premier = parseIso(m + '-01'), dec = (premier.getDay() + 6) % 7, nbJ = new Date(premier.getFullYear(), premier.getMonth() + 1, 0).getDate();
@@ -8242,10 +8781,11 @@ const IC_WA = '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColo
 const IC_FB = '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></svg>';
 const IC_YT = '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15V9l5.8 3z"/></svg>';
 const lienPartage = (src, ancre) => `${location.origin}/?src=${src}${ancre ? '#' + ancre : ''}`;
-function boutonsPartage(texte, ancre) {
-  const wa = 'https://wa.me/?text=' + encodeURIComponent(texte + '\n' + lienPartage('whatsapp', ancre));
+function boutonsPartage(texte, ancre, compact) {
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(texte + (texte.includes('\n') ? '\n\n👉 ' : '\n') + lienPartage('whatsapp', ancre) + (texte.includes('\n') ? '\n— Grand Séminaire de Faliarivo' : ''));
+  if (compact) return `<span class="partage"><a class="p-wa" href="${esc(wa)}" target="_blank" rel="noopener" title="Partager sur WhatsApp">${IC_WA}Partager</a>${navigator.share ? `<a class="p-autre" href="#" role="button" data-partage="${esc(JSON.stringify({ t: texte.replace(/\*/g, ''), u: lienPartage('partage', ancre) }))}" title="Autre application">⤴</a>` : ''}</span>`;
   const fb = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(lienPartage('facebook', ancre));
-  const autre = navigator.share ? `<a class="p-autre" href="#" role="button" data-partage="${esc(JSON.stringify({ t: texte, u: lienPartage('partage', ancre) }))}" title="Partager avec une autre application">⤴ Autre…</a>` : '';
+  const autre = navigator.share ? `<a class="p-autre" href="#" role="button" data-partage="${esc(JSON.stringify({ t: texte.replace(/\*/g, ''), u: lienPartage('partage', ancre) }))}" title="Partager avec une autre application">⤴ Autre…</a>` : '';
   return `<span class="partage"><a class="p-wa" href="${esc(wa)}" target="_blank" rel="noopener" title="Partager sur WhatsApp">${IC_WA}WhatsApp</a><a class="p-fb" href="${esc(fb)}" target="_blank" rel="noopener" title="Partager sur Facebook">${IC_FB}Facebook</a>${autre}</span>`;
 }
 function renderAccueilPlus() {
@@ -8970,6 +9510,58 @@ function choisirTaille(k) {
 choisirTaille(tailleK());
 $('#tailleBtn').addEventListener('click', () => { const i = TAILLES.indexOf(tailleK()); const k = TAILLES[(i + 1) % TAILLES.length]; choisirTaille(k); toast(k === 1 ? 'Texte normal' : k < 1.2 ? 'Texte agrandi' : 'Texte très grand', 'Touchez « Aa » pour changer encore.'); });
 
+/* ---------- Écouter : lecture à voix haute par la voix du téléphone ---------- */
+const ECOUTE = { txt: [], btn: null };
+function boutonEcouter(texte, cls) {
+  if (!('speechSynthesis' in window) || !String(texte || '').trim()) return '';
+  ECOUTE.txt.push(String(texte)); return `<button type="button" class="linkbtn ${cls || ''}" data-ecouter="${ECOUTE.txt.length - 1}" title="Le téléphone lit le texte à voix haute">🔊 Écouter</button>`;
+}
+function arreterEcoute() {
+  try { speechSynthesis.cancel(); } catch (_) {}
+  if (ECOUTE.btn) { ECOUTE.btn.textContent = '🔊 Écouter'; ECOUTE.btn = null; }
+}
+function ecouter(texte, btn) {
+  arreterEcoute();
+  const voix = speechSynthesis.getVoices(), v = voix.find(x => /^fr[-_]FR/i.test(x.lang)) || voix.find(x => /^fr/i.test(x.lang));
+  const morceaux = String(texte).replace(/\s+/g, ' ').match(/[^.!?;:]{1,220}[.!?;:]*|.{1,220}/g) || [];
+  ECOUTE.btn = btn; btn.textContent = '⏹ Arrêter la lecture';
+  morceaux.forEach((m, i) => {
+    const u = new SpeechSynthesisUtterance(m.trim()); u.lang = 'fr-FR'; u.rate = 0.95; if (v) u.voice = v;
+    if (i === morceaux.length - 1) u.onend = () => { if (ECOUTE.btn === btn) arreterEcoute(); };
+    speechSynthesis.speak(u);
+  });
+}
+if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); } catch (_) {} }
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-ecouter]'); if (!b) return;
+  e.preventDefault();
+  if (ECOUTE.btn === b) { arreterEcoute(); return; }
+  ecouter(ECOUTE.txt[+b.dataset.ecouter] || '', b);
+});
+window.addEventListener('hashchange', arreterEcoute);
+
+/* ---------- Message de partage soigné (WhatsApp) ---------- */
+function msgPartage(emoji, titre, lignes, extrait) {
+  const ex = String(extrait || '').replace(/\s+/g, ' ').trim();
+  return `${emoji} *${String(titre).replace(/\*/g, '')}*${(lignes || []).filter(Boolean).map(l => '\n' + l).join('')}${ex ? '\n\n' + (ex.length > 220 ? ex.slice(0, 217).replace(/\s\S*$/, '') + '…' : ex) : ''}`;
+}
+const texteSimple = h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
+/* Liens directs : #article=12, #livre=34, #evt=2026-12-08 */
+async function ouvrirLienDirect(h) {
+  if (h.startsWith('article=')) {
+    const id = Number(h.slice(8)); showTab('articles'); if (!articlesLoaded) await loadArticles();
+    const a = ARTICLES.find(x => x.id === id); if (a) { $('#artSearch').value = a.titre; renderArticlesPage(); }
+    return true;
+  }
+  if (h.startsWith('livre=')) {
+    const id = Number(h.slice(6)); showTab('bibliotheque');
+    if (sb) { const { data } = await sb.from('livres').select('titre').eq('id', id).maybeSingle(); if (data) { BQ.q = data.titre; $('#bqQ').value = data.titre; chercherLivres(); setTimeout(() => $('#bqRes').scrollIntoView({ behavior: 'smooth' }), 600); } }
+    return true;
+  }
+  if (h.startsWith('evt=')) { AGENDA_VUE = 'mois'; AGENDA_MOIS = h.slice(4, 11); showTab('agenda'); return true; }
+  return false;
+}
+
 /* ---------- Partage par les applications du téléphone ---------- */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-partage]'); if (!b) return;
@@ -9346,9 +9938,9 @@ async function importerListeLivres(f, COLS) {
     const etat = corps.querySelector('.il-etat'), btn = corps.querySelector('.il-go'); btn.disabled = true;
     const avecCote = rows.filter(r => r.cote), sansCote = rows.filter(r => !r.cote); let ok = 0;
     for (const [lot, fn] of [[avecCote, x => sb.from('livres').upsert(x, { onConflict: 'cote' })], [sansCote, x => sb.from('livres').insert(x)]]) {
-      for (let i = 0; i < lot.length; i += 300) { etat.textContent = `Ajout… ${ok}/${rows.length}`; const { error } = await fn(lot.slice(i, i + 300)); if (error) { etat.textContent = `Arrêté après ${ok} livre(s) : ${errText(error)}`; btn.disabled = false; return; } ok += Math.min(300, lot.length - i); }
+      for (let i = 0; i < lot.length; i += 300) { etat.textContent = `Ajout… ${ok}/${rows.length}`; const { data: dd, error } = await fn(lot.slice(i, i + 300)).select('id'); (dd || []).forEach(x => IMPORT_IDS.push(x.id)); if (error) { etat.textContent = `Arrêté après ${ok} livre(s) : ${errText(error)}`; btn.disabled = false; return; } ok += Math.min(300, lot.length - i); }
     }
-    fermer(); toast('Livres ajoutés au catalogue', `${ok} livre(s)`);
+    fermer(); toast('Livres ajoutés au catalogue', `${ok} livre(s)`); proposerAnnonceLivres(IMPORT_IDS.splice(0));
     try { BQ.q = ''; $('#bqQ').value = ''; renderBibliotheque(); } catch (_) {}
   });
 }
@@ -9467,8 +10059,8 @@ async function resynchroniserPush() {   // relie l’abonnement du téléphone �
   PUSH_SYNC = qui; const j = sub.toJSON();
   try { await sb.rpc('push_abonner', { p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth }); } catch (_) {}
 }
-async function envoyerPushPublication(genre, id) {
-  const { data, error } = await sb.functions.invoke('inviter', { body: { action: 'push_envoyer', genre, id } });
+async function envoyerPushPublication(genre, id, ids) {
+  const { data, error } = await sb.functions.invoke('inviter', { body: { action: 'push_envoyer', genre, id, ids } });
   let msg = null;
   if (error) { msg = errText(error); try { const b = await error.context.json(); if (b && b.erreur) msg = b.erreur; } catch (_) {} }
   if (msg) { toast('Notifications non envoyées', msg, 'warn'); return; }
@@ -10872,6 +11464,7 @@ function showLinkProblem(detail) {
   const h = location.hash.slice(1);
   if (h.startsWith('carte=')) { verifierCarte(decodeURIComponent(h.slice(6))); return; }
   if (h.startsWith('actu=')) { showTab('accueil'); setTimeout(() => openActu(Number(h.slice(5))), 400); return; }
+  if (/^(article|livre|evt)=/.test(h)) { ouvrirLienDirect(h); return; }
   if (['monespace', 'macarte', 'intention'].includes(h)) { allerRaccourci(h); return; }
   if (h === 'inscription') { showTab('etudiant'); openInscription(); return; }
   showTab(TABS.includes(h) || h === 'soutenir' || h === 'annuaire' ? h : 'accueil');
