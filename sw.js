@@ -1,7 +1,7 @@
 /* GSTF : application installable. Le site est toujours chargé en ligne (jamais de version périmée) ;
    sans Internet, la page « hors connexion » montre la carte d’étudiant et les prières enregistrées sur le téléphone.
    Les notifications (annonces, actualités, bibliothèque) arrivent ici. */
-const CACHE = 'gstf-v4';
+const CACHE = 'gstf-v5';
 const HORS_LIGNE = ['/offline.html', '/icon-192.png', '/badge-96.png', '/therese.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });

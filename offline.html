@@ -7,21 +7,26 @@ header{background:#8c2a34;color:#fff;padding:calc(18px + env(safe-area-inset-top
 header img{width:46px;height:46px;border-radius:50%;background:#fff;padding:3px}header b{font-family:Georgia,serif;font-size:18px;display:block}header small{opacity:.85}
 .etat{margin:14px;padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;gap:10px;justify-content:space-between}
 .etat p{margin:0;font-size:14px}button{background:#8c2a34;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:15px;font-weight:600}
-.onglets{display:flex;gap:8px;margin:0 14px}.onglets button{flex:1;background:var(--surface);color:var(--ink);border:1px solid var(--line)}.onglets button[aria-pressed=true]{background:#8c2a34;color:#fff;border-color:#8c2a34}
+.onglets{display:flex;gap:8px;margin:0 14px;overflow-x:auto;padding-bottom:4px}.onglets button{flex:none;white-space:nowrap;background:var(--surface);color:var(--ink);border:1px solid var(--line)}.onglets button[aria-pressed=true]{background:#8c2a34;color:#fff;border-color:#8c2a34}
 section{margin:14px}h2{font-family:Georgia,serif;font-size:20px;margin:6px 0 10px}
 .priere{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;margin-bottom:12px}
 .priere h3{margin:0 0 8px;font-family:Georgia,serif;font-size:18px;color:var(--accent)}.priere p{margin:0;white-space:pre-line;line-height:1.55;font-size:15.5px}
 .vide{color:var(--muted);font-size:15px;line-height:1.5}.carte-zone{display:flex;justify-content:center;overflow:auto;padding:6px 0}.carte-zone .ce{transform-origin:top center}
 .actu{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:12px}.actu img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.actu div{padding:12px 14px}.actu small{color:var(--muted)}.actu h3{margin:4px 0 6px;font-family:Georgia,serif;font-size:18px}.actu p{margin:0;white-space:pre-line;line-height:1.5;font-size:15px}.onglets button{padding:10px 6px;font-size:14px}
+.jour{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:10px}.jour h3{margin:0 0 6px;font-size:15px;color:var(--accent);text-transform:capitalize}.jour p{margin:2px 0;font-size:15px}.jour small{color:var(--muted);display:inline-block;width:92px}
+.cours details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;padding:10px 14px}.cours summary{font-weight:600}.cours .fiche{font-size:14.5px;line-height:1.5}.cours .fiche ul{padding-left:18px}
+.carteq{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:170px}.carteq .q{font-family:Georgia,serif;font-size:19px;font-weight:600;margin:0 0 12px}.carteq .r{border-top:1px solid var(--line);padding-top:10px;white-space:pre-line}
+select{font-size:15px;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;margin-bottom:10px}.lu{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}.lu h3{margin:0 0 4px;font-family:Georgia,serif}.lu p{white-space:pre-line;line-height:1.55}
 .note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px}
 </style><style id="carteCss"></style></head>
 <body>
 <header><img src="/icon-192.png" alt=""><div><b>Grand Séminaire de Théologie</b><small>Sainte Thérèse de l’Enfant-Jésus · Faliarivo</small></div></header>
 <div class="etat"><p><b>Pas de connexion Internet.</b><br><span lang="mg">Tsy misy aterineto.</span></p><button onclick="location.reload()">Réessayer</button></div>
-<div class="onglets"><button type="button" data-o="actus" aria-pressed="false">📰 Actualités</button><button type="button" data-o="carte" aria-pressed="false">🪪 Ma carte</button><button type="button" data-o="prieres" aria-pressed="false">🙏 Prières</button></div>
+<div class="onglets"><button type="button" data-o="actus" aria-pressed="false">📰 Actualités</button><button type="button" data-o="carte" aria-pressed="false">🪪 Ma carte</button><button type="button" data-o="prieres" aria-pressed="false">🙏 Prières</button><button type="button" data-o="edt" aria-pressed="false">🗓 Emploi du temps</button><button type="button" data-o="cours" aria-pressed="false">📚 Mes cours</button><button type="button" data-o="rev" aria-pressed="false">🧠 Réviser</button><button type="button" data-o="lus" aria-pressed="false">📖 Articles lus</button></div>
 <section id="o-actus" hidden></section>
 <section id="o-carte" hidden></section>
 <section id="o-prieres" hidden></section>
+<section id="o-edt" hidden></section><section id="o-cours" hidden class="cours"></section><section id="o-rev" hidden></section><section id="o-lus" hidden></section>
 <script>
 (function () {
   function lire(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
@@ -39,9 +44,40 @@ section{margin:14px}h2{font-family:Georgia,serif;font-size:20px;margin:6px 0 10p
   ac.innerHTML = '<h2>Dernières actualités</h2>' + (la && la.length ? la.map(function (x) { return '<article class="actu">' + (x.img ? '<img src="' + x.img + '" alt="">' : '') + '<div><small>' + esc(x.date) + '</small><h3>' + esc(x.titre) + '</h3>' + (x.texte ? '<p>' + esc(x.texte) + '</p>' : '') + (x.video ? '<p style="margin-top:8px;color:var(--muted)">▶ Vidéo à regarder avec Internet</p>' : '') + '</div></article>'; }).join('')
     + '<p class="note">Enregistrées sur ce téléphone le ' + esc(new Date(actus.maj).toLocaleDateString('fr-FR')) + '.</p>'
     : '<p class="vide">Ouvrez une fois l’accueil avec Internet : les dernières actualités resteront ensuite lisibles ici.</p>');
-  function aller(o) { document.querySelectorAll('[data-o]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.o === o)); }); c.hidden = o !== 'carte'; p.hidden = o !== 'prieres'; ac.hidden = o !== 'actus'; }
+  var maj = function (x) { return x && x.maj ? '<p class="note">Enregistré sur ce téléphone le ' + esc(new Date(x.maj).toLocaleDateString('fr-FR')) + '.</p>' : ''; };
+  // Emploi du temps
+  var edt = lire('gstf-edt'), oe = document.getElementById('o-edt'), auj = new Date(); auj.setHours(0, 0, 0, 0);
+  var jours = edt && edt.jours ? edt.jours.filter(function (j) { return new Date(j.d + 'T12:00:00') >= auj; }) : [];
+  oe.innerHTML = '<h2>Mon emploi du temps</h2>' + (jours.length ? jours.map(function (j) { return '<div class="jour"><h3>' + esc(new Date(j.d + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })) + '</h3>'
+      + (j.ev ? '<p>' + esc(j.ev) + '</p>' : (j.cr && j.cr.length ? j.cr.map(function (x) { return '<p><small>' + esc(x[0]) + '</small>' + esc(x[1]) + '</p>'; }).join('') : '<p style="color:var(--muted)">Pas de cours</p>')) + '</div>'; }).join('') + maj(edt)
+    : '<p class="vide">Connectez-vous une fois à votre portail étudiant avec Internet : les trois prochaines semaines de cours resteront ensuite lisibles ici.</p>');
+  // Cours (syllabus)
+  var co = lire('gstf-cours'), oc = document.getElementById('o-cours');
+  oc.innerHTML = '<h2>Mes cours</h2>' + (co && co.liste && co.liste.length ? co.liste.map(function (x) { return '<details><summary>' + esc(x.nom) + '</summary><p style="color:var(--muted);font-size:13px">' + esc(x.prof) + ' · ' + x.an + (x.an === 1 ? 're' : 'e') + ' année, semestre ' + x.sem + ' · ' + x.h + ' h</p><div class="fiche">' + (x.fiche || '<p class="vide">Syllabus non publié.</p>') + '</div></details>'; }).join('') + maj(co)
+    : '<p class="vide">Connectez-vous une fois avec Internet : le syllabus de vos cours restera ensuite lisible ici.</p>');
+  // Révision
+  var rv = lire('gstf-revision') || {}, orv = document.getElementById('o-rev'), cles = Object.keys(rv);
+  for (var i = 0; i < localStorage.length; i++) { var kk = localStorage.key(i); if (/^gstf_rev_[^e]/.test(kk) && kk !== 'gstf_rev_etat') { var cid = kk.slice(9), perso = lire(kk) || []; if (perso.length) { rv[cid] = rv[cid] || { nom: (rv[cid] && rv[cid].nom) || 'Mes questions (' + cid + ')', q: [] }; rv[cid].q = rv[cid].q.concat(perso); if (cles.indexOf(cid) < 0) cles.push(cid); } } }
+  if (!cles.length) orv.innerHTML = '<h2>Réviser</h2><p class="vide">Ouvrez une fois « Documents › Révision des cours » avec Internet : les questions resteront ensuite disponibles ici.</p>';
+  else {
+    orv.innerHTML = '<h2>Réviser</h2><select id="rvC">' + cles.map(function (k) { return '<option value="' + esc(k) + '">' + esc(rv[k].nom) + ' (' + rv[k].q.length + ')</option>'; }).join('') + '</select><div id="rvZ"></div>';
+    var file = [], n = 0, sues = 0;
+    var montrer = function () { var z = document.getElementById('rvZ'), q = file[n];
+      if (!q) { z.innerHTML = '<div class="carteq"><p class="q">🎉 Terminé : ' + sues + ' / ' + file.length + '</p><button id="rvRe">Recommencer</button></div>'; document.getElementById('rvRe').onclick = lancer; return; }
+      z.innerHTML = '<p class="note" style="text-align:left">Carte ' + (n + 1) + ' / ' + file.length + '</p><div class="carteq"><p class="q">' + esc(q.q) + '</p><div id="rvR" hidden><div class="r">' + esc(q.r) + '</div><p style="margin-top:12px"><button id="rvO">✓ Je savais</button> <button id="rvN" style="background:#6b7080">↻ À revoir</button></p></div><button id="rvV">Voir la réponse</button></div>';
+      document.getElementById('rvV').onclick = function () { document.getElementById('rvR').hidden = false; this.remove(); };
+      document.getElementById('rvO').onclick = function () { sues++; n++; montrer(); }; document.getElementById('rvN').onclick = function () { file.push(q); n++; montrer(); }; };
+    var lancer = function () { var k = document.getElementById('rvC').value; file = rv[k].q.slice().sort(function () { return Math.random() - .5; }); n = 0; sues = 0; montrer(); };
+    document.getElementById('rvC').onchange = lancer; lancer();
+  }
+  // Articles lus
+  var lu = lire('gstf-articles-lus'), ol = document.getElementById('o-lus'), la2 = lu && lu.liste ? lu.liste.filter(function (x) { return !x.expire || x.expire > Date.now(); }) : [];
+  ol.innerHTML = '<h2>Articles lus</h2>' + (la2.length ? la2.map(function (x) { return '<details class="lu"><summary><b>' + esc(x.titre) + '</b><br><small style="color:var(--muted)">' + esc([x.auteur, x.date].filter(Boolean).join(' · ')) + '</small></summary><p>' + esc(x.texte) + '</p></details>'; }).join('')
+    : '<p class="vide">Les articles que vous lisez sur le site (avec Internet) restent ensuite lisibles ici.</p>');
+  var Z = { carte: c, prieres: p, actus: ac, edt: oe, cours: oc, rev: orv, lus: ol };
+  function aller(o) { document.querySelectorAll('[data-o]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.o === o)); }); Object.keys(Z).forEach(function (k) { Z[k].hidden = k !== o; }); }
   document.querySelectorAll('[data-o]').forEach(function (b) { b.onclick = function () { aller(b.dataset.o); }; });
-  aller(/macarte|monespace/.test(location.hash) ? 'carte' : /prieres|intention/.test(location.hash) ? 'prieres' : 'actus');
+  aller(/macarte|monespace/.test(location.hash) ? 'carte' : /prieres|intention/.test(location.hash) ? 'prieres' : /documents|etudiant/.test(location.hash) && jours.length ? 'edt' : 'actus');
   window.addEventListener('online', function () { location.reload(); });
 })();
 </script></body></html>
