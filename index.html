@@ -486,6 +486,15 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   .leger .bq-couv, .leger .art-couv, .leger .ail-it img, .leger .couv-photo { display: none !important; }
   .leger .acc-slide img { filter: none; }
   #legerBtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .visite-fond { position: fixed; inset: 0; z-index: 9990; }
+  .visite-trou { position: fixed; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(15,12,20,.62); outline: 3px solid var(--gold, #c4932a); transition: all .25s; pointer-events: none; }
+  .visite-bulle { position: fixed; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .acc-plus > summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; gap: 2px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .acc-plus > summary::-webkit-details-marker { display: none; }
+  .acc-plus > summary span { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.45rem; font-weight: 600; }
+  .acc-plus > summary span::after { content: ' ▾'; color: var(--accent); } .acc-plus[open] > summary span::after { content: ' ▴'; }
+  .acc-plus > summary small { color: var(--muted); font-size: .85rem; }
+  .gal-plus { display: none; } #galerieAccueil.tout .gal-plus { display: block; }
   .art-couv { float: right; width: 92px; margin: 0 0 .6rem 1rem; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
   .outil-box { padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--surface); }
   .ref-l { display: flex; gap: .6rem; align-items: flex-start; padding: .45rem 0; border-bottom: 1px dashed var(--line); }
@@ -643,7 +652,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   @media (prefers-reduced-motion: reduce) { .revele { opacity: 1; transform: none; transition: none; } .acc-slide img, .acc-slide.actif img { transform: none; transition: none; } }
   @media print { .revele { opacity: 1 !important; transform: none !important; } }
 </style>
-<style>/* Tailwind 3.4.17 compilé */*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Source Sans\ 3,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:IBM Plex Mono,ui-monospace,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.invisible{visibility:hidden}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.z-20{z-index:20}.z-30{z-index:30}.col-span-2{grid-column:span 2/span 2}.mx-auto{margin-left:auto;margin-right:auto}.my-3{margin-top:.75rem;margin-bottom:.75rem}.-mt-1{margin-top:-.25rem}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mt-0{margin-top:0}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-3{height:.75rem}.h-40{height:10rem}.h-full{height:100%}.max-h-80{max-height:20rem}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-32{width:8rem}.w-36{width:9rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.min-w-0{min-width:0}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.max-w-\[14rem\]{max-width:14rem}.max-w-\[62ch\]{max-width:62ch}.max-w-\[70ch\]{max-width:70ch}.max-w-\[75ch\]{max-width:75ch}.max-w-\[80ch\]{max-width:80ch}.max-w-\[90ch\]{max-width:90ch}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink,.shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.border-collapse{border-collapse:collapse}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;-moz-user-select:all;user-select:all}.resize{resize:both}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-px{gap:1px}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-x-8{-moz-column-gap:2rem;column-gap:2rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.gap-y-6{row-gap:1.5rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-line>:not([hidden])~:not([hidden]){border-color:var(--line)}.self-start{align-self:flex-start}.self-end{align-self:flex-end}.justify-self-start{justify-self:start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.text-wrap{text-wrap:wrap}.break-all{word-break:break-all}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-gold{border-color:var(--gold)}.border-line{border-color:var(--line)}.bg-accent-soft{background-color:var(--accent-soft)}.bg-bg{background-color:var(--bg)}.bg-line{background-color:var(--line)}.bg-sunk{background-color:var(--sunk)}.bg-surface{background-color:var(--surface)}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:.5rem}.pb-3{padding-bottom:.75rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pl-10{padding-left:2.5rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pl-6{padding-left:1.5rem}.pr-3{padding-right:.75rem}.pr-4{padding-right:1rem}.pt-0{padding-top:0}.pt-0\.5{padding-top:.125rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.font-display{font-family:var(--font-title)}.font-mono{font-family:IBM Plex Mono,ui-monospace,monospace}.font-sans{font-family:Source Sans\ 3,system-ui,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.capitalize{text-transform:capitalize}.italic{font-style:italic}.not-italic{font-style:normal}.leading-\[1\],.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wider{letter-spacing:.05em}.text-accent{color:var(--accent)}.text-bad{color:var(--bad)}.text-gold{color:var(--gold)}.text-ink{color:var(--ink)}.text-muted{color:var(--muted)}.text-ok{color:var(--ok)}.text-warn{color:var(--warn)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.accent-ink{accent-color:var(--ink)}.opacity-60{opacity:.6}.opacity-75{opacity:.75}.opacity-80{opacity:.8}.opacity-90{opacity:.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.grayscale{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%)}.sepia{--tw-sepia:sepia(100%)}.filter,.sepia{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-accent:hover{border-color:var(--accent)}.hover\:bg-sunk:hover{background-color:var(--sunk)}.hover\:text-accent:hover{color:var(--accent)}.hover\:underline:hover{text-decoration-line:underline}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:col-span-5{grid-column:span 5/span 5}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.sm\:gap-8{gap:2rem}.sm\:p-5{padding:1.25rem}.sm\:p-6{padding:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:col-span-4{grid-column:span 4/span 4}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:grid-cols-\[1fr\2c 1fr\]{grid-template-columns:1fr 1fr}.md\:grid-cols-\[auto\2c auto\2c 1fr\]{grid-template-columns:auto auto 1fr}}@media (min-width:1024px){.lg\:sticky{position:sticky}.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:grid-cols-\[14rem\2c 1fr\]{grid-template-columns:14rem 1fr}.lg\:flex-col{flex-direction:column}}@media (min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+<style>/* Tailwind 3.4.17 compilé */*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Source Sans\ 3,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:IBM Plex Mono,ui-monospace,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.invisible{visibility:hidden}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.z-20{z-index:20}.z-30{z-index:30}.col-span-2{grid-column:span 2/span 2}.mx-auto{margin-left:auto;margin-right:auto}.my-3{margin-top:.75rem;margin-bottom:.75rem}.-mt-1{margin-top:-.25rem}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mt-0{margin-top:0}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-3{height:.75rem}.h-40{height:10rem}.h-full{height:100%}.max-h-56{max-height:14rem}.max-h-80{max-height:20rem}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-32{width:8rem}.w-36{width:9rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.min-w-0{min-width:0}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.max-w-\[14rem\]{max-width:14rem}.max-w-\[62ch\]{max-width:62ch}.max-w-\[70ch\]{max-width:70ch}.max-w-\[75ch\]{max-width:75ch}.max-w-\[80ch\]{max-width:80ch}.max-w-\[90ch\]{max-width:90ch}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink,.shrink{flex-shrink:1}.shrink-0{flex-shrink:0}.grow{flex-grow:1}.border-collapse{border-collapse:collapse}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;-moz-user-select:all;user-select:all}.resize{resize:both}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-px{gap:1px}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-x-8{-moz-column-gap:2rem;column-gap:2rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.gap-y-6{row-gap:1.5rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-line>:not([hidden])~:not([hidden]){border-color:var(--line)}.self-start{align-self:flex-start}.self-end{align-self:flex-end}.justify-self-start{justify-self:start}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.text-wrap{text-wrap:wrap}.break-all{word-break:break-all}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.border{border-width:1px}.border-2{border-width:2px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-gold{border-color:var(--gold)}.border-line{border-color:var(--line)}.bg-accent-soft{background-color:var(--accent-soft)}.bg-bg{background-color:var(--bg)}.bg-line{background-color:var(--line)}.bg-sunk{background-color:var(--sunk)}.bg-surface{background-color:var(--surface)}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:.5rem}.pb-3{padding-bottom:.75rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pl-10{padding-left:2.5rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pl-6{padding-left:1.5rem}.pr-3{padding-right:.75rem}.pr-4{padding-right:1rem}.pt-0{padding-top:0}.pt-0\.5{padding-top:.125rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.font-display{font-family:var(--font-title)}.font-mono{font-family:IBM Plex Mono,ui-monospace,monospace}.font-sans{font-family:Source Sans\ 3,system-ui,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.capitalize{text-transform:capitalize}.italic{font-style:italic}.not-italic{font-style:normal}.leading-\[1\],.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wider{letter-spacing:.05em}.text-accent{color:var(--accent)}.text-bad{color:var(--bad)}.text-gold{color:var(--gold)}.text-ink{color:var(--ink)}.text-muted{color:var(--muted)}.text-ok{color:var(--ok)}.text-warn{color:var(--warn)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.accent-ink{accent-color:var(--ink)}.opacity-60{opacity:.6}.opacity-75{opacity:.75}.opacity-80{opacity:.8}.opacity-90{opacity:.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.grayscale{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%)}.sepia{--tw-sepia:sepia(100%)}.filter,.sepia{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-accent:hover{border-color:var(--accent)}.hover\:bg-sunk:hover{background-color:var(--sunk)}.hover\:text-accent:hover{color:var(--accent)}.hover\:underline:hover{text-decoration-line:underline}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:col-span-5{grid-column:span 5/span 5}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:grid-cols-\[auto\2c 1fr\]{grid-template-columns:auto 1fr}.sm\:gap-8{gap:2rem}.sm\:p-5{padding:1.25rem}.sm\:p-6{padding:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:col-span-4{grid-column:span 4/span 4}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:grid-cols-\[1fr\2c 1fr\]{grid-template-columns:1fr 1fr}.md\:grid-cols-\[auto\2c auto\2c 1fr\]{grid-template-columns:auto auto 1fr}}@media (min-width:1024px){.lg\:sticky{position:sticky}.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.lg\:grid-cols-\[14rem\2c 1fr\]{grid-template-columns:14rem 1fr}.lg\:flex-col{flex-direction:column}}@media (min-width:1280px){.xl\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
 </head>
 <body>
 <div id="splash" class="splash" hidden aria-hidden="true"><div><img src="icon-192.png" alt=""><p class="splash-t">Grand Séminaire de Théologie</p><p class="splash-s">Sainte Thérèse de l’Enfant-Jésus · Faliarivo</p><p class="splash-d">Fides quaerens intellectum</p></div></div>
@@ -793,6 +802,8 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
 
       <div id="videosAccueil" hidden></div>
 
+      <details id="accPlus" class="acc-plus"><summary><span>📖 En savoir plus sur le séminaire</span><small>Notre patronne · notre histoire · les diocèses et congrégations · l’admission et le règlement · l’équipe formatrice et les foyers · les groupes</small></summary>
+      <div class="flex flex-col gap-12 pt-8">
       <div id="accPatronne" class="acc-patronne">
         <img src="therese.jpg" alt="Sainte Thérèse de l’Enfant-Jésus" loading="lazy" width="350" height="390">
         <div class="min-w-0">
@@ -864,6 +875,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
       </div>
 
       <div id="groupesAccueil"></div>
+      </div></details>
 
       <div id="accVie" class="grid gap-6">
         <div id="accPortrait" class="acc-carte" hidden></div>
@@ -1491,7 +1503,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 133</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 134</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1880,6 +1892,7 @@ let currentTab = 'accueil';
 function showTab(name) {
   try { if (DONNEES_PERIMEES || Date.now() - CACHE_HEURE > 5 * 60000) viderCaches(); } catch (e) {}
   if (name === 'soutenir') name = 'economat';
+  if (name === 'portails' && state.profil && state.profil.type !== 'inconnu') { try { const m = monPortail(); if (m) name = m; } catch (_) {} }
   const versAnnuaire = name === 'annuaire'; if (versAnnuaire) name = 'contact';   // l’annuaire est dans l’onglet Contact   // « Soutenir le séminaire » est dans l’onglet Économat
   if (!TABS.includes(name)) name = 'accueil';
   const ongletAvant = currentTab; currentTab = name;
@@ -2051,7 +2064,7 @@ async function renderStudentPanel() {
   $('#stuTitle').textContent = `${p.prenoms} ${p.nom}`;
   renderAnnoncesBox($('#stuAnnonces'), annoncesPour('etudiant')); renderEmailPerso($('#stuEmailPerso')); renderStuDocs(); renderPublierGroupe($('#stuGroupe'));
   $('#stuSub').textContent = `${anLabel(p.annee)} · ${p.origine}`;
-  setTimeout(sauverHorsLigne, 1500);
+  setTimeout(sauverHorsLigne, 1500); setTimeout(() => lancerVisite('etudiant'), 2500);
   const moyColor = moy == null ? null : moy >= 14 ? 'var(--ok)' : moy >= 10 ? null : 'var(--bad)';
   $('#studentSummary').innerHTML =
     tile(moy == null ? '—' : fmtNote(moy), 'Moyenne pondérée par les heures', moyColor) +
@@ -2106,7 +2119,7 @@ async function renderProfPanel() {
     $('#profNot').innerHTML = 'Ce portail est réservé aux enseignants. <button type="button" class="linkbtn" onclick="showTab(\'educateur\')">Ouvrir le Portail Éducateurs →</button>';
     $('#profNot').hidden = false; return;
   }
-  renderAnnoncesBox($('#profAnnonces'), annoncesPour('enseignant')); renderEmailPerso($('#profEmailPerso')); renderPublierGroupe($('#profGroupe'));
+  renderAnnoncesBox($('#profAnnonces'), annoncesPour('enseignant')); renderEmailPerso($('#profEmailPerso')); setTimeout(() => { if (currentTab === 'professeur') lancerVisite('enseignant'); }, 2500); renderPublierGroupe($('#profGroupe'));
   $('#profPickWrap').hidden = !isAdmin();
   if (isAdmin() && !$('#profSelect').options.length) {
     const keys = Object.keys(PROFS).filter(x => COURS.some(c => c.prof === x)).sort((a, b) => PROFS[a].n.replace(/^P\. /, '').localeCompare(PROFS[b].n.replace(/^P\. /, ''), 'fr'));
@@ -2506,7 +2519,7 @@ const AIDE_ADMIN = {
     attention: 'Ne validez un paiement qu’après avoir vu l’argent sur le compte MVola. L’explication « Comment payer » se modifie dans le cadre des paiements.' },
   etat: { t: 'État du site', but: 'Vérifier en un coup d’œil que tout est bien installé : fichiers SQL, fonction, emails, notifications, tâches automatiques.',
     etapes: ['Le cadre du haut dit « ✅ Tout est installé » ou liste ce qu’il reste à faire, dans l’ordre, avec les liens.', 'Après avoir exécuté un SQL ou installé la fonction, cliquez « ↻ Vérifier de nouveau ».', '« 👁 Voir le rapport du mois dernier » montre le résumé envoyé chaque 1er du mois ; « 📧 M’envoyer ce rapport » l’envoie tout de suite.'],
-    attention: 'Les secrets (mots de passe, clés) ne sont jamais affichés : la page dit seulement s’ils sont présents.' },
+    attention: 'Les secrets (mots de passe, clés) ne sont jamais affichés : la page dit seulement s’ils sont présents. L’espace utilisé et les photos lourdes à réduire sont aussi sur cette page.' },
   corrections: { t: 'Corrections demandées', but: 'Valider les corrections de nom, prénoms, diocèse ou congrégation demandées par les étudiants et les enseignants eux-mêmes.',
     etapes: ['Chaque demande montre l’ancienne écriture (barrée) et la nouvelle.', 'Vérifiez (acte de naissance, lettre de l’évêque…), puis « ✓ Valider la correction » : la fiche est corrigée tout de suite (listes, bulletins, annuaire).', '« ✗ Refuser » si la demande n’est pas juste ; la personne le voit dans son portail.'],
     boutons: [['✓ Valider la correction', 'corrige la fiche de la personne'], ['✗ Refuser', 'garde la fiche telle qu’elle est']],
@@ -2979,6 +2992,7 @@ async function renderAdmin() {
   const ouvert = isAdmin();
   $('#panel-admin').classList.toggle('adm-ferme', !ouvert);
   $('#admVerrou').hidden = ouvert;
+  if (ouvert) setTimeout(() => { if (currentTab === 'admin') lancerVisite('admin'); }, 1500);
   if (!ouvert) {
     $('#admVerrouTitre').textContent = admLabel(admView);
     $('#admVerrouTexte').textContent = 'Ici se trouvent ' + (ADM_DESC[admView] || 'des informations internes') + '.';
@@ -4092,10 +4106,12 @@ function renderActusAccueil() {
   el.querySelectorAll('.actu-open').forEach(b => b.addEventListener('click', () => ouvrirPublication(Number(b.dataset.actu))));
   sauverActusHorsLigne(PUB.filter(a => a.public !== false || state.profil).slice(0, 8));
   // Galerie : les photos de toutes les publications, les plus récentes d'abord
-  const g = $('#galerieAccueil'), photos = PUB.flatMap(a => a.photos.map(p => ({ p, a }))).slice(0, 16);
+  const g = $('#galerieAccueil'), photos = PUB.flatMap(a => a.photos.map(p => ({ p, a }))).slice(0, 16), nVis = matchMedia('(min-width: 640px)').matches ? 8 : 6;
   g.hidden = photos.length < 2;
   g.innerHTML = photos.length < 2 ? '' : `<h2 class="h2 mb-4">Galerie photos</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${photos.map(x => `<button type="button" class="gal-open block rounded-md overflow-hidden" data-actu="${x.a.id}" title="${esc(x.a.titre)}"><img src="${esc(photoMini(x.p))}" alt="${esc(x.a.titre)}" loading="lazy" decoding="async" style="width:100%;aspect-ratio:1;object-fit:cover"></button>`).join('')}</div>`;
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${photos.map((x, i) => `<button type="button" class="gal-open block rounded-md overflow-hidden${i >= nVis ? ' gal-plus' : ''}" data-actu="${x.a.id}" title="${esc(x.a.titre)}"><img src="${esc(photoMini(x.p))}" alt="${esc(x.a.titre)}" loading="lazy" decoding="async" style="width:100%;aspect-ratio:1;object-fit:cover"></button>`).join('')}</div>`;
+  g.classList.remove('tout');
+  if (photos.length > nVis) { g.insertAdjacentHTML('beforeend', `<button type="button" class="btn btn-ghost btn-sm mt-3" id="galTout">Voir toutes les photos (${photos.length})</button>`); $('#galTout').addEventListener('click', e => { g.classList.add('tout'); e.target.remove(); }); }
   g.querySelectorAll('.gal-open').forEach(b => b.addEventListener('click', () => openActu(Number(b.dataset.actu))));
   // Vidéos
   // Vidéos : seulement celles qui ne sont pas déjà dans « Actualités » (jamais deux fois la même publication ni la même vidéo)
@@ -5324,11 +5340,12 @@ async function renderEmailPerso(host) {
     <div class="bg-surface border border-line rounded-lg p-4 mt-4 flex flex-wrap items-center justify-between gap-3">
       <div class="min-w-0"><div class="font-semibold">🔑 Mon compte</div>
         <p class="text-sm text-muted">Identifiant : <span class="font-mono">${esc((state.profil && state.profil.email) || '')}</span> · changez votre mot de passe quand vous voulez ; personne d’autre ne le connaîtra.</p></div>
-      <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-sm mc-pw">Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm mc-out">Se déconnecter</button></div>
+      <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm mc-visite">🧭 Revoir la visite guidée</button><button type="button" class="btn btn-sm mc-pw">Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm mc-out">Se déconnecter</button></div>
     </div>
     <div class="bg-surface border border-line rounded-lg p-4 mt-4 mc-corr"></div>`;
   renderCorrectionIdentite(host.querySelector('.mc-corr'));
   host.querySelector('.mc-pw').addEventListener('click', () => $('#changePwBtn').click());
+  host.querySelector('.mc-visite').addEventListener('click', () => lancerVisite(state.profil && state.profil.type === 'etudiant' ? 'etudiant' : 'enseignant', true));
   host.querySelector('.mc-out').addEventListener('click', () => $('#logoutBtn').click());
   host.querySelector('form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -7290,7 +7307,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 133, VERSION_FONCTION_ATTENDUE = 24;
+const VERSION_SITE = 134, VERSION_FONCTION_ATTENDUE = 25;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -7326,6 +7343,7 @@ async function renderAdminEtat() {
         <tr><td class="pr-4 text-muted">Tâches automatiques (secret)</td><td>${fn && fn.secrets ? pastille(sec.rappel) : pastille(null)}</td></tr></tbody></table>
         <p class="text-xs text-muted mt-2">Les secrets se règlent dans <a class="underline" href="${LIEN_SECRETS}" target="_blank" rel="noopener">Supabase › Edge Functions › Secrets ↗</a>. Leur valeur n’est jamais affichée ici.</p></div>
       <div class="bg-surface border border-line rounded-lg p-4"><h3 class="font-semibold mb-2">⏰ Tâches automatiques</h3>${ok ? `<table class="text-sm"><tbody>${taches.map(([o, b]) => `<tr><td class="pr-3">${pastille(b, '', 'absente')}</td><td>${esc(TACHES_LBL[o[1]] || o[1])}</td></tr>`).join('')}</tbody></table>` : '<p class="text-sm text-muted">Visible après 64_etat_et_rapport.sql.</p>'}</div></div>
+    <div class="bg-surface border border-line rounded-lg p-4 mb-5"><h3 class="font-semibold mb-2">💾 Espace utilisé</h3><div id="etEsp"></div></div>
     <div class="bg-surface border border-line rounded-lg p-4 mb-5"><h3 class="font-semibold mb-1">📧 Rapport du mois</h3>
       <p class="text-sm text-muted mb-3">Le 1er de chaque mois, le site envoie au Père Préfet un résumé du mois écoulé : visites, prêts, articles vendus, inscriptions, étudiants à suivre, ce qui attend dans l’Admin.</p>
       <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm" id="etRapVoir">👁 Voir le rapport du mois dernier</button><button type="button" class="btn btn-ghost btn-sm" id="etRapEnv">📧 M’envoyer ce rapport maintenant</button></div><div id="etRap" class="mt-3"></div></div>
@@ -7334,6 +7352,7 @@ async function renderAdminEtat() {
       ${ok ? `<div class="grid sm:grid-cols-2 gap-x-6 text-sm">${fichiers.filter(x => x.verifiable).map(x => `<div class="py-1 border-b border-line flex gap-2"><span>${x.installe ? '✅' : '❌'}</span><span class="min-w-0"><b class="font-mono text-xs">${esc(x.f.split('_')[0])}</b> ${esc(x.t)}${x.installe ? '' : `<span class="block text-xs text-bad">manque : ${esc(x.o.filter((o, i) => !x.r[i]).map(o => o[1]).join(', '))}</span>`}</span></div>`).join('')}</div>
         <details class="mt-3 text-sm"><summary class="text-muted">Fichiers de données (non vérifiables : à exécuter une seule fois, au moment voulu)</summary><p class="text-muted mt-1">${fichiers.filter(x => !x.verifiable).map(x => esc(x.f)).join(' · ')}</p></details>` : ''}</div>`;
   $('#etRe').addEventListener('click', renderAdminEtat);
+  blocEspace($('#etEsp'));
   const rapport = async envoyer => {
     const z = $('#etRap'); z.innerHTML = '<p class="text-sm text-muted">Préparation…</p>';
     const { data, error } = await sb.functions.invoke('inviter', { body: { action: 'rapport_mensuel', envoyer } });
@@ -7411,6 +7430,98 @@ function basculerLeger() {
   $('#legerBtn').addEventListener('click', basculerLeger);
   try { const c = navigator.connection; if (!LEGER && c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || '')) && !localStorage.getItem('gstf-leger')) setTimeout(() => toast('Connexion lente ?', 'Touchez 📶 en haut pour alléger le site.', 'warn'), 4000); } catch (_) {}
 })();
+
+/* ---------- Espace de stockage (dans « État du site ») ---------- */
+async function blocEspace(z) {
+  z.innerHTML = '<p class="text-sm text-muted">Calcul de l’espace utilisé…</p>';
+  const [{ data: e, error }, rl] = await Promise.all([sb.rpc('espace_utilise'), sb.from('reglages').select('valeur').eq('cle', 'limites_espace').maybeSingle()]);
+  if (error || !e) { z.innerHTML = `<p class="text-sm text-muted">${/espace_utilise|function|schema cache/i.test((error && error.message) || '') ? 'Exécutez d’abord 65_espace_stockage.sql pour voir l’espace utilisé.' : esc(errText(error))}</p>`; return; }
+  const lim = { db_mo: 500, fichiers_mo: 1024, ...((rl.data && rl.data.valeur) || {}) }, mo = o => Math.round(o / 1048576);
+  const jauge = (titre, o, max) => { const p = Math.min(100, Math.round(o / (max * 1048576) * 100)), c = p >= 90 ? 'var(--bad)' : p >= 80 ? 'var(--warn)' : '#2e7d32';
+    return `<div class="mb-3"><div class="flex justify-between text-sm"><span>${titre}</span><b>${mo(o)} Mo / ${max} Mo · ${p} %</b></div><div style="height:10px;border-radius:99px;background:var(--sunk);overflow:hidden"><div style="height:100%;width:${p}%;background:${c}"></div></div></div>`; };
+  const ESP = { actualites: 'Photos des actualités', photos: 'Photos des personnes', documents: 'Documents et articles', 'articles-payants': 'Articles payants', paiements: 'Captures de paiement', inscriptions: 'Dossiers d’inscription', archives: 'Archives des bulletins', cours: 'Documents de cours', travaux: 'Travaux des étudiants', economat: 'Économat' };
+  const par = Object.entries(e.par_espace || {}).sort((a, b) => b[1] - a[1]), lourdes = e.lourdes || [];
+  z.innerHTML = `${jauge('🗄 Base de données', e.db, lim.db_mo)}${jauge('🖼 Photos et fichiers', e.fichiers, lim.fichiers_mo)}
+    <details class="text-sm mt-1"><summary class="text-muted">Détail par espace · limites de l’offre</summary>
+      <ul class="mt-2">${par.map(([k, v]) => `<li class="flex justify-between border-b border-line py-1"><span>${esc(ESP[k] || k)}</span><span>${mo(v)} Mo</span></li>`).join('')}</ul>
+      <div class="flex flex-wrap gap-2 items-end mt-3"><label>Base (Mo) <input class="field py-1 w-24" type="number" id="limDb" value="${lim.db_mo}"></label><label>Fichiers (Mo) <input class="field py-1 w-24" type="number" id="limF" value="${lim.fichiers_mo}"></label><button type="button" class="btn btn-ghost btn-sm" id="limSave">Enregistrer les limites</button></div>
+      <p class="text-xs text-muted mt-1">Offre gratuite de Supabase : 500 Mo de base et 1 Go de fichiers. Changez ces nombres si vous passez à une offre plus grande.</p></details>
+    <p class="text-xs text-muted mt-2">Une alerte part par email quand l’espace dépasse 80 % (au plus une fois par semaine).</p>
+    ${lourdes.length ? `<div class="mt-4"><p class="font-semibold text-sm">🪶 ${lourdes.length} photo(s) lourde(s) : ${mo(lourdes.reduce((s, x) => s + x.taille, 0))} Mo</p>
+      <p class="text-xs text-muted mb-2">« Réduire » garde la même photo, à la même adresse, mais 4 à 8 fois plus légère (1 600 pixels, qualité photo).</p>
+      <button type="button" class="btn btn-sm" id="allTout">🪶 Réduire toutes ces photos</button><span class="text-sm ml-2" id="allEtat"></span>
+      <ul class="text-xs mt-2 max-h-56 overflow-auto">${lourdes.map((x, i) => `<li class="flex justify-between gap-2 border-b border-line py-1"><span class="truncate">${esc(x.chemin)}</span><span class="shrink-0" data-all="${i}">${(x.taille / 1048576).toFixed(1)} Mo</span></li>`).join('')}</ul></div>` : '<p class="text-sm mt-3">🪶 Aucune photo trop lourde.</p>'}`;
+  $('#limSave').addEventListener('click', async () => {
+    const { error } = await sb.from('reglages').upsert({ cle: 'limites_espace', valeur: { db_mo: Number($('#limDb').value) || 500, fichiers_mo: Number($('#limF').value) || 1024 }, modifie_le: new Date().toISOString() });
+    if (error) toast('Non enregistré', errText(error), 'bad'); else { toast('Limites enregistrées', ''); blocEspace(z); }
+  });
+  if ($('#allTout')) $('#allTout').addEventListener('click', async () => {
+    if (!confirm(`Réduire ${lourdes.length} photo(s) ? Elles restent visibles au même endroit, en plus léger.`)) return;
+    const b = $('#allTout'); b.disabled = true; let gain = 0, ok = 0, ko = 0;
+    for (let i = 0; i < lourdes.length; i++) {
+      const x = lourdes[i], cell = z.querySelector(`[data-all="${i}"]`); $('#allEtat').textContent = `${i + 1} / ${lourdes.length}…`;
+      try {
+        const dl = await sb.storage.from(x.espace).download(x.chemin); if (dl.error) throw dl.error;
+        const petit = await compressImage(dl.data, 1600, .8);
+        if (!petit || petit.size >= x.taille * .9) { cell.textContent = 'déjà optimale'; continue; }
+        const up = await sb.storage.from(x.espace).upload(x.chemin, petit, { upsert: true, contentType: 'image/jpeg', cacheControl: '31536000' }); if (up.error) throw up.error;
+        gain += x.taille - petit.size; ok++; cell.textContent = `✓ ${(petit.size / 1048576).toFixed(2)} Mo`;
+      } catch (er) { ko++; cell.textContent = '✗'; cell.title = (er && er.message) || ''; }
+    }
+    $('#allEtat').textContent = `${ok} photo(s) réduite(s), ${Math.round(gain / 1048576)} Mo gagnés${ko ? ` · ${ko} impossible(s)` : ''}.`;
+    b.disabled = false; toast('Photos réduites', `${Math.round(gain / 1048576)} Mo gagnés`);
+  });
+}
+
+try { $('#accPlus').addEventListener('toggle', () => { window.dispatchEvent(new Event('resize')); try { renderAccueilPlus(); } catch (_) {} }); } catch (_) {}
+/* ---------- Visite guidée à la première connexion ---------- */
+const VISITES = {
+  etudiant: [['#studentSummary', 'Vos résultats', 'Votre moyenne, vos notes et vos absences, mises à jour par les professeurs.'],
+    ['#stuTtBody', 'Votre emploi du temps', 'La semaine de cours ; les flèches changent de semaine. Il reste lisible sur le téléphone même sans internet.'],
+    ['#stuCarte', 'Votre carte d’étudiant', 'Imprimez-la ou montrez-la sur le téléphone : son QR code prouve qu’elle est authentique.'],
+    ['#stuDocs', 'Les documents de vos cours', 'Les professeurs y déposent leurs cours et leurs documents.'],
+    ['#stuEmailPerso', 'Vos coordonnées', 'Votre email et votre téléphone, votre mot de passe, et « Signaler une erreur » si votre nom est mal écrit.'],
+    ['#rechBtn', 'Chercher dans tout le site', 'Un cours, un livre, une date, une question : tapez quelques mots.'],
+    ['#aideBtn', 'Besoin d’aide ?', 'Posez votre question : l’aide répond pas à pas. Pensez aussi à Documents › « Révision des cours » avant les examens.']],
+  enseignant: [['#profTeach', 'Notes et présences', 'Choisissez votre cours, puis saisissez les notes et l’émargement de chaque séance.'],
+    ['#profDocs', 'Documents de cours', 'Déposez vos cours : les étudiants de l’année les reçoivent dans leur portail.'],
+    ['#profDevoirs', 'Devoirs', 'Donnez un devoir et recevez les travaux des étudiants.'],
+    ['#profEmailPerso', 'Vos coordonnées', 'Votre email, votre téléphone, votre mot de passe.'],
+    ['#aideBtn', 'Besoin d’aide ?', 'L’aide répond pas à pas. Dans Documents › « Révision des cours », vous pouvez préparer des questions pour vos étudiants.']],
+  admin: [['.adm-nav', 'Les rubriques de l’administration', 'Scolarité, communication, paramètres : chaque rubrique a son mode d’emploi en haut de la page.'],
+    ['[data-adm="tableau"]', 'Le tableau de bord', 'Ce qui attend aujourd’hui : demandes d’inscription, messages, rendez-vous, livres en retard.'],
+    ['[data-adm="etat"]', 'L’état du site', 'Vérifie que tout est bien installé et montre l’espace utilisé.'],
+    ['#aideBtn', 'Besoin d’aide ?', 'Toutes les questions, avec les étapes. Vous pouvez y ajouter vos propres réponses.']]
+};
+function lancerVisite(cle, forcer) {
+  try { if (!forcer && localStorage.getItem('gstf-visite-' + cle)) return; localStorage.setItem('gstf-visite-' + cle, '1'); } catch (_) { if (!forcer) return; }
+  const etapes = (VISITES[cle] || []).filter(([sel]) => { const el = document.querySelector(sel); return el && el.offsetParent !== null; });
+  if (!etapes.length) return;
+  let i = 0; const fond = document.createElement('div'); fond.className = 'visite-fond'; fond.innerHTML = '<div class="visite-trou"></div><div class="visite-bulle" role="dialog" aria-live="polite"></div>'; document.body.appendChild(fond);
+  const trou = fond.querySelector('.visite-trou'), bulle = fond.querySelector('.visite-bulle');
+  const fin = () => { fond.remove(); window.removeEventListener('resize', placer); window.removeEventListener('scroll', placer); document.removeEventListener('keydown', clavier); };
+  const clavier = e => { if (e.key === 'Escape') fin(); if (e.key === 'ArrowRight' || e.key === 'Enter') suivant(); };
+  function placer() {
+    const el = document.querySelector(etapes[i][0]); if (!el) return; const r = el.getBoundingClientRect(), m = 6;
+    const haut = Math.max(r.top, 8), bas0 = Math.min(r.bottom, haut + innerHeight * .42), h = Math.max(30, bas0 - haut);
+    Object.assign(trou.style, { top: haut - m + 'px', left: Math.max(4, r.left - m) + 'px', width: Math.min(innerWidth - 8, r.width + 2 * m) + 'px', height: h + 2 * m + 'px' });
+    const w = Math.min(340, innerWidth - 24); bulle.style.width = w + 'px'; bulle.style.left = Math.max(12, Math.min(innerWidth - w - 12, r.left)) + 'px';
+    const bh = bulle.offsetHeight || 160;
+    if (haut + h + 20 + bh < innerHeight) { bulle.style.top = haut + h + 20 + 'px'; } else if (haut - 20 - bh > 8) { bulle.style.top = haut - 20 - bh + 'px'; } else { bulle.style.top = Math.max(8, innerHeight - bh - 12) + 'px'; }
+    bulle.style.bottom = '';
+  }
+  function montrer() {
+    const [sel, t, d] = etapes[i], el = document.querySelector(sel);
+    const rr = el.getBoundingClientRect(), ent = (document.querySelector('header') || {}).offsetHeight || 110;
+    window.scrollTo({ top: Math.max(0, window.scrollY + rr.top - (rr.height > innerHeight * .45 ? ent + 16 : (innerHeight - rr.height) / 2 - 60)) });
+    bulle.innerHTML = `<p class="eyebrow mb-1">Visite guidée · ${i + 1} / ${etapes.length}</p><p class="font-semibold mb-1">${esc(t)}</p><p class="text-sm">${esc(d)}</p>
+      <div class="flex justify-between items-center mt-3"><button type="button" class="linkbtn text-sm" data-v="fin">Passer</button><button type="button" class="btn btn-sm" data-v="suite">${i === etapes.length - 1 ? 'Terminer ✓' : 'Suivant →'}</button></div>`;
+    bulle.querySelector('[data-v=fin]').onclick = fin; bulle.querySelector('[data-v=suite]').onclick = suivant;
+    setTimeout(placer, 60); bulle.querySelector('[data-v=suite]').focus();
+  }
+  function suivant() { if (++i >= etapes.length) { fin(); toast('Bonne route sur le site !', 'La visite se relance depuis « Mes coordonnées » ou l’aide.'); return; } montrer(); }
+  window.addEventListener('resize', placer); window.addEventListener('scroll', placer, { passive: true }); document.addEventListener('keydown', clavier); montrer();
+}
 
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
 const BIBNUM_DEFAUT = [
@@ -8323,6 +8434,8 @@ const AIDE = [
     e: ['Une fois connecté, cliquez en haut à droite sur votre nom ou votre photo : votre portail s’ouvre.', 'Dans le cadre « 🔑 Mon compte », cliquez sur « Changer mon mot de passe ».', 'Choisissez un mot de passe d’au moins 8 caractères et enregistrez ; vous êtes alors déconnecté de vos autres appareils.', 'Le bouton « Se déconnecter » est dans le même cadre.'], go: { tab: 'portails' } },
   { q: 'Enregistrer mon adresse email personnelle', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'email mail adresse personnelle gmail yahoo coordonnees recevoir annonces rappel',
     e: ['Ouvrez votre portail (Inscription > votre espace).', 'Dans « Mes coordonnées », écrivez votre adresse Gmail, Yahoo… et enregistrez.', 'Elle sert pour les annonces, les rappels (rendez-vous, bibliothèque) et le mot de passe oublié.'] },
+  { q: 'Revoir la visite guidée du site', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'visite guidee decouvrir tutoriel premiere fois comment marche presentation portail',
+    e: ['Cliquez sur votre nom ou votre photo, en haut : votre portail s’ouvre.', 'Dans le cadre « 🔑 Mon compte » : « 🧭 Revoir la visite guidée ».', 'Des bulles montrent l’essentiel de votre portail ; « Suivant » pour avancer, « Passer » pour arrêter.'] },
   { q: 'Corriger mon nom, mes prénoms ou mon diocèse', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'corriger erreur nom prenom prenoms diocese congregation orthographe faute date naissance lieu signaler modifier identite',
     e: ['Cliquez sur votre nom ou votre photo, en haut : votre portail s’ouvre.', 'Cadre « ✏️ Une erreur sur mon nom ou mon diocèse ? » : « Signaler une erreur ».', 'Écrivez la bonne orthographe seulement dans la case concernée (les autres restent vides), ajoutez une explication si besoin, puis « Envoyer la demande ».', 'L’administration vérifie et valide : la correction apparaît alors partout (listes, bulletins, annuaire). Votre portail montre où en est la demande.'] },
   { q: 'Ajouter ou changer ma photo', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'photo portrait image profil ajouter changer visage',
@@ -11167,6 +11280,133 @@ async function supprimerDefinitivement(type, rec, btn) {
  * =================================================================== */
 const I18N = {
 "mg": {
+"AELF : messe et liturgie des heures du jour": "AELF : lamesa sy fivavahan’ny ora isan’andro",
+"Aidez à former les prêtres de demain": "Ampio amin’ny fanofanana ireo pretra rahampitso",
+"Annuaire du Grand Séminaire": "Lisitry ny olona ao amin’ny Seminera Lehibe",
+"Annuaire du séminaire ↓": "Lisitry ny olona ao amin’ny seminera ↓",
+"Annuaire public": "Lisitra ho an’ny besinimaro",
+"Apprendre le cœur du Bon Pasteur : service des paroisses, catéchèse, visite des malades et attention aux plus pauvres.": "Mianatra ny fon’ny Mpiandry tsara : fanompoana ny paroasy, katekizy, famangiana ny marary ary fiahiana ny mahantra indrindra.",
+"Articles de revues (histoire, religion, philosophie) en libre accès.": "Lahatsoratra amin’ny gazety siantifika (tantara, fivavahana, filozofia) azo vakiana maimaim-poana.",
+"Articles, livres et documents publiés par le Grand Séminaire.": "Lahatsoratra, boky ary antontan-taratasy navoakan’ny Seminera Lehibe.",
+"Avant les examens : des cartes questions-réponses et des quiz pour chaque cours. Le professeur prépare les questions ; chacun peut aussi fabriquer les siennes à partir de ses notes.": "Alohan’ny fanadinana : karatra fanontaniana sy valiny ary fitsapana isaky ny taranja. Ny mpampianatra no manomana ny fanontaniana ; afaka manao ny azy koa ny tsirairay avy amin’ny naoty raisiny.",
+"Bibliothèque du séminaire": "Tranombokin’ny seminera",
+"Calendrier académique": "Fandaharam-potoana ara-pianarana",
+"Catéchisme de l’Église catholique": "Katekizan’ny Eglizy katolika",
+"Chaque séminariste participe à la vie de la maison dans l’un des 5 groupes, chacun avec ses particularités, ses compétences et ses responsabilités.": "Mandray anjara amin’ny fiainan’ny trano ny seminarista tsirairay ao amin’ny iray amin’ireo vondrona 5, samy manana ny mampiavaka azy, ny fahaizany ary ny andraikiny.",
+"Code de droit canonique (1983)": "Fehezan-dalàna kanonika (1983)",
+"Collez ici le texte du cours (ou vos notes), ou importez un fichier Word, PDF ou une photo.": "Apetaho eto ny lahatsoratry ny taranja (na ny naoty), na ampidiro rakitra Word, PDF na sary.",
+"Collez vos notes de cours : le site fabrique des questions, que vous gardez sur ce téléphone pour réviser avec les cartes et le quiz.": "Apetaho ny naoty raisinao : manao fanontaniana ny tranonkala, tehirizinao ao amin’ity finday ity hamerenana amin’ny karatra sy ny fitsapana.",
+"Collez vos références, une par ligne, ou importez votre travail : le site les remet aux normes du GSTF (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) et signale ce qui manque.": "Apetaho ny loharano ampiasainao, iray isaky ny andalana, na ampidiro ny asanao : amboarin’ny tranonkala araka ny fenitry ny GSTF (anarana amin’ny litera kely renibe, fanampin’anarana fohy, lohateny mitongilana, daty, fanontana, pejy) ary lazainy izay tsy ampy.",
+"Compétences et responsabilités →": "Fahaizana sy andraikitra →",
+"Concile Vatican II": "Konsily Vatikana II",
+"Confiez-nous une intention": "Ankino aminay ny fikasanao",
+"Connectez-vous pour voir les questions préparées par le professeur. Vous pouvez aussi fabriquer vos propres questions à partir de vos notes, plus bas.": "Midira mba hahitana ireo fanontaniana nomanin’ny mpampianatra. Afaka manao ny fanontanianao manokana avy amin’ny naotinao koa ianao, etsy ambany.",
+"Conseil : 3 à 6 mots importants (« Eucharistie Pères de l’Église », « vocation sacerdotale Madagascar »). Cochez ce que vous gardez, puis copiez dans Word.": "Torohevitra : teny lehibe 3 ka hatramin’ny 6 (« Eokaristia Ray Masin’ny Eglizy », « fiantsoana ho pretra Madagasikara »). Mariho izay tazominao, dia adikao ao amin’ny Word.",
+"Corps enseignant": "Mpampianatra",
+"Des millions de livres numérisés, dont beaucoup d’ouvrages anciens de théologie.": "Boky an-tapitrisany natao nomerika, anisan’izany ny boky teolojia taloha maro.",
+"Des ressources gratuites et sûres, à lire même quand la bibliothèque est fermée.": "Loharano maimaim-poana sy azo antoka, azo vakiana na dia mihidy aza ny tranomboky.",
+"Devenir étudiant": "Ho lasa mpianatra",
+"Docteur angélique : œuvres de saint Thomas d’Aquin": "Docteur angélique : ny asa sorad’i Masindahy Tomasy avy any Aquin",
+"Emploi du temps": "Fandaharam-pianarana",
+"Empruntables": "Azo indramina",
+"Encycliques, exhortations, lettres et discours, en français.": "Taratasy ankapobeny, fananarana, taratasy ary kabary, amin’ny teny frantsay.",
+"Entretient la santé et l’esprit d’équipe par le sport et les loisirs.": "Mikajy ny fahasalamana sy ny firaisan-kina amin’ny alalan’ny fanatanjahantena sy ny fialam-boly.",
+"Fait circuler l’information et anime la vie intellectuelle et culturelle.": "Mampiely ny vaovao ary mamelona ny fiainana ara-tsaina sy ara-kolontsaina.",
+"Faites connaître le séminaire autour de vous": "Ampahafantaro ny manodidina anao ny seminera",
+"Formation humaine": "Fanofanana ara-olombelona",
+"Formation intellectuelle": "Fanofanana ara-tsaina",
+"Formation pastorale": "Fanofanana ara-pitandremana",
+"Formation spirituelle": "Fanofanana ara-panahy",
+"Galerie photos": "Sary",
+"Gallica : bibliothèque numérique de la BnF": "Gallica : tranomboky nomerikan’ny BnF",
+"Grandir en maturité, en liberté et en sens des responsabilités, pour devenir un homme solide, capable de relations vraies et fraternelles.": "Mitombo amin’ny fahamatorana, ny fahafahana ary ny fahatsapana andraikitra, mba ho lehilahy matanjaka, mahay mifandray amin’ny fomba marina sy ara-pirahalahiana.",
+"Horaires d’ouverture": "Ora fisokafana",
+"Intentions de prière": "Fikasana ho vavahana",
+"Internet Archive : textes": "Internet Archive : lahatsoratra",
+"La Bible – traduction officielle liturgique (AELF)": "Ny Baiboly – fandikan-teny ofisialy ara-litorjia (AELF)",
+"La Somme théologique et les autres œuvres, en français.": "Ny Somme théologique sy ireo asa soratra hafa, amin’ny teny frantsay.",
+"La bibliothèque": "Ny tranomboky",
+"La communauté du séminaire la portera dans sa prière. Elle reste discrète : rien n’est affiché sur le site sans l’accord du séminaire.": "Hitondra izany amin’ny vavaka ny vondrom-piarahamonin’ny seminera. Mijanona ho tsiambaratelo izany : tsy misy aseho eto raha tsy nahazo alalana tamin’ny seminera.",
+"La taille de chaque point indique le nombre de séminaristes. Le séminaire se trouve à Faliarivo, Antananarivo (✚).": "Ny haben’ny teboka tsirairay no milaza ny isan’ny seminarista. Any Faliarivo, Antananarivo (✚) ny seminera.",
+"Le Code latin, en français.": "Ny Fehezan-dalàna latina, amin’ny teny frantsay.",
+"Le Saint-Siège : documents des papes": "Ny Seza Masina : antontan-taratasin’ny Papa",
+"Le catalogue n’est pas affiché en entier : seuls les livres qui correspondent à votre recherche apparaissent.": "Tsy aseho manontolo ny lisitry ny boky : ireo boky mifanaraka amin’ny zavatra tadiavinao ihany no hita.",
+"Le séminaire en chiffres": "Ny seminera amin’ny isa",
+"Le séminaire vit grâce à la générosité de ses amis et bienfaiteurs. Un don, même modeste, aide à nourrir, loger et former les futurs prêtres de Madagascar.": "Velona noho ny fahalalahantanan’ireo namana sy mpanao soa azy ny seminera. Fanomezana iray, na kely aza, dia manampy amin’ny famahanana, fampiantranoana ary fanofanana ireo pretra ho avy eto Madagasikara.",
+"Le texte intégral, avec index.": "Ny lahatsoratra feno, misy fanondroana.",
+"Les constitutions, décrets et déclarations du Concile.": "Ireo lalàm-panorenana, didy ary fanambarana navoakan’ny Konsily.",
+"Les groupes d’activité": "Ireo vondron’asa",
+"Les lectures et les offices de chaque jour.": "Ny vakiteny sy ny fivavahana isan’andro.",
+"Lire l’article": "Vakio ny lahatsoratra",
+"Livres anciens, revues et manuscrits numérisés.": "Boky taloha, gazety ary sora-tanana natao nomerika.",
+"Notre histoire": "Ny tantaranay",
+"Notre patronne": "Ny Masina mpiaro anay",
+"Notre patronne · notre histoire · les diocèses et congrégations · l’admission et le règlement · l’équipe formatrice et les foyers · les groupes": "Ny Masina mpiaro anay · ny tantaranay · ny diosezy sy ny kongregasiona · ny fidirana sy ny fitsipika · ny mpanofana sy ny tokantrano · ny vondrona",
+"Partager": "Zarao",
+"Partagez les nouvelles du séminaire avec vos proches et vos communautés.": "Zarao amin’ny havanao sy ny vondrom-piarahamoninao ny vaovaon’ny seminera.",
+"Pas encore de questions pour ce cours.": "Mbola tsy misy fanontaniana ho an’ity taranja ity.",
+"Persée : revues scientifiques": "Persée : gazety siantifika",
+"Prend soin de la maison commune, dans l’esprit de Laudato si’.": "Mikarakara ny tranontsika iombonana, araka ny fanahin’ny Laudato si’.",
+"Prépare et anime la prière commune et les célébrations de la communauté, au rythme de l’année liturgique.": "Manomana sy mitarika ny vavaka iraisana sy ny fankalazana ataon’ny vondrom-piarahamonina, araka ny taom-piangonana.",
+"Pères et docteurs": "Ray Masina sy Dokotera",
+"Rechercher un livre": "Hitady boky",
+"Rechercher un nom, un diocèse…": "Hitady anarana, diosezy…",
+"Rechercher un titre ou un auteur": "Hitady lohateny na mpanoratra",
+"Restons en lien": "Aoka hifandray hatrany isika",
+"Revues et recherche": "Gazety sy fikarohana",
+"Sainte Thérèse de l’Enfant-Jésus": "Masindahy Terezy Zazakely Jesoa",
+"Soutenir le séminaire →": "Hanohana ny seminera →",
+"Suivez-nous et partagez": "Araho izahay ary zarao",
+"Sur place seulement": "Vakiana eo an-toerana ihany",
+"Syllabus des cours": "Fandaharan’ny taranja",
+"Tapez le sujet de votre mémoire ou de votre travail : le site prépare une première bibliographie avec les livres de notre bibliothèque et les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.": "Soraty ny lohahevitry ny boky famaranana na asanao : manomana lisitry ny loharano voalohany ny tranonkala miaraka amin’ireo boky ao amin’ny tranombokinay sy ireo boky ary lahatsoratra tsara indrindra hita amin’ny aterineto, efa araka ny fenitry ny GSTF.",
+"Tapez un titre, un auteur, un sujet ou une cote pour trouver un livre.": "Soraty ny lohateny, ny mpanoratra, ny lohahevitra na ny laharana hahitana boky.",
+"Textes et ressources sur les Pères de l’Église.": "Lahatsoratra sy loharano momba ny Ray Masin’ny Eglizy.",
+"Titre, auteur, sujet ou cote": "Lohateny, mpanoratra, lohahevitra na laharana",
+"Toute la Bible, livre par livre.": "Ny Baiboly manontolo, boky tsirairay.",
+"Téléphone donné à l’emprunt": "Laharana finday nomena tamin’ny fisamborana",
+"Téléphones, adresses email et photos sont visibles seulement par les membres connectés. Pour joindre une personne, passez par le secrétariat (coordonnées ci-dessus).": "Ny mpikambana tafiditra ihany no mahita ny laharana finday, ny adiresy mailaka ary ny sary. Raha hifandray amin’olona, mandalova amin’ny sekretera (adiresy etsy ambony).",
+"Un livre se renouvelle une seule fois, avant la date de retour, et seulement si aucun autre lecteur ne l’attend. Membres du séminaire : connectez-vous, vos emprunts sont dans « Mes emprunts ».": "Indray mandeha ihany no azo havaozina ny fisamborana boky, alohan’ny daty famerenana, ary raha tsy misy mpamaky hafa miandry azy. Mpikambana ao amin’ny seminera : midira, ao amin’ny « Mes emprunts » ny boky nindraminao.",
+"Une bibliographie de départ sur votre sujet, vos références remises aux normes du GSTF, des cartes et des quiz pour réviser.": "Lisitry ny loharano voalohany momba ny lohaheviny, ny loharano ampiasainao amboarina araka ny fenitry ny GSTF, karatra sy fitsapana hamerenana lesona.",
+"Une formation intégrale": "Fanofanana feno",
+"Une référence par ligne, par exemple :\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.": "Loharano iray isaky ny andalana, ohatra :\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.",
+"Veille à la vie fraternelle et matérielle de la maison, dans l’esprit du service.": "Miahy ny fiainana ara-pirahalahiana sy ara-materialy ao an-trano, amin’ny fanahy fanompoana.",
+"Vidéo Facebook": "Horonan-tsary Facebook",
+"Vivre dans l’intimité du Christ par la prière, l’Eucharistie et la Parole de Dieu, avec l’accompagnement d’un père spirituel.": "Miaina akaiky an’i Kristy amin’ny vavaka, ny Eokaristia ary ny Tenin’Andriamanitra, miaraka amin’ny fanaraha-mason’ny ray ara-panahy.",
+"Voir mes emprunts": "Jereo ny boky nindramiko",
+"Volume horaire": "Isan’ora",
+"Votre prénom (facultatif)": "Ny fanampin’anaranao (tsy voatery)",
+"ex. La miséricorde dans l’évangile de Luc": "ohatra : Ny famindram-po ao amin’ny Evanjelin’i Lioka",
+"· une fois, sans venir à la bibliothèque": "· indray mandeha, tsy mila mankany amin’ny tranomboky",
+"¹ Notes de bas de page": "¹ Fanamarihana ambany pejy",
+"Écriture sainte": "Soratra Masina",
+"Équipe formatrice, professeurs, responsables de foyers et étudiants. Chacun complète ses coordonnées dans son portail, rubrique « Mes coordonnées ».": "Mpanofana, mpampianatra, tompon’andraikitry ny tokantrano ary mpianatra. Samy mameno ny mombamomba azy ao amin’ny habaka manokana, ao amin’ny « Mes coordonnées ».",
+"Étudier la théologie avec rigueur — Écriture sainte, dogme, morale, liturgie, droit canonique — pour rendre compte de la foi.": "Mianatra teolojia amin’ny fomba hentitra — Soratra Masina, fampianarana, fitondran-tena, litorjia, lalàna kanonika — mba hahafahana manazava ny finoana.",
+"▶ Regarder sur Facebook ↗": "▶ Jereo ao amin’ny Facebook ↗",
+"▶ Regarder sur YouTube ↗": "▶ Jereo ao amin’ny YouTube ↗",
+"▶ Vidéo": "▶ Horonan-tsary",
+"★ Les actualités de plus de 3 mois sont dans « Événements inoubliables » →": "★ Ao amin’ny « Événements inoubliables » ny vaovao efa mihoatra ny 3 volana →",
+"✅ Quiz": "✅ Fitsapana",
+"✍️ Correcteur de bibliographie": "✍️ Fanitsiana lisitry ny loharano",
+"✍️ Corriger": "✍️ Ahitsio",
+"✨ Fabriquer les questions": "✨ Amboary ny fanontaniana",
+"🃏 Cartes": "🃏 Karatra",
+"🌐 Bibliothèque numérique": "🌐 Tranomboky nomerika",
+"🎓 Assistant de mémoire": "🎓 Mpanampy amin’ny boky famaranana",
+"🎓 Pour vos travaux et vos examens": "🎓 Ho an’ny asanao sy ny fanadinanao",
+"🎓 Préparer ma bibliographie": "🎓 Omano ny lisitry ny loharano",
+"📄 Importer": "📄 Ampidiro",
+"📄 Importer (Word, PDF, photo)": "📄 Ampidiro (Word, PDF, sary)",
+"📋 Plan de révision": "📋 Drafitra famerenana lesona",
+"📖 En savoir plus sur le séminaire": "📖 Hahafantatra bebe kokoa momba ny seminera",
+"📚 Bibliographie": "📚 Lisitry ny loharano",
+"🔁 Renouveler mon emprunt": "🔁 Havaozy ny fisamborako",
+"🔊 Écouter": "🔊 Henoy",
+"🙏 Confier mon intention": "🙏 Hanankina ny fikasako",
+"🧠 Révision des cours": "🧠 Famerenana lesona",
+"Le séminaire": "Ny seminera",
+"Contact et plan d’accès": "Fifandraisana sy sarintany",
+"Soutenir le séminaire": "Hanohana ny seminera",
 "Studium de premier cycle · Baccalauréat canonique de théologie": "Studium dingana voalohany · Bakalorea kanonika amin’ny teolojia",
 "La foi en quête de l'intelligence": "Ny finoana mitady ny fahalalana",
 "Le GSTF forme les candidats au sacerdoce des diocèses et des congrégations religieuses de Madagascar. Sa visée est double : approfondir et structurer personnellement la foi chrétienne, et recevoir une formation universitaire en théologie en vue du ministère de prêtre.": "Manofana ireo kandidà ho pretra avy amin’ny diosezy sy ny kongregasiona ara-pivavahana eto Madagasikara ny GSTF. Roa ny tanjony : hanamafy sy handamina manokana ny finoana kristianina, ary hahazo fiofanana ambony amin’ny teolojia ho fanomanana ny asa maha-pretra.",
@@ -11353,6 +11593,133 @@ const I18N = {
 "Cours": "Lesona"
 },
 "en": {
+"AELF : messe et liturgie des heures du jour": "AELF: today’s Mass and Liturgy of the Hours",
+"Aidez à former les prêtres de demain": "Help form the priests of tomorrow",
+"Annuaire du Grand Séminaire": "Directory of the Major Seminary",
+"Annuaire du séminaire ↓": "Seminary directory ↓",
+"Annuaire public": "Public directory",
+"Apprendre le cœur du Bon Pasteur : service des paroisses, catéchèse, visite des malades et attention aux plus pauvres.": "Learning the heart of the Good Shepherd: parish service, catechesis, visiting the sick and care for the poorest.",
+"Articles de revues (histoire, religion, philosophie) en libre accès.": "Journal articles (history, religion, philosophy), free to read.",
+"Articles, livres et documents publiés par le Grand Séminaire.": "Articles, books and documents published by the Major Seminary.",
+"Avant les examens : des cartes questions-réponses et des quiz pour chaque cours. Le professeur prépare les questions ; chacun peut aussi fabriquer les siennes à partir de ses notes.": "Before exams: question-and-answer cards and quizzes for each course. The professor prepares the questions; everyone can also make their own from their notes.",
+"Bibliothèque du séminaire": "Seminary library",
+"Calendrier académique": "Academic calendar",
+"Catéchisme de l’Église catholique": "Catechism of the Catholic Church",
+"Chaque séminariste participe à la vie de la maison dans l’un des 5 groupes, chacun avec ses particularités, ses compétences et ses responsabilités.": "Each seminarian takes part in the life of the house in one of the 5 groups, each with its own character, skills and responsibilities.",
+"Code de droit canonique (1983)": "Code of Canon Law (1983)",
+"Collez ici le texte du cours (ou vos notes), ou importez un fichier Word, PDF ou une photo.": "Paste the course text (or your notes) here, or import a Word file, a PDF or a photo.",
+"Collez vos notes de cours : le site fabrique des questions, que vous gardez sur ce téléphone pour réviser avec les cartes et le quiz.": "Paste your course notes: the site makes questions that you keep on this phone to revise with the cards and the quiz.",
+"Collez vos références, une par ligne, ou importez votre travail : le site les remet aux normes du GSTF (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) et signale ce qui manque.": "Paste your references, one per line, or import your work: the site formats them to GSTF standards (surname in small capitals, abbreviated first name, title in italics, date, publisher, page) and flags what is missing.",
+"Compétences et responsabilités →": "Skills and responsibilities →",
+"Concile Vatican II": "Second Vatican Council",
+"Confiez-nous une intention": "Entrust us with an intention",
+"Connectez-vous pour voir les questions préparées par le professeur. Vous pouvez aussi fabriquer vos propres questions à partir de vos notes, plus bas.": "Log in to see the questions prepared by the professor. You can also make your own questions from your notes, below.",
+"Conseil : 3 à 6 mots importants (« Eucharistie Pères de l’Église », « vocation sacerdotale Madagascar »). Cochez ce que vous gardez, puis copiez dans Word.": "Tip: 3 to 6 key words (“Eucharist Church Fathers”, “priestly vocation Madagascar”). Tick what you keep, then copy into Word.",
+"Corps enseignant": "Teaching staff",
+"Des millions de livres numérisés, dont beaucoup d’ouvrages anciens de théologie.": "Millions of digitised books, including many old works of theology.",
+"Des ressources gratuites et sûres, à lire même quand la bibliothèque est fermée.": "Free and reliable resources, to read even when the library is closed.",
+"Devenir étudiant": "Become a student",
+"Docteur angélique : œuvres de saint Thomas d’Aquin": "Docteur angélique: works of Saint Thomas Aquinas",
+"Emploi du temps": "Timetable",
+"Empruntables": "Can be borrowed",
+"Encycliques, exhortations, lettres et discours, en français.": "Encyclicals, exhortations, letters and speeches, in French.",
+"Entretient la santé et l’esprit d’équipe par le sport et les loisirs.": "Keeps up health and team spirit through sport and leisure.",
+"Fait circuler l’information et anime la vie intellectuelle et culturelle.": "Spreads information and leads intellectual and cultural life.",
+"Faites connaître le séminaire autour de vous": "Make the seminary known around you",
+"Formation humaine": "Human formation",
+"Formation intellectuelle": "Intellectual formation",
+"Formation pastorale": "Pastoral formation",
+"Formation spirituelle": "Spiritual formation",
+"Galerie photos": "Photo gallery",
+"Gallica : bibliothèque numérique de la BnF": "Gallica: digital library of the French National Library",
+"Grandir en maturité, en liberté et en sens des responsabilités, pour devenir un homme solide, capable de relations vraies et fraternelles.": "Growing in maturity, freedom and responsibility, to become a solid man, capable of true and fraternal relationships.",
+"Horaires d’ouverture": "Opening hours",
+"Intentions de prière": "Prayer intentions",
+"Internet Archive : textes": "Internet Archive: texts",
+"La Bible – traduction officielle liturgique (AELF)": "The Bible – official liturgical translation (AELF)",
+"La Somme théologique et les autres œuvres, en français.": "The Summa Theologiae and other works, in French.",
+"La bibliothèque": "The library",
+"La communauté du séminaire la portera dans sa prière. Elle reste discrète : rien n’est affiché sur le site sans l’accord du séminaire.": "The seminary community will carry it in prayer. It remains discreet: nothing is shown on the site without the seminary’s consent.",
+"La taille de chaque point indique le nombre de séminaristes. Le séminaire se trouve à Faliarivo, Antananarivo (✚).": "The size of each dot shows the number of seminarians. The seminary is in Faliarivo, Antananarivo (✚).",
+"Le Code latin, en français.": "The Latin Code, in French.",
+"Le Saint-Siège : documents des papes": "The Holy See: documents of the Popes",
+"Le catalogue n’est pas affiché en entier : seuls les livres qui correspondent à votre recherche apparaissent.": "The catalogue is not shown in full: only the books matching your search appear.",
+"Le séminaire en chiffres": "The seminary in figures",
+"Le séminaire vit grâce à la générosité de ses amis et bienfaiteurs. Un don, même modeste, aide à nourrir, loger et former les futurs prêtres de Madagascar.": "The seminary lives thanks to the generosity of its friends and benefactors. A gift, however modest, helps to feed, house and form the future priests of Madagascar.",
+"Le texte intégral, avec index.": "The full text, with index.",
+"Les constitutions, décrets et déclarations du Concile.": "The constitutions, decrees and declarations of the Council.",
+"Les groupes d’activité": "Activity groups",
+"Les lectures et les offices de chaque jour.": "Each day’s readings and offices.",
+"Lire l’article": "Read the article",
+"Livres anciens, revues et manuscrits numérisés.": "Old books, journals and manuscripts, digitised.",
+"Notre histoire": "Our history",
+"Notre patronne": "Our patron saint",
+"Notre patronne · notre histoire · les diocèses et congrégations · l’admission et le règlement · l’équipe formatrice et les foyers · les groupes": "Our patron saint · our history · dioceses and congregations · admission and rules · formation team and houses · groups",
+"Partager": "Share",
+"Partagez les nouvelles du séminaire avec vos proches et vos communautés.": "Share the seminary’s news with your family and your communities.",
+"Pas encore de questions pour ce cours.": "No questions yet for this course.",
+"Persée : revues scientifiques": "Persée: scholarly journals",
+"Prend soin de la maison commune, dans l’esprit de Laudato si’.": "Cares for our common home, in the spirit of Laudato si’.",
+"Prépare et anime la prière commune et les célébrations de la communauté, au rythme de l’année liturgique.": "Prepares and leads common prayer and the community’s celebrations, following the liturgical year.",
+"Pères et docteurs": "Fathers and Doctors",
+"Rechercher un livre": "Search for a book",
+"Rechercher un nom, un diocèse…": "Search for a name, a diocese…",
+"Rechercher un titre ou un auteur": "Search for a title or an author",
+"Restons en lien": "Let’s stay in touch",
+"Revues et recherche": "Journals and research",
+"Sainte Thérèse de l’Enfant-Jésus": "Saint Thérèse of the Child Jesus",
+"Soutenir le séminaire →": "Support the seminary →",
+"Suivez-nous et partagez": "Follow us and share",
+"Sur place seulement": "Library use only",
+"Syllabus des cours": "Course syllabi",
+"Tapez le sujet de votre mémoire ou de votre travail : le site prépare une première bibliographie avec les livres de notre bibliothèque et les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.": "Type the subject of your thesis or paper: the site prepares a first bibliography with the books in our library and the best books and articles found online, already in GSTF format.",
+"Tapez un titre, un auteur, un sujet ou une cote pour trouver un livre.": "Type a title, an author, a subject or a shelf mark to find a book.",
+"Textes et ressources sur les Pères de l’Église.": "Texts and resources on the Church Fathers.",
+"Titre, auteur, sujet ou cote": "Title, author, subject or shelf mark",
+"Toute la Bible, livre par livre.": "The whole Bible, book by book.",
+"Téléphone donné à l’emprunt": "Phone number given when borrowing",
+"Téléphones, adresses email et photos sont visibles seulement par les membres connectés. Pour joindre une personne, passez par le secrétariat (coordonnées ci-dessus).": "Phone numbers, email addresses and photos are visible only to logged-in members. To reach someone, go through the secretariat (details above).",
+"Un livre se renouvelle une seule fois, avant la date de retour, et seulement si aucun autre lecteur ne l’attend. Membres du séminaire : connectez-vous, vos emprunts sont dans « Mes emprunts ».": "A loan can be renewed only once, before the due date, and only if no other reader is waiting for the book. Seminary members: log in, your loans are under “Mes emprunts”.",
+"Une bibliographie de départ sur votre sujet, vos références remises aux normes du GSTF, des cartes et des quiz pour réviser.": "A starting bibliography on your subject, your references in GSTF format, cards and quizzes to revise.",
+"Une formation intégrale": "An integral formation",
+"Une référence par ligne, par exemple :\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.": "One reference per line, for example:\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.",
+"Veille à la vie fraternelle et matérielle de la maison, dans l’esprit du service.": "Looks after the fraternal and material life of the house, in a spirit of service.",
+"Vidéo Facebook": "Facebook video",
+"Vivre dans l’intimité du Christ par la prière, l’Eucharistie et la Parole de Dieu, avec l’accompagnement d’un père spirituel.": "Living close to Christ through prayer, the Eucharist and the Word of God, accompanied by a spiritual father.",
+"Voir mes emprunts": "See my loans",
+"Volume horaire": "Teaching hours",
+"Votre prénom (facultatif)": "Your first name (optional)",
+"ex. La miséricorde dans l’évangile de Luc": "e.g. Mercy in the Gospel of Luke",
+"· une fois, sans venir à la bibliothèque": "· once, without coming to the library",
+"¹ Notes de bas de page": "¹ Footnotes",
+"Écriture sainte": "Holy Scripture",
+"Équipe formatrice, professeurs, responsables de foyers et étudiants. Chacun complète ses coordonnées dans son portail, rubrique « Mes coordonnées ».": "Formation team, professors, house leaders and students. Each completes their details in their portal, under “Mes coordonnées”.",
+"Étudier la théologie avec rigueur — Écriture sainte, dogme, morale, liturgie, droit canonique — pour rendre compte de la foi.": "Studying theology rigorously — Scripture, dogma, morals, liturgy, canon law — to give an account of the faith.",
+"▶ Regarder sur Facebook ↗": "▶ Watch on Facebook ↗",
+"▶ Regarder sur YouTube ↗": "▶ Watch on YouTube ↗",
+"▶ Vidéo": "▶ Video",
+"★ Les actualités de plus de 3 mois sont dans « Événements inoubliables » →": "★ News older than 3 months are in “Événements inoubliables” →",
+"✅ Quiz": "✅ Quiz",
+"✍️ Correcteur de bibliographie": "✍️ Bibliography checker",
+"✍️ Corriger": "✍️ Correct",
+"✨ Fabriquer les questions": "✨ Make the questions",
+"🃏 Cartes": "🃏 Cards",
+"🌐 Bibliothèque numérique": "🌐 Digital library",
+"🎓 Assistant de mémoire": "🎓 Thesis assistant",
+"🎓 Pour vos travaux et vos examens": "🎓 For your papers and exams",
+"🎓 Préparer ma bibliographie": "🎓 Prepare my bibliography",
+"📄 Importer": "📄 Import",
+"📄 Importer (Word, PDF, photo)": "📄 Import (Word, PDF, photo)",
+"📋 Plan de révision": "📋 Revision plan",
+"📖 En savoir plus sur le séminaire": "📖 Learn more about the seminary",
+"📚 Bibliographie": "📚 Bibliography",
+"🔁 Renouveler mon emprunt": "🔁 Renew my loan",
+"🔊 Écouter": "🔊 Listen",
+"🙏 Confier mon intention": "🙏 Entrust my intention",
+"🧠 Révision des cours": "🧠 Course revision",
+"Le séminaire": "The seminary",
+"Contact et plan d’accès": "Contact and directions",
+"Soutenir le séminaire": "Support the seminary",
 "Studium de premier cycle · Baccalauréat canonique de théologie": "Undergraduate Studium · Canonical Baccalaureate in Theology",
 "La foi en quête de l'intelligence": "Faith seeking understanding",
 "Le GSTF forme les candidats au sacerdoce des diocèses et des congrégations religieuses de Madagascar. Sa visée est double : approfondir et structurer personnellement la foi chrétienne, et recevoir une formation universitaire en théologie en vue du ministère de prêtre.": "The GSTF trains candidates for the priesthood from the dioceses and religious congregations of Madagascar. Its aim is twofold: to deepen and personally structure the Christian faith, and to receive a university education in theology in view of priestly ministry.",
@@ -11539,6 +11906,133 @@ const I18N = {
 "Cours": "Courses"
 },
 "it": {
+"AELF : messe et liturgie des heures du jour": "AELF: messa e liturgia delle ore del giorno",
+"Aidez à former les prêtres de demain": "Aiutate a formare i sacerdoti di domani",
+"Annuaire du Grand Séminaire": "Annuario del Seminario Maggiore",
+"Annuaire du séminaire ↓": "Annuario del seminario ↓",
+"Annuaire public": "Annuario pubblico",
+"Apprendre le cœur du Bon Pasteur : service des paroisses, catéchèse, visite des malades et attention aux plus pauvres.": "Imparare il cuore del Buon Pastore: servizio nelle parrocchie, catechesi, visita ai malati e attenzione ai più poveri.",
+"Articles de revues (histoire, religion, philosophie) en libre accès.": "Articoli di riviste (storia, religione, filosofia) ad accesso libero.",
+"Articles, livres et documents publiés par le Grand Séminaire.": "Articoli, libri e documenti pubblicati dal Seminario Maggiore.",
+"Avant les examens : des cartes questions-réponses et des quiz pour chaque cours. Le professeur prépare les questions ; chacun peut aussi fabriquer les siennes à partir de ses notes.": "Prima degli esami: schede domanda-risposta e quiz per ogni corso. Il professore prepara le domande; ognuno può anche crearne di proprie dai suoi appunti.",
+"Bibliothèque du séminaire": "Biblioteca del seminario",
+"Calendrier académique": "Calendario accademico",
+"Catéchisme de l’Église catholique": "Catechismo della Chiesa cattolica",
+"Chaque séminariste participe à la vie de la maison dans l’un des 5 groupes, chacun avec ses particularités, ses compétences et ses responsabilités.": "Ogni seminarista partecipa alla vita della casa in uno dei 5 gruppi, ciascuno con le sue caratteristiche, competenze e responsabilità.",
+"Code de droit canonique (1983)": "Codice di diritto canonico (1983)",
+"Collez ici le texte du cours (ou vos notes), ou importez un fichier Word, PDF ou une photo.": "Incollate qui il testo del corso (o i vostri appunti), oppure importate un file Word, un PDF o una foto.",
+"Collez vos notes de cours : le site fabrique des questions, que vous gardez sur ce téléphone pour réviser avec les cartes et le quiz.": "Incollate i vostri appunti: il sito crea domande che conservate su questo telefono per ripassare con le schede e il quiz.",
+"Collez vos références, une par ligne, ou importez votre travail : le site les remet aux normes du GSTF (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) et signale ce qui manque.": "Incollate i vostri riferimenti, uno per riga, o importate il vostro lavoro: il sito li adatta alle norme del GSTF (cognome in maiuscoletto, nome abbreviato, titolo in corsivo, data, editore, pagina) e segnala ciò che manca.",
+"Compétences et responsabilités →": "Competenze e responsabilità →",
+"Concile Vatican II": "Concilio Vaticano II",
+"Confiez-nous une intention": "Affidateci un’intenzione",
+"Connectez-vous pour voir les questions préparées par le professeur. Vous pouvez aussi fabriquer vos propres questions à partir de vos notes, plus bas.": "Accedete per vedere le domande preparate dal professore. Potete anche creare le vostre domande dai vostri appunti, qui sotto.",
+"Conseil : 3 à 6 mots importants (« Eucharistie Pères de l’Église », « vocation sacerdotale Madagascar »). Cochez ce que vous gardez, puis copiez dans Word.": "Consiglio: da 3 a 6 parole chiave («Eucaristia Padri della Chiesa», «vocazione sacerdotale Madagascar»). Spuntate ciò che tenete, poi copiate in Word.",
+"Corps enseignant": "Corpo docente",
+"Des millions de livres numérisés, dont beaucoup d’ouvrages anciens de théologie.": "Milioni di libri digitalizzati, tra cui molte opere antiche di teologia.",
+"Des ressources gratuites et sûres, à lire même quand la bibliothèque est fermée.": "Risorse gratuite e sicure, da leggere anche quando la biblioteca è chiusa.",
+"Devenir étudiant": "Diventare studente",
+"Docteur angélique : œuvres de saint Thomas d’Aquin": "Docteur angélique: opere di san Tommaso d’Aquino",
+"Emploi du temps": "Orario",
+"Empruntables": "In prestito",
+"Encycliques, exhortations, lettres et discours, en français.": "Encicliche, esortazioni, lettere e discorsi, in francese.",
+"Entretient la santé et l’esprit d’équipe par le sport et les loisirs.": "Cura la salute e lo spirito di squadra con lo sport e il tempo libero.",
+"Fait circuler l’information et anime la vie intellectuelle et culturelle.": "Diffonde l’informazione e anima la vita intellettuale e culturale.",
+"Faites connaître le séminaire autour de vous": "Fate conoscere il seminario intorno a voi",
+"Formation humaine": "Formazione umana",
+"Formation intellectuelle": "Formazione intellettuale",
+"Formation pastorale": "Formazione pastorale",
+"Formation spirituelle": "Formazione spirituale",
+"Galerie photos": "Galleria fotografica",
+"Gallica : bibliothèque numérique de la BnF": "Gallica: biblioteca digitale della BnF",
+"Grandir en maturité, en liberté et en sens des responsabilités, pour devenir un homme solide, capable de relations vraies et fraternelles.": "Crescere in maturità, libertà e senso di responsabilità, per diventare un uomo solido, capace di relazioni vere e fraterne.",
+"Horaires d’ouverture": "Orari di apertura",
+"Intentions de prière": "Intenzioni di preghiera",
+"Internet Archive : textes": "Internet Archive: testi",
+"La Bible – traduction officielle liturgique (AELF)": "La Bibbia – traduzione liturgica ufficiale (AELF)",
+"La Somme théologique et les autres œuvres, en français.": "La Somma teologica e le altre opere, in francese.",
+"La bibliothèque": "La biblioteca",
+"La communauté du séminaire la portera dans sa prière. Elle reste discrète : rien n’est affiché sur le site sans l’accord du séminaire.": "La comunità del seminario la porterà nella preghiera. Resta riservata: nulla appare sul sito senza l’accordo del seminario.",
+"La taille de chaque point indique le nombre de séminaristes. Le séminaire se trouve à Faliarivo, Antananarivo (✚).": "La grandezza di ogni punto indica il numero di seminaristi. Il seminario si trova a Faliarivo, Antananarivo (✚).",
+"Le Code latin, en français.": "Il Codice latino, in francese.",
+"Le Saint-Siège : documents des papes": "La Santa Sede: documenti dei papi",
+"Le catalogue n’est pas affiché en entier : seuls les livres qui correspondent à votre recherche apparaissent.": "Il catalogo non è mostrato per intero: compaiono solo i libri che corrispondono alla vostra ricerca.",
+"Le séminaire en chiffres": "Il seminario in cifre",
+"Le séminaire vit grâce à la générosité de ses amis et bienfaiteurs. Un don, même modeste, aide à nourrir, loger et former les futurs prêtres de Madagascar.": "Il seminario vive grazie alla generosità dei suoi amici e benefattori. Un dono, anche modesto, aiuta a nutrire, alloggiare e formare i futuri sacerdoti del Madagascar.",
+"Le texte intégral, avec index.": "Il testo integrale, con indice.",
+"Les constitutions, décrets et déclarations du Concile.": "Le costituzioni, i decreti e le dichiarazioni del Concilio.",
+"Les groupes d’activité": "I gruppi di attività",
+"Les lectures et les offices de chaque jour.": "Le letture e gli uffici di ogni giorno.",
+"Lire l’article": "Leggi l’articolo",
+"Livres anciens, revues et manuscrits numérisés.": "Libri antichi, riviste e manoscritti digitalizzati.",
+"Notre histoire": "La nostra storia",
+"Notre patronne": "La nostra patrona",
+"Notre patronne · notre histoire · les diocèses et congrégations · l’admission et le règlement · l’équipe formatrice et les foyers · les groupes": "La nostra patrona · la nostra storia · diocesi e congregazioni · ammissione e regolamento · équipe formativa e case · i gruppi",
+"Partager": "Condividi",
+"Partagez les nouvelles du séminaire avec vos proches et vos communautés.": "Condividete le notizie del seminario con i vostri cari e le vostre comunità.",
+"Pas encore de questions pour ce cours.": "Ancora nessuna domanda per questo corso.",
+"Persée : revues scientifiques": "Persée: riviste scientifiche",
+"Prend soin de la maison commune, dans l’esprit de Laudato si’.": "Si prende cura della casa comune, nello spirito della Laudato si’.",
+"Prépare et anime la prière commune et les célébrations de la communauté, au rythme de l’année liturgique.": "Prepara e anima la preghiera comune e le celebrazioni della comunità, al ritmo dell’anno liturgico.",
+"Pères et docteurs": "Padri e dottori",
+"Rechercher un livre": "Cerca un libro",
+"Rechercher un nom, un diocèse…": "Cerca un nome, una diocesi…",
+"Rechercher un titre ou un auteur": "Cerca un titolo o un autore",
+"Restons en lien": "Restiamo in contatto",
+"Revues et recherche": "Riviste e ricerca",
+"Sainte Thérèse de l’Enfant-Jésus": "Santa Teresa di Gesù Bambino",
+"Soutenir le séminaire →": "Sostenere il seminario →",
+"Suivez-nous et partagez": "Seguiteci e condividete",
+"Sur place seulement": "Solo consultazione in sede",
+"Syllabus des cours": "Programmi dei corsi",
+"Tapez le sujet de votre mémoire ou de votre travail : le site prépare une première bibliographie avec les livres de notre bibliothèque et les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.": "Scrivete l’argomento della vostra tesi o del vostro lavoro: il sito prepara una prima bibliografia con i libri della nostra biblioteca e i migliori libri e articoli trovati su internet, già secondo le norme del GSTF.",
+"Tapez un titre, un auteur, un sujet ou une cote pour trouver un livre.": "Scrivete un titolo, un autore, un argomento o una segnatura per trovare un libro.",
+"Textes et ressources sur les Pères de l’Église.": "Testi e risorse sui Padri della Chiesa.",
+"Titre, auteur, sujet ou cote": "Titolo, autore, argomento o segnatura",
+"Toute la Bible, livre par livre.": "Tutta la Bibbia, libro per libro.",
+"Téléphone donné à l’emprunt": "Telefono indicato al prestito",
+"Téléphones, adresses email et photos sont visibles seulement par les membres connectés. Pour joindre une personne, passez par le secrétariat (coordonnées ci-dessus).": "Telefoni, indirizzi email e foto sono visibili solo ai membri connessi. Per contattare una persona, passate dalla segreteria (recapiti qui sopra).",
+"Un livre se renouvelle une seule fois, avant la date de retour, et seulement si aucun autre lecteur ne l’attend. Membres du séminaire : connectez-vous, vos emprunts sont dans « Mes emprunts ».": "Un prestito si rinnova una sola volta, prima della data di restituzione, e solo se nessun altro lettore lo aspetta. Membri del seminario: accedete, i vostri prestiti sono in «Mes emprunts».",
+"Une bibliographie de départ sur votre sujet, vos références remises aux normes du GSTF, des cartes et des quiz pour réviser.": "Una bibliografia di partenza sul vostro argomento, i vostri riferimenti secondo le norme del GSTF, schede e quiz per ripassare.",
+"Une formation intégrale": "Una formazione integrale",
+"Une référence par ligne, par exemple :\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.": "Un riferimento per riga, per esempio:\nJoseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.\nRAHNER Karl. Traité fondamental de la foi. Centurion 1983\nIbid., p. 52.",
+"Veille à la vie fraternelle et matérielle de la maison, dans l’esprit du service.": "Veglia sulla vita fraterna e materiale della casa, nello spirito del servizio.",
+"Vidéo Facebook": "Video Facebook",
+"Vivre dans l’intimité du Christ par la prière, l’Eucharistie et la Parole de Dieu, avec l’accompagnement d’un père spirituel.": "Vivere nell’intimità di Cristo con la preghiera, l’Eucaristia e la Parola di Dio, accompagnati da un padre spirituale.",
+"Voir mes emprunts": "Vedi i miei prestiti",
+"Volume horaire": "Monte ore",
+"Votre prénom (facultatif)": "Il vostro nome (facoltativo)",
+"ex. La miséricorde dans l’évangile de Luc": "es. La misericordia nel Vangelo di Luca",
+"· une fois, sans venir à la bibliothèque": "· una volta, senza venire in biblioteca",
+"¹ Notes de bas de page": "¹ Note a piè di pagina",
+"Écriture sainte": "Sacra Scrittura",
+"Équipe formatrice, professeurs, responsables de foyers et étudiants. Chacun complète ses coordonnées dans son portail, rubrique « Mes coordonnées ».": "Équipe formativa, professori, responsabili delle case e studenti. Ognuno completa i suoi recapiti nel proprio portale, alla voce «Mes coordonnées».",
+"Étudier la théologie avec rigueur — Écriture sainte, dogme, morale, liturgie, droit canonique — pour rendre compte de la foi.": "Studiare la teologia con rigore — Sacra Scrittura, dogmatica, morale, liturgia, diritto canonico — per rendere ragione della fede.",
+"▶ Regarder sur Facebook ↗": "▶ Guarda su Facebook ↗",
+"▶ Regarder sur YouTube ↗": "▶ Guarda su YouTube ↗",
+"▶ Vidéo": "▶ Video",
+"★ Les actualités de plus de 3 mois sont dans « Événements inoubliables » →": "★ Le notizie di oltre 3 mesi sono in «Événements inoubliables» →",
+"✅ Quiz": "✅ Quiz",
+"✍️ Correcteur de bibliographie": "✍️ Correttore di bibliografia",
+"✍️ Corriger": "✍️ Correggi",
+"✨ Fabriquer les questions": "✨ Crea le domande",
+"🃏 Cartes": "🃏 Schede",
+"🌐 Bibliothèque numérique": "🌐 Biblioteca digitale",
+"🎓 Assistant de mémoire": "🎓 Assistente per la tesi",
+"🎓 Pour vos travaux et vos examens": "🎓 Per i vostri lavori e i vostri esami",
+"🎓 Préparer ma bibliographie": "🎓 Prepara la mia bibliografia",
+"📄 Importer": "📄 Importa",
+"📄 Importer (Word, PDF, photo)": "📄 Importa (Word, PDF, foto)",
+"📋 Plan de révision": "📋 Piano di ripasso",
+"📖 En savoir plus sur le séminaire": "📖 Saperne di più sul seminario",
+"📚 Bibliographie": "📚 Bibliografia",
+"🔁 Renouveler mon emprunt": "🔁 Rinnova il mio prestito",
+"🔊 Écouter": "🔊 Ascolta",
+"🙏 Confier mon intention": "🙏 Affida la mia intenzione",
+"🧠 Révision des cours": "🧠 Ripasso dei corsi",
+"Le séminaire": "Il seminario",
+"Contact et plan d’accès": "Contatti e indicazioni",
+"Soutenir le séminaire": "Sostenere il seminario",
 "Studium de premier cycle · Baccalauréat canonique de théologie": "Studium di primo ciclo · Baccalaureato canonico in teologia",
 "La foi en quête de l'intelligence": "La fede che cerca l’intelligenza",
 "Le GSTF forme les candidats au sacerdoce des diocèses et des congrégations religieuses de Madagascar. Sa visée est double : approfondir et structurer personnellement la foi chrétienne, et recevoir une formation universitaire en théologie en vue du ministère de prêtre.": "Il GSTF forma i candidati al sacerdozio delle diocesi e delle congregazioni religiose del Madagascar. Il suo scopo è duplice: approfondire e strutturare personalmente la fede cristiana e ricevere una formazione universitaria in teologia in vista del ministero sacerdotale.",
@@ -11726,7 +12220,7 @@ const I18N = {
 }
 };
 const LANGUES = { fr: 'Français', mg: 'Malagasy', en: 'English', it: 'Italiano' };
-const I18N_ZONES = ['header nav', '#navLat', '#panel-souvenirs > div:first-child', '#panel-accueil', '#panel-contact', '#panel-portails', '#inscriptionBox', 'body > footer', '#panel-agenda', '#panel-economat > div:first-child', '#soApp', '#panel-anciens'];
+const I18N_ZONES = ['#panel-bibliotheque', '#panel-articles', '#docNav', '#docView', '#accPlus > summary', 'header nav', '#navLat', '#panel-souvenirs > div:first-child', '#panel-accueil', '#panel-contact', '#panel-portails', '#inscriptionBox', 'body > footer', '#panel-agenda', '#panel-economat > div:first-child', '#soApp', '#panel-anciens'];
 let LANGUE = 'fr'; try { const l = localStorage.getItem('gstf-langue'); if (LANGUES[l]) LANGUE = l; } catch (e) {}
 const i18nOrig = new WeakMap(), i18nOrigPh = new WeakMap();
 const i18nNorm = s => s.replace(/\s+/g, ' ').trim();
