@@ -184,6 +184,10 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   #printArea { display: block !important; color: #000; background: #fff; font-family: Georgia, "Times New Roman", serif; padding: 0; font-size: 10pt; }
   #printArea > p, #printArea > h1, #printArea > .pa-box { margin-left: 1cm; margin-right: 1cm; }
   #printArea .pa-page { page-break-after: always; break-after: page; }
+  #printArea .plag-imp .outil-box, #printArea .plag-imp-dec { border: .6pt solid #999; border-radius: 4pt; padding: 6pt 8pt; margin: 0 0 8pt; break-inside: avoid-page; }
+  #printArea .plag-imp table { width: 100%; border-collapse: collapse; font-size: 9pt; } #printArea .plag-imp th, #printArea .plag-imp td { border-bottom: .4pt solid #bbb; padding: 2pt 4pt; text-align: left; vertical-align: top; }
+  #printArea .plag-imp .text-3xl { font-size: 20pt; } #printArea .plag-imp mark { background: #ffe08a; -webkit-print-color-adjust: exact; print-color-adjust: exact; } #printArea .plag-imp .plag-texte { max-height: none; overflow: visible; font-size: 9pt; }
+  #printArea .plag-imp .pill { padding: 1pt 6pt; border-radius: 8pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #printArea .pa-page:last-child { page-break-after: auto; break-after: auto; }
   #printArea .pa-head { text-align: center; border-bottom: 1.5pt solid #000; padding-bottom: 3pt; margin-bottom: 6pt; }
   #printArea .pa-logo { height: 18mm; width: auto; display: block; margin: 0 auto 3pt; }
@@ -1514,7 +1518,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 136</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 137</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -4866,6 +4870,7 @@ function renderAdminArticles() {
     ARTICLES.unshift(data); e.target.reset(); list();
     toast('Article publié', titre);
     if (prevenir) envoyerPushPublication('article', data.id);
+    if (texte) plagAjouterTexte('article:' + data.id, 'article', base.auteur, titre, new Date().getFullYear(), texte).catch(() => {});
   });
 }
 
@@ -7328,8 +7333,8 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 136, VERSION_FONCTION_ATTENDUE = 27;
-const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]]];
+const VERSION_SITE = 137, VERSION_FONCTION_ATTENDUE = 27;
+const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
   'gstf-resumes-livres': 'Résumés et couvertures des livres (chaque heure)', 'gstf-rapport-mensuel': 'Rapport du mois envoyé par email (le 1er du mois)' };
@@ -7703,7 +7708,8 @@ async function renderSuivi(box) {
  *  Plagiat : comparer un travail aux autres travaux, le chercher sur  *
  *  internet, et relever les signaux d’alerte                          *
  * =================================================================== */
-const PLAG_N = 7;   // longueur des suites de mots comparées
+const PLAG_N = 7;   // longueur des suites de mots comparées (copie exacte)
+const PLAG_STOP = new Set('les des une dans pour par avec sur sous mais donc car que qui quoi dont est sont etre avoir ont fait cette ces son sa ses leur leurs nous vous ils elles elle lui aussi plus tres tout tous toute toutes comme ainsi alors entre vers chez sans selon dont meme cela celui celle ceux deja encore apres avant pendant lorsque quand parce'.split(' '));
 const plagNorm = t => sans(t).replace(/[’'`]/g, ' ').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 function plagHash(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return h | 0; }
 // Le texte sans les citations entre guillemets (Bible, Magistère… : leur reprise est normale)
@@ -7711,7 +7717,14 @@ const plagSansCitations = t => String(t).replace(/«[^»]{0,1500}»|“[^”]{0,
 function plagEmpreinte(texte) {
   const mots = plagNorm(plagSansCitations(texte)).split(' ').filter(Boolean), H = new Map();
   for (let i = 0; i + PLAG_N <= mots.length; i++) { const h = plagHash(mots.slice(i, i + PLAG_N).join(' ')); if (!H.has(h)) H.set(h, i); }
-  return { mots, H, hashes: [...H.keys()].slice(0, 30000) };
+  // empreinte « souple » : 4 mots porteurs de sens, racine de 6 lettres, dans n’importe quel ordre (reformulations)
+  const pleins = mots.filter(w => w.length > 3 && !PLAG_STOP.has(w)).map(w => w.slice(0, 6)), H2 = new Set();
+  for (let i = 0; i + 4 <= pleins.length; i++) H2.add(plagHash(pleins.slice(i, i + 4).sort().join(' ')));
+  return { mots, H, hashes: [...H.keys()].slice(0, 30000), hashes2: [...H2].slice(0, 30000) };
+}
+function plagStyle(texte) {
+  const w = String(texte).split(/\s+/).filter(Boolean), ph = String(texte).split(/[.!?]+/).filter(x => x.trim().length > 3);
+  return { lm: +(w.reduce((a, x) => a + x.length, 0) / Math.max(1, w.length)).toFixed(2), lp: +(w.length / Math.max(1, ph.length)).toFixed(1), rares: +(w.filter(x => x.length > 9).length / Math.max(1, w.length)).toFixed(3) };
 }
 async function pdfTexteSimple(f) {   // texte d’un PDF, sans lecture de photos (rapide, même sur téléphone)
   await chargerScript(LIBS_IMPORT.pdf); pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS_IMPORT.pdfWorker;
@@ -7719,9 +7732,24 @@ async function pdfTexteSimple(f) {   // texte d’un PDF, sans lecture de photos
   for (let p = 1; p <= Math.min(doc.numPages, 250); p++) { const tc = await (await doc.getPage(p)).getTextContent(); t += tc.items.map(i => i.str + (i.hasEOL ? '\n' : ' ')).join('') + '\n'; }
   return t;
 }
-// Après le dépôt d’un travail par l’étudiant : son empreinte rejoint la base de comparaison (en silence)
-async function plagiatApresDepot(devoirId, f) {
-  try { const t = await pdfTexteSimple(f), e = plagEmpreinte(t); if (e.hashes.length >= 5) await sb.rpc('plagiat_depot', { p_devoir: devoirId, p_hashes: e.hashes, p_nb: e.mots.length }); } catch (_) {}
+async function texteDuFichier(f, etat) {
+  let t = /\.pdf$/i.test(f.name) || f.type === 'application/pdf' ? await pdfTexteSimple(f).catch(() => '') : '';
+  if (t.replace(/\s/g, '').length < 200) t = (await lignesDepuisFichier(f, etat || (() => {}))).join('\n');
+  return t;
+}
+// Après le dépôt d’un travail : déclaration, empreintes, pourcentages calculés tout de suite (en silence)
+async function plagiatApresDepot(devoirId, f, declaration) {
+  let t = ''; try { t = await pdfTexteSimple(f); } catch (_) {}
+  const e = plagEmpreinte(t);
+  try {
+    const { error } = await sb.rpc('plagiat_depot2', { p_devoir: devoirId, p_hashes: e.hashes, p_hashes2: e.hashes2, p_nb: e.mots.length, p_style: plagStyle(t), p_declaration: !!declaration });
+    if (error && /plagiat_depot2|function|schema cache/i.test(error.message) && e.hashes.length >= 5) await sb.rpc('plagiat_depot', { p_devoir: devoirId, p_hashes: e.hashes, p_nb: e.mots.length });
+  } catch (_) {}
+}
+async function plagAjouterTexte(cle, source, auteur, titre, annee, texte) {
+  const E = plagEmpreinte(texte); if (E.hashes.length < 5) return false;
+  const { error } = await sb.rpc('plagiat_ajouter', { p_cle: cle, p_source: source, p_auteur: auteur || '', p_titre: titre || '', p_annee: String(annee || ''), p_hashes: E.hashes, p_hashes2: E.hashes2, p_nb: E.mots.length });
+  if (error) throw error; return true;
 }
 function plagPhrasesWeb(texte) {   // les phrases les plus « remarquables », réparties dans tout le travail
   const ph = plagSansCitations(texte).replace(/\s+/g, ' ').match(/[^.!?;]{60,320}[.!?;]/g) || [];
@@ -7733,19 +7761,16 @@ function plagPhrasesWeb(texte) {   // les phrases les plus « remarquables », r
 }
 function plagSignaux(texte) {
   const S = [], T = String(texte);
-  // 1. Citations longues sans référence
   const cit = [...T.matchAll(/«([^»]{180,1500})»/g)].filter(m => !/^\s*[\d¹²³⁴⁵⁶⁷⁸⁹⁰(]|^\s*\(|^.{0,40}(cf\.|p\.\s*\d|\d{4})/i.test(T.slice(m.index + m[0].length, m.index + m[0].length + 60)));
   if (cit.length) S.push(['Citations longues sans référence', `${cit.length} citation(s) de plus de 30 mots ne semblent suivies d’aucune note ni référence.`, cit.slice(0, 3).map(m => '« ' + m[1].slice(0, 140).trim() + '… »')]);
-  // 2. Changements brusques de style d’un paragraphe à l’autre
   const pars = T.split(/\n\s*\n|\n(?=[A-ZÀ-Ý])/).map(p => p.replace(/\s+/g, ' ').trim()).filter(p => p.split(' ').length >= 60);
   if (pars.length >= 5) {
-    const m = pars.map(p => { const w = p.split(' '), ph = p.split(/[.!?]+/).filter(x => x.trim()); return { p, lm: w.reduce((a, x) => a + x.length, 0) / w.length, lp: w.length / Math.max(1, ph.length), rares: w.filter(x => x.length > 9).length / w.length }; });
+    const m = pars.map(p => ({ p, ...plagStyle(p) }));
     const moy = k => m.reduce((a, x) => a + x[k], 0) / m.length, et = k => Math.sqrt(m.reduce((a, x) => a + (x[k] - moy(k)) ** 2, 0) / m.length) || 1;
     const z = m.map(x => ({ p: x.p, z: Math.abs(x.lm - moy('lm')) / et('lm') + Math.abs(x.lp - moy('lp')) / et('lp') + Math.abs(x.rares - moy('rares')) / et('rares') }));
     const brusques = z.filter(x => x.z > 5.2).sort((a, b) => b.z - a.z);
     if (brusques.length) S.push(['Changements brusques de style', `${brusques.length} paragraphe(s) écrit(s) très différemment du reste (longueur des phrases, vocabulaire) : à relire.`, brusques.slice(0, 3).map(x => x.p.slice(0, 160) + '…')]);
   }
-  // 3. Bibliographie et notes qui ne correspondent pas
   const iB = T.search(/\n\s*(bibliographie|bibliography|sources et bibliographie)\b/i);
   if (iB > 0) {
     const corps = sans(T.slice(0, iB)), bib = T.slice(iB);
@@ -7755,43 +7780,221 @@ function plagSignaux(texte) {
   } else if (T.split(/\s+/).length > 2500) S.push(['Pas de bibliographie trouvée', 'Le travail est long mais aucune partie « Bibliographie » n’a été trouvée.', []]);
   return S;
 }
-async function rapportPlagiat({ texte, titre, auteur, remise, etudiant, enregistrer }) {
-  const fond = document.createElement('div'); fond.className = 'plag-fond';
-  fond.innerHTML = `<div class="plag-boite" role="dialog" aria-label="Rapport de plagiat"><div class="flex justify-between items-center gap-2 mb-3"><p class="eyebrow">🔍 Plagiat · rapport</p><span class="flex gap-2"><button type="button" class="btn btn-ghost btn-sm" data-plag-print>🖨 Imprimer</button><button type="button" class="btn btn-sm" data-plag-fermer>Fermer</button></span></div><div data-plag-corps><p class="text-muted">Analyse en cours…</p></div></div>`;
+const PLAG_DEC = { rien: 'Rien à signaler', avertissement: 'Avertissement', refaire: 'Travail à refaire', annule: 'Note annulée' };
+let PLAG_SEUILS = { vigilance: 10, inacceptable: 25 };
+(async () => { try { const r = await sb.from('reglages').select('valeur').eq('cle', 'plagiat_seuils').maybeSingle(); if (r.data && r.data.valeur) PLAG_SEUILS = { ...PLAG_SEUILS, ...r.data.valeur }; } catch (_) {} })();
+const plagCoul = p => p >= PLAG_SEUILS.inacceptable ? 'var(--bad)' : p >= PLAG_SEUILS.vigilance ? 'var(--warn)' : '#2e7d32';
+const plagVerdict = p => p >= PLAG_SEUILS.inacceptable ? `au-dessus du seuil inacceptable (${PLAG_SEUILS.inacceptable} %)` : p >= PLAG_SEUILS.vigilance ? `à examiner (seuil de vigilance : ${PLAG_SEUILS.vigilance} %)` : 'dans la norme';
+/* Évaluation critique et scientifique d’un rapport de plagiat, d’après les cadres internationaux :
+   ENAI (European Network for Academic Integrity), COPE (Committee on Publication Ethics), ICAI (International Center for Academic Integrity).
+   Principe commun : un pourcentage de similarité n’est pas une preuve ; c’est une personne qui juge, après avoir lu et entendu l’étudiant. */
+const PLAG_GRAV = {
+  aucun: { t: 'Aucune irrégularité relevée', c: '#2e7d32', dec: 'rien' },
+  mineur: { t: 'Irrégularité mineure', c: '#2e7d32', dec: 'rien' },
+  modere: { t: 'Irrégularité modérée', c: 'var(--warn)', dec: 'avertissement' },
+  grave: { t: 'Irrégularité grave', c: 'var(--bad)', dec: 'refaire' }
+};
+function plagEvaluer({ pct, pct2, sources, parMot, nbHashes, nbHashes2, resWeb, sig, decs, etu, nbMots }) {
+  const V = PLAG_SEUILS.vigilance, I = PLAG_SEUILS.inacceptable;
+  let plusLong = 0, cur = 0, nbPassages = 0;
+  for (let i = 0; i < parMot.length; i++) { if (parMot[i]) { if (!cur) nbPassages++; cur++; if (cur > plusLong) plusLong = cur; } else cur = 0; }
+  const src = sources.map(s => ({ ...s, p: Math.round(Math.min(100, s.commun / Math.max(1, nbHashes) * 100)), p2: Math.round(Math.min(100, (s.commun2 || 0) / Math.max(1, nbHashes2) * 100)) }));
+  const notables = src.filter(s => s.p >= 3), etudiants = src.filter(s => (!s.source || s.source === 'travail') && s.p >= V);
+  const webTrouve = resWeb ? resWeb.filter(r => r.resultats && r.resultats.length).length : null;
+  const aSig = n => sig.some(s => s[0] === n), recidive = (decs || []).filter(d => d.decision && d.decision !== 'rien').length;
+  const T = [
+    { nom: 'Copie textuelle (copier-coller)', ok: plusLong >= 40 || pct >= I, det: `${pct} % du texte se retrouve mot pour mot ailleurs ; plus long passage identique : ${plusLong} mots (${nbPassages} passage(s) en tout).` },
+    { nom: 'Paraphrase non citée (« patchwriting »)', ok: pct2 >= V && pct2 >= pct + 15, det: `≈ ${pct2} % du texte reprend les idées et le vocabulaire d’une source avec des mots changés ou déplacés, contre ${pct} % de copie exacte.` },
+    { nom: 'Plagiat « mosaïque » (plusieurs sources assemblées)', ok: notables.length >= 3, det: `${notables.length} source(s) contribuent chacune pour au moins 3 % du texte.` },
+    { nom: 'Reprise du travail d’un autre étudiant', ok: etudiants.length > 0, det: etudiants.length ? `${etudiants.length} travail(aux) d’étudiant au-dessus du seuil de vigilance (${etudiants.map(s => s.p + ' %').join(', ')}).` : 'Aucun travail d’étudiant au-dessus du seuil de vigilance.' },
+    { nom: 'Source internet non citée', ok: !!webTrouve, det: webTrouve == null ? 'Recherche automatique non effectuée : vérifier les phrases avec les boutons Google.' : `${webTrouve} phrase(s) sur ${resWeb.length} retrouvée(s) mot pour mot sur internet.` },
+    { nom: 'Citations sans référence', ok: aSig('Citations longues sans référence'), det: aSig('Citations longues sans référence') ? 'Des citations longues ne sont suivies d’aucune note : la source doit être donnée.' : 'Les citations longues semblent référencées.' },
+    { nom: 'Changements brusques de style (indice seulement)', ok: aSig('Changements brusques de style'), det: aSig('Changements brusques de style') ? 'Certains paragraphes sont écrits très différemment du reste : indice d’un texte d’une autre main (source non trouvée, traduction ou texte produit par une IA), jamais une preuve.' : 'Le style est homogène.' }
+  ];
+  let g = 'aucun';
+  if (pct >= 3 || pct2 >= V || T[5].ok || T[6].ok) g = 'mineur';
+  if (pct >= V || pct2 >= I || plusLong >= 40 || webTrouve || T[2].ok) g = 'modere';
+  if (pct >= I || plusLong >= 80 || webTrouve >= 3 || etudiants.some(s => s.p >= I)) g = 'grave';
+  const reco = etu ? {
+    aucun: ['Votre travail peut être déposé. Vérifiez seulement que chaque idée empruntée a sa note.'],
+    mineur: ['Reprenez les passages surlignés : guillemets + note de bas de page, ou vraie reformulation avec vos propres mots et la source en note.'],
+    modere: ['Ne déposez pas encore : plusieurs passages viennent d’autres textes sans être cités.', 'Pour chaque passage surligné : citez (guillemets + note) ou reformulez réellement, puis refaites le test.'],
+    grave: ['Ne déposez pas ce travail en l’état : une grande partie vient d’autres textes.', 'Réécrivez ces parties avec vos propres mots ; gardez seulement de courtes citations, entre guillemets et avec leur note.', 'Si vous ne comprenez pas comment citer, demandez conseil à votre professeur avant la date limite.']
+  }[g] : {
+    aucun: ['Aucune suite : le travail peut être évalué normalement.'],
+    mineur: ['Suite pédagogique : signaler à l’étudiant les passages concernés et lui rappeler les règles de citation.', 'Pas de sanction : il s’agit le plus souvent d’une maladresse de citation.'],
+    modere: ['Entretien avec l’étudiant avant toute décision : il explique sa manière de travailler et ses sources.', 'Si l’intention de tromper n’est pas établie : faire reprendre les passages avec citations correctes.', 'Si elle l’est : avertissement écrit, gardé dans le dossier.'],
+    grave: ['Entretien obligatoire avec l’étudiant (procédure contradictoire), en présence d’un témoin si possible.', 'Transmettre le dossier au Préfet des études avec ce rapport et la copie du travail.', 'Selon le règlement : travail à refaire ou note annulée ; une récidive aggrave la sanction.']
+  }[g];
+  if (!etu && recidive) reco.push(`Antécédent : ${recidive} décision(s) déjà prise(s) pour cet étudiant, à prendre en compte (proportionnalité).`);
+  const methode = [
+    `Texte analysé : ${nbMots.toLocaleString('fr-FR')} mots, extraits automatiquement du fichier déposé.`,
+    `Copie exacte : le texte est découpé en suites de ${PLAG_N} mots consécutifs ; chaque suite est transformée en empreinte numérique (FNV-1a) et comparée aux empreintes déjà enregistrées.`,
+    'Reformulation : une seconde empreinte, plus souple, compare les racines des mots importants (ordre et petits mots ignorés) pour repérer les paraphrases.',
+    'Les passages placés entre guillemets ne sont pas comptés : une citation correcte n’est jamais du plagiat.',
+    `Base de comparaison : travaux déjà déposés au séminaire, anciens mémoires importés, articles et actes du site. Le site ne garde que des empreintes, jamais le texte lisible d’un autre travail.`,
+    resWeb ? `Internet : ${resWeb.length} phrase(s) caractéristique(s) cherchée(s) mot pour mot par un moteur de recherche (Brave Search).` : 'Internet : phrases caractéristiques proposées à la vérification manuelle (Google).',
+    `Seuils fixés par le séminaire : vigilance dès ${V} %, inacceptable dès ${I} %.`
+  ];
+  const limites = [
+    'Les livres et revues qui ne sont pas en ligne ni dans la base ne peuvent pas être retrouvés : un texte « propre » n’est pas une garantie.',
+    'Un texte traduit d’une autre langue (anglais, italien, malgache…) n’est pas reconnu comme copie.',
+    'Un texte produit par une intelligence artificielle n’est pas détecté comme tel ; seuls des indices de style peuvent alerter.',
+    'Faux positifs possibles : formules liturgiques, citations bibliques ou du Magistère, titres, bibliographie, expressions courantes.',
+    'Le pourcentage de reformulation est une estimation statistique : il faut lire les passages.'
+  ];
+  const cadre = [
+    'ENAI — Glossary for Academic Integrity (Tauginienė et al., 2018) et Foltýnek et al., « Testing of support tools for plagiarism detection » (2020) : un logiciel signale des similitudes ; seul un examen humain peut conclure au plagiat.',
+    'COPE (Committee on Publication Ethics) — lignes directrices sur le plagiat : distinguer copie mineure et copie importante, entendre l’auteur avant de décider.',
+    'ICAI — The Fundamental Values of Academic Integrity (3e éd., 2021) : honnêteté, confiance, équité, respect, responsabilité, courage.',
+    'R. M. Howard (1995) : le « patchwriting » (paraphrase trop proche) relève souvent d’un apprentissage inachevé de l’écriture savante, à traiter d’abord de façon pédagogique.'
+  ];
+  const procedure = [
+    'Présomption de bonne foi : ce rapport est une aide à la décision, pas une preuve.',
+    'Droit d’être entendu : l’étudiant voit les passages concernés et peut s’expliquer avant toute sanction.',
+    'Proportionnalité : la décision tient compte de l’étendue, de l’intention, du niveau d’études et des antécédents.',
+    'Traçabilité : la décision et son motif sont consignés dans le dossier de l’étudiant.'
+  ];
+  return { g, G: PLAG_GRAV[g], types: T, reco, methode, limites, cadre, procedure, plusLong, nbPassages, src, webTrouve, recidive };
+}
+function plagEvalHTML(EV, etu, num) {
+  const li = a => `<ul class="text-sm mt-1">${a.map(x => `<li class="mb-1">• ${esc(x)}</li>`).join('')}</ul>`;
+  return `<div class="outil-box mb-4" data-plag-eval><h3 class="font-semibold">${num}. Évaluation critique et scientifique</h3>
+    <p class="mt-2"><span class="pill" style="background:${EV.G.c};color:#fff">${esc(EV.G.t)}</span> <span class="text-xs text-muted">selon les critères internationaux (ENAI, COPE, ICAI)</span></p>
+    <table class="text-sm mt-3"><thead><tr><th>Type de manquement</th><th>Constat</th><th>Détail</th></tr></thead><tbody>${EV.types.map(t => `<tr><td>${esc(t.nom)}</td><td style="color:${t.ok ? 'var(--bad)' : '#2e7d32'};white-space:nowrap">${t.ok ? '⚠️ relevé' : '✓ non relevé'}</td><td class="text-xs">${esc(t.det)}</td></tr>`).join('')}</tbody></table>
+    <p class="font-semibold text-sm mt-3">${etu ? 'Ce que je dois faire' : 'Suite recommandée (graduée)'}</p>${li(EV.reco)}
+    <details class="mt-2"><summary class="text-sm font-semibold">Méthode, limites et cadre de référence</summary>
+      <p class="font-semibold text-sm mt-2">Méthode</p>${li(EV.methode)}
+      <p class="font-semibold text-sm mt-2">Limites de l’analyse</p>${li(EV.limites)}
+      ${etu ? '' : `<p class="font-semibold text-sm mt-2">Procédure équitable</p>${li(EV.procedure)}`}
+      <p class="font-semibold text-sm mt-2">Cadre de référence</p>${li(EV.cadre)}</details></div>`;
+}
+// Rapport Word (.docx), modifiable : mêmes sections que l’écran, sans la zone de décision
+async function plagWord(R) {
+  toast('Préparation du fichier Word…', 'Quelques secondes.');
+  try { await chargerScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js'); } catch (_) { toast('Word indisponible', 'Vérifiez la connexion internet.', 'bad'); return; }
+  const X = window.docx, EV = R.EV, F = 'Calibri', B = { style: X.BorderStyle.SINGLE, size: 4, color: 'BBBBBB' };
+  const hex = c => c === 'var(--bad)' ? 'B3261E' : c === 'var(--warn)' ? 'B26A00' : '2E7D32';
+  const P = (t, o = {}, r = {}) => new X.Paragraph({ spacing: { after: 80 }, ...o, children: Array.isArray(t) ? t : [new X.TextRun({ text: String(t), font: F, size: 21, ...r })] });
+  const H = t => new X.Paragraph({ heading: X.HeadingLevel.HEADING_2, spacing: { before: 280, after: 100 }, keepNext: true, children: [new X.TextRun({ text: t, font: F, size: 26, bold: true, color: '7A1F2B' })] });
+  const H3 = t => new X.Paragraph({ spacing: { before: 160, after: 60 }, keepNext: true, children: [new X.TextRun({ text: t, font: F, size: 22, bold: true })] });
+  const puce = t => new X.Paragraph({ numbering: { reference: 'puces', level: 0 }, spacing: { after: 40 }, children: [new X.TextRun({ text: t, font: F, size: 20 })] });
+  const larg = 9026;
+  const tab = (tetes, lignes, cols) => new X.Table({ width: { size: larg, type: X.WidthType.DXA }, columnWidths: cols,
+    rows: [tetes, ...lignes].map((l, i) => new X.TableRow({ tableHeader: i === 0, children: l.map((c, j) => new X.TableCell({ width: { size: cols[j], type: X.WidthType.DXA }, borders: { top: B, bottom: B, left: B, right: B },
+      shading: i === 0 ? { type: X.ShadingType.CLEAR, color: 'auto', fill: 'F1E9EA' } : undefined, margins: { top: 50, bottom: 50, left: 90, right: 90 },
+      children: [new X.Paragraph({ children: [new X.TextRun({ text: String(typeof c === 'object' ? c.t : c), font: F, size: 18, bold: i === 0 || (c && c.b), color: c && c.c ? c.c : undefined })] })] })) })) });
+  const corps = [
+    P('GRAND SÉMINAIRE DE THÉOLOGIE SAINTE THÉRÈSE DE L’ENFANT-JÉSUS', { alignment: X.AlignmentType.CENTER, spacing: { after: 0 } }, { bold: true, size: 22 }),
+    P('Faliarivo - Ambanidia · Lot VB 5 bis · 101 Antananarivo', { alignment: X.AlignmentType.CENTER, border: { bottom: { style: X.BorderStyle.SINGLE, size: 8, color: '7A1F2B', space: 4 } }, spacing: { after: 240 } }, { size: 18, color: '555555' }),
+    P(R.etu ? 'Test de plagiat de mon brouillon' : 'Rapport d’analyse de similarité et d’intégrité académique', { alignment: X.AlignmentType.CENTER }, { bold: true, size: 30 }),
+    P(R.titre || 'Travail', { alignment: X.AlignmentType.CENTER }, { italics: true, size: 24 }),
+    P([R.auteur, `${R.nbMots.toLocaleString('fr-FR')} mots`, R.date].filter(Boolean).join(' · '), { alignment: X.AlignmentType.CENTER, spacing: { after: 240 } }, { size: 19, color: '555555' }),
+    H('Synthèse'),
+    P([new X.TextRun({ text: 'Appréciation : ', font: F, size: 22, bold: true }), new X.TextRun({ text: EV.G.t, font: F, size: 22, bold: true, color: hex(EV.G.c) })]),
+    P(`Passages identiques : ${R.pct} % (${plagVerdict(R.pct)}) · passages reformulés : ≈ ${R.pct2} % · plus long passage identique : ${EV.plusLong} mots.`),
+    H('1. Comparaison avec les autres travaux'),
+    ...(R.erreur ? [P(R.erreur)] : EV.src.length ? [tab(['Travail ressemblant', ...(R.etu ? [] : ['Auteur']), 'Année', 'Identique', 'Reformulé'],
+      EV.src.map(s => [s.titre || '—', ...(R.etu ? [] : [s.auteur || '—']), s.annee || '', { t: s.p + ' %', b: 1, c: hex(plagCoul(s.p)) }, { t: s.p2 + ' %', c: hex(plagCoul(s.p2)) }]),
+      R.etu ? [5026, 1200, 1400, 1400] : [3426, 2200, 1000, 1200, 1200])] : [P('Aucun passage commun avec les travaux déjà enregistrés.')]),
+    P('Les passages entre guillemets ne sont pas comptés.', { spacing: { before: 80 } }, { size: 17, italics: true, color: '666666' }),
+    H('2. Recherche sur internet'),
+    ...(R.resWeb ? R.resWeb.map(r => P(`« ${r.phrase} » — ${r.resultats.length ? 'trouvée sur ' + r.resultats.map(x => (x.site || x.titre) + ' (' + x.lien + ')').join(' ; ') : 'non trouvée'}`, {}, { size: 19, color: r.resultats.length ? 'B3261E' : undefined }))
+      : R.phrases.length ? [P('Phrases à vérifier mot pour mot dans un moteur de recherche :', {}, { size: 19 }), ...R.phrases.map(p => puce(`« ${p} »`))] : [P('Pas de phrase assez longue à chercher.')]),
+    H('3. Signaux d’alerte'),
+    ...(R.sig.length ? R.sig.flatMap(([t, d, ex]) => [H3('⚠ ' + t), P(d), ...ex.map(x => puce(x))]) : [P('Aucun signal particulier.')]),
+    H('4. Évaluation critique et scientifique'),
+    tab(['Type de manquement', 'Constat', 'Détail'], EV.types.map(t => [t.nom, { t: t.ok ? 'relevé' : 'non relevé', b: 1, c: t.ok ? 'B3261E' : '2E7D32' }, t.det]), [2800, 1100, 5126]),
+    H3(R.etu ? 'Ce que je dois faire' : 'Suite recommandée (graduée)'), ...EV.reco.map(puce),
+    H3('Méthode'), ...EV.methode.map(puce),
+    H3('Limites de l’analyse'), ...EV.limites.map(puce),
+    ...(R.etu ? [] : [H3('Procédure équitable'), ...EV.procedure.map(puce)]),
+    H3('Cadre de référence'), ...EV.cadre.map(puce)
+  ];
+  if (R.pct) {
+    corps.push(new X.Paragraph({ pageBreakBefore: true, heading: X.HeadingLevel.HEADING_2, children: [new X.TextRun({ text: 'Annexe : texte avec les passages identiques surlignés', font: F, size: 26, bold: true, color: '7A1F2B' })] }));
+    const runs = []; let buf = '', etat = R.parMot[0] || 0; const lim = Math.min(R.mots.length, 6000);
+    const flush = () => { if (buf) runs.push(new X.TextRun({ text: buf, font: F, size: 19, highlight: etat ? 'yellow' : undefined })); buf = ''; };
+    for (let i = 0; i < lim; i++) { const e = R.parMot[i] || 0; if (e !== etat) { flush(); etat = e; } buf += R.mots[i] + ' '; }
+    flush(); corps.push(new X.Paragraph({ alignment: X.AlignmentType.JUSTIFIED, children: runs }));
+  }
+  if (!R.etu) corps.push(H('Décision'), P('Décision : ……………………………………………………   Date : ……………………'), P('Motif et entretien avec l’étudiant :'), P('……………………………………………………………………………………………………………………………'), P('……………………………………………………………………………………………………………………………'), P('Signature du professeur : ……………………………      Visa du Préfet des études : ……………………………', { spacing: { before: 240 } }));
+  corps.push(P('Ce rapport est une aide à la décision, pas un jugement : un passage commun peut venir d’une source correctement citée.', { spacing: { before: 240 } }, { size: 17, italics: true, color: '666666' }));
+  const doc = new X.Document({ creator: 'GSTF', title: 'Rapport de plagiat', numbering: { config: [{ reference: 'puces', levels: [{ level: 0, format: X.LevelFormat.BULLET, text: '•', alignment: X.AlignmentType.LEFT, style: { paragraph: { indent: { left: 360, hanging: 240 } } } }] }] },
+    styles: { default: { document: { run: { font: F, size: 21 } }, heading2: { run: { font: F, size: 26, bold: true }, paragraph: { spacing: { before: 280, after: 100 }, keepNext: true } } } },
+    sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1134, bottom: 1134, left: 1440, right: 1440 } } },
+      footers: { default: new X.Footer({ children: [new X.Paragraph({ alignment: X.AlignmentType.CENTER, children: [new X.TextRun({ text: 'GSTF · rapport de plagiat · page ', font: F, size: 16, color: '888888' }), new X.TextRun({ children: [X.PageNumber.CURRENT], font: F, size: 16, color: '888888' })] })] }) },
+      children: corps }] });
+  const blob = await X.Packer.toBlob(doc);
+  telecharger(`Plagiat_${String(R.titre || 'travail').replace(/[^\p{L}\p{N}]+/gu, '_').slice(0, 50)}.docx`, blob);
+  toast('Fichier Word prêt', 'Regardez dans vos téléchargements.');
+}
+// mode : 'prof' (complet, avec décision) ou 'etudiant' (test du brouillon : sans noms, sans rien enregistrer)
+async function rapportPlagiat({ texte, titre, auteur, remise, etudiant, enregistrer, mode = 'prof' }) {
+  const etu = mode === 'etudiant', fond = document.createElement('div'); fond.className = 'plag-fond';
+  fond.innerHTML = `<div class="plag-boite" role="dialog" aria-label="Rapport de plagiat"><div class="flex justify-between items-center gap-2 mb-3"><p class="eyebrow">🔍 Plagiat · ${etu ? 'test de mon brouillon' : 'rapport'}</p><span class="flex gap-2"><button type="button" class="btn btn-ghost btn-sm" data-plag-word hidden>📝 Word</button><button type="button" class="btn btn-ghost btn-sm" data-plag-pdf hidden>📕 PDF</button><button type="button" class="btn btn-sm" data-plag-fermer>Fermer</button></span></div><div data-plag-corps><p class="text-muted">Analyse en cours…</p></div></div>`;
   document.body.appendChild(fond); document.body.style.overflow = 'hidden';
   const fermer = () => { fond.remove(); document.body.style.overflow = ''; };
   fond.querySelector('[data-plag-fermer]').onclick = fermer; fond.addEventListener('click', e => { if (e.target === fond) fermer(); });
   const corps = fond.querySelector('[data-plag-corps]');
   const E = plagEmpreinte(texte), nbMots = texte.split(/\s+/).filter(Boolean).length;
-  if (E.hashes.length < 5) { corps.innerHTML = '<p>Le texte de ce travail n’a pas pu être lu (fichier scanné sans texte, ou trop court). Demandez à l’étudiant un PDF tiré directement de Word.</p>'; return; }
-  const [cmp, web] = await Promise.all([
-    sb.rpc('plagiat_comparer', { p_hashes: E.hashes, p_exclure_remise: remise || null, p_exclure_etudiant: etudiant || null }).then(r => r, e => ({ error: e })),
-    sb.functions.invoke('inviter', { body: { action: 'plagiat_web', phrases: plagPhrasesWeb(texte) } }).then(r => r.data || {}, () => ({}))]);
-  if (enregistrer) Promise.resolve().then(() => enregistrer(E)).catch(() => {});
+  if (E.hashes.length < 5) { corps.innerHTML = '<p>Le texte n’a pas pu être lu (fichier scanné sans texte, ou trop court). Utilisez un PDF tiré directement de Word.</p>'; return; }
+  const comparer = async () => {
+    if (etu) return await sb.rpc('plagiat_tester', { p_hashes: E.hashes, p_hashes2: E.hashes2 });
+    let r = await sb.rpc('plagiat_comparer2', { p_hashes: E.hashes, p_hashes2: E.hashes2, p_exclure_remise: remise || null, p_exclure_etudiant: etudiant || null });
+    if (r.error && /plagiat_comparer2|function|schema cache/i.test(r.error.message)) r = await sb.rpc('plagiat_comparer', { p_hashes: E.hashes, p_exclure_remise: remise || null, p_exclure_etudiant: etudiant || null });
+    return r;
+  };
+  const [cmp, web, decs] = await Promise.all([comparer().catch(e => ({ error: e })),
+    etu ? Promise.resolve({}) : sb.functions.invoke('inviter', { body: { action: 'plagiat_web', phrases: plagPhrasesWeb(texte) } }).then(r => r.data || {}, () => ({})),
+    !etu && etudiant ? sb.from('plagiat_decisions').select('*').eq('etudiant_id', etudiant).order('decide_le', { ascending: false }).limit(10).then(r => r.data || [], () => []) : Promise.resolve([])]);
+  let maj = null; if (enregistrer) maj = await Promise.resolve().then(() => enregistrer(E)).catch(() => null);
   const sources = (cmp && !cmp.error && cmp.data) || [], marque = new Set(), parMot = new Uint8Array(E.mots.length);
   sources.forEach(s => (s.communs || []).forEach(h => marque.add(h)));
   E.H.forEach((i, h) => { if (marque.has(h)) for (let k = i; k < Math.min(E.mots.length, i + PLAG_N); k++) parMot[k] = 1; });
   const pctTotal = E.mots.length ? Math.round(parMot.reduce((a, x) => a + x, 0) / E.mots.length * 100) : 0;
-  const couleur = p => p >= 25 ? 'var(--bad)' : p >= 10 ? 'var(--warn)' : '#2e7d32';
-  // le texte (sans citations), avec les passages retrouvés surlignés
+  const pct2 = maj && maj.data && maj.data.pct2 != null ? maj.data.pct2 : (E.hashes2.length ? Math.min(100, Math.round(Math.max(0, ...sources.map(s => s.commun2 || 0)) / E.hashes2.length * 100)) : 0);
   let extrait = '', dans = false; const lim = Math.min(E.mots.length, 6000);
   for (let i = 0; i < lim; i++) { if (parMot[i] && !dans) { extrait += '<mark>'; dans = true; } if (!parMot[i] && dans) { extrait += '</mark>'; dans = false; } extrait += esc(E.mots[i]) + ' '; }
   if (dans) extrait += '</mark>';
   const phrases = plagPhrasesWeb(texte), resWeb = web && web.ok ? web.resultats : null, sig = plagSignaux(texte);
-  corps.innerHTML = `<h2 class="font-display text-2xl font-semibold">${esc(titre || 'Travail')}</h2><p class="text-sm text-muted mb-4">${esc(auteur || '')} · ${nbMots.toLocaleString('fr-FR')} mots · analysé le ${new Date().toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p>
-    <div class="outil-box mb-4"><h3 class="font-semibold">1. Comparaison avec les autres travaux du séminaire</h3>
-      ${cmp && cmp.error ? `<p class="text-sm text-bad mt-1">${/plagiat_comparer|function|schema cache/i.test((cmp.error && cmp.error.message) || '') ? 'Exécutez d’abord 67_plagiat.sql dans Supabase.' : esc(errText(cmp.error))}</p>` : `
-      <p class="mt-2"><span class="text-3xl font-semibold" style="color:${couleur(pctTotal)}">${pctTotal} %</span> <span class="text-sm">du texte (hors citations entre guillemets) se retrouve dans d’autres travaux.</span></p>
-      ${sources.length ? `<table class="text-sm mt-3"><thead><tr><th>Travail ressemblant</th><th>Auteur</th><th>Année</th><th class="text-right">Part commune</th></tr></thead><tbody>${sources.map(s => { const p = Math.round(Math.min(100, s.commun / Math.max(1, E.hashes.length) * 100)); return `<tr><td>${esc(s.titre || '—')}</td><td>${esc(s.auteur || '—')}</td><td>${esc(s.annee || '')}</td><td class="text-right font-semibold" style="color:${couleur(p)}">${p} %</td></tr>`; }).join('')}</tbody></table>` : '<p class="text-sm mt-1">Aucun passage commun avec les travaux déjà enregistrés.</p>'}
-      <p class="text-xs text-muted mt-2">La base grandit à chaque dépôt. Les passages entre guillemets ne sont pas comptés. En dessous de 10 %, il s’agit en général d’expressions courantes.</p>`}</div>
+  const EV = plagEvaluer({ pct: pctTotal, pct2, sources, parMot, nbHashes: E.hashes.length, nbHashes2: E.hashes2.length, resWeb, sig, decs, etu, nbMots });
+  const dateR = new Date().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  corps.innerHTML = `<h2 class="font-display text-2xl font-semibold">${esc(titre || 'Travail')}</h2><p class="text-sm text-muted mb-4">${esc(auteur || '')}${auteur ? ' · ' : ''}${nbMots.toLocaleString('fr-FR')} mots · ${new Date().toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p>
+    ${etu ? '<div class="outil-box mb-4" style="border-color:var(--accent)"><p class="text-sm">Ce test n’est pas envoyé au professeur et rien n’est enregistré. Corrigez les passages surlignés : mettez-les entre guillemets avec une note de bas de page, ou reformulez-les vraiment avec vos propres mots. Le <button type="button" class="linkbtn" id="plagCorr">correcteur de bibliographie</button> vous aide à présenter vos notes.</p></div>' : ''}
+    <div class="outil-box mb-4"><h3 class="font-semibold">1. Comparaison avec les autres travaux${etu ? '' : ' du séminaire'}</h3>
+      ${cmp && cmp.error ? `<p class="text-sm text-bad mt-1">${/plagiat_|function|schema cache/i.test((cmp.error && cmp.error.message) || '') ? 'Exécutez d’abord 67_plagiat.sql et 68_plagiat_plus.sql dans Supabase.' : esc(errText(cmp.error))}</p>` : `
+      <div class="flex flex-wrap gap-6 mt-2"><p><span class="text-3xl font-semibold" style="color:${plagCoul(pctTotal)}">${pctTotal} %</span><br><span class="text-sm">passages identiques</span><br><span class="text-xs" style="color:${plagCoul(pctTotal)}">${plagVerdict(pctTotal)}</span></p>
+        <p><span class="text-3xl font-semibold" style="color:${plagCoul(pct2)}">≈ ${pct2} %</span><br><span class="text-sm">passages reformulés<br><span class="text-xs text-muted">(mots changés ou déplacés)</span></span></p></div>
+      ${sources.length ? `<table class="text-sm mt-3"><thead><tr><th>Travail ressemblant</th>${etu ? '' : '<th>Auteur</th>'}<th>Année</th><th class="text-right">Identique</th><th class="text-right">Reformulé</th></tr></thead><tbody>${sources.map(s => { const p = Math.round(Math.min(100, s.commun / Math.max(1, E.hashes.length) * 100)), p2 = Math.round(Math.min(100, (s.commun2 || 0) / Math.max(1, E.hashes2.length) * 100)); return `<tr><td>${esc(s.titre || '—')}${s.source && s.source !== 'travail' ? ` <span class="pill bg-sunk">${esc(s.source)}</span>` : ''}</td>${etu ? '' : `<td>${esc(s.auteur || '—')}</td>`}<td>${esc(s.annee || '')}</td><td class="text-right font-semibold" style="color:${plagCoul(p)}">${p} %</td><td class="text-right" style="color:${plagCoul(p2)}">${p2} %</td></tr>`; }).join('')}</tbody></table>` : '<p class="text-sm mt-2">Aucun passage commun avec les travaux déjà enregistrés.</p>'}
+      <p class="text-xs text-muted mt-2">Les passages entre guillemets ne sont pas comptés. Seuils du séminaire : vigilance dès ${PLAG_SEUILS.vigilance} %, inacceptable dès ${PLAG_SEUILS.inacceptable} %. Quel que soit le pourcentage, un paragraphe entier recopié sans guillemets ni note est du plagiat. La reformulation est une estimation : regardez le texte.</p>`}</div>
     <div class="outil-box mb-4"><h3 class="font-semibold">2. Recherche sur internet</h3>
-      ${resWeb ? `<p class="text-sm text-muted mb-2">${resWeb.filter(r => r.resultats.length).length} phrase(s) sur ${resWeb.length} retrouvée(s) mot pour mot sur internet.</p>${resWeb.map(r => `<div class="ref-l" style="display:block"><p class="text-sm">« ${esc(r.phrase)} »</p>${r.resultats.length ? r.resultats.map(x => `<p class="text-sm mt-1" style="color:var(--bad)">⚠️ trouvée sur <a class="underline" href="${esc(x.lien)}" target="_blank" rel="noopener">${esc(x.site || x.titre)}</a> <span class="text-muted">· ${esc(x.titre || '')}</span></p>`).join('') : `<p class="text-xs text-muted mt-1">${r.quota ? 'Limite du jour atteinte : ' : 'Non trouvée. '}<a class="underline" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent('"' + r.phrase + '"')}">vérifier sur Google ↗</a></p>`}</div>`).join('')}`
-        : `<p class="text-sm text-muted mb-2">Cliquez sur chaque bouton : Google cherche la phrase exacte. Si elle apparaît sur un site ou dans un livre en ligne, la source s’affiche en premier.</p>${phrases.map((p, i) => `<div class="ref-l"><span class="text-sm grow">« ${esc(p)} »</span><a class="btn btn-ghost btn-sm shrink-0" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent('"' + p + '"')}">Chercher ${i + 1} ↗</a></div>`).join('') || '<p class="text-sm">Pas de phrase assez longue à chercher.</p>'}
-          ${isAdmin() ? '<p class="text-xs text-muted mt-2">La recherche peut se faire toute seule : réglez une clé Brave Search (voir l’aide « Plagiat : recherche automatique sur internet »).</p>' : ''}`}</div>
+      ${resWeb ? `<p class="text-sm text-muted mb-2">${resWeb.filter(r => r.resultats.length).length} phrase(s) sur ${resWeb.length} retrouvée(s) mot pour mot sur internet.</p>${resWeb.map(r => `<div class="ref-l" style="display:block"><p class="text-sm">« ${esc(r.phrase)} »</p>${r.resultats.length ? r.resultats.map(x => `<p class="text-sm mt-1" style="color:var(--bad)">⚠️ trouvée sur <a class="underline" href="${esc(x.lien)}" target="_blank" rel="noopener">${esc(x.site || x.titre)}</a> <span class="text-muted">· ${esc(x.titre || '')}</span></p>`).join('') : `<p class="text-xs text-muted mt-1">${r.quota ? 'Limite atteinte : ' : 'Non trouvée. '}<a class="underline" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent('"' + r.phrase + '"')}">vérifier sur Google ↗</a></p>`}</div>`).join('')}`
+        : `<p class="text-sm text-muted mb-2">Cliquez sur chaque bouton : Google cherche la phrase exacte. Si elle vient d’un site ou d’un livre en ligne, la source s’affiche en premier.</p>${phrases.map((p, i) => `<div class="ref-l"><span class="text-sm grow">« ${esc(p)} »</span><a class="btn btn-ghost btn-sm shrink-0" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent('"' + p + '"')}">Chercher ${i + 1} ↗</a></div>`).join('') || '<p class="text-sm">Pas de phrase assez longue à chercher.</p>'}`}</div>
     <div class="outil-box mb-4"><h3 class="font-semibold">3. Signaux d’alerte</h3>${sig.length ? sig.map(([t, d, ex]) => `<div class="ref-l" style="display:block"><p class="font-semibold text-sm">⚠️ ${esc(t)}</p><p class="text-sm">${esc(d)}</p>${ex.length ? `<ul class="text-xs text-muted mt-1">${ex.map(x => `<li>• ${esc(x)}</li>`).join('')}</ul>` : ''}</div>`).join('') : '<p class="text-sm">Aucun signal particulier.</p>'}</div>
-    ${pctTotal ? `<details class="outil-box"><summary class="font-semibold">Voir le texte avec les passages retrouvés surlignés</summary><div class="plag-texte mt-3">${extrait}${E.mots.length > lim ? '…' : ''}</div></details>` : ''}
-    <p class="text-xs text-muted mt-4">Ce rapport est une aide, pas un jugement : un passage commun peut venir d’une source correctement citée. Le professeur décide, après avoir regardé le travail et, si besoin, après un entretien avec l’étudiant.</p>`;
-  fond.querySelector('[data-plag-print]').onclick = () => printPages(`<div class="pa-page">${corps.innerHTML.replace(/<details[^>]*>/g, '<div>').replace(/<\/details>/g, '</div>').replace(/<summary[^>]*>.*?<\/summary>/g, '')}</div>`);
+    ${plagEvalHTML(EV, etu, 4)}
+    ${pctTotal ? `<details class="outil-box mb-4" ${etu ? 'open' : ''} data-plag-texte><summary class="font-semibold">Voir le texte avec les passages identiques surlignés</summary><div class="plag-texte mt-3">${extrait}${E.mots.length > lim ? '…' : ''}</div></details>` : ''}
+    ${!etu && remise ? `<div class="outil-box mb-4" style="border-color:var(--accent)"><h3 class="font-semibold mb-1">5. Décision</h3><p class="text-xs text-muted mb-2">Suggestion d’après l’évaluation : <b>${esc(PLAG_DEC[EV.G.dec])}</b>. C’est vous qui décidez, après l’entretien avec l’étudiant.</p>
+      ${decs.length ? `<p class="text-xs text-muted mb-2">Décisions précédentes pour cet étudiant : ${decs.map(d => `${esc(PLAG_DEC[d.decision])} (${esc(d.titre)}, ${esc(new Date(d.decide_le).toLocaleDateString('fr-FR'))})`).join(' · ')}</p>` : ''}
+      <div class="flex flex-wrap gap-3 text-sm">${Object.entries(PLAG_DEC).map(([k, l]) => `<label class="flex items-center gap-1"><input type="radio" name="plagDec" value="${k}" ${k === EV.G.dec ? 'checked' : ''}> ${l}</label>`).join('')}</div>
+      <textarea class="field text-sm mt-2" id="plagDecCom" rows="2" maxlength="2000" placeholder="Motif, entretien avec l’étudiant, suite donnée…"></textarea>
+      <button type="button" class="btn btn-sm mt-2" id="plagDecGo">Enregistrer la décision</button><p class="text-xs text-muted mt-1">Gardée dans le dossier : l’administration et les éducateurs la voient ; une décision autre que « rien à signaler » apparaît dans le suivi des étudiants.</p></div>` : ''}
+    <p class="text-xs text-muted">Ce rapport est une aide, pas un jugement : un passage commun peut venir d’une source correctement citée.${etu ? '' : ' Le professeur décide, après avoir regardé le travail et, si besoin, après un entretien avec l’étudiant.'}</p>`;
+  if ($('#plagCorr')) $('#plagCorr').onclick = () => { fermer(); allerA('documents', '#docView', () => { currentDoc = 'correcteur'; }); };
+  const R = { etu, titre, auteur, nbMots, date: dateR, pct: pctTotal, pct2, EV, resWeb, phrases, sig, mots: E.mots, parMot, erreur: cmp && cmp.error ? 'Comparaison impossible : ' + errText(cmp.error) : '' };
+  const bw = fond.querySelector('[data-plag-word]'), bp = fond.querySelector('[data-plag-pdf]'); bw.hidden = bp.hidden = false;
+  bw.onclick = () => plagWord(R).catch(er => toast('Word non créé', errText(er), 'bad'));
+  bp.onclick = () => { const c = corps.cloneNode(true);
+    c.querySelectorAll('summary').forEach(x => x.remove()); c.querySelectorAll('details').forEach(d => { const v = document.createElement('div'); v.className = d.className; if (d.hasAttribute('data-plag-texte')) v.insertAdjacentHTML('beforeend', '<h3 class="font-semibold">Annexe : texte avec les passages identiques surlignés</h3>'); v.append(...d.childNodes); d.replaceWith(v); });
+    const dz = c.querySelector('#plagDecGo'); if (dz) dz.closest('.outil-box').remove(); c.querySelectorAll('button, .btn').forEach(b => { if (b.tagName === 'A') b.replaceWith(document.createTextNode('')); else b.remove(); });
+    printPages(`<div class="pa-page"><div class="pa-head">${logoImg()}<div class="pa-inst">Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus</div><div class="pa-sub">Faliarivo - Ambanidia · Lot VB 5 bis · 101 Antananarivo</div><div class="pa-sub">${etu ? 'Test de plagiat du brouillon' : 'Rapport d’analyse de similarité et d’intégrité académique'}</div></div>
+      <div class="plag-imp">${c.innerHTML}</div>${etu ? '' : '<div class="plag-imp-dec"><p><b>Décision :</b> ………………………………………… <b>Date :</b> ………………</p><p><b>Motif et entretien avec l’étudiant :</b></p><p>…………………………………………………………………………………………………</p><p>…………………………………………………………………………………………………</p><p style="margin-top:14pt">Signature du professeur : ……………………… &nbsp; Visa du Préfet des études : ………………………</p></div>'}</div>`); };
+  if ($('#plagDecGo')) $('#plagDecGo').onclick = async () => {
+    const dec = (document.querySelector('input[name="plagDec"]:checked') || {}).value || 'rien';
+    const { error } = await sb.from('plagiat_decisions').insert({ remise_id: remise, etudiant_id: etudiant, titre: titre || '', pct: pctTotal, pct2, decision: dec, commentaire: $('#plagDecCom').value.trim() });
+    if (error) { toast('Décision non enregistrée', /plagiat_decisions|schema cache|relation/i.test(error.message) ? 'Exécutez d’abord 68_plagiat_plus.sql dans Supabase.' : errText(error), 'bad'); return; }
+    toast('Décision enregistrée', PLAG_DEC[dec]); $('#plagDecGo').disabled = true; $('#plagDecGo').textContent = '✓ Enregistrée';
+  };
 }
 // Professeur : vérifier un travail rendu
 async function plagiatRemise(x, nomEtu, titreDevoir) {
@@ -7799,13 +8002,34 @@ async function plagiatRemise(x, nomEtu, titreDevoir) {
   try {
     const dl = await sb.storage.from('travaux').download(x.fichier); if (dl.error) throw dl.error;
     const f = new File([dl.data], x.fichier_nom || 'travail.pdf', { type: dl.data.type || 'application/pdf' });
-    let texte = await pdfTexteSimple(f).catch(() => '');
-    if (texte.replace(/\s/g, '').length < 200) texte = (await lignesDepuisFichier(f, m => {})).join('\n');
+    const texte = await texteDuFichier(f);
     rapportPlagiat({ texte, titre: titreDevoir, auteur: nomEtu, remise: x.id, etudiant: x.etudiant_id,
-      enregistrer: E => sb.rpc('plagiat_enregistrer', { p_remise: x.id, p_auteur: nomEtu, p_titre: titreDevoir, p_annee: String(new Date(x.remis_le).getFullYear()), p_hashes: E.hashes, p_nb: E.mots.length }) });
+      enregistrer: async E => { const r = await sb.rpc('plagiat_enregistrer2', { p_remise: x.id, p_hashes: E.hashes, p_hashes2: E.hashes2, p_nb: E.mots.length });
+        if (r.error && /plagiat_enregistrer2|function|schema cache/i.test(r.error.message)) return await sb.rpc('plagiat_enregistrer', { p_remise: x.id, p_auteur: nomEtu, p_titre: titreDevoir, p_annee: String(new Date(x.remis_le).getFullYear()), p_hashes: E.hashes, p_nb: E.mots.length });
+        return r; } });
   } catch (er) { toast('Lecture impossible', errText(er), 'bad'); }
 }
-// Vérifier n’importe quel document (mémoire rendu sur papier scanné, travail reçu par email…)
+// Étudiant : tester son brouillon avant de le déposer
+function testerBrouillon() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.pdf,.docx,.txt';
+  inp.onchange = async () => { const f = inp.files[0]; if (!f) return; toast('Lecture de votre brouillon…', ''); try { rapportPlagiat({ texte: await texteDuFichier(f), titre: f.name, mode: 'etudiant' }); } catch (er) { toast('Lecture impossible', errText(er), 'bad'); } };
+  inp.click();
+}
+// Pastilles dans la liste des travaux rendus (professeur)
+function pastillePlagiat(x, versions) {
+  const out = [];
+  if (x.plagiat_pct != null) out.push(`<span class="pill" title="Passages identiques · reformulés (calculés au dépôt)" style="background:color-mix(in srgb, ${plagCoul(Math.max(x.plagiat_pct, (x.plagiat_pct2 || 0) * .6))} 14%, var(--surface));color:${plagCoul(Math.max(x.plagiat_pct, (x.plagiat_pct2 || 0) * .6))}">🔍 ${x.plagiat_pct} %${x.plagiat_pct2 != null ? ` · ≈ ${x.plagiat_pct2} %` : ''}</span>`);
+  if (x.declaration_le) out.push('<span class="text-xs text-muted" title="Déclaration d’honnêteté cochée au dépôt">✔ déclaration</span>');
+  const V = (versions || []).filter(v => v.remise_id === x.id).sort((a, b) => a.version - b.version);
+  if (V.length > 1) {
+    const alertes = []; for (let i = 1; i < V.length; i++) { const a = V[i - 1].style || {}, b = V[i].style || {};
+      if (Math.abs((b.lm || 0) - (a.lm || 0)) > .6 || Math.abs((b.lp || 0) - (a.lp || 0)) > 9) alertes.push(`style très différent au dépôt ${V[i].version}`);
+      if (V[i].nouveau != null && V[i].nouveau > 75 && V[i].nb_mots > V[i - 1].nb_mots * 1.6) alertes.push(`texte presque entièrement nouveau au dépôt ${V[i].version}`); }
+    out.push(`<span class="text-xs ${alertes.length ? 'text-warn font-semibold' : 'text-muted'}" title="${esc(V.map(v => `Dépôt ${v.version} : ${v.nb_mots} mots${v.nouveau != null ? ', ' + v.nouveau + ' % nouveau' : ''}`).join(' · '))}">📈 ${V.length} versions${alertes.length ? ' · ⚠️ ' + esc(alertes.join(', ')) : ''}</span>`);
+  }
+  return out.length ? `<span class="block mt-1 flex flex-wrap gap-1.5 items-center">${out.join('')}</span>` : '';
+}
+// Vérifier n’importe quel document · enrichir la base (administration)
 function blocPlagiatDocument() {
   return `<details class="bg-surface border border-line rounded-lg p-4 mt-6" id="plagDoc"><summary class="font-semibold"><span class="chev">▸</span> 🔍 Plagiat : vérifier un document</summary>
     <p class="text-sm text-muted mt-2 mb-3">Un mémoire, un travail reçu par email ou sur papier : PDF, Word ou photo. Le site le compare aux travaux du séminaire, cherche ses phrases sur internet et relève les signaux d’alerte.</p>
@@ -7813,8 +8037,14 @@ function blocPlagiatDocument() {
       <label class="text-sm"><span class="block mb-1">Auteur</span><input class="field" id="plagA" maxlength="200" placeholder="Nom de l’étudiant"></label>
       <label class="text-sm"><span class="block mb-1">Titre</span><input class="field" id="plagT" maxlength="300" placeholder="Titre du travail"></label>
       <label class="text-sm"><span class="block mb-1">Année</span><input class="field" id="plagY" maxlength="20" value="${new Date().getFullYear()}"></label></div>
-    ${isAdmin() ? '<label class="flex items-center gap-2 text-sm mt-2"><input type="checkbox" id="plagAjout" checked> Ajouter ce travail à la base de comparaison (par exemple les anciens mémoires)</label>' : ''}
-    <button type="button" class="btn btn-sm mt-3" id="plagGo">🔍 Vérifier</button> <span class="text-sm" id="plagEtat"></span></details>`;
+    ${isAdmin() ? '<label class="flex items-center gap-2 text-sm mt-2"><input type="checkbox" id="plagAjout" checked> Ajouter ce travail à la base de comparaison</label>' : ''}
+    <button type="button" class="btn btn-sm mt-3" id="plagGo">🔍 Vérifier</button> <span class="text-sm" id="plagEtat"></span>
+    ${isAdmin() ? `<div class="mt-5 pt-4 border-t border-line"><p class="font-semibold text-sm mb-1">📚 Enrichir la base de comparaison (administration)</p>
+      <p class="text-xs text-muted mb-2">Plus la base est riche, plus la vérification est utile. Le nom du fichier sert de titre (ex. « RAKOTO Jean - La miséricorde chez Luc - 2019.pdf » : auteur, titre, année).</p>
+      <div class="flex flex-wrap gap-2 items-center"><label class="btn btn-ghost btn-sm cursor-pointer">📂 Importer d’anciens mémoires (plusieurs fichiers)<input type="file" id="plagLot" multiple accept=".pdf,.docx,.txt" hidden></label>
+        <button type="button" class="btn btn-ghost btn-sm" id="plagSite">➕ Ajouter les articles et les actes du site</button></div><p class="text-sm mt-2" id="plagLotEtat"></p>
+      <p class="font-semibold text-sm mt-4 mb-1">⚖️ Seuils du séminaire</p><div class="flex flex-wrap items-end gap-3 text-sm"><label>Vigilance dès <input class="field py-1 w-20" type="number" min="1" max="100" id="plagSv" value="${PLAG_SEUILS.vigilance}"> %</label><label>Inacceptable dès <input class="field py-1 w-20" type="number" min="1" max="100" id="plagSi" value="${PLAG_SEUILS.inacceptable}"> %</label><button type="button" class="btn btn-ghost btn-sm" id="plagSeuilsGo">Enregistrer</button></div>
+      <p class="text-xs text-muted mt-1">Usage courant dans les universités : moins de 10 % normal, 10 à 25 % à examiner, plus de 25 % inacceptable sans citation. Inscrivez ces seuils dans le règlement des études.</p></div>` : ''}</details>`;
 }
 function brancherPlagiatDocument() {
   const b = $('#plagGo'); if (!b) return;
@@ -7822,14 +8052,36 @@ function brancherPlagiatDocument() {
     const f = $('#plagF').files[0]; if (!f) { toast('Choisissez un fichier', '', 'warn'); return; }
     const etat = m => { $('#plagEtat').textContent = m; }; b.disabled = true;
     try {
-      let texte = /\.pdf$/i.test(f.name) ? await pdfTexteSimple(f).catch(() => '') : '';
-      if (texte.replace(/\s/g, '').length < 200) texte = (await lignesDepuisFichier(f, etat)).join('\n');
-      etat('');
-      const ajout = $('#plagAjout') && $('#plagAjout').checked;
-      rapportPlagiat({ texte, titre: $('#plagT').value.trim() || f.name, auteur: $('#plagA').value.trim(),
-        enregistrer: ajout ? E => sb.rpc('plagiat_enregistrer', { p_remise: null, p_auteur: $('#plagA').value.trim(), p_titre: $('#plagT').value.trim() || f.name, p_annee: $('#plagY').value.trim(), p_hashes: E.hashes, p_nb: E.mots.length }) : null });
+      const texte = await texteDuFichier(f, etat); etat('');
+      const ajout = $('#plagAjout') && $('#plagAjout').checked, a = $('#plagA').value.trim(), t = $('#plagT').value.trim() || f.name, y = $('#plagY').value.trim();
+      rapportPlagiat({ texte, titre: t, auteur: a, enregistrer: ajout ? () => plagAjouterTexte(`import:${sans(f.name)}:${f.size}`, 'import', a, t, y, texte) : null });
     } catch (er) { etat(er.message || 'Lecture impossible.'); }
     b.disabled = false;
+  });
+  const lot = $('#plagLot'); if (lot) lot.addEventListener('change', async () => {
+    const F = [...lot.files], etat = m => { $('#plagLotEtat').textContent = m; }; let ok = 0, ko = 0;
+    for (let i = 0; i < F.length; i++) {
+      const f = F[i], parts = f.name.replace(/\.[a-z0-9]+$/i, '').split(/\s+[-–]\s+/), an = (f.name.match(/\b(19|20)\d{2}\b/) || [''])[0];
+      etat(`${i + 1} / ${F.length} : ${f.name}…`);
+      try { const t = await texteDuFichier(f); if (await plagAjouterTexte(`import:${sans(f.name)}:${f.size}`, 'mémoire', parts.length > 1 ? parts[0] : '', parts.length > 1 ? parts[1] : parts[0], an, t)) ok++; else ko++; } catch (_) { ko++; }
+    }
+    etat(`✅ ${ok} travail(aux) ajouté(s) à la base${ko ? ` · ${ko} illisible(s) (scannés sans texte ?)` : ''}.`); lot.value = '';
+  });
+  const sg = $('#plagSeuilsGo'); if (sg) sg.addEventListener('click', async () => {
+    const v = Math.max(1, Number($('#plagSv').value) || 10), i = Math.max(v + 1, Number($('#plagSi').value) || 25);
+    const { error } = await sb.from('reglages').upsert({ cle: 'plagiat_seuils', valeur: { vigilance: v, inacceptable: i }, modifie_le: new Date().toISOString() });
+    if (error) { toast('Non enregistré', errText(error), 'bad'); return; } PLAG_SEUILS = { vigilance: v, inacceptable: i }; toast('Seuils enregistrés', `vigilance ${v} %, inacceptable ${i} %`);
+  });
+  const site = $('#plagSite'); if (site) site.addEventListener('click', async () => {
+    const etat = m => { $('#plagLotEtat').textContent = m; }; site.disabled = true; let ok = 0;
+    try {
+      if (!articlesLoaded) await loadArticles();
+      for (const a of ARTICLES.filter(x => x.texte)) { etat(`Article : ${a.titre}…`); if (await plagAjouterTexte('article:' + a.id, 'article', a.auteur, a.titre, (a.publie_le || '').slice(0, 4), a.texte).catch(() => false)) ok++; }
+      const { data: L } = await sb.from('actes_symposium').select('id, donnees, titre_court');
+      for (const A of (L || [])) (A.donnees.contributions || []).forEach((c, i) => { if (c.texte) plagAjouterTexte(`acte:${A.id}:${i}`, 'acte', [c.prenom, c.nom].filter(Boolean).join(' '), c.titre || A.titre_court, A.donnees.annee || '', c.texte).then(r => { if (r) ok++; }, () => {}); });
+      setTimeout(() => etat(`✅ ${ok} texte(s) du site ajouté(s) à la base (articles et actes).`), 1500);
+    } catch (er) { etat(errText(er)); }
+    site.disabled = false;
   });
 }
 
@@ -8750,6 +9002,10 @@ const AIDE = [
     e: ['Portail Professeur › votre cours › « Devoirs et travaux » › ouvrez le devoir.', 'Pour chaque travail rendu : « ✍️ Retour détaillé ».', 'Note, points forts, à améliorer, commentaire, et si vous voulez la copie annotée (PDF ou photo). « Envoyer le retour » : l’étudiant est prévenu sur son téléphone.', 'Vous voyez ensuite « 👁 lu par l’étudiant ».'], go: { tab: 'professeur' } },
   { q: 'Plagiat : vérifier l’originalité d’un travail', r: ['prof', 'admin'], k: 'plagiat copie copier originalite verifier travail internet tricherie fraude copie colle memoire',
     e: ['Portail Professeur › votre cours › « Devoirs et travaux » : sur chaque travail rendu, « 🔍 Plagiat ».', 'Le rapport montre : 1. le pourcentage du texte retrouvé dans d’autres travaux du séminaire (année en cours et années passées), avec les passages surlignés ; 2. les phrases retrouvées sur internet (ou des boutons pour les chercher sur Google) ; 3. les signaux d’alerte : citations longues sans référence, changements brusques de style, bibliographie peu utilisée.', 'Pour un document reçu autrement (mémoire, email, papier scanné) : « 🔍 Plagiat : vérifier un document », en bas de la même page. L’administration peut y ajouter les anciens mémoires à la base de comparaison.', 'Le rapport est une aide : le professeur décide, au besoin après un entretien avec l’étudiant.'], go: { tab: 'professeur' } },
+  { q: 'Tester mon travail avant de le déposer (plagiat)', r: ['etudiant'], k: 'tester brouillon plagiat verifier avant depot citation copie originalite',
+    e: ['Portail étudiant › « Mes devoirs » › « 🔍 Tester mon brouillon ».', 'Choisissez votre fichier (PDF ou Word) : le site montre les passages trop proches d’autres travaux, des phrases à vérifier sur internet et les citations sans référence.', 'Rien n’est envoyé au professeur. Corrigez : guillemets et note de bas de page, ou vraie reformulation.', 'Au dépôt, cochez la déclaration « Je certifie que ce travail est personnel… ».'], go: { tab: 'etudiant' } },
+  { q: 'Quel pourcentage de plagiat est inacceptable ?', r: ['prof', 'admin', 'etudiant'], k: 'pourcentage plagiat seuil inacceptable taux acceptable combien',
+    e: ['Seuils du séminaire (réglables par l’administration) : vigilance dès 10 %, inacceptable dès 25 % de passages identiques non cités.', 'Quel que soit le pourcentage, un paragraphe entier recopié sans guillemets ni note est du plagiat.', 'Un pourcentage élevé dû à des citations correctes (entre guillemets, avec note) n’est pas du plagiat : le professeur regarde toujours le texte.'] },
   { q: 'Plagiat : recherche automatique sur internet', r: ['admin'], k: 'plagiat internet automatique cle brave recherche api',
     e: ['Sans réglage, le rapport donne des boutons « Chercher sur Google » (gratuit, à cliquer).', 'Pour que la recherche se fasse toute seule : créez un compte sur api-dashboard.search.brave.com (carte bancaire demandée, environ 1 000 recherches gratuites par mois, soit environ 80 travaux).', 'Copiez la clé, puis dans Supabase › Edge Functions › Secrets, ajoutez BRAVE_API_KEY avec cette clé.', 'Admin › État du site indique si la recherche automatique est réglée.'] },
   { q: 'Voir les étudiants en difficulté (suivi précoce)', r: ['admin', 'educ'], k: 'suivi difficulte etudiant moyenne absences devoirs non rendus aider soutien alerte',
@@ -9128,6 +9384,8 @@ async function renderProfDevoirs(c) {
   if (error) { box.innerHTML = `<p class="text-sm text-bad">${/devoirs|schema cache/i.test(error.message) ? 'Exécutez d’abord 38_etudes_rayonnement.sql dans Supabase.' : esc(errText(error))}</p>`; return; }
   const ids = dv.map(d => d.id);
   const { data: rm } = ids.length ? await sb.from('remises').select('*').in('devoir_id', ids) : { data: [] };
+  const memIds = (rm || []).filter(x => (dv.find(d => d.id === x.devoir_id) || {}).type === 'memoire').map(x => x.id);
+  const { data: vers } = memIds.length ? await sb.from('plagiat_versions').select('remise_id, version, nb_mots, style, nouveau').in('remise_id', memIds).then(r => r, () => ({ data: [] })) : { data: [] };
   const roster = state.roster || [];
   const nomEtu = id => { const s = roster.find(x => x.id === id); return s ? `${s.prenoms} ${s.nom}` : 'un étudiant'; };
   box.innerHTML = `<h3 class="h2 mb-1">Devoirs et travaux</h3><p class="text-sm text-muted mb-3">${esc(c.nom)} · les étudiants déposent leur travail en PDF ; les retards sont signalés.</p>
@@ -9139,7 +9397,7 @@ async function renderProfDevoirs(c) {
         <div class="overflow-x-auto"><table class="text-sm"><thead><tr><th>Étudiant</th><th>Travail</th><th>Note /20</th><th>Commentaire</th><th></th></tr></thead><tbody>
         ${(d.etudiant_id ? roster.filter(s => s.id === d.etudiant_id) : roster).map(s => { const x = r.find(y => y.etudiant_id === s.id);
           return `<tr><td class="whitespace-nowrap">${esc(s.nom)} ${esc(s.prenoms)}</td>
-            <td class="whitespace-nowrap">${x ? `<button type="button" class="linkbtn text-xs" data-tv="${esc(x.fichier)}">Ouvrir</button> <span class="text-xs ${x.en_retard ? 'text-warn font-semibold' : 'text-muted'}">${dtLong(x.remis_le)}${x.en_retard ? ' · en retard' : ''}</span>` : `<span class="text-xs ${new Date(d.date_limite) < new Date() ? 'text-bad' : 'text-muted'}">non remis</span>`}</td>
+            <td class="whitespace-nowrap">${x ? `<button type="button" class="linkbtn text-xs" data-tv="${esc(x.fichier)}">Ouvrir</button> <span class="text-xs ${x.en_retard ? 'text-warn font-semibold' : 'text-muted'}">${dtLong(x.remis_le)}${x.en_retard ? ' · en retard' : ''}</span>${pastillePlagiat(x, vers)}` : `<span class="text-xs ${new Date(d.date_limite) < new Date() ? 'text-bad' : 'text-muted'}">non remis</span>`}</td>
             <td>${x ? `<input class="field num w-16 text-center" data-rn="${x.id}" inputmode="decimal" value="${x.note != null ? String(x.note).replace('.', ',') : ''}">` : ''}</td>
             <td>${x ? `<input class="field text-xs" data-rc="${x.id}" maxlength="500" value="${esc(x.commentaire || '')}">` : ''}</td>
             <td class="whitespace-nowrap">${x ? `<button type="button" class="btn btn-ghost btn-sm" data-rsave="${x.id}">Noter</button> <button type="button" class="btn btn-sm" data-rretour="${x.id}" data-retu="${esc(s.nom + ' ' + s.prenoms)}">✍️ Retour détaillé</button> <button type="button" class="btn btn-ghost btn-sm" data-rplag="${x.id}" data-retu="${esc(s.nom + ' ' + s.prenoms)}" title="Comparer aux autres travaux et chercher sur internet">🔍 Plagiat</button>${x.corrige_le ? `<span class="block text-xs text-muted mt-1">${x.vu_le ? '👁 lu par l’étudiant' : 'retour envoyé'}</span>` : ''}` : ''}</td></tr>`; }).join('')}</tbody></table></div>
@@ -9202,7 +9460,7 @@ async function renderStuDevoirs() {
   const maintenant = new Date();
   const actifs = dv.filter(d => new Date(d.date_limite) > new Date(maintenant - 60 * 864e5) || (rm || []).some(r => r.devoir_id === d.id && r.note == null));
   if (!actifs.length) { box.innerHTML = '<h2 class="h2 mb-3">Mes devoirs</h2><p class="text-sm text-muted">Aucun devoir en cours.</p>'; return; }
-  box.innerHTML = `<h2 class="h2 mb-3">Mes devoirs</h2><div class="flex flex-col gap-2">${actifs.map(d => { const r = (rm || []).find(x => x.devoir_id === d.id), passe = new Date(d.date_limite) < maintenant;
+  box.innerHTML = `<div class="flex flex-wrap items-baseline justify-between gap-2 mb-3"><h2 class="h2">Mes devoirs</h2><button type="button" class="btn btn-ghost btn-sm" id="stuTestPlag" title="Avant de déposer : voir les passages trop proches d’une source">🔍 Tester mon brouillon (plagiat)</button></div><div class="flex flex-col gap-2">${actifs.map(d => { const r = (rm || []).find(x => x.devoir_id === d.id), passe = new Date(d.date_limite) < maintenant;
     const etat = r ? (r.note != null ? `<span class="text-ok font-semibold">Corrigé : ${fmtNote(r.note)}/20</span>` : `<span class="${r.en_retard ? 'text-warn' : 'text-ok'}">Remis le ${dtLong(r.remis_le)}${r.en_retard ? ' (en retard)' : ''}</span>`)
       : `<span class="${passe ? 'text-bad font-semibold' : 'text-muted'}">${passe ? 'Non remis : date dépassée' : 'À rendre'}</span>`;
     return `<div class="p-3 rounded-lg border border-line bg-surface" data-sd="${d.id}"><div class="flex flex-wrap justify-between gap-2"><span><span class="pill bg-sunk">${DEVOIR_TYPES[d.type]}</span> <b>${esc(d.titre)}</b>
@@ -9210,13 +9468,16 @@ async function renderStuDevoirs() {
       ${d.consignes ? `<p class="text-sm whitespace-pre-line mt-2">${esc(d.consignes)}</p>` : ''}
       ${d.fichier ? `<button type="button" class="linkbtn text-xs mt-1" data-tv="${esc(d.fichier)}">Sujet : ${esc(d.fichier_nom || 'fichier')}</button>` : ''}
       ${r && (r.commentaire || r.corrige_fichier) ? `<div class="mt-2 p-3 rounded-md" style="background:color-mix(in srgb, var(--accent) 6%, var(--surface))" ${r.corrige_le && !r.vu_le ? `data-retour-nouveau="${r.id}"` : ''}><p class="text-sm font-semibold mb-1">✍️ Retour du professeur${r.corrige_le && !r.vu_le ? ' <span class="pill" style="background:var(--accent);color:var(--accent-ink)">nouveau</span>' : ''}</p>${r.commentaire ? `<p class="text-sm whitespace-pre-line">${esc(r.commentaire)}</p>` : ''}${r.corrige_fichier ? `<button type="button" class="linkbtn text-sm mt-1" data-tv="${esc(r.corrige_fichier)}">📎 Ma copie corrigée (${esc(r.corrige_nom || 'fichier')})</button>` : ''}</div>` : ''}
-      ${!r || r.note == null ? `<div class="flex flex-wrap items-center gap-2 mt-2"><input type="file" accept="application/pdf" class="field text-xs max-w-xs" data-sf="${d.id}"><button type="button" class="btn btn-sm" data-sr="${d.id}">${r ? 'Remplacer mon travail' : 'Déposer mon travail'}</button>${r ? `<button type="button" class="linkbtn text-xs" data-tv="${esc(r.fichier)}">Voir mon dépôt</button>` : ''}</div>` : ''}</div>`; }).join('')}</div>`;
+      ${!r || r.note == null ? `<div class="flex flex-wrap items-center gap-2 mt-2"><input type="file" accept="application/pdf" class="field text-xs max-w-xs" data-sf="${d.id}"><button type="button" class="btn btn-sm" data-sr="${d.id}">${r ? 'Remplacer mon travail' : 'Déposer mon travail'}</button></div><label class="flex items-start gap-2 text-xs mt-2"><input type="checkbox" class="mt-0.5" data-decl="${d.id}"><span>Je certifie que ce travail est personnel et que toutes mes sources (livres, articles, sites, textes d’autres étudiants) sont citées entre guillemets ou en note. Je sais que les travaux sont comparés entre eux et aux sources en ligne.</span></label><div>${r ? `<button type="button" class="linkbtn text-xs" data-tv="${esc(r.fichier)}">Voir mon dépôt</button>` : ''}</div>` : ''}</div>`; }).join('')}</div>`;
   box.querySelectorAll('[data-tv]').forEach(b => b.addEventListener('click', () => ouvrirTravail(b.dataset.tv)));
+  if ($('#stuTestPlag')) $('#stuTestPlag').addEventListener('click', testerBrouillon);
   box.querySelectorAll('[data-retour-nouveau]').forEach(z => sb.rpc('retour_vu', { p_remise: Number(z.dataset.retourNouveau) }).then(() => {}, () => {}));
   box.querySelectorAll('[data-sr]').forEach(b => b.addEventListener('click', async () => {
     const id = Number(b.dataset.sr), f = box.querySelector(`[data-sf="${id}"]`).files[0];
     if (!f) { toast('Aucun fichier', 'Choisissez votre travail en PDF.', 'warn'); return; }
     if (!estPdf(f) || f.size > 25e6) { toast('Fichier refusé', 'Votre travail doit être un PDF de 25 Mo au plus.', 'warn'); return; }
+    const decl = box.querySelector(`[data-decl="${id}"]`);
+    if (decl && !decl.checked) { toast('Déclaration à cocher', 'Cochez « Je certifie que ce travail est personnel… » avant de déposer.', 'warn'); decl.focus(); return; }
     b.disabled = true; b.textContent = 'Envoi…';
     const chemin = `remises/${id}/${p.id}/${Date.now()}.pdf`;
     const up = await sb.storage.from('travaux').upload(chemin, f, { contentType: 'application/pdf' });
@@ -9224,7 +9485,7 @@ async function renderStuDevoirs() {
     const { data, error } = await sb.rpc('remettre_travail', { p_devoir: id, p_fichier: chemin, p_nom: f.name });
     if (error) { await sb.storage.from('travaux').remove([chemin]); toast('Dépôt impossible', errText(error), 'bad'); b.disabled = false; return; }
     if (data && data.ancien) sb.storage.from('travaux').remove([data.ancien]);
-    plagiatApresDepot(id, f);
+    plagiatApresDepot(id, f, true);
     toast('Travail déposé', data && data.en_retard ? 'Déposé après la date limite : le retard est signalé au professeur.' : 'Votre professeur peut maintenant le lire.', data && data.en_retard ? 'warn' : 'ok');
     renderStuDevoirs();
   }));
