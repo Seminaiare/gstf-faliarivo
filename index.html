@@ -425,6 +425,17 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   .art-qr { padding: .7rem 0; border-bottom: 1px solid var(--line); } .art-rep { margin: .3rem 0 0 1rem; color: var(--muted); }
   .art-q-form { display: flex; flex-direction: column; gap: .5rem; margin-top: 1rem; padding: .9rem; border-radius: .6rem; background: var(--sunk); }
   .art-rubs { flex-wrap: wrap; }
+  .direct { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; overflow: hidden; }
+  .direct-on { border-color: #c4222d; box-shadow: 0 0 0 2px rgba(196,34,45,.25); }
+  .direct-tete { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .55rem .9rem; border-bottom: 1px solid var(--line); }
+  .direct-pastille { font-weight: 700; font-size: .78rem; letter-spacing: .08em; color: #fff; background: #c4222d; padding: .2rem .6rem; border-radius: 999px; animation: directPulse 1.6s infinite; }
+  .direct-bientot { background: var(--accent); animation: none; }
+  @keyframes directPulse { 50% { opacity: .55; } } @media (prefers-reduced-motion: reduce) { .direct-pastille { animation: none; } }
+  .direct-lect { position: relative; aspect-ratio: 16 / 9; background: #120a0c; color: #fff; }
+  .direct-lect iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .direct-attente { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; text-align: center; padding: 1rem; background: radial-gradient(circle at 50% 40%, #5a161f, #120a0c); color: #fff; }
+  .direct-cpt { font-family: var(--font-display, Georgia), serif; font-size: clamp(1.8rem, 6vw, 3.2rem); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hom-mini { width: 3rem; aspect-ratio: 16 / 9; display: grid; place-items: center; background: #222; color: #fff; border-radius: .3rem; flex: 0 0 auto; }
   .hom-lect { position: relative; aspect-ratio: 16 / 9; background: #000; cursor: pointer; }
   .hom-lect img, .hom-lect iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
   .hom-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 4.2rem; height: 4.2rem; border-radius: 50%; border: 0; background: rgba(176, 30, 40, .92); color: #fff; font-size: 1.6rem; box-shadow: 0 6px 20px rgba(0,0,0,.35); }
@@ -832,6 +843,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
       <form id="pwForm" class="bg-surface border border-line rounded-lg p-5 flex flex-col gap-4" novalidate>
         <div><label for="pw1" class="block text-sm font-semibold mb-1">Nouveau mot de passe</label><input id="pw1" class="field" type="password" autocomplete="new-password"></div>
         <div><label for="pw2" class="block text-sm font-semibold mb-1">Confirmer</label><input id="pw2" class="field" type="password" autocomplete="new-password"></div>
+        <label class="flex items-start gap-2 text-sm bg-sunk rounded-lg p-3"><input type="checkbox" id="pwAutres" class="mt-1" checked><span><b>🔒 Déconnecter mes autres appareils</b><br><span class="text-muted">Téléphones, ordinateurs ou tablettes encore connectés avec l’ancien mot de passe devront se reconnecter avec le nouveau. Conseillé si vous pensez que quelqu’un connaît votre mot de passe.</span></span></label>
         <p id="pwErr" class="text-sm text-bad" hidden></p>
         <div class="flex flex-wrap gap-3"><button class="btn" type="submit" id="pwBtn">Enregistrer le mot de passe</button><button class="btn btn-ghost" type="button" id="pwCancel" hidden>Annuler</button></div>
       </form>
@@ -873,6 +885,8 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
       </div>
 
       <div id="annoncesAccueil" hidden></div>
+
+      <div id="directAcc" class="max-w-5xl" hidden></div>
 
       <div id="homelieAcc" class="max-w-5xl" hidden></div>
 
@@ -1622,7 +1636,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 155</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 157</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -1979,10 +1993,11 @@ $('#pwForm').addEventListener('submit', async e => {
   const { error } = await sb.auth.updateUser({ password: a });
   $('#pwBtn').disabled = false;
   if (error) { err.textContent = errText(error); err.hidden = false; return; }
-  // Les autres appareils connectés avec l'ancien mot de passe sont déconnectés
-  await sb.auth.signOut({ scope: 'others' });
-  err.hidden = true; $('#pwPanel').hidden = true; $('#pw1').value = $('#pw2').value = '';
-  toast('Mot de passe enregistré', 'Vos autres appareils ont été déconnectés. Utilisez désormais ce mot de passe.');
+  // Sur demande : les autres appareils connectés avec l'ancien mot de passe sont déconnectés
+  const autres = $('#pwAutres').checked; let ok = true;
+  if (autres) { try { const r = await sb.auth.signOut({ scope: 'others' }); ok = !(r && r.error); } catch (_) { ok = false; } }
+  err.hidden = true; $('#pwPanel').hidden = true; $('#pw1').value = $('#pw2').value = ''; $('#pwAutres').checked = true;
+  toast('Mot de passe enregistré', autres ? (ok ? 'Vos autres appareils ont été déconnectés. Cet appareil reste connecté.' : 'Le mot de passe est changé, mais les autres appareils n’ont pas pu être déconnectés : réessayez avec « Déconnecter mes autres appareils » dans Mon compte.') : 'Vos autres appareils restent connectés.');
   const back = pwReturnTab; pwReturnTab = null;
   await afterAuthChange();
   showTab(back || (state.profil && state.profil.type === 'enseignant' ? 'professeur' : 'etudiant'));
@@ -2123,7 +2138,7 @@ function renderHome() {
   };
   renderCarteDioceses(by); bars(CONGREGATIONS, '#barsCong');
   if ($('#litJour')) try { $('#litJour').innerHTML = liturgieBandeau(TODAY, true); } catch (_) {}
-  try { chargerHomelie(); } catch (_) {}
+  try { chargerDirect(); chargerHomelie(); } catch (_) {}
   if (AGENDA_ACC === null) { AGENDA_ACC = []; chargerAgendaAccueil(); }
   const ag = AGENDA_ACC.map(e => [e.debut < TODAY ? TODAY : e.debut, e.titre, true, e]);
   const cal = [...CALENDRIER[1].items, ...CALENDRIER[2].items].filter(it => it[0] >= TODAY && calVisible(it)).slice(0, 5);
@@ -5558,11 +5573,16 @@ async function renderEmailPerso(host) {
     <div class="bg-surface border border-line rounded-lg p-4 mt-4 flex flex-wrap items-center justify-between gap-3">
       <div class="min-w-0"><div class="font-semibold">🔑 Mon compte</div>
         <p class="text-sm text-muted">Identifiant : <span class="font-mono">${esc((state.profil && state.profil.email) || '')}</span> · changez votre mot de passe quand vous voulez ; personne d’autre ne le connaîtra.</p></div>
-      <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm mc-visite">🧭 Revoir la visite guidée</button><button type="button" class="btn btn-sm mc-pw">Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm mc-out">Se déconnecter</button></div>
+      <div class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm mc-visite">🧭 Revoir la visite guidée</button><button type="button" class="btn btn-sm mc-pw">Changer mon mot de passe</button><button type="button" class="btn btn-ghost btn-sm mc-autres">🔒 Déconnecter mes autres appareils</button><button type="button" class="btn btn-ghost btn-sm mc-out">Se déconnecter</button></div>
     </div>
     <div class="bg-surface border border-line rounded-lg p-4 mt-4 mc-corr"></div>`;
   renderCorrectionIdentite(host.querySelector('.mc-corr'));
   host.querySelector('.mc-pw').addEventListener('click', () => $('#changePwBtn').click());
+  host.querySelector('.mc-autres').addEventListener('click', async () => {
+    if (!confirm('Déconnecter tous vos autres appareils (téléphones, ordinateurs, tablettes) ? Cet appareil-ci reste connecté.')) return;
+    let ok = true; try { const r = await sb.auth.signOut({ scope: 'others' }); ok = !(r && r.error); } catch (_) { ok = false; }
+    toast(ok ? 'Autres appareils déconnectés' : 'Déconnexion impossible', ok ? 'Ils devront se reconnecter avec votre mot de passe.' : 'Vérifiez la connexion internet et réessayez.', ok ? 'ok' : 'bad');
+  });
   host.querySelector('.mc-visite').addEventListener('click', () => lancerVisite(state.profil && state.profil.type === 'etudiant' ? 'etudiant' : 'enseignant', true));
   host.querySelector('.mc-out').addEventListener('click', () => $('#logoutBtn').click());
   host.querySelector('form').addEventListener('submit', async e => {
@@ -8035,7 +8055,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 155, VERSION_FONCTION_ATTENDUE = 31;
+const VERSION_SITE = 157, VERSION_FONCTION_ATTENDUE = 31;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]],["70_economat_plus","Économat : comptes, accords, pensions, stocks, historique",[["t","economat_demandes"],["t","economat_journal"],["f","economat_pensions"],["c","economat_ops.compte"]]],["71_echeances","Échéances et abonnements",[["t","echeances"],["t","echeances_paiements"],["f","echeance_payer"]]],["72_departs","Retirer une personne : date et motif",[["t","departs"]]],["73_pages","Créateur de pages (menus…)",[["t","pages_site"],["f","page_contenu"]]],["74_cours_plus","Cours : crédits ECTS, syllabus par le professeur",[["c","cours.credits"],["f","cours_syllabus"]]],["75_contact","Contact : objet, numéro de suivi, coordonnées",[["c","messages_contact.objet"],["f","contact_envoyer"]]],["76_paiement_sans_capture","Article payant : coller le SMS ou taper la référence",[["c","achats_articles.source"],["f","payer_article_sans_capture"]]],["77_vitesse","Mesure de la vitesse du site",[["t","perf_mesures"],["f","perf_resume"]]],["78_agenda_signature","Agenda (Je participe, répétition, services liturgiques) et signature",[["c","agenda.recurrence"],["t","agenda_participants"],["t","liturgie_services"],["t","signatures"],["f","agenda_inscrire"]]],["79_alertes","Alertes au Préfet par mail et WhatsApp",[["t","alertes"],["f","alerte_nouvelle"],["j","gstf-alertes"]]],["80_homelies","Homélie du dimanche (RDB LIVE)",[["t","homelies"],["j","gstf-homelies"]]],["81_articles_plus","Articles : rubriques, modifier, statistiques, questions, propositions",[["c","articles.rubrique"],["t","article_stats"],["t","article_questions"],["t","article_propositions"],["f","article_accepter"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -10106,7 +10126,7 @@ async function chargerHomelie() {
     <div class="p-4 pb-3 flex flex-wrap items-baseline justify-between gap-2"><h2 class="h2">🎙️ Homélie du dimanche</h2>
       ${isAdmin() ? `<span class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm" id="homMaj">🔄 Chercher la nouvelle</button><button type="button" class="btn btn-ghost btn-sm" id="homAj">＋ Coller un lien</button></span>` : ''}</div>
     ${H ? `<div class="grid md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-0">
-      <div class="hom-lect" id="homLect" data-id="${esc(H.video_id)}"><img src="https://i.ytimg.com/vi/${esc(H.video_id)}/hqdefault.jpg" alt="" loading="lazy"><button type="button" class="hom-play" aria-label="Écouter l’homélie">▶</button></div>
+      <div class="hom-lect" id="homLect" data-id="${esc(H.video_id)}">${LEGER ? '' : `<img src="https://i.ytimg.com/vi/${esc(H.video_id)}/hqdefault.jpg" alt="" loading="lazy">`}<button type="button" class="hom-play" aria-label="Écouter l’homélie">▶</button></div>
       <div class="p-4 flex flex-col gap-2"><p class="text-xs font-semibold uppercase tracking-wider text-muted">${esc(quand)}</p>
         <p class="font-display text-xl font-semibold leading-snug">${esc(HOM_REG.auteur)}</p>
         ${H.dimanche ? `<p class="text-sm">${esc(homDimanche(H))}</p>` : `<p class="text-sm">${esc(H.titre)}</p>`}
@@ -10115,7 +10135,7 @@ async function chargerHomelie() {
           ${isAdmin() ? `<button type="button" class="btn btn-ghost btn-sm" data-hom-masq="${esc(H.video_id)}">🙈 Masquer</button>` : ''}</div></div></div>`
       : '<p class="px-4 pb-4 text-sm text-muted">Aucune homélie pour l’instant. Cliquez sur « 🔄 Chercher la nouvelle » : le site va la chercher dans la liste de RDB LIVE.</p>'}
     ${vis.length > 1 ? `<details class="border-t border-line"><summary class="p-3 px-4 text-sm font-semibold"><span class="chev">▸</span> Homélies précédentes (${vis.length - 1})</summary>
-      <div class="hom-liste px-4 pb-4">${vis.filter(x => x !== H).map(x => `<button type="button" class="hom-item" data-hom="${esc(x.video_id)}"><img src="https://i.ytimg.com/vi/${esc(x.video_id)}/mqdefault.jpg" alt="" loading="lazy"><span class="text-sm text-left">${esc(x.dimanche ? homDimanche(x) : x.titre)}</span></button>`).join('')}</div></details>` : ''}
+      <div class="hom-liste px-4 pb-4">${vis.filter(x => x !== H).map(x => `<button type="button" class="hom-item" data-hom="${esc(x.video_id)}">${LEGER ? '<span class="hom-mini">▶</span>' : `<img src="https://i.ytimg.com/vi/${esc(x.video_id)}/mqdefault.jpg" alt="" loading="lazy">`}<span class="text-sm text-left">${esc(x.dimanche ? homDimanche(x) : x.titre)}</span></button>`).join('')}</div></details>` : ''}
   </section>`;
   const lect = $('#homLect');
   if (lect) lect.onclick = () => { lect.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(lect.dataset.id)}?autoplay=1&rel=0" title="Homélie" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; lect.onclick = null; };
@@ -10158,7 +10178,7 @@ function artCompter(a, type) {
   sb.rpc('article_compter', { p_id: a.id, p_type: type }).then(() => {}, () => {});
 }
 function artCouvHtml(a, cls = '') {
-  return a.couverture ? `<img class="${cls}" src="${esc(a.couverture)}" alt="" loading="lazy">`
+  return a.couverture && !LEGER ? `<img class="${cls}" src="${esc(a.couverture)}" alt="" loading="lazy">`
     : `<span class="art-couv-gen ${cls}"><small>Grand Séminaire de Faliarivo</small><b>${esc(a.titre)}</b>${a.auteur ? `<i>${esc(a.auteur)}</i>` : ''}</span>`;
 }
 const estRelecteur = () => isAdmin() || !!(state.profil && state.profil.type === 'enseignant');
@@ -10398,6 +10418,86 @@ async function enregistrerModifArticle() {
   if (ancien) await sb.storage.from(seau).remove([ancien]);
   Object.assign(a, maj); toast('Article modifié', titre); viderFormArticle(); renderAdminArticles();
   if (texte && !a.payant) plagAjouterTexte('article:' + a.id, 'article', maj.auteur, titre, new Date(a.publie_le).getFullYear(), texte).catch(() => {});
+}
+
+/* ---------- En direct : ordinations, fêtes, rentrée solennelle (YouTube ou Facebook) ---------- */
+let DIRECTS = null, DIRECT_T = null;
+const heureMG = (d, o = {}) => new Date(d).toLocaleString('fr-FR', { timeZone: 'Indian/Antananarivo', ...o });
+function directLecteur(u, auto) {
+  const y = ytId(u);
+  if (y) return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(y)}?rel=0${auto ? '&autoplay=1' : ''}" title="Vidéo en direct" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  const ch = /youtube\.com\/channel\/(UC[\w-]{20,})/.exec(String(u || ''));
+  if (ch) return `<iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${ch[1]}${auto ? '&autoplay=1' : ''}" title="Vidéo en direct" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  if (estFacebook(u)) return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(u)}&show_text=false" title="Vidéo en direct" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  return '';
+}
+const directFin = d => new Date(new Date(d.debut).getTime() + (Number(d.duree_h) || 3) * 3600e3);
+async function chargerDirect() {
+  const box = $('#directAcc'); if (!box || !sb) return;
+  if (DIRECTS === null) { const { data } = await sb.from('reglages').select('valeur').eq('cle', 'directs').maybeSingle(); DIRECTS = ((data && data.valeur && data.valeur.liste) || []).filter(d => d && d.debut); }
+  clearInterval(DIRECT_T);
+  const now = Date.now(), L = [...DIRECTS].sort((a, b) => a.debut.localeCompare(b.debut));
+  const D = L.find(d => directFin(d) > now && new Date(d.debut).getTime() - now < 21 * 864e5);   // le prochain (dans les 3 semaines) ou celui en cours
+  const passes = L.filter(d => directFin(d) <= now && d.lien).reverse();
+  if (!D && !passes.length && !isAdmin()) { box.hidden = true; return; }
+  box.hidden = false;
+  const enCours = D && new Date(D.debut).getTime() <= now;
+  const g = D && `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(D.titre)}&dates=${new Date(D.debut).toISOString().replace(/[-:]|\.\d{3}/g, '')}/${directFin(D).toISOString().replace(/[-:]|\.\d{3}/g, '')}&details=${encodeURIComponent((D.description || '') + '\n' + SITE_URL)}`;
+  box.innerHTML = `${D ? `<section class="direct ${enCours ? 'direct-on' : ''}">
+      <div class="direct-tete">${enCours ? '<span class="direct-pastille">● EN DIRECT</span>' : '<span class="direct-pastille direct-bientot">📡 BIENTÔT EN DIRECT</span>'}
+        ${isAdmin() ? '<button type="button" class="btn btn-ghost btn-sm" data-dir-gerer>Gérer les directs</button>' : ''}</div>
+      <div class="grid md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        <div class="direct-lect" data-dir-lect>${enCours ? '' : `<div class="direct-attente"><p class="text-sm opacity-80">Début dans</p><p class="direct-cpt" data-cpt></p></div>`}</div>
+        <div class="p-4 flex flex-col gap-2"><h2 class="font-display text-2xl font-semibold leading-snug">${esc(D.titre)}</h2>
+          <p class="text-sm">${esc(heureMG(D.debut, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }))} <span class="text-muted">(heure de Madagascar)</span></p>
+          ${D.description ? `<p class="text-sm text-muted whitespace-pre-line">${esc(D.description)}</p>` : ''}
+          <div class="flex flex-wrap gap-2 mt-1">${enCours ? '' : `<a class="btn btn-ghost btn-sm" href="${esc(g)}" target="_blank" rel="noopener">📅 Me le rappeler</a>`}
+            ${boutonsPartage(msgPartage(enCours ? '🔴' : '📡', (enCours ? 'En direct : ' : 'En direct le ' + heureMG(D.debut, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) + ' : ') + D.titre, [SITE_URL]), '', true)}
+            ${D.lien ? `<a class="linkbtn text-sm self-center" href="${esc(D.lien)}" target="_blank" rel="noopener">Ouvrir dans ${estFacebook(D.lien) ? 'Facebook' : 'YouTube'} ↗</a>` : ''}</div></div></div></section>`
+    : isAdmin() ? `<div class="flex justify-end"><button type="button" class="btn btn-ghost btn-sm" data-dir-gerer>📡 Annoncer un direct</button></div>` : ''}
+    ${passes.length ? `<details class="mt-2 text-sm"><summary class="cursor-pointer font-semibold"><span class="chev">▸</span> Revoir les directs précédents (${passes.length})</summary><ul class="mt-2 flex flex-col gap-1">${passes.slice(0, 20).map(d => `<li><a class="linkbtn" href="${esc(d.lien)}" target="_blank" rel="noopener">▶ ${esc(d.titre)}</a> <span class="text-muted">· ${esc(heureMG(d.debut, { day: 'numeric', month: 'long', year: 'numeric' }))}</span></li>`).join('')}</ul></details>` : ''}`;
+  box.querySelectorAll('[data-dir-gerer]').forEach(b => b.onclick = dialogueDirects);
+  const lect = box.querySelector('[data-dir-lect]');
+  if (D && enCours && lect) {
+    if (LEGER) { lect.innerHTML = `<button type="button" class="direct-attente w-full"><span class="text-3xl">▶</span><span class="text-sm">Regarder le direct (mode connexion faible)</span></button>`; lect.firstChild.onclick = () => { lect.innerHTML = directLecteur(D.lien, true) || ''; }; }
+    else lect.innerHTML = directLecteur(D.lien, false) || `<div class="direct-attente"><p>Le lien vidéo n’est pas encore donné.</p></div>`;
+  }
+  if (D && !enCours) {
+    const cpt = box.querySelector('[data-cpt]');
+    const tic = () => { const s = Math.max(0, Math.round((new Date(D.debut).getTime() - Date.now()) / 1000)); if (!s) { clearInterval(DIRECT_T); chargerDirect(); return; }
+      const j = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+      if (cpt && cpt.isConnected) cpt.textContent = j ? `${j} j ${h} h ${m} min` : `${String(h).padStart(2, '0')} : ${String(m).padStart(2, '0')} : ${String(sec).padStart(2, '0')}`; };
+    tic(); DIRECT_T = setInterval(tic, 1000);
+  } else if (D && enCours) DIRECT_T = setTimeout(chargerDirect, Math.max(60e3, directFin(D) - Date.now() + 1000));
+}
+async function dialogueDirects() {
+  const { data } = await sb.from('reglages').select('valeur').eq('cle', 'directs').maybeSingle();
+  let L = ((data && data.valeur && data.valeur.liste) || []);
+  const dlg = document.createElement('dialog'); dlg.className = 'sig-dlg';
+  const rendu = () => { dlg.innerHTML = `<form method="dialog" class="p-5 flex flex-col gap-3" data-f>
+    <div class="flex items-start justify-between gap-3"><h2 class="font-display text-2xl font-semibold">📡 Les directs</h2><button class="btn btn-ghost btn-sm" value="x">✕</button></div>
+    <p class="text-sm text-muted">Annoncez une ordination, une fête, la rentrée solennelle… Le site affiche un compte à rebours sur l’Accueil, puis la vidéo en direct à l’heure dite, puis la garde dans « Revoir les directs ».</p>
+    <label class="text-sm"><span class="block font-semibold mb-1">Titre</span><input class="field" name="titre" maxlength="140" placeholder="Ex. Ordinations diaconales" required></label>
+    <div class="grid sm:grid-cols-2 gap-3"><label class="text-sm"><span class="block font-semibold mb-1">Début <span class="font-normal text-muted">(heure de Madagascar)</span></span><input class="field" type="datetime-local" name="debut" required></label>
+      <label class="text-sm"><span class="block font-semibold mb-1">Durée (heures)</span><input class="field" type="number" name="duree_h" min="1" max="12" value="3"></label></div>
+    <label class="text-sm"><span class="block font-semibold mb-1">Lien de la vidéo <span class="font-normal text-muted">(YouTube : bouton « Partager » du direct programmé ; ou Facebook. Vous pouvez l’ajouter plus tard.)</span></span><input class="field" name="lien" placeholder="https://youtube.com/live/…"></label>
+    <label class="text-sm"><span class="block font-semibold mb-1">Description <span class="font-normal text-muted">(facultatif)</span></span><textarea class="field" name="description" rows="2" maxlength="600"></textarea></label>
+    <div><button type="button" class="btn" data-aj>Enregistrer ce direct</button></div>
+    <h3 class="font-semibold mt-2">Directs enregistrés</h3>
+    ${L.length ? `<ul class="text-sm flex flex-col gap-2">${[...L].sort((a, b) => b.debut.localeCompare(a.debut)).map(d => `<li class="flex flex-wrap justify-between gap-2 bg-sunk rounded-lg p-2"><span><b>${esc(d.titre)}</b><br><span class="text-muted">${esc(heureMG(d.debut, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}${d.lien ? '' : ' · ⚠️ sans lien vidéo'}</span></span>
+      <span class="flex gap-2"><button type="button" class="linkbtn" data-lien="${esc(d.id)}">🔗 Lien</button><button type="button" class="linkbtn text-bad" data-sup="${esc(d.id)}">Supprimer</button></span></li>`).join('')}</ul>` : '<p class="text-sm text-muted">Aucun pour l’instant.</p>'}</form>`;
+    const f = dlg.querySelector('[data-f]');
+    const sauver = async () => { const { error } = await sb.from('reglages').upsert({ cle: 'directs', valeur: { liste: L.slice(-60) }, modifie_le: new Date().toISOString() }); if (error) { toast('Non enregistré', errText(error), 'bad'); return false; } DIRECTS = null; chargerDirect(); return true; };
+    f.querySelector('[data-aj]').onclick = async () => { const t = f.titre.value.trim(), d = f.debut.value, lien = f.lien.value.trim();
+      if (!t || !d) { toast('Incomplet', 'Donnez un titre et la date de début.', 'warn'); return; }
+      if (lien && !directLecteur(lien)) { toast('Lien non reconnu', 'Collez le lien YouTube (youtube.com/live/… ou youtu.be/…) ou Facebook du direct.', 'warn'); return; }
+      L.push({ id: Date.now().toString(36), titre: t, debut: new Date(d + ':00+03:00').toISOString(), duree_h: Math.min(12, Math.max(1, Number(f.duree_h.value) || 3)), lien, description: f.description.value.trim() });
+      if (await sauver()) { toast('Direct annoncé', 'Le compte à rebours est sur l’Accueil.'); rendu(); } };
+    f.querySelectorAll('[data-sup]').forEach(b => b.onclick = async () => { if (!confirm('Supprimer ce direct ?')) return; L = L.filter(x => x.id !== b.dataset.sup); if (await sauver()) rendu(); });
+    f.querySelectorAll('[data-lien]').forEach(b => b.onclick = async () => { const x = L.find(y => y.id === b.dataset.lien); const u = prompt('Lien YouTube ou Facebook du direct :', x.lien || ''); if (u === null) return;
+      if (u.trim() && !directLecteur(u.trim())) { toast('Lien non reconnu', '', 'warn'); return; } x.lien = u.trim(); if (await sauver()) { toast('Lien enregistré', ''); rendu(); } });
+  };
+  rendu(); document.body.appendChild(dlg); dlg.addEventListener('close', () => dlg.remove()); dlg.showModal();
 }
 
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
@@ -11309,7 +11409,7 @@ const AIDE = [
   { q: 'J’ai oublié mon mot de passe', r: ['tous'], k: 'oublie oublier mot passe perdu reinitialiser retrouver password mdp',
     e: ['Inscription > votre espace > « Mot de passe oublié ? ».', 'Saisissez votre adresse email personnelle (celle enregistrée sur le site) et cliquez sur « Recevoir le lien ».', 'Ouvrez l’email et cliquez sur « Choisir mon nouveau mot de passe » (lien valable 1 heure).', 'Pas d’adresse personnelle enregistrée ? Le Père Préfet ou le secrétariat vous remet une nouvelle fiche.'], go: { tab: 'portails' } },
   { q: 'Changer mon mot de passe', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'changer modifier mot passe nouveau securite password mdp compte deconnecter',
-    e: ['Une fois connecté, cliquez en haut à droite sur votre nom ou votre photo : votre portail s’ouvre.', 'Dans le cadre « 🔑 Mon compte », cliquez sur « Changer mon mot de passe ».', 'Choisissez un mot de passe d’au moins 8 caractères et enregistrez ; vous êtes alors déconnecté de vos autres appareils.', 'Le bouton « Se déconnecter » est dans le même cadre.'], go: { tab: 'portails' } },
+    e: ['Une fois connecté, cliquez en haut à droite sur votre nom ou votre photo : votre portail s’ouvre.', 'Dans le cadre « 🔑 Mon compte », cliquez sur « Changer mon mot de passe » (la case « Déconnecter mes autres appareils » est cochée : laissez-la si quelqu’un a pu voir votre ancien mot de passe).', 'Choisissez un mot de passe d’au moins 8 caractères et enregistrez ; vous êtes alors déconnecté de vos autres appareils.', 'Le bouton « Se déconnecter » est dans le même cadre.'], go: { tab: 'portails' } },
   { q: 'Enregistrer mon adresse email personnelle', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'email mail adresse personnelle gmail yahoo coordonnees recevoir annonces rappel',
     e: ['Ouvrez votre portail (Inscription > votre espace).', 'Dans « Mes coordonnées », écrivez votre adresse Gmail, Yahoo… et enregistrez.', 'Elle sert pour les annonces, les rappels (rendez-vous, bibliothèque) et le mot de passe oublié.'] },
   { q: 'S’entraîner sur les annales d’examens', r: ['etudiant', 'prof', 'admin', 'educ'], k: 'annales examens anciens sujets corrige corriges entrainement reviser preparer examen session',
