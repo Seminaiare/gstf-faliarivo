@@ -482,6 +482,16 @@ const CONFIG = {
   @media (max-width: 767px) { body.entete-compact header .gutter > div:first-child { padding-top: .35rem; padding-bottom: .35rem; } }
   .bq-cache { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.1rem; border: 1px dashed var(--line); border-radius: .8rem; background: var(--surface); }
   .bq-cache > span { font-size: 1.6rem; line-height: 1; }
+  .ailleurs { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--surface); }
+  .ailleurs h3 { font-weight: 600; margin-bottom: .2rem; }
+  .ail-res { display: grid; gap: .6rem; margin: .8rem 0; }
+  .ail-it { display: flex; gap: .75rem; align-items: flex-start; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--bg); }
+  .ail-it img { width: 42px; height: 60px; object-fit: cover; border-radius: 3px; flex: none; }
+  .ail-it b { display: block; line-height: 1.25; }
+  .ail-libre { display: inline-block; font-size: .72rem; font-weight: 600; padding: .05rem .45rem; border-radius: 99px; background: var(--accent-soft); color: var(--accent); margin-right: .3rem; }
+  .ail-sites { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
+  .ail-sites a { font-size: .82rem; padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); text-decoration: none; }
+  .ail-sites a:hover { border-color: var(--accent); }
   .cadre-info { border: 1px solid var(--line); border-left: 4px solid var(--gold); background: color-mix(in srgb, var(--gold) 8%, var(--surface)); border-radius: 8px; padding: .65rem .8rem; font-size: .9rem; }
   .bq-renouv { border: 1px solid var(--line); border-radius: .8rem; background: var(--surface); padding: .8rem 1rem; }
   .bq-renouv summary { cursor: pointer; }
@@ -1456,7 +1466,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 128</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 129</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -4153,12 +4163,88 @@ async function renderArticlesPage() {
       </div>
       <div class="mt-3 whitespace-pre-line art-texte max-w-[75ch]" hidden>${esc(a.texte || '')}</div>
     </article>`).join('') : `<p class="text-muted">${q ? 'Aucun article ne correspond à cette recherche.' : 'Aucun article publié pour l’instant.'}</p>`;
+  const qBrut = $('#artSearch').value.trim();
+  clearTimeout(renderArticlesPage.t);
+  if (qBrut.length >= 3) {
+    if (list.length) el.insertAdjacentHTML('beforeend', '<button type="button" class="linkbtn text-sm" id="artAilleurs">🌍 Pas ce que vous cherchez ? Chercher aussi ailleurs sur internet</button>');
+    else renderArticlesPage.t = setTimeout(() => { if ($('#artSearch').value.trim() === qBrut) ailleurs(el, qBrut, 'article', true); }, 700);
+    if ($('#artAilleurs')) $('#artAilleurs').addEventListener('click', e => { e.target.remove(); ailleurs(el, qBrut, 'article', false); });
+  }
   el.querySelectorAll('[data-art-id]').forEach(z => brancherAchat(z, ARTICLES.find(a => a.id === Number(z.dataset.artId))));
   el.querySelectorAll('.art-lire').forEach(b => b.addEventListener('click', () => {
     const t = b.closest('article').querySelector('.art-texte'); t.hidden = !t.hidden; b.textContent = t.hidden ? 'Lire l’article' : 'Replier l’article';
   }));
 }
 $('#artSearch').addEventListener('input', () => renderArticlesPage());
+
+/* ---------- Pas chez nous ? Chercher ailleurs sur internet ---------- */
+const AILLEURS_SITES = {
+  livre: [
+    ['Google Livres', 'https://www.google.com/search?tbm=bks&q='],
+    ['Open Library (prêt gratuit en ligne)', 'https://openlibrary.org/search?q='],
+    ['Internet Archive (livres anciens libres)', 'https://archive.org/search?query=', '&and%5B%5D=mediatype%3A%22texts%22'],
+    ['Gallica – BnF', 'https://gallica.bnf.fr/services/engine/search/sru?operation=searchRetrieve&version=1.2&query=%28gallica%20all%20%22', '%22%29'],
+    ['Documents de l’Église (vatican.va)', 'https://www.google.com/search?q=site%3Avatican.va+'],
+    ['WorldCat (quelle bibliothèque l’a ?)', 'https://search.worldcat.org/search?q=']],
+  article: [
+    ['Google Scholar', 'https://scholar.google.com/scholar?q='],
+    ['Persée (revues en français, gratuit)', 'https://www.persee.fr/search?q='],
+    ['Cairn (revues francophones)', 'https://www.cairn.info/resultats_recherche.php?searchTerm='],
+    ['OpenEdition Journals (libre)', 'https://search.openedition.org/results?q='],
+    ['Érudit', 'https://www.erudit.org/fr/recherche/?basic_search_term='],
+    ['HAL (articles libres)', 'https://hal.science/search/index/?q=']]
+};
+const AILLEURS_CACHE = {};
+async function ailleursMeilleurs(q, genre) {
+  const cle = genre + '|' + sans(q);
+  if (AILLEURS_CACHE[cle]) return AILLEURS_CACHE[cle];
+  const t = (u, ms = 9000) => fetch(u, { signal: AbortSignal.timeout(ms) }).then(r => r.ok ? r.json() : null).catch(() => null);
+  let L = [];
+  if (genre === 'livre') {
+    const [gb, ol] = await Promise.all([
+      t(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=10&printType=books`),
+      t(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=8&fields=key,title,author_name,first_publish_year,cover_i,ebook_access,publisher`)]);
+    ((gb && gb.items) || []).forEach((it, i) => { const v = it.volumeInfo || {}, a = it.accessInfo || {};
+      L.push({ titre: v.title + (v.subtitle ? ' : ' + v.subtitle : ''), det: [(v.authors || []).join(', '), v.publisher, (v.publishedDate || '').slice(0, 4)].filter(Boolean).join(' · '),
+        lien: v.infoLink || v.previewLink, image: v.imageLinks && (v.imageLinks.smallThumbnail || '').replace('http:', 'https:'), source: 'Google Livres',
+        libre: a.viewability === 'ALL_PAGES' ? 'Lecture libre' : a.viewability === 'PARTIAL' ? 'Extraits' : '', rang: i, fr: v.language === 'fr' }); });
+    ((ol && ol.docs) || []).forEach((d, i) => L.push({ titre: d.title, det: [(d.author_name || []).slice(0, 2).join(', '), (d.publisher || [])[0], d.first_publish_year].filter(Boolean).join(' · '),
+      lien: 'https://openlibrary.org' + d.key, image: d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-S.jpg` : '', source: 'Open Library',
+      libre: d.ebook_access === 'public' ? 'Lecture libre' : d.ebook_access === 'borrowable' ? 'Prêt en ligne' : '', rang: i + .5, fr: false }));
+    const vus = new Set(); L = L.filter(x => { const k = sans(x.titre).replace(/[^a-z0-9]/g, '').slice(0, 40); if (!x.titre || vus.has(k)) return false; vus.add(k); return true; });
+  } else {
+    const oa = await t(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=12&select=title,authorships,publication_year,primary_location,open_access,doi,cited_by_count,language`);
+    ((oa && oa.results) || []).forEach((w, i) => { const loc = w.primary_location || {}, src = loc.source || {}, acc = w.open_access || {};
+      L.push({ titre: w.title, det: [(w.authorships || []).slice(0, 2).map(a => a.author && a.author.display_name).filter(Boolean).join(', '), src.display_name, w.publication_year, w.cited_by_count ? `cité ${w.cited_by_count} fois` : ''].filter(Boolean).join(' · '),
+        lien: acc.oa_url || loc.landing_page_url || w.doi, source: 'OpenAlex', libre: acc.is_oa ? 'Accès libre' : '', rang: i, fr: w.language === 'fr' }); });
+    L = L.filter(x => x.titre && x.lien);
+  }
+  // les meilleurs : pertinence d'abord, puis bonus pour l'accès libre et le français
+  L.forEach(x => x.score = x.rang - (x.libre ? 2 : 0) - (x.fr ? 1.5 : 0));
+  L.sort((a, b) => a.score - b.score);
+  return (AILLEURS_CACHE[cle] = L.slice(0, 6));
+}
+function ailleursHtml(q, genre, rien) {
+  const sites = AILLEURS_SITES[genre].map(([n, u, fin]) => `<a href="${esc(u + encodeURIComponent(q) + (fin || ''))}" target="_blank" rel="noopener">${esc(n)} ↗</a>`).join('');
+  return `<div class="ailleurs" data-ailleurs="${genre}">
+    <h3>🌍 ${rien ? (genre === 'livre' ? 'Notre bibliothèque n’a pas ce livre.' : 'Nous n’avons pas cet article.') + ' Voici ce que l’on trouve ailleurs' : 'Chercher aussi ailleurs sur internet'}</h3>
+    <p class="text-sm text-muted">Les meilleurs résultats pour « ${esc(q)} », en commençant par ceux qu’on peut lire gratuitement.</p>
+    <div class="ail-res"><p class="text-sm text-muted">Recherche sur internet…</p></div>
+    <p class="text-sm font-semibold mt-1">Continuer la recherche sur :</p><div class="ail-sites">${sites}</div></div>`;
+}
+async function ailleursRemplir(box, q, genre) {
+  const z = box.querySelector('.ail-res'); if (!z) return;
+  const L = await ailleursMeilleurs(q, genre);
+  if (!z.isConnected) return;
+  z.innerHTML = L.length ? L.map(x => `<a class="ail-it" href="${esc(x.lien)}" target="_blank" rel="noopener">${x.image ? `<img src="${esc(x.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+      <span class="min-w-0"><b>${esc(x.titre)}</b><span class="text-sm text-muted">${esc(x.det)}</span><br><span class="text-xs">${x.libre ? `<span class="ail-libre">${esc(x.libre)}</span>` : ''}<span class="text-muted">${esc(x.source)} ↗</span></span></span></a>`).join('')
+    : '<p class="text-sm text-muted">Rien de sûr trouvé automatiquement : essayez les sites ci-dessous.</p>';
+}
+function ailleurs(cont, q, genre, rien) {
+  if (!cont || !q || q.length < 3) return;
+  cont.insertAdjacentHTML('beforeend', ailleursHtml(q, genre, rien));
+  ailleursRemplir(cont.lastElementChild, q, genre);
+}
 
 
 /* =================================================================== *
@@ -6147,7 +6233,7 @@ async function chercherLivres() {
   const { data, error } = await sb.rpc('chercher_livres', { p_q: BQ.q, p_filtre: BQ.filtre, p_limite: BQ.q ? 200 : 60 });
   if (error) { box.innerHTML = `<p class="text-bad">${esc(/chercher_livres|function|schema cache/i.test(error.message) ? 'Exécutez d’abord 25_bibliotheque.sql dans Supabase.' : errText(error))}</p>`; return; }
   BQ.res = data || [];
-  if (!BQ.res.length) { box.innerHTML = `<p class="text-muted">${BQ.q ? 'Aucun livre ne correspond à cette recherche.' : 'Le catalogue est encore vide.'}</p>`; return; }
+  if (!BQ.res.length) { box.innerHTML = `<p class="text-muted">${BQ.q ? 'Aucun livre ne correspond à cette recherche.' : 'Le catalogue est encore vide.'}</p>`; ailleurs(box, BQ.q, 'livre', true); return; }
   const dispo = l => {
     if (l.sur_place) return '<span class="pill bg-sunk">Sur place seulement</span>';
     const libres = l.exemplaires - l.pretes - (l.gardes || 0), membre = state.profil && state.profil.type !== 'inconnu';
@@ -6171,7 +6257,9 @@ async function chercherLivres() {
       ${BQ.biblio ? `<td class="whitespace-nowrap text-right">${!l.sur_place && l.exemplaires > l.pretes ? `<button type="button" class="btn btn-sm" data-preter="${l.id}">Prêter</button> ` : ''}<button type="button" class="linkbtn text-xs" data-modif="${l.id}">Modifier</button></td>` : ''}
     </tr>`).join('')}</tbody></table></div>
     ${BQ.res.length >= (BQ.q ? 200 : 60) ? '<p class="text-xs text-muted mt-2">Seuls les premiers résultats sont affichés : précisez la recherche.</p>' : ''}
-    ${BQ.tout && !BQ.q ? '<button type="button" class="linkbtn text-sm mt-2" id="bqToutCacher">Cacher le catalogue</button>' : ''}`;
+    ${BQ.tout && !BQ.q ? '<button type="button" class="linkbtn text-sm mt-2" id="bqToutCacher">Cacher le catalogue</button>' : ''}
+    ${BQ.q && BQ.q.length >= 3 ? '<button type="button" class="linkbtn text-sm mt-2" id="bqAilleurs">🌍 Pas le livre que vous cherchez ? Chercher aussi ailleurs sur internet</button>' : ''}`;
+  if ($('#bqAilleurs')) $('#bqAilleurs').addEventListener('click', e => { e.target.remove(); ailleurs(box, BQ.q, 'livre', false); });
   if ($('#bqToutCacher')) $('#bqToutCacher').addEventListener('click', () => { BQ.tout = false; chercherLivres(); });
   box.querySelectorAll('[data-preter]').forEach(b => b.addEventListener('click', () => ouvrirPret(Number(b.dataset.preter))));
   box.querySelectorAll('[data-reserver]').forEach(b => b.addEventListener('click', () => reserverLivre(Number(b.dataset.reserver))));
@@ -7478,6 +7566,8 @@ const AIDE = [
     e: ['Bibliothèque : cherchez le livre.', 'Sous son titre : sa couverture et « 📖 Résumé » (cherché automatiquement sur internet, avec sa source).'], go: { tab: 'bibliotheque' } },
   { q: 'Citer un livre dans un devoir ou un mémoire', r: ['tous'], k: 'citer citation reference note bas page bibliographie normes methodologie memoire',
     e: ['Bibliothèque : cherchez le livre, puis « ❝ Citer ce livre ».', 'Trois références prêtes : note de bas de page, notes suivantes (op. cit.) et bibliographie, aux normes du cours de Méthodologie (prénom abrégé, nom en petites capitales, titre en italique, date, édition, page).', '« 📋 Copier » puis collez dans Word : la mise en forme est gardée.'], go: { tab: 'bibliotheque' } },
+  { q: 'Trouver ailleurs un livre ou un article que la bibliothèque n’a pas', r: ['tous'], k: 'ailleurs internet trouver livre article absent pas manque autre site google scholar persee cairn gallica open library',
+    e: ['Bibliothèque (pour un livre) ou Articles (pour un article) : tapez le titre, l’auteur ou le sujet.', 'Si nous ne l’avons pas, le site cherche tout seul sur internet et montre les meilleurs résultats, en commençant par ceux qu’on peut lire gratuitement (« Lecture libre », « Accès libre »).', 'Si nous avons des résultats mais pas le bon : « 🌍 Chercher aussi ailleurs sur internet ».', 'En dessous, des boutons ouvrent la même recherche sur Google Livres, Gallica, Persée, Cairn, Google Scholar…'], go: { tab: 'bibliotheque' } },
   { q: 'La bibliothèque numérique (ressources gratuites)', r: ['tous'], k: 'bibliotheque numerique ressources gratuites vatican catechisme bible peres lire en ligne',
     e: ['Bibliothèque, en bas de la page : « 🌐 Bibliothèque numérique ».', 'Magistère, Vatican II, Catéchisme, Code de droit canonique, Bible et liturgie du jour, Pères de l’Église, revues.', 'L’administration modifie la liste avec « Modifier la liste ».'], go: { tab: 'bibliotheque' } },
   { q: 'Lire ou télécharger un article payant', r: ['tous', 'visiteur'], k: 'article payant acheter payer mvola consulter telecharger pdf 500 1000 ariary code capture',
@@ -8672,8 +8762,12 @@ async function chercherPartout(q) {
     const fn = [];
     box.innerHTML = G.length ? G.map(([titre, l]) => `<p class="rech-titre">${esc(titre)}</p>${l.map(([lib, det, f]) => { fn.push(f); return `<button type="button" class="rech-l" data-rr data-i="${fn.length - 1}"><span><b>${esc(lib)}</b><small>${esc(det)}</small></span></button>`; }).join('')}`).join('')
       + (enCours ? '<p class="rech-titre">Recherche dans les livres, articles et événements…</p>' : '')
-      : (enCours ? '<p class="rech-vide">Recherche…</p>' : `<p class="rech-vide">Rien trouvé pour « ${esc(q)} ». Essayez un autre mot, ou posez la question à <button type="button" class="linkbtn" id="rechAide">l’aide du site</button>.</p>`);
+      : (enCours ? '<p class="rech-vide">Recherche…</p>' : `<p class="rech-vide">Rien trouvé pour « ${esc(q)} ». Essayez un autre mot, ou posez la question à <button type="button" class="linkbtn" id="rechAide">l’aide du site</button>.</p>`
+      + (q.length >= 3 ? `<p class="rech-titre">Ailleurs sur internet</p><button type="button" class="rech-l" data-ail="livre"><span><b>📚 Chercher un livre « ${esc(q)} »</b><small>Google Livres, Open Library, Gallica… les meilleurs résultats</small></span></button><button type="button" class="rech-l" data-ail="article"><span><b>📰 Chercher un article « ${esc(q)} »</b><small>Persée, Cairn, OpenEdition, Google Scholar…</small></span></button>` : ''));
     box.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => { fermerRecherche(); fn[+b.dataset.i](); }));
+    box.querySelectorAll('[data-ail]').forEach(b => b.addEventListener('click', () => { fermerRecherche();
+      if (b.dataset.ail === 'livre') allerA('bibliotheque', '#bqRes', () => { BQ.q = q; try { $('#bqQ').value = q; } catch (_) {} });
+      else allerA('articles', '#artList', () => { try { $('#artSearch').value = q; } catch (_) {} }); }));
     if ($('#rechAide')) $('#rechAide').addEventListener('click', () => { fermerRecherche(); $('#aidePanel').hidden = false; $('#aideQ').value = q; $('#aideForm').requestSubmit(); });
   }
 }
