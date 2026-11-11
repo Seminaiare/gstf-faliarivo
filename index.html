@@ -502,6 +502,26 @@ const CONFIG = {
   .bn-lien:hover { border-color: var(--accent); transform: translateY(-1px); }
   .bn-lien span { font-size: .85rem; color: var(--muted); line-height: 1.4; }
   .bn-lien small { font-size: .72rem; color: var(--accent); margin-top: .2rem; }
+  .art-pill { background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--ink); }
+  .art-achat { margin-top: .8rem; padding: .8rem .9rem; border: 1px dashed color-mix(in srgb, var(--gold) 55%, var(--line)); border-radius: .7rem; background: color-mix(in srgb, var(--gold) 5%, var(--surface)); }
+  .art-payant-contenu { margin-top: .9rem; }
+  .art-texte-payant { -webkit-user-select: none; user-select: none; }
+  .art-pdf-pages canvas { display: block; margin: 0 0 .6rem; border: 1px solid var(--line); border-radius: 4px; background: #fff; }
+  .art-formule { display: flex; gap: .6rem; align-items: flex-start; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+  .art-formule:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .art-formule small { display: block; color: var(--muted); font-size: .8rem; }
+  .art-code { font-family: ui-monospace, monospace; font-size: 1.8rem; font-weight: 700; letter-spacing: .12em; color: var(--accent); margin: .3rem 0; }
+  .art-vente { border-top: 1px solid var(--line); padding-top: .8rem; }
+  .mode-emploi { border: 1px solid color-mix(in srgb, #2563a8 35%, var(--line)); background: color-mix(in srgb, #2563a8 6%, var(--surface)); border-radius: .8rem; padding: .7rem 1rem; margin-bottom: 1.2rem; max-width: 70rem; }
+  .mode-emploi summary { cursor: pointer; font-size: .95rem; }
+  .mode-emploi[open] summary { margin-bottom: .5rem; }
+  .me-but { font-weight: 600; margin-bottom: .4rem; }
+  .me-etapes { list-style: decimal; padding-left: 1.3rem; display: flex; flex-direction: column; gap: .25rem; font-size: .92rem; }
+  .me-sous { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: .7rem 0 .3rem; }
+  .me-boutons { display: flex; flex-direction: column; gap: .25rem; font-size: .88rem; }
+  .me-btn { display: inline-block; font-weight: 600; font-size: .8rem; border: 1px solid var(--line); border-radius: 6px; padding: 0 .4rem; background: var(--surface); margin-right: .3rem; }
+  .me-att { margin-top: .6rem; font-size: .88rem; color: var(--warn); }
+  .me-pied { margin-top: .6rem; font-size: .75rem; color: var(--muted); }
   .zone-photos { border: 2px dashed color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: .6rem; padding: .9rem 1rem; background: var(--sunk); text-align: center; cursor: default; transition: background .15s, border-color .15s; outline: none; }
   .zone-photos:focus, .zone-photos:hover { border-color: var(--accent); }
   .zone-photos.survol { background: var(--accent-soft); border-color: var(--accent); }
@@ -1307,6 +1327,7 @@ const CONFIG = {
         <button type="button" data-adm="accueil" aria-pressed="false">Page d’accueil<span id="admIntCount"></span></button>
       </div>
 
+      <div id="admModeEmploi"></div>
       <div id="admFiche" class="bg-surface border rounded-lg p-5 mb-6 max-w-2xl" style="border-color: var(--accent)" hidden role="status">
         <p class="eyebrow mb-1">Fiche d'accès à remettre</p>
         <div id="admFicheBody"></div>
@@ -1423,7 +1444,7 @@ const CONFIG = {
       <p class="text-muted mt-4 italic">« Vous êtes tous frères. » (Mt 23, 8)</p></div>
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 124</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 125</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2383,6 +2404,87 @@ document.querySelectorAll('[data-adm]').forEach(b => b.addEventListener('click',
 $('#eOrigine').innerHTML = `<optgroup label="Diocèses">${DIOCESES.map(d => `<option>${d}</option>`).join('')}</optgroup><optgroup label="Congrégations">${CONGREGATIONS.map(d => `<option>${d}</option>`).join('')}</optgroup>`;
 const fmtWhen = t => t ? new Date(t).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
 
+/* =================================================================== *
+ *  Mode d'emploi pour les administrateurs : une aide dans chaque rubrique
+ * =================================================================== */
+const AIDE_ADMIN = {
+  tableau: { t: 'Tableau de bord', but: 'Voir d’un coup d’œil ce qui demande votre attention aujourd’hui.',
+    etapes: ['Ouvrez cette page chaque matin : chaque carte montre un nombre (demandes, messages, notes à saisir, rendez-vous, livres en retard…).', 'Cliquez « Ouvrir → » sur une carte pour aller directement à la rubrique concernée.', 'Cliquez « ↻ Actualiser » pour recharger les chiffres sans quitter la page.'],
+    boutons: [['Ouvrir →', 'va à la rubrique de la carte'], ['↻ Actualiser', 'recharge les chiffres'], ['Économat →', 'ouvre les comptes de l’économat']] },
+  etudiants: { t: 'Étudiants', but: 'Gérer la liste des séminaristes, leurs fiches et leurs comptes.',
+    etapes: ['Choisissez l’année (1re, 2e, 3e) ; cherchez un nom avec le champ de recherche.', 'Cliquez sur un étudiant pour ouvrir sa fiche : modifiez ses informations puis « Enregistrer ».', 'Pour un mot de passe oublié : ouvrez la fiche, créez un nouveau mot de passe, imprimez la fiche d’accès et remettez-la en main propre.', 'Un étudiant qui part : retirez-le (il reste dans les archives) ; « Réactiver » le fait revenir.'],
+    boutons: [['Enregistrer', 'garde les changements de la fiche'], ['Modifier le nom', 'corrige le nom ou les prénoms'], ['Réactiver', 'remet un étudiant retiré'], ['Supprimer définitivement', 'efface tout (notes comprises) : à éviter, préférez « retirer »']],
+    attention: 'La suppression définitive ne peut pas être annulée. Faites d’abord une sauvegarde.' },
+  demandes: { t: 'Demandes d’inscription', but: 'Traiter les demandes envoyées par le formulaire « Inscription » du site.',
+    etapes: ['Lisez la demande et ouvrez les pièces jointes (photo, certificats).', 'Si elle est complète et acceptée : « Accepter et créer le compte » ; une fiche d’accès s’affiche : imprimez-la et remettez-la.', 'Sinon : « Refuser » (la personne peut être recontactée par téléphone).'],
+    boutons: [['Accepter et créer le compte', 'crée l’étudiant et son compte'], ['Refuser', 'classe la demande'], ['Effacer les demandes refusées…', 'fait le ménage des vieilles demandes (plus d’un an)']] },
+  nouveau: { t: 'Nouvelle inscription', but: 'Inscrire vous-même un séminariste (sans passer par le formulaire public).',
+    etapes: ['Remplissez nom, prénoms, année, diocèse ou congrégation, téléphone et email personnel.', 'Ajoutez la photo si vous l’avez.', 'Validez : le compte est créé et la fiche d’accès (identifiant + mot de passe) s’affiche.', 'Imprimez la fiche et remettez-la en main propre ; le mot de passe n’est plus affiché ensuite.'],
+    attention: 'Ne photographiez pas et n’envoyez pas les mots de passe par WhatsApp.' },
+  enseignants: { t: 'Enseignants', but: 'Gérer les professeurs, l’équipe formatrice et leurs comptes.',
+    etapes: ['Ajoutez un professeur avec son nom, son rôle et son email personnel.', 'Ouvrez sa fiche pour changer ses informations ou lui créer un nouveau mot de passe.', 'Les cours se donnent à un professeur dans « Année académique › Cours ».', 'Le rôle « Préfet », « Recteur » ou « Secrétariat » donne l’accès à l’Admin : à n’accorder qu’aux bonnes personnes.'],
+    boutons: [['Enregistrer', 'garde les changements'], ['Réactiver', 'remet un professeur retiré'], ['Supprimer définitivement', 'à éviter : préférez retirer']] },
+  annee: { t: 'Année académique', but: 'Préparer l’année : dates, cours et professeurs, calendrier, passage à l’année suivante.',
+    etapes: ['« Enregistrer les dates » : début et fin de l’année et des semestres.', 'Cours : ajoutez un cours, choisissez le professeur (enregistré tout seul) ; « Syllabus » pour son programme.', 'Calendrier académique : une ligne par date (rentrée, examens, vacances, fête patronale…). Il remplit l’Agenda, l’accueil et le livret. « Reprendre les dates de l’année précédente » prépare une nouvelle année en un clic.', 'En juin/juillet : « Choisir les redoublants », puis « Passer à l’année suivante » (les 1re passent en 2e, etc.).'],
+    attention: 'Avant de passer à l’année suivante, faites une sauvegarde (rubrique Sauvegarde).' },
+  releves: { t: 'Relevés de notes', but: 'Préparer, imprimer et archiver les relevés officiels et la fiche de l’examen de fin de cycle.',
+    etapes: ['Vérifiez l’en-tête (nom du Recteur, signatures) puis « Enregistrer l’en-tête ».', 'Choisissez l’étudiant ou la classe et imprimez les relevés.', 'Les demandes de relevé faites par les anciens arrivent ici : acceptez ou refusez.', '3e année : remplissez la fiche de l’examen de fin de cycle, puis « Télécharger la fiche Excel » si besoin.'] },
+  cartes: { t: 'Cartes d’étudiant', but: 'Imprimer les cartes d’étudiant avec photo et QR code.',
+    etapes: ['Vérifiez les informations de la carte (validité, signature) et « Enregistrer les informations ».', 'Cochez les étudiants dont il faut une carte (ceux sans photo sont signalés).', '« Imprimer les cartes cochées » : imprimez sur papier épais, puis découpez.'] },
+  evaluation: { t: 'Évaluation des cours', but: 'Ouvrir l’évaluation anonyme des cours par les étudiants et lire les résultats.',
+    etapes: ['Ouvrez ou fermez la période d’évaluation, puis « Enregistrer ».', 'Les étudiants répondent depuis leur portail (anonyme).', 'Lisez les résultats par cours ; « Imprimer » pour le conseil des formateurs.'] },
+  historique: { t: 'Historique des notes', but: 'Savoir qui a changé une note, quand, et quelle était l’ancienne valeur.',
+    etapes: ['Cherchez un étudiant ou un cours.', 'Chaque ligne montre l’ancienne et la nouvelle note, l’auteur et la date.', '« Imprimer » pour garder une trace en cas de contestation.'] },
+  edt: { t: 'Emploi du temps', but: 'Modifier l’emploi du temps d’une semaine (cours déplacé, absence, examen).',
+    etapes: ['Choisissez la classe et la semaine.', 'Changez les cases concernées, puis « Enregistrer la semaine ».', '« Recopier » reprend les changements d’une autre semaine ; « Effacer les changements de cette semaine » revient à l’emploi du temps normal.'] },
+  annonces: { t: 'Annonces', but: 'Envoyer une annonce aux étudiants, aux professeurs ou à tous (portail, email, notification).',
+    etapes: ['Écrivez le titre et le texte, choisissez à qui elle s’adresse.', 'Cochez l’envoi par email ou notification si l’annonce est importante.', '« Publier l’annonce » ; « Retirer » l’enlève quand elle n’est plus utile.'] },
+  actus: { t: 'Actualités et photos', but: 'Publier les nouvelles et les photos du séminaire (page d’accueil, événements inoubliables).',
+    etapes: ['« Nouvelle publication » : titre, date de l’événement, texte, puis « + Photos, vidéos, PDF » (vous pouvez aussi coller ou glisser les photos).', 'Cochez « Inoubliable » pour un grand événement : il restera pour toujours dans « Événements inoubliables ».', '« Publier ». Les publications des groupes d’activité arrivent « en attente » : « Approuver » ou « Retirer ».', '« Alléger les anciennes photos » rend les vieilles photos plus légères pour le téléphone.'],
+    attention: 'Après 3 mois, une actualité passe automatiquement dans les souvenirs.' },
+  articles: { t: 'Articles', but: 'Publier des articles (texte ou PDF), gratuits ou payants.',
+    etapes: ['Remplissez titre, auteur, résumé ; écrivez le texte ou joignez un PDF (un fichier Word remplit le texte).', 'Article payant : cochez « 💰 Article payant » et indiquez les prix (consulter sur le site, télécharger le PDF). Le texte et le PDF sont alors protégés.', 'Indiquez une fois le numéro MVola du secrétariat (en haut), puis « Enregistrer ».', 'Quand un lecteur a payé, son paiement apparaît dans « À vérifier » : comparez avec le SMS MVola reçu (référence et montant), puis « ✓ Paiement reçu » ou « Refuser ».', 'Après validation, « WhatsApp au lecteur » lui envoie un message avec son code.'],
+    boutons: [['Rendre payant / Rendre gratuit', 'change le statut d’un article déjà publié'], ['Réserver aux connectés', 'cache l’article aux visiteurs'], ['Retirer', 'supprime l’article']],
+    attention: 'Ne validez un paiement qu’après avoir vu l’argent sur le compte MVola.' },
+  messages: { t: 'Messages reçus', but: 'Lire et répondre aux messages envoyés par le formulaire « Contact ».',
+    etapes: ['Ouvrez un message pour le lire.', 'Écrivez la réponse et cliquez « Envoyer la réponse » : elle part par email à la personne.', 'Les messages traités restent dans l’historique.'] },
+  groupes: { t: 'Groupes d’activité', but: 'Présenter les groupes (liturgie, service, sport…) et choisir qui peut y publier.',
+    etapes: ['Modifiez la présentation de chaque groupe et ses responsables.', '« Enregistrer les groupes ». Les rédacteurs d’un groupe publient des actualités que vous approuvez.', '« Revenir aux textes proposés » remet les textes d’origine.'] },
+  apparence: { t: 'Apparence', but: 'Changer les couleurs, le logo et la photo du site.',
+    etapes: ['Choisissez les couleurs ou un style ; l’aperçu change tout de suite.', 'Changez le logo ou la photo d’en-tête si besoin.', '« Enregistrer l’apparence » pour tous ; « Annuler les changements » ou « Revenir au style d’origine » en cas d’erreur.'] },
+  sauvegarde: { t: 'Sauvegarde', but: 'Garder une copie de toutes les données du séminaire.',
+    etapes: ['Une sauvegarde arrive automatiquement par email le 1er de chaque mois : rangez-la (Drive + clé USB).', '« Télécharger en Excel » : une copie lisible ; « Sauvegarde complète (JSON) » : la copie qui sert à restaurer.', '« Recevoir la sauvegarde par email maintenant » avant une grosse opération (passage d’année, suppression).'],
+    attention: 'Les photos et PDF ne sont pas dans cette sauvegarde : téléchargez-les une fois par trimestre (voir le dossier de passation).' },
+  accueil: { t: 'Page d’accueil', but: 'Animer la page d’accueil : photos, parole de la semaine, compte à rebours, portrait du mois, intentions de prière.',
+    etapes: ['Changez la parole de la semaine, le compte à rebours (titre + date, par ex. les ordinations) et le portrait du mois.', 'Choisissez les photos du bandeau.', '« Enregistrer la page d’accueil », puis « Voir la page d’accueil » pour vérifier.', 'Intentions de prière reçues : lisez-les ; publiez celles qui peuvent l’être, « Retirer » les autres.'] },
+  stats: { t: 'Statistiques de visites', but: 'Savoir combien de personnes visitent le site, quelles pages et d’où.',
+    etapes: ['Choisissez la période.', 'Regardez les visiteurs par jour, les pages les plus vues, les pays.', 'Utile pour le rapport annuel ou pour savoir si une annonce a été vue.'] }
+};
+const AIDE_AUTRES = {
+  bibliotheque: { t: 'Gestion de la bibliothèque', but: 'Prêter, rendre, réserver, ajouter des livres et suivre la bibliothèque.',
+    etapes: ['Prêts : cherchez le livre puis « Prêter » ; au retour « Rendu » ; « Prolonger » pour quelques jours de plus.', 'Réservations : les demandes faites sur le site (🌐) apparaissent ici ; quand le lecteur vient avec sa pièce d’identité, « Prêter ».', 'Ajouter / importer : un livre à la main, ou une liste (Excel, Word, PDF, photo) ; « 🧹 Remettre en ordre le catalogue » corrige les fiches mal découpées ; les résumés se cherchent tout seuls.', 'Statistiques : livres les plus empruntés, lecteurs, « Imprimer le rapport ».', 'Réglages (administrateurs) : durée du prêt, nombre de livres, bibliothécaires.'],
+    attention: 'Un livre « sur place » ne sort pas de la bibliothèque.' },
+  agenda: { t: 'Agenda', but: 'Ajouter les événements de la communauté et régler les rappels.',
+    etapes: ['« Ajouter un événement » : titre, catégorie, dates, lieu ; choisissez « Qui le voit » (public ou un groupe) et cochez 🔔 pour un rappel la veille.', 'Le calendrier académique, les fêtes liturgiques et les anniversaires s’ajoutent tout seuls ; « Masquer » retire un événement automatique inutile.', '⚙ Réglages : heure du rappel la veille ; « Modifier le calendrier de l’année » mène à l’Admin.', '📸 Après un événement : « Publier les photos » prépare la publication.'] }
+};
+function modeEmploi(cle, aide) {
+  const A = aide || AIDE_ADMIN[cle]; if (!A) return '';
+  let vus = []; try { vus = JSON.parse(localStorage.getItem('gstf-mode-emploi') || '[]'); } catch (_) {}
+  return `<details class="mode-emploi" data-me="${esc(cle)}" ${vus.includes(cle) ? '' : 'open'}><summary><span aria-hidden="true">ℹ️</span> Mode d’emploi : <b>${esc(A.t)}</b></summary>
+    <p class="me-but">${esc(A.but)}</p>
+    <ol class="me-etapes">${A.etapes.map(e => `<li>${esc(e)}</li>`).join('')}</ol>
+    ${A.boutons ? `<p class="me-sous">Les boutons</p><ul class="me-boutons">${A.boutons.map(([b, d]) => `<li><span class="me-btn">${esc(b)}</span> ${esc(d)}</li>`).join('')}</ul>` : ''}
+    ${A.attention ? `<p class="me-att">⚠️ ${esc(A.attention)}</p>` : ''}
+    <p class="me-pied">Ce cadre se replie : cliquez sur son titre. Guide complet : « Guide du secrétariat » (PDF). Aide immédiate : bouton « Besoin d’aide ? ».</p></details>`;
+}
+function brancherModeEmploi(z) {
+  z.querySelectorAll('details.mode-emploi').forEach(d => d.addEventListener('toggle', () => {
+    let vus = []; try { vus = JSON.parse(localStorage.getItem('gstf-mode-emploi') || '[]'); } catch (_) {}
+    const k = d.dataset.me; vus = d.open ? vus.filter(x => x !== k) : [...new Set([...vus, k])];
+    try { localStorage.setItem('gstf-mode-emploi', JSON.stringify(vus)); } catch (_) {}
+  }));
+}
+
 async function renderAdmin() {
   $('#admFil').textContent = admLabel(admView);
   const ouvert = isAdmin();
@@ -2391,8 +2493,10 @@ async function renderAdmin() {
   if (!ouvert) {
     $('#admVerrouTitre').textContent = admLabel(admView);
     $('#admVerrouTexte').textContent = 'Ici se trouvent ' + (ADM_DESC[admView] || 'des informations internes') + '.';
+    $('#admModeEmploi').innerHTML = '';
     return;
   }
+  $('#admModeEmploi').innerHTML = modeEmploi(admView); brancherModeEmploi($('#admModeEmploi'));
   ['tableau', 'etudiants', 'demandes', 'nouveau', 'enseignants', 'annonces', 'actus', 'articles', 'apparence', 'groupes', 'annee', 'sauvegarde', 'releves', 'cartes', 'evaluation', 'historique', 'edt', 'messages', 'stats', 'accueil'].forEach(k => $('#adm-' + k).hidden = k !== admView);
   if (admView === 'stats') renderAdminStats();
   if (admView === 'accueil') renderAdminAccueil();
@@ -3746,25 +3850,202 @@ async function renderArticlesPage() {
   const el = $('#artList');
   if (!articlesLoaded) { el.innerHTML = '<p class="text-muted">Chargement…</p>'; await loadArticles(); }
   if (currentTab !== 'articles') return;
+  if (!PAIEMENT) await chargerPaiement();
   const q = $('#artSearch').value.trim().toLowerCase();
   const list = ARTICLES.filter(a => !q || (a.titre + ' ' + a.auteur + ' ' + a.resume).toLowerCase().includes(q));
   el.innerHTML = list.length ? list.map(a => `
     <article class="bg-surface border border-line rounded-lg p-5">
       <h2 class="font-display text-2xl font-semibold leading-snug">${esc(a.titre)}</h2>
-      <p class="text-sm text-muted">${a.auteur ? esc(a.auteur) + ' · ' : ''}${esc(artDate(a))}${a.public ? '' : ' · réservé aux connectés'}</p>
+      <p class="text-sm text-muted">${a.payant ? '<span class="pill art-pill">💰 Article payant</span> ' : ''}${a.auteur ? esc(a.auteur) + ' · ' : ''}${esc(artDate(a))}${a.public ? '' : ' · réservé aux connectés'}</p>
       ${a.resume ? `<p class="mt-2">${esc(a.resume)}</p>` : ''}
+      ${a.payant ? blocAchat(a) : ''}
       <div class="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-sm">
         ${a.texte ? `<button type="button" class="linkbtn art-lire">Lire l’article</button>` : ''}
         ${a.fichier ? `<a class="linkbtn" href="${esc(docUrl(a.fichier))}" target="_blank" rel="noopener">Ouvrir le PDF${a.fichier_nom ? ' (' + esc(a.fichier_nom) + ')' : ''}</a>` : ''}
       </div>
       <div class="mt-3 whitespace-pre-line art-texte max-w-[75ch]" hidden>${esc(a.texte || '')}</div>
     </article>`).join('') : `<p class="text-muted">${q ? 'Aucun article ne correspond à cette recherche.' : 'Aucun article publié pour l’instant.'}</p>`;
+  el.querySelectorAll('[data-art-id]').forEach(z => brancherAchat(z, ARTICLES.find(a => a.id === Number(z.dataset.artId))));
   el.querySelectorAll('.art-lire').forEach(b => b.addEventListener('click', () => {
     const t = b.closest('article').querySelector('.art-texte'); t.hidden = !t.hidden; b.textContent = t.hidden ? 'Lire l’article' : 'Replier l’article';
   }));
 }
 $('#artSearch').addEventListener('input', () => renderArticlesPage());
 
+
+/* =================================================================== *
+ *  Articles payants : consulter sur le site ou télécharger le PDF,    *
+ *  paiement MVola au secrétariat, accès par code                      *
+ * =================================================================== */
+let PAIEMENT = null;
+async function chargerPaiement() {
+  const r = await sb.from('reglages').select('valeur').eq('cle', 'paiement').maybeSingle();
+  PAIEMENT = { mvola: '', nom: 'Secrétariat du Grand Séminaire', ...((r.data && r.data.valeur) || {}) };
+}
+const CODES_CLE = 'gstf-codes-articles';
+const mesCodes = () => { try { return JSON.parse(localStorage.getItem(CODES_CLE) || '{}') || {}; } catch (_) { return {}; } };
+function garderCode(id, code) { const m = mesCodes(); m[id] = [...new Set([code, ...(m[id] || [])])].slice(0, 5); try { localStorage.setItem(CODES_CLE, JSON.stringify(m)); } catch (_) {} }
+const telInt = t => { const d = String(t || '').replace(/\D/g, ''); return d.startsWith('261') ? d : d.startsWith('0') ? '261' + d.slice(1) : d; };
+function blocAchat(a) {
+  const codes = mesCodes()[a.id] || [];
+  return `<div class="art-achat" data-art-id="${a.id}">
+    <div class="flex flex-wrap gap-2">
+      ${a.texte_payant || a.pdf_payant ? `<button type="button" class="btn btn-sm" data-acheter="lecture">📖 Consulter sur le site · ${ar(a.prix_lecture)}</button>` : ''}
+      ${a.pdf_payant ? `<button type="button" class="btn btn-ghost btn-sm" data-acheter="pdf">⬇️ Télécharger le PDF · ${ar(a.prix_pdf)}</button>` : ''}
+      ${codes.length ? `<button type="button" class="btn btn-ghost btn-sm" data-ouvrir="${esc(codes[0])}">🔓 Ouvrir avec mon code ${esc(codes[0])}</button>` : ''}
+      ${isAdmin() ? '<button type="button" class="linkbtn text-sm" data-art-admin>Lire (administration)</button>' : ''}</div>
+    <p class="text-xs text-muted mt-1">Paiement par MVola au secrétariat · <button type="button" class="linkbtn text-xs" data-saisir-code>J’ai déjà un code d’accès</button></p>
+    <div class="art-payant-contenu" hidden></div></div>`;
+}
+function brancherAchat(z, a) {
+  if (!a) return;
+  z.querySelectorAll('[data-acheter]').forEach(b => b.addEventListener('click', () => acheterArticle(a, b.dataset.acheter)));
+  z.querySelectorAll('[data-ouvrir]').forEach(b => b.addEventListener('click', () => ouvrirAvecCode(a, b.dataset.ouvrir, z)));
+  z.querySelector('[data-saisir-code]').addEventListener('click', () => {
+    const c = prompt('Votre code d’accès (forme XXXXX-XXXXX) :'); if (c) ouvrirAvecCode(a, c, z);
+  });
+  const adm = z.querySelector('[data-art-admin]');
+  if (adm) adm.addEventListener('click', async () => {
+    const { data, error } = await sb.from('articles_payants').select('*').eq('article_id', a.id).maybeSingle();
+    if (error || !data) { toast('Lecture impossible', error ? errText(error) : 'Contenu introuvable.', 'bad'); return; }
+    let pdf = null; if (data.fichier) { const s2 = await sb.storage.from('articles-payants').createSignedUrl(data.fichier, 900); pdf = s2.data && s2.data.signedUrl; }
+    afficherContenuPayant(z, { titre: a.titre, texte: data.texte, pdf, formule: 'pdf', admin: true });
+  });
+}
+function acheterArticle(a, formule) {
+  const mv = (PAIEMENT && PAIEMENT.mvola || '').trim(), I = identiteLecteur();
+  const prix = f => f === 'pdf' ? a.prix_pdf : a.prix_lecture;
+  dialogueBiblio(`<p class="eyebrow mb-1">Article payant</p><h2 class="font-display text-2xl font-semibold leading-snug mb-3">${esc(a.titre)}</h2>
+    <fieldset class="flex flex-col gap-2 mb-4"><legend class="text-sm font-semibold mb-1">1. Choisissez</legend>
+      ${a.texte_payant || a.pdf_payant ? `<label class="art-formule"><input type="radio" name="artF" value="lecture" ${formule === 'lecture' ? 'checked' : ''}> <span><b>📖 Consulter sur le site</b> · ${ar(a.prix_lecture)}<small>Lecture sur le site, avec votre code, quand vous voulez.</small></span></label>` : ''}
+      ${a.pdf_payant ? `<label class="art-formule"><input type="radio" name="artF" value="pdf" ${formule === 'pdf' ? 'checked' : ''}> <span><b>⬇️ Télécharger le PDF</b> · ${ar(a.prix_pdf)}<small>Le fichier PDF à garder sur votre téléphone ou ordinateur.</small></span></label>` : ''}</fieldset>
+    ${mv ? `<div class="cadre-info mb-4"><p class="font-semibold mb-1">2. Payez par MVola</p>
+      <p>Envoyez <b id="artMontant">${ar(prix(formule))}</b> au <b class="whitespace-nowrap">${esc(mv)}</b> (${esc(PAIEMENT.nom || 'Secrétariat')}) <button type="button" class="linkbtn text-sm" id="artCopieNum">copier le numéro</button></p>
+      <p class="text-sm text-muted mt-1">MVola vous envoie un SMS de confirmation avec une <b>référence</b> (ex. MP241111.1234.A56789).</p></div>
+    <form id="artForm" class="grid sm:grid-cols-2 gap-3"><p class="text-sm font-semibold sm:col-span-2">3. Indiquez votre paiement</p>
+      <label class="text-sm"><span class="block font-semibold mb-1">Nom et prénom *</span><input class="field" id="artNom" maxlength="160" value="${esc([I.prenoms, I.nom].filter(Boolean).join(' '))}" required></label>
+      <label class="text-sm"><span class="block font-semibold mb-1">Téléphone MVola *</span><input class="field" id="artTel" type="tel" inputmode="tel" maxlength="20" value="${esc(I.tel)}" placeholder="034 12 345 67" required></label>
+      <label class="text-sm sm:col-span-2"><span class="block font-semibold mb-1">Référence de la transaction MVola *</span><input class="field font-mono" id="artRef" maxlength="60" placeholder="copiée du SMS de MVola" required></label>
+      <p class="text-sm text-bad sm:col-span-2" id="artErr" hidden></p>
+      <div class="sm:col-span-2 flex flex-wrap gap-2"><button class="btn">J’ai payé : recevoir mon code</button><button type="button" class="btn btn-ghost" data-dl-fermer>Annuler</button></div></form>`
+      : `<p class="text-warn mb-3">Le numéro MVola du secrétariat n’est pas encore indiqué sur le site. Contactez le secrétariat (onglet Contact).</p><button type="button" class="btn btn-ghost" data-dl-fermer>Fermer</button>`}`);
+  document.querySelectorAll('input[name="artF"]').forEach(r => r.addEventListener('change', () => { if ($('#artMontant')) $('#artMontant').textContent = ar(prix(r.value)); }));
+  if ($('#artCopieNum')) $('#artCopieNum').addEventListener('click', async () => { try { await navigator.clipboard.writeText(mv.replace(/\s/g, '')); $('#artCopieNum').textContent = '✓ copié'; } catch (_) {} });
+  if (!$('#artForm')) return;
+  $('#artForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = (document.querySelector('input[name="artF"]:checked') || {}).value, err = m => { $('#artErr').textContent = m; $('#artErr').hidden = false; };
+    if (!f) return err('Choisissez une formule.');
+    const nom = $('#artNom').value.trim(), tel = $('#artTel').value.trim(), ref = $('#artRef').value.trim();
+    if (nom.length < 2) return err('Indiquez votre nom.'); if (tel.replace(/\D/g, '').length < 9) return err('Indiquez votre numéro de téléphone.'); if (ref.length < 3) return err('Indiquez la référence reçue par SMS.');
+    const b = e.submitter; b.disabled = true;
+    const { data, error } = await sb.rpc('acheter_article', { p_article: a.id, p_formule: f, p_nom: nom, p_tel: tel, p_ref: ref });
+    b.disabled = false;
+    if (error) return err(/acheter_article|function|schema cache/i.test(error.message) ? 'Ce service sera bientôt disponible (installation en cours).' : errText(error));
+    garderCode(a.id, data.code);
+    sb.functions.invoke('inviter', { body: { action: 'article_achat_signal', code: data.code } }).catch(() => {});
+    dialogueBiblio(`<div class="text-center"><p class="text-4xl mb-2">🔑</p><h2 class="font-display text-2xl font-semibold mb-2">Votre code d’accès</h2>
+      <p class="art-code">${esc(data.code)}</p><button type="button" class="linkbtn text-sm mb-3" id="artCopieCode">📋 Copier le code</button>
+      <p class="text-sm mb-2">Gardez bien ce code (notez-le ou faites une capture d’écran). Il est aussi gardé sur cet appareil.</p>
+      <p class="text-sm text-muted mb-4">Le secrétariat vérifie votre paiement de <b>${ar(data.montant)}</b>, en général dans la journée. Ensuite, revenez sur l’article et cliquez « 🔓 Ouvrir avec mon code ».</p>
+      <button type="button" class="btn" data-dl-fermer>Fermer</button></div>`);
+    $('#artCopieCode').addEventListener('click', async () => { try { await navigator.clipboard.writeText(data.code); $('#artCopieCode').textContent = '✓ Copié'; } catch (_) {} });
+    renderArticlesPage();
+  });
+}
+async function ouvrirAvecCode(a, code, z) {
+  const zone = z.querySelector('.art-payant-contenu'); zone.hidden = false; zone.innerHTML = '<p class="text-sm text-muted">Vérification du code…</p>';
+  const { data, error } = await sb.functions.invoke('inviter', { body: { action: 'article_acces', code } });
+  const er = error ? await lireErreurFonction(error) : null;
+  if (er || !data) { zone.innerHTML = `<p class="text-sm text-bad">${esc(er || 'Service indisponible, réessayez plus tard.')}</p>`; return; }
+  if (data.statut === 'inconnu') { zone.innerHTML = `<p class="text-sm text-bad">${esc(data.erreur || 'Code inconnu.')}</p>`; return; }
+  if (data.article_id && data.article_id !== a.id) { zone.innerHTML = `<p class="text-sm text-warn">Ce code ouvre un autre article : « ${esc(data.titre)} ».</p>`; return; }
+  garderCode(a.id, code.toUpperCase().trim());
+  if (data.statut === 'en_attente') { zone.innerHTML = `<div class="cadre-info">⏳ <b>Paiement en cours de vérification</b> par le secrétariat (${ar(data.montant)}). Réessayez un peu plus tard avec le même code.</div>`; return; }
+  if (data.statut === 'refuse') { zone.innerHTML = `<div class="cadre-info">❌ <b>Paiement non reconnu.</b> ${esc(data.motif || '')} Contactez le secrétariat avec votre référence MVola.</div>`; return; }
+  afficherContenuPayant(z, data);
+}
+async function afficherContenuPayant(z, d) {
+  const zone = z.querySelector('.art-payant-contenu'); zone.hidden = false;
+  zone.innerHTML = `${d.formule === 'pdf' && d.pdf ? `<a class="btn btn-sm mb-3" href="${esc(d.pdf)}" ${d.admin ? 'target="_blank" rel="noopener"' : ''}>⬇️ Télécharger le PDF</a>` : ''}
+    ${d.texte ? `<div class="art-texte-payant whitespace-pre-line max-w-[75ch]">${esc(d.texte)}</div>` : ''}
+    ${d.pdf && !d.texte ? '<div class="art-pdf-pages" aria-label="Pages de l’article"><p class="text-sm text-muted">Chargement des pages…</p></div>' : ''}`;
+  if (d.pdf && !d.texte) {
+    try {
+      await chargerScript(LIBS_IMPORT.pdf); pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS_IMPORT.pdfWorker;
+      const doc = await pdfjsLib.getDocument({ url: d.pdf }).promise, box = zone.querySelector('.art-pdf-pages'); box.innerHTML = '';
+      const larg = Math.min(box.clientWidth || 700, 900);
+      for (let i = 1; i <= Math.min(doc.numPages, 80); i++) {
+        const pg = await doc.getPage(i), v0 = pg.getViewport({ scale: 1 }), sc = larg / v0.width, v = pg.getViewport({ scale: sc * (window.devicePixelRatio || 1) });
+        const c = document.createElement('canvas'); c.width = v.width; c.height = v.height; c.style.width = '100%'; c.oncontextmenu = ev => ev.preventDefault();
+        box.appendChild(c); await pg.render({ canvasContext: c.getContext('2d'), viewport: v }).promise;
+      }
+    } catch (e) { zone.querySelector('.art-pdf-pages').innerHTML = '<p class="text-sm text-bad">Le PDF n’a pas pu s’afficher. Réessayez avec votre code.</p>'; }
+  }
+  zone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ---------- Administration : paiements MVola à vérifier ---------- */
+async function renderAchatsArticles(box) {
+  if (!PAIEMENT) await chargerPaiement();
+  const { data, error } = await sb.from('achats_articles').select('*, articles(titre)').order('demande_le', { ascending: false }).limit(120);
+  if (error) { box.innerHTML = `<p class="text-sm text-muted">${/achats_articles|schema cache/i.test(error.message) ? 'Pour vendre des articles, exécutez d’abord 59_articles_payants.sql dans Supabase.' : esc(errText(error))}</p>`; return; }
+  const att = data.filter(x => x.statut === 'en_attente'), faits = data.filter(x => x.statut !== 'en_attente');
+  const mois = new Date().toISOString().slice(0, 7), total = faits.filter(x => x.statut === 'valide' && (x.traite_le || '').slice(0, 7) === mois).reduce((t, x) => t + x.montant, 0);
+  const ligne = x => `<tr data-achat="${x.id}"><td class="whitespace-nowrap">${jourCourt(x.demande_le.slice(0, 10))}</td><td>${esc(x.articles ? x.articles.titre : '?')}<div class="text-xs text-muted">${x.formule === 'pdf' ? '⬇️ PDF' : '📖 consultation'} · ${ar(x.montant)}</div></td>
+    <td>${esc(x.nom)}<div class="text-xs text-muted">${esc(x.telephone)}</div></td><td class="font-mono text-xs">${esc(x.ref_mvola)}</td>
+    <td class="whitespace-nowrap">${x.statut === 'en_attente' ? `<button type="button" class="btn btn-sm" data-valider>✓ Paiement reçu</button> <button type="button" class="linkbtn text-xs text-bad" data-refuser>Refuser</button>`
+      : `${x.statut === 'valide' ? '<span class="text-ok">✓ validé</span>' : `<span class="text-bad">refusé</span>${x.motif ? `<div class="text-xs text-muted">${esc(x.motif)}</div>` : ''}`}
+         ${x.statut === 'valide' ? `<a class="linkbtn text-xs block" target="_blank" rel="noopener" href="https://wa.me/${telInt(x.telephone)}?text=${encodeURIComponent(`Bonjour ${x.nom}, votre paiement MVola de ${ar(x.montant)} est bien reçu. Votre code d’accès ${x.code} ouvre l’article « ${x.articles ? x.articles.titre : ''} » sur ${SITE_URL}/#articles. Que Dieu vous bénisse ! – Grand Séminaire de Faliarivo`)}">WhatsApp au lecteur</a>` : ''}`}</td></tr>`;
+  box.innerHTML = `<div class="bg-surface border border-line rounded-lg p-4 mb-6">
+    <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2"><h2 class="h2">💰 Paiements MVola des articles</h2><span class="text-sm text-muted">Encaissé ce mois : <b>${ar(total)}</b></span></div>
+    <form id="payForm" class="flex flex-wrap items-end gap-3 mb-4"><label class="text-sm"><span class="block font-semibold mb-1">Numéro MVola du secrétariat</span><input class="field" id="payMv" value="${esc(PAIEMENT.mvola)}" placeholder="034 00 000 00" maxlength="20"></label>
+      <label class="text-sm"><span class="block font-semibold mb-1">Au nom de</span><input class="field" id="payNom" value="${esc(PAIEMENT.nom)}" maxlength="80"></label><button class="btn btn-ghost btn-sm">Enregistrer</button></form>
+    ${att.length ? `<p class="text-sm font-semibold mb-1">⏳ À vérifier (${att.length}) : regardez les SMS MVola reçus sur le téléphone du secrétariat, comparez la référence et le montant.</p>` : '<p class="text-sm text-muted mb-1">Aucun paiement à vérifier.</p>'}
+    ${att.length ? `<div class="overflow-x-auto"><table class="text-sm"><thead><tr><th>Date</th><th>Article</th><th>Lecteur</th><th>Réf. MVola</th><th></th></tr></thead><tbody>${att.map(ligne).join('')}</tbody></table></div>` : ''}
+    ${faits.length ? `<details class="mt-3"><summary class="text-sm cursor-pointer">Historique (${faits.length})</summary><div class="overflow-x-auto mt-2"><table class="text-sm"><thead><tr><th>Date</th><th>Article</th><th>Lecteur</th><th>Réf. MVola</th><th></th></tr></thead><tbody>${faits.map(ligne).join('')}</tbody></table></div></details>` : ''}</div>`;
+  $('#payForm').addEventListener('submit', async e => {
+    e.preventDefault(); const v = { mvola: $('#payMv').value.trim(), nom: $('#payNom').value.trim() || 'Secrétariat du Grand Séminaire' };
+    const { error: er } = await sb.from('reglages').upsert({ cle: 'paiement', valeur: v, modifie_le: new Date().toISOString() });
+    if (er) { toast('Non enregistré', errText(er), 'bad'); return; } PAIEMENT = v; toast('Numéro MVola enregistré', v.mvola || '(vide)');
+  });
+  box.querySelectorAll('[data-achat]').forEach(tr => {
+    const x = data.find(y => y.id === Number(tr.dataset.achat)), maj = async (statut, motif) => {
+      const { error: er } = await sb.from('achats_articles').update({ statut, motif: motif || null, traite_le: new Date().toISOString(), traite_par: state.profil && state.profil.email }).eq('id', x.id);
+      if (er) { toast('Non enregistré', errText(er), 'bad'); return; }
+      toast(statut === 'valide' ? 'Paiement validé' : 'Paiement refusé', statut === 'valide' ? `${x.nom} peut ouvrir l’article avec son code ${x.code}.` : x.nom); renderAchatsArticles(box);
+    };
+    const v = tr.querySelector('[data-valider]'); if (v) v.addEventListener('click', () => { if (confirm(`Avez-vous bien reçu ${ar(x.montant)} de ${x.nom} (réf. ${x.ref_mvola}) ?`)) maj('valide'); });
+    const r = tr.querySelector('[data-refuser]'); if (r) r.addEventListener('click', () => { const m = prompt('Motif du refus (le lecteur le verra) :', 'Paiement introuvable sur MVola.'); if (m !== null) maj('refuse', m.trim()); });
+  });
+}
+async function convertirArticle(a, versPayant) {
+  try {
+    if (versPayant) {
+      const pl = Number(prompt('Prix pour consulter sur le site (Ar) :', a.prix_lecture || 500)); if (!pl && pl !== 0) return;
+      const pp = a.fichier ? Number(prompt('Prix pour télécharger le PDF (Ar) :', a.prix_pdf || 1000)) : (a.prix_pdf || 1000); if (!pp && pp !== 0) return;
+      let fichier = null;
+      if (a.fichier) {
+        const blob = await (await fetch(docUrl(a.fichier))).blob(), path = `articles/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.pdf`;
+        const up = await sb.storage.from('articles-payants').upload(path, blob, { contentType: 'application/pdf' }); if (up.error) throw up.error; fichier = path;
+      }
+      const ins = await sb.from('articles_payants').upsert({ article_id: a.id, texte: a.texte || '', fichier, fichier_nom: a.fichier_nom || null }); if (ins.error) throw ins.error;
+      const u = await sb.from('articles').update({ payant: true, prix_lecture: pl, prix_pdf: pp, pdf_payant: !!fichier, texte_payant: !!a.texte, texte: '', fichier: null, fichier_nom: null }).eq('id', a.id); if (u.error) throw u.error;
+      if (a.fichier) await sb.storage.from('documents').remove([a.fichier]);
+    } else {
+      const { data: p, error } = await sb.from('articles_payants').select('*').eq('article_id', a.id).maybeSingle(); if (error) throw error;
+      let fichier = null;
+      if (p && p.fichier) {
+        const dl = await sb.storage.from('articles-payants').download(p.fichier); if (dl.error) throw dl.error;
+        const path = `articles/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.pdf`, up = await sb.storage.from('documents').upload(path, dl.data, { contentType: 'application/pdf' }); if (up.error) throw up.error; fichier = path;
+      }
+      const u = await sb.from('articles').update({ payant: false, texte: (p && p.texte) || '', fichier, fichier_nom: (p && p.fichier_nom) || null, pdf_payant: false, texte_payant: false }).eq('id', a.id); if (u.error) throw u.error;
+      if (p && p.fichier) await sb.storage.from('articles-payants').remove([p.fichier]);
+      await sb.from('articles_payants').delete().eq('article_id', a.id);
+    }
+    toast(versPayant ? 'Article devenu payant' : 'Article devenu gratuit', a.titre); await loadArticles(); renderAdminArticles();
+  } catch (e) { toast('Changement impossible', /articles_payants|payant|schema cache|bucket/i.test(e.message || '') ? 'Exécutez d’abord 59_articles_payants.sql dans Supabase.' : errText(e), 'bad'); }
+}
 function renderAdminArticles() {
   const box = $('#adm-articles');
   box.innerHTML = `
@@ -3777,6 +4058,10 @@ function renderAdminArticles() {
         <label class="text-sm"><span class="block font-semibold mb-1">Texte de l’article <span class="font-normal text-muted">(facultatif si vous joignez un PDF)</span></span><textarea id="arTexte" class="field" rows="8"></textarea></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Fichier PDF ou Word <span class="font-normal text-muted">(facultatif ; un PDF est joint à l’article, 15 Mo au plus ; un fichier Word remplit le texte de l’article)</span></span><input id="arPdf" class="field" type="file" accept="application/pdf,.docx"></label>
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="arPrive">Réservé aux étudiants et professeurs connectés</label>
+        <div class="art-vente"><label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" id="arPayant">💰 Article payant (paiement MVola)</label>
+          <div class="grid grid-cols-2 gap-3 mt-2" id="arPrix" hidden><label class="text-sm"><span class="block mb-1">Consulter sur le site (Ar)</span><input id="arPrixL" class="field" type="number" min="0" step="100" value="500"></label>
+          <label class="text-sm"><span class="block mb-1">Télécharger le PDF (Ar)</span><input id="arPrixP" class="field" type="number" min="0" step="100" value="1000"></label>
+          <p class="text-xs text-muted col-span-2">Le résumé reste visible de tous. Le texte et le PDF sont gardés dans un espace privé : le lecteur les ouvre avec le code reçu après vérification de son paiement.</p></div></div>
         <p id="arErr" class="text-sm text-bad" hidden></p>
         <button class="btn" type="submit" id="arBtn">Publier l’article</button>
       </form>
@@ -3785,12 +4070,14 @@ function renderAdminArticles() {
   const list = () => {
     $('#arList').innerHTML = ARTICLES.length ? ARTICLES.map(a => `<div class="bg-surface border border-line rounded-lg p-3" data-ar="${a.id}">
         <div class="font-semibold">${esc(a.titre)}</div>
-        <div class="text-xs text-muted">${a.auteur ? esc(a.auteur) + ' · ' : ''}${esc(artDate(a))} · ${a.fichier ? 'PDF joint' : 'sans PDF'} · ${a.public ? 'public' : 'réservé aux connectés'}</div>
+        <div class="text-xs text-muted">${a.auteur ? esc(a.auteur) + ' · ' : ''}${esc(artDate(a))} · ${a.payant ? `<b>💰 payant : ${ar(a.prix_lecture)} / ${a.pdf_payant ? ar(a.prix_pdf) + ' le PDF' : 'sans PDF'}</b>` : a.fichier ? 'PDF joint' : 'sans PDF'} · ${a.public ? 'public' : 'réservé aux connectés'}</div>
         <div class="flex gap-4 mt-1 text-sm">${a.fichier ? `<a class="linkbtn" href="${esc(docUrl(a.fichier))}" target="_blank" rel="noopener">Voir le PDF</a>` : ''}
+          <button type="button" class="linkbtn ar-pay">${a.payant ? 'Rendre gratuit' : 'Rendre payant'}</button>
           <button type="button" class="linkbtn ar-vis">${a.public ? 'Réserver aux connectés' : 'Rendre public'}</button>
           <button type="button" class="linkbtn ar-del" style="color:var(--bad)">Retirer</button></div></div>`).join('') : '<p class="text-muted">Aucun article pour l’instant.</p>';
     $('#arList').querySelectorAll('[data-ar]').forEach(row => {
       const a = ARTICLES.find(x => x.id === Number(row.dataset.ar));
+      row.querySelector('.ar-pay').addEventListener('click', () => { if (confirm(a.payant ? `Rendre « ${a.titre} » gratuit pour tous ?` : `Rendre « ${a.titre} » payant ? Son texte et son PDF ne seront plus visibles sans code.`)) convertirArticle(a, !a.payant); });
       row.querySelector('.ar-vis').addEventListener('click', async () => {
         const { error } = await sb.from('articles').update({ public: !a.public }).eq('id', a.id);
         if (error) { toast('Modification impossible', errText(error), 'bad'); return; }
@@ -3799,6 +4086,7 @@ function renderAdminArticles() {
       row.querySelector('.ar-del').addEventListener('click', async () => {
         if (!confirm(`Retirer l’article « ${a.titre} » ?`)) return;
         if (a.fichier) await sb.storage.from('documents').remove([a.fichier]);
+        if (a.payant) { const { data: pp } = await sb.from('articles_payants').select('fichier').eq('article_id', a.id).maybeSingle(); if (pp && pp.fichier) await sb.storage.from('articles-payants').remove([pp.fichier]); }
         const { error } = await sb.from('articles').delete().eq('id', a.id);
         if (error) { toast('Suppression impossible', errText(error), 'bad'); return; }
         ARTICLES = ARTICLES.filter(x => x.id !== a.id); list();
@@ -3806,6 +4094,8 @@ function renderAdminArticles() {
     });
   };
   (articlesLoaded ? Promise.resolve() : loadArticles()).then(list);
+  $('#arPayant').addEventListener('change', () => { $('#arPrix').hidden = !$('#arPayant').checked; });
+  const achatsBox = document.createElement('div'); box.prepend(achatsBox); renderAchatsArticles(achatsBox);
   $('#arForm').addEventListener('submit', async e => {
     e.preventDefault();
     const err = $('#arErr'), titre = $('#arTitre').value.trim(), pdf = $('#arPdf').files[0];
@@ -3815,16 +4105,21 @@ function renderAdminArticles() {
     if (!texte && !pdf) { err.textContent = 'Écrivez le texte de l’article ou joignez un fichier PDF.'; err.hidden = false; return; }
     if (pdf && pdf.size > 15 * 1024 * 1024) { err.textContent = 'Le PDF dépasse 15 Mo.'; err.hidden = false; return; }
     err.hidden = true; const btn = $('#arBtn'); btn.disabled = true; btn.textContent = pdf ? 'Envoi du PDF…' : 'Publication…';
-    let fichier = null;
+    let fichier = null; const payant = $('#arPayant').checked, seau = payant ? 'articles-payants' : 'documents';
     if (pdf) {
       const path = `articles/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.pdf`;
-      const up = await sb.storage.from('documents').upload(path, pdf, { contentType: 'application/pdf' });
+      const up = await sb.storage.from(seau).upload(path, pdf, { contentType: 'application/pdf' });
       if (up.error) { btn.disabled = false; btn.textContent = 'Publier l’article'; err.textContent = /bucket|not found/i.test(up.error.message || '') ? 'Exécutez d’abord 11_articles.sql dans Supabase.' : errText(up.error); err.hidden = false; return; }
       fichier = path;
     }
-    const { data, error } = await sb.from('articles').insert({ titre, auteur: $('#arAuteur').value.trim(), resume: $('#arResume').value.trim(), texte, fichier, fichier_nom: pdf ? pdf.name : null, public: !$('#arPrive').checked }).select().single();
+    const base = { titre, auteur: $('#arAuteur').value.trim(), resume: $('#arResume').value.trim(), public: !$('#arPrive').checked };
+    let { data, error } = payant
+      ? await sb.from('articles').insert({ ...base, texte: '', fichier: null, fichier_nom: null, payant: true, prix_lecture: Math.max(0, Number($('#arPrixL').value) || 0), prix_pdf: Math.max(0, Number($('#arPrixP').value) || 0), pdf_payant: !!fichier, texte_payant: !!texte }).select().single()
+      : await sb.from('articles').insert({ ...base, texte, fichier, fichier_nom: pdf ? pdf.name : null }).select().single();
+    if (!error && payant) { const r2 = await sb.from('articles_payants').insert({ article_id: data.id, texte, fichier, fichier_nom: pdf ? pdf.name : null }); if (r2.error) { await sb.from('articles').delete().eq('id', data.id); error = r2.error; } }
+    if (error && fichier) { await sb.storage.from(seau).remove([fichier]); fichier = null; }
     btn.disabled = false; btn.textContent = 'Publier l’article';
-    if (error) { if (fichier) await sb.storage.from('documents').remove([fichier]); err.textContent = /articles|relation|schema cache/i.test(error.message) ? 'Exécutez d’abord 11_articles.sql dans Supabase.' : errText(error); err.hidden = false; return; }
+    if (error) { err.textContent = /payant|articles_payants|bucket/i.test(error.message || '') ? 'Pour vendre des articles, exécutez d’abord 59_articles_payants.sql dans Supabase.' : /articles|relation|schema cache/i.test(error.message) ? 'Exécutez d’abord 11_articles.sql dans Supabase.' : errText(error); err.hidden = false; return; }
     ARTICLES.unshift(data); e.target.reset(); list();
     toast('Article publié', titre);
   });
@@ -5479,6 +5774,7 @@ async function renderBibliotheque() {
   try { renderRenouveler(); } catch (e) {}
   try { renderBiblioNumerique(); } catch (e) {}
   $('#bqGestion').hidden = !BQ.biblio;
+  if (BQ.biblio) { let me = $('#bqModeEmploi'); if (!me) { me = document.createElement('div'); me.id = 'bqModeEmploi'; $('#bqGestion').prepend(me); } me.innerHTML = modeEmploi('bibliotheque', AIDE_AUTRES.bibliotheque); brancherModeEmploi(me); }
   $('#bqImport').hidden = !BQ.biblio;
   if (BQ.biblio) renderGestionBiblio();
 }
@@ -7275,7 +7571,7 @@ async function renderAgenda() {
   const parMois = {}; avenir.forEach(e => (parMois[e.debut.slice(0, 7)] ||= []).push(e));
   const passes = isAdmin() ? TOUT.filter(e => e.debut < TODAY && e.debut >= iso(new Date(Date.now() - 31 * 864e5)) && e.auto !== 'Liturgie' && e.auto !== 'Madagascar').reverse() : [];
   const sel = (id, opts, v) => `<select class="field" id="${id}">${Object.entries(opts).map(([k, l]) => `<option value="${k}" ${k === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
-  box.innerHTML = `${isAdmin() ? `<details class="bg-surface border border-line rounded-lg p-4 mb-3" id="agFormBox"><summary class="font-semibold"><span class="chev">▸</span> Ajouter un événement</summary>
+  box.innerHTML = `${isAdmin() ? modeEmploi('agenda', AIDE_AUTRES.agenda) : ''}${isAdmin() ? `<details class="bg-surface border border-line rounded-lg p-4 mb-3" id="agFormBox"><summary class="font-semibold"><span class="chev">▸</span> Ajouter un événement</summary>
       <form id="agForm" class="grid sm:grid-cols-2 md:grid-cols-4 gap-3 mt-3">
         <label class="text-sm md:col-span-2"><span class="block font-semibold mb-1">Titre *</span><input class="field" id="agTitre" maxlength="160" placeholder="ex. Récollection de l’Avent"></label>
         <label class="text-sm"><span class="block font-semibold mb-1">Catégorie</span><select class="field" id="agCat">${Object.entries(AG_CAT).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
@@ -7316,7 +7612,7 @@ async function renderAgenda() {
       <div class="flex flex-col gap-2">${passes.map(e => `<div class="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg border border-line bg-surface"><span><b>${esc(e.titre)}</b> <span class="text-sm text-muted">· ${fmtDate(e.debut, { day: 'numeric', month: 'long' })}</span></span>
         <button type="button" class="btn btn-ghost btn-sm" data-ag-photos="${esc(String(e.id))}">📸 Publier les photos</button></div>`).join('')}</div></div>` : ''}
     <div id="agSouv"></div>`;
-  souvenirsAgenda();
+  souvenirsAgenda(); brancherModeEmploi(box);
   const trouve = id => AGENDA.find(e => String(e.id) === id);
   box.querySelectorAll('#agFiltre [data-f]').forEach(b => b.addEventListener('click', () => { AGENDA_FILTRE = b.dataset.f; renderAgenda(); }));
   box.querySelectorAll('#agVue [data-v]').forEach(b => b.addEventListener('click', () => { AGENDA_VUE = b.dataset.v; try { localStorage.setItem('gstf-agenda-vue', AGENDA_VUE); } catch (_) {} renderAgenda(); }));
