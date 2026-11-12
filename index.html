@@ -476,6 +476,11 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   .lit-b-court { margin-bottom: 0; } .lit-pastille { width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 1px solid rgba(0,0,0,.25); flex: 0 0 auto; }
   .sig-dlg { width: min(40rem, 94vw); max-height: 92vh; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); color: var(--ink); padding: 0; }
   .sig-dlg::backdrop { background: rgba(0,0,0,.45); }
+  .saint-trait { width: 4.5rem; height: 4px; border-radius: 2px; margin: .6rem auto .7rem; box-shadow: 0 0 0 1px rgba(0,0,0,.12); }
+  .saint-img { margin: 0 auto 1rem; width: fit-content; max-width: 100%; padding: 6px; background: #fff; border: 1px solid var(--line); border-radius: .4rem; box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+  .saint-img img { display: block; max-height: 340px; max-width: 100%; width: auto; }
+  .saint-vie { font-family: var(--font-title); font-size: 1.12rem; line-height: 1.6; }
+  @media (max-width: 639px) { .entete-row { flex-wrap: wrap; row-gap: .5rem; } .entete-row > .entete-l { flex: 1 1 100%; } }
   .sig-cadre { min-height: 7rem; display: grid; place-items: center; padding: .8rem; border: 1px dashed var(--line); border-radius: .7rem; background: #fff; }
   .sig-cadre img { max-height: 9rem; object-fit: contain; } .sig-cachet-ap img { height: 3rem; background: #fff; border-radius: .3rem; }
   .sig-cv { width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: .6rem; touch-action: none; cursor: crosshair; }
@@ -772,8 +777,8 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
 
 <header class="sticky z-20 bg-surface border-b border-line" style="top: 0">
   <div class="gutter">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 pt-4">
-      <div class="flex items-center gap-3 min-w-0">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 pt-4 entete-row">
+      <div class="flex items-center gap-3 min-w-0 entete-l">
         <span class="cross shrink-0" aria-hidden="true" id="siteCross"></span>
         <img id="siteLogo" alt="Logo du Grand Séminaire" class="shrink-0" style="width:56px;height:56px;object-fit:contain" hidden>
         <div class="min-w-0">
@@ -1654,7 +1659,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 161</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 162</span></span><span>Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -8084,7 +8089,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 161, VERSION_FONCTION_ATTENDUE = 34;
+const VERSION_SITE = 162, VERSION_FONCTION_ATTENDUE = 34;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]],["70_economat_plus","Économat : comptes, accords, pensions, stocks, historique",[["t","economat_demandes"],["t","economat_journal"],["f","economat_pensions"],["c","economat_ops.compte"]]],["71_echeances","Échéances et abonnements",[["t","echeances"],["t","echeances_paiements"],["f","echeance_payer"]]],["72_departs","Retirer une personne : date et motif",[["t","departs"]]],["73_pages","Créateur de pages (menus…)",[["t","pages_site"],["f","page_contenu"]]],["74_cours_plus","Cours : crédits ECTS, syllabus par le professeur",[["c","cours.credits"],["f","cours_syllabus"]]],["75_contact","Contact : objet, numéro de suivi, coordonnées",[["c","messages_contact.objet"],["f","contact_envoyer"]]],["76_paiement_sans_capture","Article payant : coller le SMS ou taper la référence",[["c","achats_articles.source"],["f","payer_article_sans_capture"]]],["77_vitesse","Mesure de la vitesse du site",[["t","perf_mesures"],["f","perf_resume"]]],["78_agenda_signature","Agenda (Je participe, répétition, services liturgiques) et signature",[["c","agenda.recurrence"],["t","agenda_participants"],["t","liturgie_services"],["t","signatures"],["f","agenda_inscrire"]]],["79_alertes","Alertes au Préfet par mail et WhatsApp",[["t","alertes"],["f","alerte_nouvelle"],["j","gstf-alertes"]]],["80_homelies","Homélie du dimanche (RDB LIVE)",[["t","homelies"],["j","gstf-homelies"]]],["81_articles_plus","Articles : rubriques, modifier, statistiques, questions, propositions",[["c","articles.rubrique"],["t","article_stats"],["t","article_questions"],["t","article_propositions"],["f","article_accepter"]]],["82_chaine_youtube","Chaîne YouTube et Page Facebook du séminaire",[]],["83_droit_image_attestations","Droit à l'image, accusé de réception, attestation en ligne",[["c","etudiants.image_accord"],["c","messages_contact.accuse_le"],["t","attestation_demandes"],["f","demander_attestation"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -9610,7 +9615,7 @@ function liturgieBandeau(d = TODAY, court = false) {
     <div class="min-w-0 flex-1"><div class="text-xs font-semibold uppercase tracking-wider text-muted">${d === TODAY ? 'Aujourd’hui' : esc(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }))} · ${esc(L.temps)}</div>
       <div class="font-semibold">${esc(L.fete || L.libelle)}</div>${L.fete ? `<div class="text-sm text-muted">${esc(L.rang)} · ${esc(L.libelle)}</div>` : ''}
       ${L.facult.length ? `<div class="text-sm text-muted">Ou mémoire facultative : ${esc(L.facult.join(' ; '))}</div>` : ''}<div class="text-xs text-muted">Couleur liturgique : ${L.couleur}</div></div>
-    <a class="btn btn-ghost btn-sm" href="${L.aelf}" target="_blank" rel="noopener">📖 Lectures du jour</a></div>`;
+    <span class="flex flex-wrap gap-2"><button type="button" class="btn btn-ghost btn-sm" onclick="ouvrirSaintDuJour('${d}')">✨ Saint du jour</button><a class="btn btn-ghost btn-sm" href="${L.aelf}" target="_blank" rel="noopener">📖 Lectures du jour</a></span></div>`;
 }
 
 /* ---------- Agenda : événements qui se répètent, événements personnels, inscriptions ---------- */
@@ -10847,6 +10852,115 @@ async function renderDemandesAttestation(zone) {
     const { error: e } = await sb.from('attestation_demandes').update({ statut: 'acceptee', document: lettreHtml(), traite_le: new Date().toISOString(), traite_par: state.profil && state.profil.email }).eq('id', LETTRE.demandeId);
     if (e) { toast('Non envoyée', errText(e), 'bad'); return; }
     LETTRE.demandeId = null; toast('Attestation envoyée', 'L’étudiant peut l’imprimer depuis son portail.'); renderDemandesAttestation(zone); };
+}
+
+/* ---------- Saint du jour : fenêtre à l'ouverture de l'application (vie du saint en français, couleur liturgique du calendrier du site) ---------- */
+const SAINT_STOP = /^(notes?|références|notes et références|voir aussi|bibliographie|liens externes|annexes|articles connexes|sources|iconographie|galerie)$/i;
+let SAINT_CORR = null;
+const saintPref = () => { try { return localStorage.getItem('gstf-saint-ouverture') !== '0'; } catch (_) { return true; } };
+// Le saint (ou la célébration) du jour, d'après le calendrier romain du site
+function saintsDuJour(d = TODAY) {
+  const L = liturgieDuJour(d), noms = [];
+  if (L.fete) noms.push(L.fete);
+  L.facult.forEach(n => { if (!/^Sainte Marie le samedi/.test(n)) noms.push(n.replace(/ \(commémoraison\)$/, '')); });
+  return { L, noms: [...new Set(noms)] };
+}
+async function saintCorrections() {
+  if (SAINT_CORR) return SAINT_CORR;
+  try { const { data } = await sb.from('reglages').select('valeur').eq('cle', 'saints_wiki').maybeSingle(); SAINT_CORR = (data && data.valeur) || {}; } catch (_) { SAINT_CORR = {}; }
+  return SAINT_CORR;
+}
+const WIKI = 'https://fr.wikipedia.org/w/api.php?format=json&origin=*&';
+async function wikiJson(q) { const r = await fetch(WIKI + q, { signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined }); if (!r.ok) throw new Error('Wikipédia indisponible'); return r.json(); }
+// Trouve l'article Wikipédia du saint, puis sa vie (texte complet jusqu'aux notes) et son image
+async function saintVie(nom, d) {
+  const cle = 'gstf-saint-' + d + '-' + nom.slice(0, 40);
+  try { const c = JSON.parse(localStorage.getItem(cle) || 'null'); if (c && c.texte) return c; } catch (_) {}
+  const corr = await saintCorrections(), md = d.slice(5);
+  let titre = (corr[md] && corr[md][nom]) || (typeof corr[md] === 'string' ? corr[md] : '');
+  if (!titre) {
+    const q = nom.replace(/\(.*?\)/g, '').replace(/[’']/g, "'").trim();
+    const s = await wikiJson('action=query&list=search&srlimit=8&srnamespace=0&srsearch=' + encodeURIComponent(q));
+    const R = ((s.query || {}).search || []).filter(x => !/homonymie/i.test(x.title));
+    const bon = R.find(x => /\b(saint|sainte|bienheureu|martyr|pape|évêque|vierge|apôtre|prêtre|religieu|docteur|Seigneur|Vierge Marie|fête)/i.test(x.title + ' ' + x.snippet)) || R[0];
+    if (!bon) throw new Error('Aucun article trouvé');
+    titre = bon.title;
+  }
+  const j = await wikiJson('action=query&redirects=1&prop=extracts|pageimages|info&inprop=url&explaintext=1&exsectionformat=wiki&piprop=thumbnail&pithumbsize=640&titles=' + encodeURIComponent(titre));
+  const p = Object.values((j.query || {}).pages || {})[0];
+  if (!p || p.missing !== undefined || !p.extract) throw new Error('Article introuvable');
+  const lignes = [], src = p.extract.split('\n');
+  for (const l of src) {
+    const h = /^(=+)\s*(.+?)\s*=+$/.exec(l.trim());
+    if (h) { if (SAINT_STOP.test(h[2])) break; lignes.push({ h: h[2], n: h[1].length }); continue; }
+    if (l.trim()) lignes.push({ p: l.trim() });
+  }
+  // on enlève les titres de section restés vides
+  const texte = lignes.filter((x, i) => !x.h || (lignes[i + 1] && !lignes[i + 1].h) || (lignes[i + 1] && lignes[i + 1].n > x.n));
+  const res = { titre: p.title, lien: p.fullurl || `https://fr.wikipedia.org/wiki/${encodeURIComponent(p.title)}`, image: p.thumbnail && p.thumbnail.source, texte };
+  try { localStorage.setItem(cle, JSON.stringify(res)); } catch (_) {}
+  return res;
+}
+function saintTexteHtml(T) {
+  let n = 0, html = '', coupe = false;
+  for (const x of T) { if (n > 16000) { coupe = true; break; }
+    if (x.h) html += `<h3 class="font-display text-lg font-semibold mt-4 mb-1">${esc(x.h)}</h3>`;
+    else { html += `<p class="mb-2">${esc(x.p)}</p>`; n += x.p.length; } }
+  return { html, coupe };
+}
+async function ouvrirSaintDuJour(d = TODAY, choix = 0) {
+  if (!sb) return;
+  document.querySelectorAll('dialog.saint-dlg').forEach(x => x.remove());
+  const { L, noms } = saintsDuJour(d), nom = noms[choix] || '', coul = LIT_COUL[L.couleur] || '#2e7d32';
+  const dlg = document.createElement('dialog'); dlg.className = 'sig-dlg saint-dlg';
+  dlg.innerHTML = `<div class="flex flex-col" style="max-height:92vh">
+    <div class="flex items-center gap-3 p-4 border-b border-line"><button type="button" class="btn btn-ghost btn-sm" data-x aria-label="Fermer">✕</button>
+      <div><p class="font-semibold">Saint du jour</p><p class="text-xs text-muted">${esc(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))}</p></div></div>
+    <div class="overflow-y-auto p-5" data-corps>
+      <h2 class="font-display text-2xl sm:text-3xl font-semibold text-center leading-snug">${esc(nom || L.libelle)}</h2>
+      <div class="saint-trait" style="background:${coul}"></div>
+      ${nom ? `<p class="text-center text-sm text-muted">${L.fete && nom === L.fete ? esc(L.rang) + ' · ' : 'Mémoire facultative · '}${esc(L.libelle)}</p>` : ''}
+      <p class="text-center text-sm mt-1"><span class="lit-pastille" style="background:${coul};display:inline-block;vertical-align:middle"></span> Couleur liturgique : <b>${esc(L.couleur)}</b></p>
+      ${noms.length > 1 ? `<div class="flex flex-wrap justify-center gap-2 mt-3">${noms.map((x, i) => `<button type="button" class="btn btn-sm ${i === choix ? '' : 'btn-ghost'}" data-choix="${i}">${esc(x.split(',')[0])}</button>`).join('')}</div>` : ''}
+      <div class="flex flex-wrap justify-center gap-2 mt-3"><a class="btn btn-sm" href="${L.aelf}" target="_blank" rel="noopener">📖 Lectures du jour</a></div>
+      <div data-vie class="mt-4">${nom ? '<p class="text-center text-muted text-sm">Chargement de la vie du saint…</p>' : `<p class="text-center text-sm text-muted mt-2">${D_DIM(d) ? 'Aujourd’hui, c’est le jour du Seigneur : pas de saint au calendrier.' : 'Aujourd’hui, pas de saint inscrit au calendrier romain : c’est la férie.'}</p>`}</div>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-3 p-4 border-t border-line">
+      <label class="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" data-pref ${saintPref() ? 'checked' : ''}> Toujours afficher à l’ouverture de l’application</label>
+      ${isAdmin() && nom ? '<button type="button" class="linkbtn text-xs" data-corr>✏️ Ce n’est pas le bon saint ?</button>' : ''}</div></div>`;
+  const y0 = window.scrollY; document.body.appendChild(dlg); dlg.addEventListener('close', () => { dlg.remove(); window.scrollTo(0, y0); }); dlg.showModal();
+  dlg.querySelector('[data-x]').onclick = () => dlg.close();
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.querySelector('[data-pref]').onchange = e => { try { localStorage.setItem('gstf-saint-ouverture', e.target.checked ? '1' : '0'); } catch (_) {} };
+  dlg.querySelectorAll('[data-choix]').forEach(b => b.onclick = () => ouvrirSaintDuJour(d, +b.dataset.choix));
+  const bc = dlg.querySelector('[data-corr]');
+  if (bc) bc.onclick = async () => { const u = prompt('Collez l’adresse de la bonne page Wikipédia (fr.wikipedia.org/wiki/…) pour « ' + nom + ' » :'); if (!u) return;
+    const t = decodeURIComponent((/wiki\/([^?#]+)/.exec(u) || [, u])[1]).replace(/_/g, ' ').trim(); if (!t) return;
+    const C = { ...(await saintCorrections()) }, md = d.slice(5); C[md] = { ...(typeof C[md] === 'object' ? C[md] : {}), [nom]: t };
+    const { error } = await sb.from('reglages').upsert({ cle: 'saints_wiki', valeur: C, modifie_le: new Date().toISOString() });
+    if (error) { toast('Non enregistré', errText(error), 'bad'); return; }
+    SAINT_CORR = C; try { Object.keys(localStorage).filter(k => k.startsWith('gstf-saint-' + d)).forEach(k => localStorage.removeItem(k)); } catch (_) {}
+    toast('Corrigé', 'Ce saint sera désormais toujours lié à cette page, chaque année.'); ouvrirSaintDuJour(d, choix); };
+  if (!nom) return;
+  const zone = dlg.querySelector('[data-vie]');
+  try {
+    const V = await saintVie(nom, d); if (!zone.isConnected) return;
+    const T = saintTexteHtml(V.texte);
+    zone.innerHTML = `${V.image ? (LEGER ? `<button type="button" class="btn btn-ghost btn-sm mx-auto block" data-img>🖼️ Voir l’image (connexion faible)</button>` : `<figure class="saint-img"><img src="${esc(V.image)}" alt="${esc(V.titre)}" loading="lazy"></figure>`) : ''}
+      <div class="saint-vie">${T.html}</div>
+      ${T.coupe ? `<p class="mt-2"><a class="linkbtn" href="${esc(V.lien)}" target="_blank" rel="noopener">Lire la suite de sa vie ↗</a></p>` : ''}
+      <p class="text-xs text-muted mt-4 border-t border-line pt-2">Vie du saint : article « <a class="underline" href="${esc(V.lien)}" target="_blank" rel="noopener">${esc(V.titre)}</a> » de Wikipédia en français, texte reproduit sans modification (licence CC BY-SA 4.0)${V.image ? ' · image : Wikimedia Commons' : ''}. Couleur liturgique et célébration : calendrier romain du séminaire.</p>`;
+    const bi = zone.querySelector('[data-img]'); if (bi) bi.onclick = () => { bi.outerHTML = `<figure class="saint-img"><img src="${esc(V.image)}" alt="${esc(V.titre)}"></figure>`; };
+  } catch (e) {
+    if (zone.isConnected) zone.innerHTML = `<p class="text-center text-sm text-muted">La vie du saint n’a pas pu être chargée (connexion ?). <a class="linkbtn" href="https://fr.wikipedia.org/w/index.php?search=${encodeURIComponent(nom)}" target="_blank" rel="noopener">La lire sur Wikipédia ↗</a></p>`;
+  }
+}
+const D_DIM = d => parseIso(d).getDay() === 0;
+// À l'ouverture de l'application (après l'écran du logo et l'écran du séminaire) : l'accueil, puis le saint du jour
+function saintALOuverture() {
+  if (!saintPref()) return;
+  try { if (sessionStorage.getItem('gstf-saint-vu')) return; sessionStorage.setItem('gstf-saint-vu', '1'); } catch (_) {}
+  setTimeout(() => { if (!document.querySelector('dialog[open]')) ouvrirSaintDuJour(); }, 700);
 }
 
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
@@ -13036,7 +13150,7 @@ function renderCarteDioceses(by) {
 function masquerSplash() {
   const sp = $('#splash'); if (!sp || sp.hidden || sp.classList.contains('part')) return;
   const reste = Math.max(0, 1100 - (Date.now() - (window.__SPLASH0 || 0)));
-  setTimeout(() => { sp.classList.add('part'); setTimeout(() => { sp.hidden = true; }, 550); }, reste);
+  setTimeout(() => { sp.classList.add('part'); setTimeout(() => { sp.hidden = true; try { saintALOuverture(); } catch (_) {} }, 550); }, reste);
 }
 const monPortail = () => { const p = state.profil; return !p || p.type === 'inconnu' ? null : p.type === 'etudiant' ? 'etudiant' : ['educateur', 'foyer'].includes(p.role) ? 'educateur' : 'professeur'; };
 function allerRaccourci(h) {
