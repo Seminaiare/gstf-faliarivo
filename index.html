@@ -15747,6 +15747,17 @@ async function verifierNouvelleVersion() {
 }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') verifierNouvelleVersion(); });
 setTimeout(masquerSplash, 3500);
-</script>
+</script<script>
+  
+if (window.matchMedia("(max-width: 768px)").matches) {
+  let t = 18;
+  let b = document.createElement("div");
+  b.style.cssText = "display:flex;gap:10px;justify-content:center;background:#00c8c8;padding:8px;position:sticky;top:0;z-index:9999";
+  b.innerHTML = '<button id="p" style="font-size:28px;width:50px;height:50px;border-radius:50%;background:white;">+</button><button id="m" style="font-size:28px;width:50px;height:50px;border-radius:50%;background:white;">-</button>';
+  document.body.prepend(b);
+  document.getElementById("p").onclick = function(){ if(t<30){t+=2; document.body.style.fontSize=t+"px";} };
+  document.getElementById("m").onclick = function(){ if(t>12){t-=2; document.body.style.fontSize=t+"px";} };
+}
+</script>>
 </body>
 </html>
