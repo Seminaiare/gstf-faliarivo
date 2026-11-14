@@ -258,7 +258,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         </div>
         <div class="grid md:grid-cols-2 gap-x-10 gap-y-6">
           <div class="min-w-0"><p class="eyebrow mb-2">9 diocèses</p><div id="carteDioc" class="carte-mada"></div><p class="text-xs text-muted mt-1">La taille de chaque point indique le nombre de séminaristes. Le Séminaire se trouve à Faliarivo, Antananarivo (✚).</p></div>
-          <div class="min-w-0"><p class="eyebrow mb-2">11 congrégations religieuses</p><div id="barsCong" class="flex flex-col gap-1.5"></div></div>
+          <div class="min-w-0"><p class="eyebrow mb-2" id="congTitre">11 congrégations religieuses</p><div id="barsCong" class="flex flex-col gap-1.5"></div></div>
         </div>
       </div>
         </div>
@@ -926,6 +926,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
           <button type="button" class="btn btn-ghost" id="admBullAll">Imprimer / PDF des bulletins affichés</button>
           <span id="admCount" class="text-sm text-muted"></span>
         </div>
+        <details class="mb-3 bg-surface border border-line rounded-lg" id="admCongDet"><summary class="cursor-pointer p-3 text-sm font-semibold">🏛 Congrégations religieuses : la liste du site (ajouter, renommer, retirer)</summary><div class="px-3 pb-3" id="admCong"></div></details>
         <div class="bg-surface border border-line rounded-lg overflow-x-auto">
           <table class="text-sm" style="min-width: 760px"><thead><tr><th>Étudiant</th><th>Année · origine</th><th>Identifiant</th><th>Email personnel</th><th>Téléphone</th><th>Mot de passe</th><th></th></tr></thead><tbody id="admStuBody"></tbody></table>
         </div>
@@ -1102,6 +1103,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=224"></script>
+<script defer src="/app.js?v=228"></script>
 </body>
 </html>
