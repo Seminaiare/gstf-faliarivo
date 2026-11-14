@@ -229,7 +229,9 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   #printArea .rl-annee { padding-bottom: 14pt; }
   #printArea .rl-titre { text-align: center; font-weight: bold; margin: 4pt 0 1pt; font-size: 11.5pt; }
   #printArea .rl-id { display: flex; justify-content: space-between; align-items: flex-end; margin: 0 0 5pt 22%; line-height: 1.4; }
-  #printArea .rl-num { padding-right: 18%; }
+  #printArea .rl-num { padding-right: 18%; margin-left: auto; }
+  #printArea .rl-id-ph { margin-left: calc(22% - 26mm); justify-content: flex-start; gap: 6mm; align-items: center; }
+  #printArea .rl-photo { width: 20mm; height: 25mm; object-fit: cover; border: .6pt solid #000; flex-shrink: 0; }
   #printArea .rl-t { width: 72%; margin: 0 auto; border-collapse: collapse; }
   #printArea .rl-t th, #printArea .rl-t td { border: .8pt solid #000; padding: .4pt 4pt; font-size: 10.5pt; line-height: 1.2; font-weight: normal; text-align: left; color: #000; background: none; text-transform: none; letter-spacing: normal; }
   #printArea .rl-t .rl-n { text-align: right; width: 18%; white-space: nowrap; }
@@ -554,6 +556,14 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   .nav-lat .tab[data-tab][aria-selected="true"] { background: color-mix(in srgb, var(--tc, var(--accent)) 13%, var(--surface)); color: var(--tc, var(--accent)); }
   .nav-lat .tab[data-tab][aria-selected="true"] .tab-ic { background: var(--surface); }
   /* Recherche, pastilles, raccourcis, en-tête compact */
+  .outils-tete { display: inline-flex; gap: .35rem; }
+  .outils-tete .rech-btn[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .defil-pilule { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 70; display: flex; align-items: center; gap: .25rem; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: .3rem .45rem; box-shadow: 0 6px 22px rgba(0,0,0,.18); font-size: .85rem; }
+  .defil-pilule button { min-width: 2.1rem; height: 2.1rem; border-radius: 999px; font-weight: 700; }
+  .defil-pilule button:hover { background: var(--sunk); }
+  .defil-pilule .dv { white-space: nowrap; min-width: 4.6rem; text-align: center; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .78rem; }
+  @media (min-width: 768px) { .defil-pilule { bottom: 24px; } }
+  @media print { .defil-pilule, .outils-tete { display: none !important; } }
   .rech-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
   .rech-btn:hover { border-color: var(--accent); color: var(--accent); }
   .rech-fond { position: fixed; inset: 0; z-index: 90; background: rgba(15, 12, 18, .45); display: flex; align-items: flex-start; justify-content: center; padding: 8vh 12px 12px; }
@@ -733,6 +743,8 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
     #sessionChip { display: none !important; }
     .entete-adresse { display: none; }
     header .langues button { padding: .28rem .42rem; font-size: .7rem; }
+    header .rech-btn { width: 2rem; height: 2rem; }
+    .outils-tete { gap: .25rem; }
     header .gutter > div:first-child { padding-top: .6rem; padding-bottom: .6rem; gap: .6rem; }
     .aide-btn { font-size: 0 !important; padding: .55rem !important; gap: 0 !important; }
     .aide-btn span { font-size: 1rem; }
@@ -843,6 +855,11 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         </div>
       </div>
       <button type="button" id="installBtn" class="btn btn-sm shrink-0" hidden title="Installer l’application GSTF sur cet appareil" aria-label="Installer l’application GSTF">📲<span class="hidden sm:inline"> Installer l’application</span><span class="sm:hidden"> App</span></button>
+      <div class="outils-tete shrink-0" role="group" aria-label="Outils de lecture">
+        <button type="button" id="calBtn" class="rech-btn" title="Calendrier : saint et lectures d’un autre jour, agenda du séminaire" aria-label="Calendrier"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h3M8 17h6"/></svg></button>
+        <button type="button" id="modeBtn" class="rech-btn" title="Mode sombre ou clair" aria-label="Mode sombre ou clair" aria-pressed="false"></button>
+        <button type="button" id="defilBtn" class="rech-btn" title="Défilement automatique de la page (lecture)" aria-label="Défilement automatique" aria-pressed="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8l5-5 5 5M7 16l5 5 5-5"/><circle cx="12" cy="12" r="1.6"/></svg></button>
+      </div>
       <button type="button" id="rechBtn" class="rech-btn shrink-0" title="Rechercher dans tout le site (touche /)" aria-label="Rechercher dans le site"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></button>
       <button type="button" id="tailleBtn" class="taille-btn shrink-0 notranslate" translate="no" title="Taille du texte" aria-label="Agrandir ou réduire le texte">A<small>a</small></button>
       <div id="langues" class="langues shrink-0 notranslate" translate="no" role="group" aria-label="Langue / Language">
@@ -2927,7 +2944,7 @@ const AIDE_ADMIN = {
     etapes: ['Cochez « Par mail » et « Par WhatsApp », et les demandes qui vous intéressent. « Enregistrer ».', 'WhatsApp, une seule fois : suivez les 5 étapes « Activer WhatsApp » (service gratuit CallMeBot).', '« 📨 Envoyer un essai maintenant » : vous devez recevoir le mail et le WhatsApp.'],
     attention: 'Les messages ne contiennent ni notes ni données sensibles : seulement le type de demande, le nom et le lien du site. La clé WhatsApp va uniquement dans les secrets de Supabase.' },
   signature: { t: 'Ma signature', but: 'Mettre votre signature manuscrite sur les relevés de notes, les bulletins, les cartes d’étudiant et le programme du mois, sans les signer un par un.',
-    etapes: ['La première fois : « ✍️ Ajouter ma signature » puis « 📷 Choisir la photo de ma signature » (une photo sur une feuille blanche). Le site enlève le fond tout seul. « Enregistrer ».', 'Ensuite, sur un bulletin, les relevés ou les cartes : cliquez sur « ✍️ Ajouter ma signature », puis « Imprimer ».', '« Plus d’options » : signer au doigt, coller une capture, couleur de l’encre, taille, cachet du séminaire, documents concernés.'],
+    etapes: ['La première fois : « ✍️ Ajouter ma signature » puis « 📷 Choisir la photo de ma signature » (une photo sur une feuille blanche). Le site enlève le fond tout seul. « Enregistrer ».', 'Ensuite, sur un bulletin, les relevés ou les cartes : cliquez sur « ✍️ Ajouter ma signature », puis « Imprimer ».', 'Couleur de l’encre (noire ou bleue) : bouton « 🎨 Couleur et place » à côté de « ✓ Signature ajoutée », puis « 🎨 Couleur de l’encre » et « Enregistrer ma signature ». La signature déjà enregistrée change de couleur, sans nouvelle photo.', '« Plus d’options » : signer au doigt, coller une capture, netteté, cachet du séminaire, documents concernés.', 'La photo de l’étudiant apparaît sur son relevé de notes, à gauche de son nom, quand elle est enregistrée sur le site.'],
     attention: 'Votre signature n’est jamais visible du public ni des étudiants. Vérifiez chaque document avant de l’imprimer avec votre signature.' },
   echeances: { t: 'Échéances et abonnements', but: 'Ne rien oublier de ce qu’il faut payer, renouveler ou résilier : abonnement Claude, nom de domaine, électricité, assurance, taxes…',
     etapes: ['« ＋ Nouvelle échéance » : nom, montant, prochaine date, fréquence, nombre de jours de rappel, et le lien de la page pour payer ou résilier.', 'Le site prévient par email et sur le téléphone avant la date, le jour même, puis tous les 3 jours en cas de retard.', '« ✔ Payé » : la date passe automatiquement à l’échéance suivante ; la dépense peut aller dans la caisse de l’économat.', '« Résilier » : après avoir résilié chez le fournisseur, les rappels s’arrêtent.'],
@@ -3743,7 +3760,7 @@ function releveHtml(d) {
       ${C.mail ? `<div>Mail : ${esc(C.mail)}</div>` : ''}${C.tel ? `<div>Tél : ${esc(C.tel)}</div>` : ''}</div></div>
       <div class="rl-annee">Année académique ${esc(d.anneeAcad || ANNEE)}</div></div>
     <div class="rl-titre">RELEVÉ DES NOTES</div>
-    <div class="rl-id"><div><b>NOM : ${esc((s.nom || '').toUpperCase())}</b><br><b>PRÉNOM : ${esc(s.prenoms || '')}</b><br><b>CLASSE : ${CLASSE(s.annee)}</b></div>
+    <div class="rl-id${s.photo ? ' rl-id-ph' : ''}">${s.photo ? `<img class="rl-photo" data-ph="${esc(s.photo)}" ${PHOTO_URL[s.photo] ? `src="${esc(PHOTO_URL[s.photo])}"` : ''} alt="">` : ''}<div><b>NOM : ${esc((s.nom || '').toUpperCase())}</b><br><b>PRÉNOM : ${esc(s.prenoms || '')}</b><br><b>CLASSE : ${CLASSE(s.annee)}</b></div>
       <div class="rl-num">${s.numero != null && s.numero !== '' ? '<b>Numéro : ' + esc(s.numero) + '</b>' : ''}</div></div>
     <table class="rl-t"><thead><tr><th></th><th>Matières</th><th class="rl-n">Notes/20</th></tr></thead><tbody>
       ${d.rows.map((r, i) => ligne(i + 1, r.c.nom, r.n == null ? '' : n2(r.n))).join('')}
@@ -3919,8 +3936,13 @@ function bulletinScreen(d) {
 }
 function bulletinPrint(d) { return releveHtml(d); }
 let PDF_ASTUCE = false;
-function printPages(html) {
+async function printPages(html) {
   $('#printArea').innerHTML = html;
+  // photos des étudiants (relevés) : adresse à demander puis attendre le chargement avant d'imprimer
+  const ph = [...$('#printArea').querySelectorAll('img[data-ph]')];
+  if (ph.length) { try { await chargerPhotos(ph.map(i => i.dataset.ph)); } catch (_) {}
+    ph.forEach(i => { const u = PHOTO_URL[i.dataset.ph]; if (u) { if (i.getAttribute('src') !== u) i.src = u; } else i.remove(); });
+    await Promise.all(ph.filter(i => i.isConnected && !i.complete).map(i => new Promise(ok => { i.onload = i.onerror = ok; setTimeout(ok, 6000); }))); }
   if (!PDF_ASTUCE) { PDF_ASTUCE = true; toast('Imprimer ou télécharger', 'Pour obtenir un fichier PDF, choisissez « Enregistrer au format PDF » comme imprimante.'); }
   window.print();
 }
@@ -4257,6 +4279,88 @@ const APPARENCE_DEFAUT = { logo: '', theme: 'gstf', mode: 'auto', accent: '', go
 let APPARENCE = { ...APPARENCE_DEFAUT };
 const hexMix = (a, b, t) => { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(b); return '#' + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
 const isHex = v => /^#[0-9a-f]{6}$/i.test(v || '');
+/* ---------- Outils de lecture de l’en-tête : calendrier, mode sombre/clair, défilement automatique ---------- */
+function modePerso() { try { const v = localStorage.getItem('gstf-mode'); return v === 'sombre' || v === 'clair' ? v : ''; } catch (_) { return ''; } }
+function estSombre() {
+  const p = modePerso(); if (p) return p === 'sombre';
+  return (APPARENCE.mode !== 'clair') && !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+}
+function majModeBtn() {
+  const b = document.getElementById('modeBtn'); if (!b) return; const s = estSombre();
+  b.innerHTML = s
+    ? '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>';
+  b.title = s ? 'Passer en mode clair' : 'Passer en mode sombre (lecture le soir)';
+  b.setAttribute('aria-label', b.title); b.setAttribute('aria-pressed', String(s));
+}
+function basculerMode() {
+  const v = estSombre() ? 'clair' : 'sombre';
+  try { localStorage.setItem('gstf-mode', v); } catch (_) {}
+  applyApparence(APPARENCE);
+  toast(v === 'sombre' ? '🌙 Mode sombre' : '☀️ Mode clair', 'Sur cet appareil seulement.');
+}
+function ouvrirCalendrier() {
+  const dlg = document.createElement('dialog'); dlg.className = 'sig-dlg';
+  const d0 = jourLit();
+  dlg.innerHTML = `<form method="dialog" class="p-5 flex flex-col gap-3" style="max-width:24rem">
+    <div class="flex items-start justify-between gap-3"><h2 class="font-display text-2xl font-semibold">📅 Calendrier</h2><button class="btn btn-ghost btn-sm" value="x" formnovalidate aria-label="Fermer">✕</button></div>
+    <p class="text-sm text-muted">Choisissez un jour pour voir son saint et ses lectures (calendrier liturgique, heure de Madagascar).</p>
+    <input type="date" class="field" id="calJour" value="${d0}" min="${iso(plusJours(parseIso(TODAY), -366))}" max="${iso(plusJours(parseIso(TODAY), 366))}">
+    <div class="flex flex-wrap gap-2"><button type="button" class="btn" id="calVoir">Saint et lectures de ce jour</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-cal-n="-1">Hier</button><button type="button" class="btn btn-ghost btn-sm" data-cal-n="0">Aujourd’hui</button><button type="button" class="btn btn-ghost btn-sm" data-cal-n="1">Demain</button></div>
+    <button type="button" class="linkbtn text-sm self-start" id="calAgenda">🗓 Agenda du séminaire (cours, examens, événements) →</button></form>`;
+  document.body.appendChild(dlg); dlg.addEventListener('close', () => dlg.remove()); dlg.showModal();
+  const q = x => dlg.querySelector(x);
+  q('#calVoir').onclick = () => { const v = q('#calJour').value; if (!v) return; dlg.close(); ouvrirSaintDuJour(v); };
+  dlg.querySelectorAll('[data-cal-n]').forEach(b => b.onclick = () => { const n = +b.dataset.calN; dlg.close(); ouvrirSaintDuJour(n === 0 ? jourLit() : iso(plusJours(parseIso(TODAY), n))); });
+  q('#calAgenda').onclick = () => { dlg.close(); showTab('agenda'); };
+}
+const DEFIL = { on: false, pause: false, v: 2, raf: 0, reste: 0, t0: 0, cible: null };
+const DEFIL_V = [12, 20, 30, 45, 65, 95];   // pixels par seconde
+function defilCible() {   // dans une fenêtre ouverte (saint du jour, article…) ou dans la page
+  const d = [...document.querySelectorAll('dialog[open]')].pop();
+  if (d) { const z = [d, ...d.querySelectorAll('*')].find(e => e.scrollHeight > e.clientHeight + 20 && /(auto|scroll)/.test(getComputedStyle(e).overflowY)); if (z) return z; }
+  return null;   // la page entière
+}
+function defilPas(t) {
+  if (!DEFIL.on) return;
+  if (!DEFIL.pause) {
+    const dt = Math.min(100, t - (DEFIL.t0 || t)); DEFIL.reste += DEFIL_V[DEFIL.v] * dt / 1000;
+    const n = Math.floor(DEFIL.reste);
+    if (n >= 1) { DEFIL.reste -= n; const c = DEFIL.cible && DEFIL.cible.isConnected ? DEFIL.cible : null;
+      const avant = c ? c.scrollTop : window.scrollY; if (c) c.scrollTop += n; else window.scrollBy(0, n);
+      const apres = c ? c.scrollTop : window.scrollY; if (apres === avant) { arreterDefil('Fin de la page.'); return; } }
+  }
+  DEFIL.t0 = t; DEFIL.raf = requestAnimationFrame(defilPas);
+}
+function majDefilPilule() {
+  let p = document.getElementById('defilPil');
+  if (!DEFIL.on) { if (p) p.remove(); return; }
+  if (!p) { p = document.createElement('div'); p.id = 'defilPil'; p.className = 'defil-pilule'; p.setAttribute('role', 'group'); p.setAttribute('aria-label', 'Défilement automatique');
+    p.innerHTML = '<button type="button" data-d="moins" aria-label="Plus lent">−</button><button type="button" data-d="pause" aria-label="Pause"></button><span class="dv"></span><button type="button" data-d="plus" aria-label="Plus vite">+</button><button type="button" data-d="stop" aria-label="Arrêter le défilement">✕</button>';
+    p.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; const a = b.dataset.d;
+      if (a === 'moins') DEFIL.v = Math.max(0, DEFIL.v - 1); if (a === 'plus') DEFIL.v = Math.min(DEFIL_V.length - 1, DEFIL.v + 1);
+      if (a === 'pause') DEFIL.pause = !DEFIL.pause; if (a === 'stop') { arreterDefil(); return; }
+      try { localStorage.setItem('gstf-defil-v', String(DEFIL.v)); } catch (_) {} majDefilPilule(); });
+    const host = [...document.querySelectorAll('dialog[open]')].pop() || document.body; host.appendChild(p); }
+  p.querySelector('[data-d="pause"]').textContent = DEFIL.pause ? '▶' : '❚❚';
+  p.querySelector('[data-d="pause"]').setAttribute('aria-label', DEFIL.pause ? 'Reprendre' : 'Pause');
+  p.querySelector('.dv').textContent = DEFIL.pause ? 'En pause' : 'Vitesse ' + (DEFIL.v + 1);
+}
+function lancerDefil() {
+  try { const v = +localStorage.getItem('gstf-defil-v'); if (v >= 0 && v < DEFIL_V.length && localStorage.getItem('gstf-defil-v') !== null) DEFIL.v = v; } catch (_) {}
+  DEFIL.on = true; DEFIL.pause = false; DEFIL.reste = 0; DEFIL.t0 = 0; DEFIL.cible = defilCible();
+  cancelAnimationFrame(DEFIL.raf); DEFIL.raf = requestAnimationFrame(defilPas);
+  const b = document.getElementById('defilBtn'); if (b) b.setAttribute('aria-pressed', 'true'); majDefilPilule();
+}
+function arreterDefil(msg) {
+  DEFIL.on = false; cancelAnimationFrame(DEFIL.raf);
+  const b = document.getElementById('defilBtn'); if (b) b.setAttribute('aria-pressed', 'false'); majDefilPilule();
+  if (msg) toast(msg, '');
+}
+// toucher le texte met en pause (comme dans un bréviaire) ; changer de page arrête
+document.addEventListener('touchstart', e => { if (DEFIL.on && !e.target.closest('#defilPil')) { DEFIL.pause = true; majDefilPilule(); } }, { passive: true });
+document.addEventListener('wheel', () => { if (DEFIL.on && !DEFIL.pause) { DEFIL.pause = true; majDefilPilule(); } }, { passive: true });
 function applyApparence(a) {
   const t = THEMES[a.theme] || THEMES.gstf;
   const clair = { ...t.clair };
@@ -4268,9 +4372,13 @@ function applyApparence(a) {
   { const fam = { garamond: 'EB+Garamond:ital,wght@0,500;0,600;1,500', playfair: 'Playfair+Display:ital,wght@0,500;0,600;1,500' }[a.police];   // police choisie : chargée seulement si besoin
     if (fam && !document.getElementById('policeTheme')) { const l = document.createElement('link'); l.id = 'policeTheme'; l.rel = 'stylesheet'; l.href = `https://fonts.googleapis.com/css2?family=${fam}&display=swap`; document.head.appendChild(l); } }
   let css = `:root { ${vars(clair)} --font-title: ${font}; color-scheme: light; } body { font-size: calc(${Math.min(18, Math.max(14, Number(a.taille) || 15))}px * var(--taille-k, 1)); }`;
-  css += a.mode === 'clair'
+  const perso = modePerso();   // bouton 🌙 / ☀️ de l’en-tête : le choix de la personne passe avant le réglage du site
+  if (perso === 'sombre') css += `:root { ${vars(t.sombre)} color-scheme: dark; }`;
+  else if (perso === 'clair') css += `@media (prefers-color-scheme: dark) { :root { ${vars(clair)} color-scheme: light; } }`;
+  else css += a.mode === 'clair'
     ? `@media (prefers-color-scheme: dark) { :root { ${vars(clair)} color-scheme: light; } }`
     : `@media (prefers-color-scheme: dark) { :root { ${vars(t.sombre)} color-scheme: dark; } }`;
+  try { majModeBtn(); } catch (_) {}
   let st = document.getElementById('themeStyle');
   if (!st) { st = document.createElement('style'); st.id = 'themeStyle'; document.head.appendChild(st); }
   st.textContent = css;
@@ -8471,7 +8579,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 188, VERSION_FONCTION_ATTENDUE = 41;
+const VERSION_SITE = 190, VERSION_FONCTION_ATTENDUE = 41;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]],["70_economat_plus","Économat : comptes, accords, pensions, stocks, historique",[["t","economat_demandes"],["t","economat_journal"],["f","economat_pensions"],["c","economat_ops.compte"]]],["71_echeances","Échéances et abonnements",[["t","echeances"],["t","echeances_paiements"],["f","echeance_payer"]]],["72_departs","Retirer une personne : date et motif",[["t","departs"]]],["73_pages","Créateur de pages (menus…)",[["t","pages_site"],["f","page_contenu"]]],["74_cours_plus","Cours : crédits ECTS, syllabus par le professeur",[["c","cours.credits"],["f","cours_syllabus"]]],["75_contact","Contact : objet, numéro de suivi, coordonnées",[["c","messages_contact.objet"],["f","contact_envoyer"]]],["76_paiement_sans_capture","Article payant : coller le SMS ou taper la référence",[["c","achats_articles.source"],["f","payer_article_sans_capture"]]],["77_vitesse","Mesure de la vitesse du site",[["t","perf_mesures"],["f","perf_resume"]]],["78_agenda_signature","Agenda (Je participe, répétition, services liturgiques) et signature",[["c","agenda.recurrence"],["t","agenda_participants"],["t","liturgie_services"],["t","signatures"],["f","agenda_inscrire"]]],["79_alertes","Alertes au Préfet par mail et WhatsApp",[["t","alertes"],["f","alerte_nouvelle"],["j","gstf-alertes"]]],["80_homelies","Homélie du dimanche (RDB LIVE)",[["t","homelies"],["j","gstf-homelies"]]],["81_articles_plus","Articles : rubriques, modifier, statistiques, questions, propositions",[["c","articles.rubrique"],["t","article_stats"],["t","article_questions"],["t","article_propositions"],["f","article_accepter"]]],["82_chaine_youtube","Chaîne YouTube et Page Facebook du séminaire",[]],["83_droit_image_attestations","Droit à l'image, accusé de réception, attestation en ligne",[["c","etudiants.image_accord"],["c","messages_contact.accuse_le"],["t","attestation_demandes"],["f","demander_attestation"]]],["84_saint_facebook","Saint du jour publié chaque nuit sur la Page Facebook",[["j","gstf-saint-facebook"]]],["85_homelies_horaire","Homélie cherchée toutes les heures (alerte du samedi 20 h)",[]],["86_documents_video","Documents de cours : vidéo, classes concernées, public",[["c","documents_cours.video"],["c","documents_cours.pour_annees"],["f","peut_voir_document"]]],["87_aide_questions","Aide : questions des visiteurs restées sans réponse",[["t","aide_questions"],["f","aide_noter"]]],["88_rdv_public","Rendez-vous ouverts au public",[["c","entretien_rdv.jeton"],["f","reserver_entretien_public"]]],["89_abonnes_articles","Abonnement gratuit aux articles",[["t","abonnes"],["f","abonner"],["t","emails_articles"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -10175,9 +10283,10 @@ const sigActif = () => !!signaturePour('releve') || !!signaturePour('carte');
 // Bouton « ✍️ Ajouter ma signature » : un clic l'ajoute (ou l'enlève) des documents imprimés
 function boutonSignature(id = 'sigBtn') {
   if (!isAdmin()) return '';
-  const a = sigActif(); return `<button type="button" class="btn ${a ? '' : 'btn-ghost'}" id="${id}" data-sig-bascule aria-pressed="${a}" title="${a ? 'Cliquez pour imprimer sans signature' : ''}">${a ? '✓ Signature ajoutée' : '✍️ Ajouter ma signature'}</button>`;
+  const a = sigActif(); return `<button type="button" class="btn ${a ? '' : 'btn-ghost'}" id="${id}" data-sig-bascule aria-pressed="${a}" title="${a ? 'Cliquez pour imprimer sans signature' : ''}">${a ? '✓ Signature ajoutée' : '✍️ Ajouter ma signature'}</button><button type="button" class="btn btn-ghost btn-sm" data-sig-regler title="Couleur de l’encre, place, taille, cachet">🎨 Couleur et place</button>`;
 }
 function brancherSignature(racine, apres) {
+  (racine || document).querySelectorAll('[data-sig-regler]:not([data-b])').forEach(b => { b.dataset.b = 1; b.addEventListener('click', () => dialogueSignature(() => { majBoutonsSig(); if (apres) apres(); })); });
   (racine || document).querySelectorAll('[data-sig-bascule]:not([data-b])').forEach(b => { b.dataset.b = 1; b.addEventListener('click', async () => {
     await chargerSignatures();
     if (!(SIGNATURES || []).length) { dialogueSignature(() => { SIG_AJOUT = true; majBoutonsSig(); if (apres) apres(); }); return; }
@@ -10244,6 +10353,13 @@ function sigReduire(canvas, largeur = 700) {   // PNG transparent d'au plus ~300
 }
 
 /* Fenêtre « Ajouter ma signature » : une photo suffit ; les autres façons et réglages sont dans « Plus d’options » */
+/* Changer la couleur d’une signature déjà enregistrée (le fond transparent est gardé) */
+function sigRecolorer(src, rgb) {
+  return new Promise(ok => { const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+    const g = c.getContext('2d'); g.drawImage(im, 0, 0); const D = g.getImageData(0, 0, c.width, c.height), d = D.data;
+    for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { d[i] = rgb[0]; d[i + 1] = rgb[1]; d[i + 2] = rgb[2]; }
+    g.putImageData(D, 0, 0); ok(c.toDataURL('image/png')); }; im.onerror = () => ok(src); im.src = src; });
+}
 async function dialogueSignature(apres) {
   await chargerSignatures(true);
   const S = maSignature() || {}, cfg = RELEVE.cfg || {};
@@ -10267,6 +10383,7 @@ async function dialogueSignature(apres) {
     <div class="grid sm:grid-cols-2 gap-x-4 gap-y-1 text-sm">
       <label class="flex items-center gap-2">Taille de la signature <input type="range" min="20" max="70" value="${S.largeur_mm || 38}" id="sigLarg" class="flex-1"> <span id="sigLargV" class="num text-xs">${S.largeur_mm || 38} mm</span></label>
       <label class="flex items-center gap-2" id="sigCTailleL" ${cachet ? '' : 'hidden'}>Taille du cachet <input type="range" min="18" max="50" value="${P.c}" id="sigCTaille" class="flex-1"> <span id="sigCTailleV" class="num text-xs">${P.c} mm</span></label></div>
+    <div class="flex flex-wrap items-center gap-2 text-sm"><span class="font-semibold">🎨 Couleur de l’encre :</span>${[['noire', '⚫ Noire'], ['bleue', '🔵 Bleue'], ['originale', 'Comme sur la photo']].map(([v, l]) => `<button type="button" class="btn btn-ghost btn-sm" data-sig-encre="${v}" aria-pressed="false">${l}</button>`).join('')}</div>
     <label class="text-sm flex items-start gap-2"><input type="checkbox" id="sigAuto" class="mt-1" ${S.auto === false ? '' : 'checked'}> <span>Mettre <b>toujours</b> ma signature sur les bulletins et relevés (sinon : bouton « Ajouter ma signature » à chaque fois)</span></label>
     <details class="bg-sunk rounded-lg p-3"><summary class="font-semibold text-sm"><span class="chev">▸</span> Plus d’options</summary>
       <div class="flex flex-col gap-3 mt-3 text-sm">
@@ -10276,7 +10393,7 @@ async function dialogueSignature(apres) {
         <div id="sigPad" hidden><canvas id="sigCv" width="700" height="260" class="sig-cv"></canvas>
           <div class="flex gap-2 mt-2"><button type="button" class="btn btn-ghost btn-sm" id="sigEff">Effacer</button><button type="button" class="btn btn-sm" id="sigOkPad">Utiliser ce tracé</button></div></div>
         <label class="flex items-center gap-2">Netteté du détourage <input type="range" min="15" max="90" value="45" id="sigSeuil" class="flex-1"> <span class="text-xs text-muted">(plus à droite : enlève plus de fond)</span></label>
-        <label class="flex items-center gap-2">Couleur de l’encre <select class="field" id="sigEncre" style="width:auto"><option value="noire">Noire</option><option value="bleue">Bleue</option><option value="originale">Comme sur la photo</option></select></label>
+
         <div><p class="font-semibold mb-1">Documents où elle peut apparaître</p>${Object.entries(SIG_DOCS).map(([k, l]) => `<label class="flex items-center gap-2"><input type="checkbox" data-sig-doc="${k}" ${(S.documents || ['releve', 'carte', 'programme']).includes(k) ? 'checked' : ''}> ${l}</label>`).join('')}</div>
         <label class="flex items-center gap-2"><input type="checkbox" id="sigPart" ${S.partage === false ? '' : 'checked'}> Le secrétariat peut aussi imprimer avec ma signature</label>
         <div class="grid sm:grid-cols-2 gap-2"><label><span class="block font-semibold mb-1">Nom sous la signature</span><input class="field" id="sigNom" value="${esc(S.nom || cfg.signataire_nom || '')}"></label>
@@ -10315,7 +10432,18 @@ async function dialogueSignature(apres) {
   dlg.addEventListener('paste', e => { const f = [...(e.clipboardData || {}).files || []].find(x => x.type.startsWith('image/')); if (f) { e.preventDefault(); coller(f); } });
   q('#sigTourne').onclick = () => { if (!source) { toast('D’abord une photo', 'Choisissez la photo de votre signature.', 'warn'); return; } o.rotation = (o.rotation + 90) % 360; refaire(); };
   q('#sigSeuil').onchange = e => { o.seuil = +e.target.value; refaire(); };
-  q('#sigEncre').onchange = e => { o.encre = e.target.value; refaire(); };
+  const majEncre = () => dlg.querySelectorAll('[data-sig-encre]').forEach(b => { const on = b.dataset.sigEncre === o.encre; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('btn-ghost', !on); });
+  dlg.querySelectorAll('[data-sig-encre]').forEach(b => b.onclick = async () => {
+    const v = b.dataset.sigEncre;
+    if (source) { o.encre = v; majEncre(); refaire(); return; }
+    if (!img) { o.encre = v; majEncre(); return; }
+    if (v === 'originale') { toast('Couleur d’origine', 'Pour retrouver la couleur de la photo, choisissez de nouveau la photo de votre signature.', 'warn'); return; }
+    img = await sigRecolorer(img, v === 'bleue' ? [20, 45, 140] : [15, 18, 35]); o.encre = v; majEncre(); montrer();
+  });
+  o.encre = 'noire'; majEncre();
+  if (img) { const im = new Image(); im.onload = () => { try { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; const g2 = c.getContext('2d'); g2.drawImage(im, 0, 0);
+    const d = g2.getImageData(0, 0, c.width, c.height).data; let r = 0, b = 0, n = 0; for (let i = 0; i < d.length; i += 16) if (d[i + 3] > 100) { r += d[i]; b += d[i + 2]; n++; }
+    if (n && b / n > r / n + 40) { o.encre = 'bleue'; majEncre(); } } catch (_) {} }; im.src = img; }
   q('#sigLarg').oninput = e => { q('#sigLargV').textContent = e.target.value + ' mm'; montrer(); };
   // Signer à l'écran
   const cv = q('#sigCv'), g = cv.getContext('2d'); let trace = false, vide = true;
@@ -12836,6 +12964,12 @@ const AIDE = [
     e: ['Le nom du Pontife est en caractères romains (petites majuscules), suivi d’une virgule ; puis entre « » le type de document et l’incipit en italique ; puis la date suivie d’une virgule.', 'En ligne : JEAN-PAUL II, « Lettre apostolique Tertio Millennio Adveniente » [En ligne], 10 novembre 1994, in vatican.va – (cons. 12/04/2021).', 'Pas besoin de l’adresse (URL) pour vatican.va ; pour les autres sites, l’omettre est une faute grave.', 'Dans le corps du texte : seulement l’abréviation du document et le numéro, ex. (CR 66).', 'Dans le syllabus : ✏️ puis le bouton « ⛪ Magistère » ; remplissez « Site » et « Date de consultation » si le document a été lu en ligne.'] },
   { q: 'Règles des travaux pratiques (TP) : combien, quelles matières, qui dirige ?', r: ['tous'], k: 'regle tp travaux pratiques combien huit 8 pages 12 15 compte rendu lecture dogmatique ecriture symposium directeur enseignant plagiat copie 0 20 sujet',
     e: ['Huit TP de 12 à 15 pages en trois ans, plus un compte-rendu de lecture : deux en théologie dogmatique, deux en Écritures saintes, un dans une autre discipline, trois pour les trois symposiums.', 'Vous choisissez le sujet et l’enseignant ; le TP se fait uniquement sous la direction d’un enseignant du GSTF : prenez contact avec lui dès le sujet choisi.', 'Forme (méthodologie) et fond (absence d’hérésie) sont évalués. Plagiat ou copie : 0/20.', 'Les règles complètes sont sur votre page d’accueil (après connexion) : « 📝 Travaux pratiques : les règles du GSTF ». L’administration peut les modifier avec ✏️.'] },
+  { q: 'Changer la couleur de ma signature (noire ou bleue) sur les relevés et bulletins', r: ['admin'], k: 'signature couleur encre bleue noire changer relevé bulletin carte cachet place taille',
+    e: ['Sur la page du relevé ou du bulletin : bouton « 🎨 Couleur et place », à côté de « ✓ Signature ajoutée ».', 'Choisissez « ⚫ Noire » ou « 🔵 Bleue » dans « 🎨 Couleur de l’encre » : l’aperçu change tout de suite.', 'Cliquez « Enregistrer ma signature ». Toutes les impressions suivantes ont la nouvelle couleur.', 'Aussi : Admin › Ma signature › « ✏️ Modifier ».'] },
+  { q: 'Mettre la photo de l’étudiant sur son relevé de notes', r: ['admin'], k: 'photo etudiant releve notes bulletin image portrait apparaitre imprimer',
+    e: ['La photo apparaît toute seule sur le relevé imprimé, à gauche du nom, quand l’étudiant a une photo sur le site.', 'Pour ajouter ou changer une photo : Admin › Étudiants, cliquez sur le rond de la photo à côté du nom.', 'Sans photo, le relevé reste comme avant.'] },
+  { q: 'Les trois boutons en haut : calendrier, mode sombre ou clair, défilement automatique', r: ['tous'], k: 'calendrier date jour autre saint lectures mode sombre nuit clair lune soleil defilement automatique defiler lire lecture vitesse breviaire boutons haut',
+    e: ['📅 Calendrier : choisissez un jour (hier, demain, une autre date) pour voir son saint et ses lectures ; en bas, le lien vers l’agenda du séminaire.', '🌙 / ☀️ Mode sombre ou clair : un appui change les couleurs, sur cet appareil seulement. Appui long : revenir au réglage du téléphone.', '⇕ Défilement automatique : la page descend toute seule pour lire sans toucher l’écran. En bas : − plus lent, ⏸ pause, + plus vite, ✕ arrêter. Toucher le texte met en pause.'] },
   { q: 'Normes du GSTF : deuxième citation, Ibid., Id. (note brève)', r: ['tous'], k: 'norme citer deuxieme citation seconde suivante ibid id idem note breve op cit meme ouvrage meme auteur',
     e: ['La première citation est toujours complète : B. SESBOÜÉ, Hors de l’Église, pas de salut. Histoire d’une formule et problèmes d’interprétation, Paris, DDB, 2004, p. 88.', 'Même référence que la note précédente, identique en tout : seulement « Ibid. » (en italique).', 'Même référence, autre page : « Ibid., p. 95. »', 'Deux œuvres du même auteur à la suite dans la même note : la deuxième fois, « ID. » à la place du nom.', 'À partir de la deuxième citation : le nom de l’auteur (le premier s’il y en a plusieurs), le titre en italique et la page, séparés par des virgules. Le site le propose sous « Note brève » dans la fenêtre ✏️.'] },
   { q: 'Normes du GSTF : citer un site internet (webographie)', r: ['tous'], k: 'norme citer site internet web webographie lien url en ligne consultation theologien devenu pape ratzinger benoit youtube',
@@ -14429,6 +14563,13 @@ async function chercherPartout(q) {
   }
 }
 $('#rechBtn').addEventListener('click', () => ouvrirRecherche());
+$('#calBtn').addEventListener('click', ouvrirCalendrier);
+$('#modeBtn').addEventListener('click', basculerMode);
+{ let tAppui = 0; $('#modeBtn').addEventListener('pointerdown', () => { tAppui = setTimeout(() => { try { localStorage.removeItem('gstf-mode'); } catch (_) {} applyApparence(APPARENCE); toast('Mode automatique', 'Le site suit de nouveau le réglage du téléphone.'); tAppui = -1; }, 800); });
+  ['pointerup', 'pointerleave'].forEach(ev => $('#modeBtn').addEventListener(ev, () => { if (tAppui > 0) clearTimeout(tAppui); })); }
+$('#defilBtn').addEventListener('click', () => { if (DEFIL.on) arreterDefil(); else lancerDefil(); });
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', majModeBtn); } catch (_) {}
+majModeBtn();
 $('#feuilleRech').addEventListener('click', () => { fermerFeuille(); ouvrirRecherche(); });
 
 /* ---------- 3. En-tête compact quand on descend ---------- */
