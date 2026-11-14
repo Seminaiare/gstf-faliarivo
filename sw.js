@@ -4,7 +4,7 @@
    la toute première fois sans Internet, la page « hors connexion » montre la carte d’étudiant et les prières. */
 const CACHE = 'gstf-v6';
 const HORS_LIGNE = ['/offline.html', '/icon-192.png', '/badge-96.png', '/therese.jpg'];
-const PAGE = '/', STATIQUES = ['/i18n.js'];
+const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
 // Servir depuis le téléphone, puis rafraîchir en arrière-plan
