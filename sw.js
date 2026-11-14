@@ -2,19 +2,19 @@
    Rapide : la page du site est servie tout de suite depuis le téléphone, puis mise à jour en arrière-plan
    (le site affiche « Nouvelle version disponible » quand il y en a une). Sans Internet, le site s'ouvre quand même ;
    la toute première fois sans Internet, la page « hors connexion » montre la carte d’étudiant et les prières. */
-const CACHE = 'gstf-v7';
+const CACHE = 'gstf-v8';
 const HORS_LIGNE = ['/offline.html', '/icon-192.png', '/badge-96.png', '/therese.jpg'];
 const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
-// Le code du site (app.js?v=…) : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
+// Le code du site (app.js?v=…, et espace.js?v=… pour le personnel) : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
 async function scriptVersionne(u) {
   const c = await caches.open(CACHE), cle = u.pathname + u.search, enCache = await c.match(cle);
   if (enCache) return enCache;
   const r = await fetch(u.href, { credentials: 'same-origin' });
   if (r.ok) {
     await c.put(cle, r.clone());
-    for (const k of await c.keys()) { const x = new URL(k.url); if (x.pathname === '/app.js' && x.search !== u.search) await c.delete(k); }
+    for (const k of await c.keys()) { const x = new URL(k.url); if (x.pathname === u.pathname && x.search !== u.search) await c.delete(k); }
   }
   return r;
 }
@@ -40,7 +40,7 @@ self.addEventListener('fetch', e => {
     if (u.pathname === '/' || u.pathname === '/index.html') { e.respondWith(rapideEtFrais(e, PAGE, '/').catch(() => caches.match('/offline.html'))); return; }
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
-  if (u.pathname === '/app.js') { e.respondWith(scriptVersionne(u)); return; }
+  if (u.pathname === '/app.js' || u.pathname === '/espace.js') { e.respondWith(scriptVersionne(u)); return; }
   if (STATIQUES.includes(u.pathname)) { e.respondWith(rapideEtFrais(e, u.pathname, u.pathname)); return; }
   if (HORS_LIGNE.includes(u.pathname)) e.respondWith(caches.match(r).then(x => x || fetch(r)));
 });
