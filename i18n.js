@@ -1,6 +1,9 @@
 /* Traductions du site (malgache, anglais, italien) : chargées seulement si on choisit une autre langue que le français. */
 window.I18N_DATA = {
 "mg": {
+"Études": "Fianarana",
+"Connexion": "Fidirana",
+"Mon espace": "Ny toerako",
 "AELF : messe et liturgie des heures du jour": "AELF : lamesa sy fivavahan’ny ora isan’andro",
 "Aidez à former les prêtres de demain": "Ampio amin’ny fanofanana ireo pretra rahampitso",
 "Annuaire du Grand Séminaire": "Lisitry ny olona ao amin’ny Seminera Lehibe",
@@ -314,6 +317,9 @@ window.I18N_DATA = {
 "Cours": "Lesona"
 },
 "en": {
+"Études": "Studies",
+"Connexion": "Sign in",
+"Mon espace": "My space",
 "AELF : messe et liturgie des heures du jour": "AELF: today’s Mass and Liturgy of the Hours",
 "Aidez à former les prêtres de demain": "Help form the priests of tomorrow",
 "Annuaire du Grand Séminaire": "Directory of the Major Seminary",
@@ -627,6 +633,9 @@ window.I18N_DATA = {
 "Cours": "Courses"
 },
 "it": {
+"Études": "Studi",
+"Connexion": "Accedi",
+"Mon espace": "Il mio spazio",
 "AELF : messe et liturgie des heures du jour": "AELF: messa e liturgia delle ore del giorno",
 "Aidez à former les prêtres de demain": "Aiutate a formare i sacerdoti di domani",
 "Annuaire du Grand Séminaire": "Annuario del Seminario Maggiore",
