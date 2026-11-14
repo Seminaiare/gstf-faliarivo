@@ -125,6 +125,12 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   .fiche h4 { margin: .9rem 0 .2rem; font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); }
   .fiche ul { margin: .3rem 0 .3rem 1.1rem; list-style: disc; }
   .fiche .biblio-l li { margin: .3rem 0; text-align: left; hyphens: manual; }
+  .pcap { font-variant: small-caps; }
+  .ref-ed { font-size: 12px; opacity: .55; margin-left: .25rem; vertical-align: baseline; } .ref-ed:hover, .ref-ed:focus { opacity: 1; }
+  .ref-manq { color: var(--warn); font-size: 12px; cursor: help; }
+  .ref-outils { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: .3rem 0 .6rem; }
+  #refTypes [aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media print { .ref-ed, .ref-outils, .ref-manq { display: none !important; } }
   .abo-carte { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.25rem; padding: 1rem 1.15rem; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 10px; background: var(--surface); }
   .abo-invit { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(5.2rem + env(safe-area-inset-bottom)); width: min(30rem, calc(100vw - 24px)); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.18); padding: 1rem 1.1rem; }
   .abo-invit ul { margin: .4rem 0 .2rem 1.1rem; list-style: disc; font-size: .875rem; }
@@ -1790,7 +1796,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
   </div>
   <div class="max-w-7xl mx-auto border-t border-line py-3 text-xs text-muted flex flex-wrap gap-x-4 gap-y-1"><a class="hover:underline" href="/le-seminaire.html">Le séminaire</a><a class="hover:underline" href="/inscription-seminaire.html">Devenir étudiant</a><a class="hover:underline" href="/bibliotheque-seminaire.html">La bibliothèque</a><a class="hover:underline" href="/contact-acces.html">Contact et plan d’accès</a><a class="hover:underline" href="/soutenir-seminaire.html">Soutenir le séminaire</a></div>
   <div class="max-w-7xl mx-auto border-t border-line py-4 text-xs text-muted flex flex-wrap justify-between gap-2">
-    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 187</span></span><span id="pdDroite">Studium de premier cycle · baccalauréat canonique de théologie</span>
+    <span>© 2026 Grand Séminaire de Théologie Sainte Thérèse de l’Enfant-Jésus – Faliarivo · <span class="notranslate" translate="no">version 188</span></span><span id="pdDroite">Studium de premier cycle · baccalauréat canonique de théologie</span>
   </div>
 </footer>
 <dialog id="groupeDialog" style="max-width:min(640px, calc(100vw - 32px));width:100%;border:1px solid var(--line);border-radius:10px;padding:0;background:var(--surface);color:var(--ink)"><div class="flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('dialog').close()">Fermer ✕</button></div><div class="gd-body px-5 pb-6"></div></dialog>
@@ -2578,16 +2584,23 @@ function bibCouper(x) {
   const t = String(x); if ((t.match(/\b(?:1[5-9]|20)\d{2}\b/g) || []).length < 2) return [t];
   const p = t.split(BIB_COUPE).map(y => y.trim()).filter(Boolean); return p.length > 1 && p.every(y => y.length >= 15) ? p : [t];
 }
-function ficheHtml(blocks) {
-  let html = '', inList = false, biblio = false;
-  for (const [t, x] of blocks) {
-    if (t === 'li') { if (!inList) { html += '<ul>'; inList = true; } html += `<li>${esc(x)}</li>`; continue; }
+function ficheHtml(blocks, ctx) {
+  const ed = !!(ctx && ctx.edit);
+  let html = '', inList = false, biblio = false, debut = -1, dernier = -1;
+  const crayon = (bi, part) => ed ? ` <button type="button" class="ref-ed" data-ref-ed="${bi}" data-part="${part == null ? '' : part}" title="Modifier cette référence" aria-label="Modifier cette référence">✏️</button>` : '';
+  const outils = () => { if (ed && biblio) html += `<div class="ref-outils"><button type="button" class="linkbtn text-xs" data-ref-aj="${dernier + 1}">＋ Ajouter une référence</button><button type="button" class="linkbtn text-xs" data-ref-tri="${debut}">↕ Trier de A à Z</button></div>`; };
+  const ouvrir = () => { if (!inList) { html += biblio ? '<ul class="biblio-l">' : '<ul>'; inList = true; } };
+  blocks.forEach(([t, x], bi) => {
+    if (t === 'ref') { ouvrir(); const m = ed ? refManques(x) : []; html += `<li>${refHtml(refFinal(x))}${m.length ? ` <span class="ref-manq" title="À compléter : ${esc(m.join(', '))}">⚠</span>` : ''}${crayon(bi)}</li>`; dernier = bi; return; }
+    if (t === 'li') { ouvrir(); html += `<li>${esc(x)}${biblio ? crayon(bi) : ''}</li>`; dernier = bi; return; }
     if (inList) { html += '</ul>'; inList = false; }
-    if (t === 'h') { biblio = /bibliograph|lecture|ouvrage|source/i.test(x); html += `<h4>${esc(x)}</h4>`; continue; }
-    const p = biblio ? bibCouper(x) : [x];
-    html += p.length > 1 ? `<ul class="biblio-l">${p.map(y => `<li>${esc(y)}</li>`).join('')}</ul>` : `<p>${esc(x)}</p>`;
-  }
-  return html + (inList ? '</ul>' : '');
+    if (t === 'h') { outils(); biblio = /bibliograph|lecture|ouvrage|source|webograph|r[ée]f[ée]rences/i.test(x); debut = dernier = bi; html += `<h4>${esc(x)}</h4>`; return; }
+    const p = biblio ? bibCouper(x) : [x]; dernier = bi;
+    html += p.length > 1 ? `<ul class="biblio-l">${p.map((y, i) => `<li>${esc(y)}${crayon(bi, i)}</li>`).join('')}</ul>` : `<p>${esc(x)}${biblio ? crayon(bi) : ''}</p>`;
+  });
+  if (inList) html += '</ul>';
+  outils();
+  return html;
 }
 const yearSeg = () => `<div class="seg" role="group" aria-label="Année">${[[0,'Toutes'],[1,'1re année'],[2,'2e année'],[3,'3e année']].map(([v, l]) => `<button type="button" data-year="${v}" aria-pressed="${docYear === v}">${l}</button>`).join('')}</div>`;
 let DOC_MES_COURS = false;
@@ -2659,7 +2672,7 @@ function renderFiches() {
       <div class="fiche px-4 pb-4 pl-10 min-w-0">
         <dl class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-1 text-sm mb-2"><dt class="text-muted">Enseignant</dt><dd>${esc(profName(c.prof))}</dd>
           <dt class="text-muted">Année · semestre</dt><dd>${anLabel(c.an)} · semestre ${c.sem}</dd><dt class="text-muted">Volume horaire</dt><dd>${c.h} heures · ${ectsTxt(ectsDe(c))}</dd></dl>
-        ${f ? ficheHtml(f) : '<p class="text-muted">Le syllabus de ce cours n’est pas encore publié.</p>'}
+        ${f ? ficheHtml(f, { edit: refPeutModifier(c.id) }) : '<p class="text-muted">Le syllabus de ce cours n’est pas encore publié.</p>'}
         <div class="cl-biblio" data-cl="${c.id}">${BIBLIOS ? biblioCoursHtml(c.id) : ''}</div>
         <div data-res="${esc(c.id)}"></div>
         <button type="button" class="btn btn-ghost btn-sm mt-3 syl-print" data-cours="${c.id}">Imprimer le syllabus</button></div></details>`;
@@ -2991,7 +3004,7 @@ function biblioLigne(l, rubrique) {   // NOM | Prénom | Titre | date | édition
   if (p.length < 3) return `<p class="bib">${enLigne(l)}</p>`;
   const [nom, pre, titre, ...reste] = p, aut = nom ? `<span class="sc">${esc(nom)}</span>${pre ? ' ' + esc(prenomAbrege(pre)) : ''}, ` : '';
   const ti = rubrique === 'articles' ? `« ${esc(titre)} »` : `<em>${esc(titre)}</em>`;
-  const r = reste.filter(Boolean).map((x, i) => rubrique === 'articles' && i === 0 ? `dans <em>${esc(x)}</em>` : /^\d[\d\s]*$/.test(x) && i === reste.length - 1 ? esc(x) + ' p.' : esc(x));
+  const r = reste.filter(Boolean).map((x, i) => rubrique === 'articles' && i === 0 ? `<em>${esc(x)}</em>` : /^\d+\s*-\s*\d+$/.test(x) && i === reste.length - 1 ? 'pp. ' + esc(x.replace(/\s/g, '')) : esc(x));
   return `<p class="bib">${aut}${ti}${r.length ? ', ' + r.join(', ') : ''}.</p>`;
 }
 const triBiblio = t => String(t || '').split('\n').map(x => x.trim()).filter(Boolean).sort((a, b) => sans(a).localeCompare(sans(b))).join('\n');
@@ -3030,7 +3043,7 @@ async function renderAdminActes() {
         ${zone(`c.${i}.resume`, 'Résumé (quelques lignes)', c.resume, 2)}${zone(`c.${i}.texte`, 'Texte de la contribution', c.texte, 10)}<p class="text-xs text-muted" data-etat-c="${i}"></p></div>`).join('')}</div>
       <button type="button" class="btn btn-ghost btn-sm mt-3" id="acteAjoutC">＋ Ajouter une contribution</button><input type="file" id="acteWordF" accept=".docx" hidden><input type="file" id="acteScanF" accept="image/*" capture="environment" hidden>`, true)}
     ${bloc('5. Synthèse et conclusion', `${champ('conclusion.auteur', 'Auteur', D.conclusion.auteur)}${zone('conclusion.texte', 'Texte', D.conclusion.texte, 6)}`)}
-    ${bloc('6. Bibliographie générale', `<p class="text-sm text-muted mb-2">Une référence par ligne : <span class="font-mono">NOM | Prénom | Titre | date | édition | pages</span>. Le site la met aux normes du séminaire (nom en petites capitales, prénom abrégé, titre en italique). Pour un article : <span class="font-mono">NOM | Prénom | Titre de l’article | Revue n° | date | p. 12-30</span>. Une ligne sans « | » est gardée telle quelle.</p>
+    ${bloc('6. Bibliographie générale', `<p class="text-sm text-muted mb-2">Une référence par ligne : <span class="font-mono">NOM | Prénom | Titre | Lieu | Éditeur | année | 9-470</span> (proposition à vérifier). Le site la met aux normes du séminaire (nom en petites capitales, prénom abrégé, titre en italique). Pour un article : <span class="font-mono">NOM | Prénom | Titre de l’article | Revue | 102 (2002) | 43-62</span>. Une ligne sans « | » est gardée telle quelle.</p>
       ${zone('biblio_magistere', 'Écriture sainte et Magistère', D.biblio_magistere, 4)}${zone('biblio_ouvrages', 'Ouvrages', D.biblio_ouvrages, 6)}${zone('biblio_articles', 'Articles', D.biblio_articles, 4)}<button type="button" class="btn btn-ghost btn-sm" id="acteTri">Trier par ordre alphabétique</button>`)}
     ${bloc('7. Les auteurs et annexes', `${zone('auteurs', 'Les auteurs', D.auteurs, 5, 'Une ligne par auteur : <span class="font-mono">Prénom NOM | prêtre du diocèse de …, professeur de …</span>')}${zone('programme', 'Annexe : programme du symposium', D.programme, 5, 'Une ligne par intervention.')}`)}
     ${bloc('8. Quatrième de couverture', `${zone('quatrieme', 'Texte de présentation (8 à 12 lignes)', D.quatrieme, 6)}<div class="grid sm:grid-cols-2 gap-3">${champ('prix', 'Prix (facultatif)', D.prix, 'placeholder="ex. 15 000 Ar"')}</div>`)}`}`;
@@ -6513,8 +6526,10 @@ async function loadAnnee() {
 }
 
 /* ---------- Administration : rubrique « Année académique » ---------- */
-const syllabusVersTexte = blocks => (blocks || []).map(([t, x]) => t === 'h' ? '## ' + x : t === 'li' ? '- ' + x : x).join('\n');
-const texteVersSyllabus = t => lignes(t).map(l => l.startsWith('## ') ? ['h', l.slice(3).trim()] : /^[-•] /.test(l) ? ['li', l.slice(2).trim()] : ['p', l]);
+const syllabusVersTexte = blocks => (blocks || []).map(([t, x]) => t === 'h' ? '## ' + x : t === 'li' ? '- ' + x : t === 'ref' ? '- ' + refTxt(refFinal(x)) : x).join('\n');
+// ancien : le syllabus d’avant — une ligne restée identique à une référence mise aux normes garde sa forme (italique, petites capitales)
+const texteVersSyllabus = (t, ancien) => { const M = new Map((ancien || []).filter(([k]) => k === 'ref').map(([, r]) => [refTxt(refFinal(r)), r]));
+  return lignes(t).map(l => l.startsWith('## ') ? ['h', l.slice(3).trim()] : /^[-•] /.test(l) ? (M.has(l.slice(2).trim()) ? ['ref', M.get(l.slice(2).trim())] : ['li', l.slice(2).trim()]) : ['p', l]); };
 let ADM_COURS = null, ADM_PROFS_LISTE = null;
 async function renderAdminAnnee() {
   const box = $('#adm-annee');
@@ -6634,7 +6649,7 @@ async function renderAdminAnnee() {
       sb2.hidden = false; sb2.scrollIntoView({ behavior: 'smooth', block: 'center' });
       $('#anSylClose').addEventListener('click', () => { sb2.hidden = true; sb2.innerHTML = ''; });
       $('#anSylSave').addEventListener('click', async () => {
-        const syl = texteVersSyllabus($('#anSylTxt').value);
+        const syl = texteVersSyllabus($('#anSylTxt').value, c.syllabus || DATA.FICHES[c.id]);
         const { error } = await sb.from('cours').update({ syllabus: syl.length ? syl : null }).eq('id', c.id);
         if (error) { toast('Enregistrement impossible', errText(error), 'bad'); return; }
         c.syllabus = syl; if (syl.length) DATA.FICHES[c.id] = syl; else delete DATA.FICHES[c.id];
@@ -7979,12 +7994,13 @@ async function remettreEnOrdre() {
 }
 
 /* ---------- Citer ce livre (normes du cours de Méthodologie du GSTF) ----------
-   Note de bas de page : Prénom abrégé, NOM (petites capitales), Titre (italique), date, édition, page.
-   Bibliographie       : NOM (petites capitales) Prénom abrégé, Titre (italique), date, édition, pages. */
+   Note de bas de page : P. NOM (petites capitales), Titre (italique), Lieu, Éditeur, année, p.  —  note brève : P. NOM, Titre, p.
+   Bibliographie       : NOM P., Titre, Lieu, Éditeur, année, pp. (de l’introduction à la fin de la table des matières).
+   Ce sont des propositions : la personne peut tout modifier avant de copier. */
 function personnesAuteur(a) {
   a = String(a || '').trim(); if (!a) return [];
   if (/congr[ée]gation|conseil|commission|conf[ée]rence|[ée]cole|institut|synode|concile|[ée]glise|saint-si[èe]ge|collectif|colloque|dicast[èe]re|acad[ée]mie|soci[ée]t[ée]/i.test(a)) return [{ coll: a }];
-  const dir = /\(dir\.?\)|\bdir\./i.test(a) ? ' (dir.)' : '';
+  const dir = /\(dir\.?\)|\bdir\./i.test(a) ? ' (Dir.)' : '';
   return a.replace(/\(dir\.?\)|\bdir\./ig, '').split(/\s*[,;/&]\s*|\s+et\s+/).map(x => x.trim()).filter(Boolean).map(n => {
     const m = n.split(/\s+/); if (m.length > 5) return { coll: n };
     if (m.length === 1) return { pre: '', nom: m[0] };
@@ -8000,19 +8016,19 @@ function auteursCitation(a, ordre, html) {
 function auteurBiblio(a, ordre) { return auteursCitation(a, ordre, false); }
 function citerLivre(l) {
   if (!l) return;
-  const date = l.annee_pub ? String(l.annee_pub) : 's. d.', edit = l.editeur || 's. éd.';
-  const court = String(l.titre).split(/\s[:–—]\s|[:.]\s/)[0].trim();
+  const date = l.annee_pub ? String(l.annee_pub) : 's. d.', edit = l.editeur || 's. éd.', lieu = l.lieu || 's. l.';
+  const T = h => h ? `<i>${esc(l.titre)}</i>` : l.titre, E = (h, x) => h ? esc(x) : x;
   const F = [
-    ['Note de bas de page (1re citation)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(l.titre)}</i>` : l.titre}, ${date}, ${h ? esc(edit) : edit}, p. …`],
-    ['Note de bas de page (citations suivantes)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(court)}</i>, <i>op. cit.</i>` : court + ', op. cit.'}, p. …`],
-    ['Bibliographie (à la fin du travail)', h => `${auteursCitation(l.auteur, 'nom', h)}${l.auteur ? ', ' : ''}${h ? `<i>${esc(l.titre)}</i>` : l.titre}, ${date}, ${h ? esc(edit) : edit}, … p.`]];
+    ['Note de bas de page (1re citation)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${T(h)}, ${E(h, lieu)}, ${E(h, edit)}, ${date}, p. …`],
+    ['Note de bas de page (référence brève)', h => `${auteursCitation(l.auteur, 'pre', h)}${l.auteur ? ', ' : ''}${T(h)}, p. …`],
+    ['Bibliographie (à la fin du travail)', h => `${auteursCitation(l.auteur, 'nom', h)}${l.auteur ? ', ' : ''}${T(h)}, ${E(h, lieu)}, ${E(h, edit)}, ${date}, pp. …`]];
   dialogueBiblio(`<p class="eyebrow mb-1">Bibliothèque · citer ce livre</p><h2 class="font-display text-2xl font-semibold mb-3">${esc(l.titre)}</h2>
     ${F.map(([lib, f], i) => `<div class="cit-bloc"><p class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">${lib}</p>
-      <p class="cit-ref">${f(true)}</p><button type="button" class="btn btn-ghost btn-sm mt-1" data-cit="${i}">📋 Copier</button></div>`).join('')}
-    <p class="text-xs text-muted mt-3">Normes du cours de Méthodologie : prénom abrégé, nom en <span style="font-variant:small-caps">petites capitales</span>, titre en <i>italique</i>, date, édition, page. Collé dans Word, la mise en forme est gardée. Remplacez « … » par la page citée (note) ou le nombre de pages du livre (bibliographie), et vérifiez sur le livre lui-même.</p>
+      <p class="cit-ref" contenteditable="true" spellcheck="true" data-citz="${i}" title="Vous pouvez modifier ce texte avant de le copier">${f(true)}</p><button type="button" class="btn btn-ghost btn-sm mt-1" data-cit="${i}">📋 Copier</button></div>`).join('')}
+    <p class="text-xs text-muted mt-3"><b>Propositions</b> selon les normes du cours de Méthodologie du GSTF : prénom abrégé et nom en <span style="font-variant:small-caps">petites capitales</span> (dans la bibliographie : nom puis prénom abrégé), titre en <i>italique</i>, lieu, éditeur, année, page. <b>Vous pouvez modifier chaque texte</b> avant de le copier (vérifiez sur le livre lui-même). Remplacez « … » par la page citée (note) ou par les pages de l’introduction à la fin de la table des matières (bibliographie). Le lieu d’édition n’est pas connu du catalogue : remplacez « s. l. ».</p>
     <button type="button" class="btn btn-sm mt-3" data-dl-fermer>Fermer</button>`);
   document.querySelectorAll('[data-cit]').forEach(b => b.addEventListener('click', async () => {
-    const f = F[+b.dataset.cit][1], h = `<span style="font-family:'Times New Roman',serif">${f(true)}</span>`, t = f(false);
+    const z = document.querySelector(`[data-citz="${b.dataset.cit}"]`), h = `<span style="font-family:'Times New Roman',serif">${z.innerHTML}</span>`, t = z.innerText.trim();
     try { await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([h], { type: 'text/html' }), 'text/plain': new Blob([t], { type: 'text/plain' }) })]); }
     catch (_) { try { await navigator.clipboard.writeText(t); } catch (e) { prompt('Copiez la référence :', t); return; } }
     b.textContent = '✓ Copié'; setTimeout(() => { b.textContent = '📋 Copier'; }, 1800);
@@ -8028,25 +8044,25 @@ function persRef(aut, ordre, h) {
   const L = (aut || []).filter(p => p && (p.nom || p.coll));
   const f = p => p.coll ? (h ? esc(p.coll) : p.coll) : ordre === 'nom' ? `${petCap(p.nom, h)}${p.pre ? ' ' + (h ? esc(p.pre) : p.pre) : ''}` : `${p.pre ? (h ? esc(p.pre) : p.pre) + ' ' : ''}${petCap(p.nom, h)}`;
   if (L.length > 3) return f(L[0]) + (h ? ' <i>et alii</i>' : ' et alii');
-  return L.map(f).join(', ') + (L.some(p => p.dir) ? ' (dir.)' : '');
+  return L.map(f).join(', ') + (L.some(p => p.dir) ? ' (Dir.)' : '');
 }
 // Une référence aux normes du GSTF. mode : 'note' (1re citation), 'court' (citations suivantes), 'biblio'
-function refTexte(r, mode, h, page) {
+function refTexte(r, mode, h, page) {   // normes du cours de Méthodologie du GSTF (proposition, modifiable par l’étudiant)
   const E = x => h ? esc(String(x)) : String(x), I = x => h ? `<i>${esc(String(x))}</i>` : String(x);
   const art = r.type === 'article', p = [], aut = persRef(r.aut, mode === 'biblio' ? 'nom' : 'pre', h);
+  const pg = x => { x = String(x || '').replace(/[–—]/g, '-'); return x ? (/-/.test(x) ? 'pp. ' : 'p. ') + E(x) : ''; };
   if (aut) p.push(aut);
-  if (mode === 'court') {
-    const tc = String(r.titre || '').split(/\s[:–—]\s|[:.]\s/)[0].trim();
-    p.push(art ? `« ${E(tc)} »` : I(tc)); p.push(h ? '<i>op. cit.</i>' : 'op. cit.');
+  if (mode === 'court') {   // référence brève : P. NOM, Titre, page citée
+    p.push(art ? `« ${E(r.titre || '[titre ?]')} »` : I(r.titre || '[titre ?]')); p.push(pg(page || r.page) || 'p. …');
+  } else if (art) {
+    p.push(`« ${E(r.titre || '[titre ?]')} »`);
+    if (r.revue) p.push(I(r.revue) + (r.num ? ', ' + E(r.num) : '') + (r.date ? ' (' + E(r.date) + ')' : '')); else p.push(r.date ? '(' + E(r.date) + ')' : 's. d.');
+    p.push(mode === 'biblio' ? pg(r.pages) : (pg(page || r.page) || 'p. …'));
   } else {
-    p.push(art ? `« ${E(r.titre || '[titre ?]')} »` : I(r.titre || '[titre ?]'));
-    if (art && r.revue) p.push('dans ' + I(r.revue) + (r.num ? ' ' + E(r.num) : ''));
-    p.push(r.date ? E(r.date) : 's. d.');
-    if (!art) p.push(r.ed ? E(r.ed) : 's. éd.');
+    p.push(I(r.titre || '[titre ?]'), E(r.lieu || 's. l.'), E(r.ed || 's. éd.'), E(r.date || 's. d.'));
+    p.push(mode === 'biblio' ? pg(r.pages) : (pg(page || r.page) || 'p. …'));
   }
-  if (mode === 'biblio') { if (art && r.pages) p.push('p. ' + E(r.pages)); else if (!art && r.nbp) p.push(E(r.nbp) + ' p.'); }
-  else { const pg = page || r.page || (art ? r.pages : ''); p.push('p. ' + (pg ? E(pg) : '…')); }
-  const t = p.join(', '); return /…$/.test(t) ? t : t.replace(/\.\s*$/, '') + '.';
+  const t = p.filter(Boolean).join(', '); return /…$/.test(t) ? t : t.replace(/\.\s*$/, '') + '.';
 }
 const cleRef = r => sans(((r.aut || [])[0] || {}).nom || ((r.aut || [])[0] || {}).coll || '') + '|' + sans(r.titre).replace(/[^a-z0-9]/g, '').slice(0, 30);
 const triRefs = L => L.slice().sort((a, b) => sans(persRef(a.aut, 'nom', false) || a.titre).localeCompare(sans(persRef(b.aut, 'nom', false) || b.titre)));
@@ -8099,7 +8115,7 @@ function afficherMemoire() {
       ${l.length ? l.map((x, i) => `<label class="ref-l"><input type="checkbox" class="ail-it-sel" data-mem="${gi}-${i}" ${x.on ? 'checked' : ''}><span class="min-w-0"><span class="ref-txt">${refTexte(x.ref, 'biblio', true)}</span>
         <span class="block text-xs text-muted">${esc(x.info || '')}${x.lien ? ` · <a href="${esc(x.lien)}" target="_blank" rel="noopener" class="underline">ouvrir ↗</a>` : ''}</span></span></label>`).join('') : '<p class="text-sm text-muted">Rien trouvé ici.</p>'}</div>`).join('') +
     `<div class="flex flex-wrap gap-2"><button type="button" class="btn" id="memCopier">📋 Copier la bibliographie cochée</button><button type="button" class="btn btn-ghost" id="memCorr">✍️ Vérifier dans le correcteur</button></div>
-     <p class="text-xs text-muted mt-2">Normes du GSTF : nom en <span style="font-variant:small-caps">petites capitales</span>, prénom abrégé, titre en <i>italique</i>, date, édition, page. Les informations venues d’internet peuvent être incomplètes : vérifiez chaque référence sur le livre ou l’article lui-même.</p>`
+     <p class="text-xs text-muted mt-2">Propositions selon les normes du cours de Méthodologie du GSTF : nom en <span style="font-variant:small-caps">petites capitales</span> (bibliographie : NOM P.), titre en <i>italique</i>, lieu, éditeur, année, pages ; à vérifier et modifier si besoin. Les informations venues d’internet peuvent être incomplètes : vérifiez chaque référence sur le livre ou l’article lui-même.</p>`
     : '<p class="text-muted">Rien trouvé : essayez d’autres mots, plus simples.</p>';
   box.querySelectorAll('[data-mem]').forEach(c => c.addEventListener('change', () => { const [g, i] = c.dataset.mem.split('-').map(Number); MEM.res[g][2][i].on = c.checked; }));
   const choisis = () => tous.filter(x => x.on).map(x => x.ref);
@@ -8138,7 +8154,7 @@ function personnesDe(seg) { return seg.split(/\s+et\s+|\s*&\s*|\s*\/\s*/).map(li
 function analyserRef(ligne) {
   const src = String(ligne).trim();
   let t = src.replace(/^\s*(?:\[\d+\]|\(\d+\)|\d{1,3}[.)]|\d{1,3}\s(?=\p{Lu})|[-–•*·▪])\s*/u, '').replace(/\s+/g, ' ').trim();
-  const r = { src, type: 'livre', aut: [], titre: '', date: '', ed: '', revue: '', num: '', pages: '', page: '', nbp: '', reste: [] };
+  const r = { src, type: 'livre', aut: [], titre: '', date: '', ed: '', lieu: '', revue: '', num: '', pages: '', page: '', nbp: '', reste: [] };
   if (/^(ibid|ibidem|id\.)/i.test(t)) { r.ibid = true; r.page = ((t.match(/p\.\s*(\d+(?:\s*[-–]\s*\d+)?)/i) || [])[1] || '').replace(/\s/g, '').replace('-', '–'); return r; }
   t = t.replace(/,?\s*op\.\s*cit\.?/i, '');
   let m = t.match(/[,.]?\s*\b(?:pp?\.|pages?)\s*(\d+(?:\s*[-–]\s*\d+)?)\s*\.?\s*$/i);
@@ -8171,7 +8187,7 @@ function analyserRef(ligne) {
     if (y && !r.date) { r.date = y[1]; s = s.replace(y[0], '').replace(/^[\s,.:;-]+|[\s,.:;-]+$/g, ''); if (!s) continue; }
     if (/^(dans|in)\s+/i.test(s)) { r.type = 'article'; r.revue = s.replace(/^(dans|in)\s+/i, ''); continue; }
     if (/^(n°|no\.?|n\.|vol\.?|t\.|tome|fasc\.?)\s*\d/i.test(s) || (r.type === 'article' && /^\d{1,4}(\s*\/\s*\d+)?$/.test(s))) { r.num = r.num ? r.num + ', ' + s : s; continue; }
-    if (VILLES.has(sans(s)) || VILLES.has(sans(s.split(/\s*[-–]\s*/)[0]))) continue;
+    if (VILLES.has(sans(s)) || VILLES.has(sans(s.split(/\s*[-–]\s*/)[0]))) { if (!r.lieu) r.lieu = s; continue; }
     if (/^(coll\.|collection)\s/i.test(s)) continue;
     if (r.type === 'article' && !r.revue && !EDITEURS_RX.test(s)) { r.revue = s; continue; }
     if (r.type !== 'article' && !r.ed) { r.ed = s.replace(/^([ée]ditions|[ée]d\.)\s+/i, ''); continue; }
@@ -8187,13 +8203,14 @@ function manquesRef(r, mode) {
   if (!r.aut.length) M.push('auteur');
   if (!r.titre) M.push('titre');
   if (!r.date) M.push('date');
-  if (r.type === 'article' ? !r.revue : !r.ed) M.push(r.type === 'article' ? 'revue' : 'édition (éditeur)');
+  if (r.type === 'article' ? !r.revue : !r.ed) M.push(r.type === 'article' ? 'revue' : 'éditeur');
+  if (r.type !== 'article' && !r.lieu) M.push('lieu d’édition');
   if (mode === 'notes' && !r.page && !(r.type === 'article' && r.pages)) M.push('page citée');
-  if (mode === 'biblio' && r.type !== 'article' && !r.nbp) M.push('nombre de pages');
+  if (mode === 'biblio' && !r.pages) M.push(r.type === 'article' ? 'pages (première et dernière)' : 'pages (de l’introduction à la fin de la table des matières)');
   return M;
 }
 function renderCorrecteur(v) {
-  v.innerHTML = docHead('✍️ Correcteur de bibliographie', 'Collez vos références, une par ligne, ou importez votre travail : le site les remet aux normes du GSTF (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) et signale ce qui manque.') +
+  v.innerHTML = docHead('✍️ Correcteur de bibliographie', 'Collez vos références, une par ligne, ou importez votre travail : le site propose une forme aux normes du cours de Méthodologie du GSTF (nom en petites capitales, prénom abrégé, titre en italique, lieu, éditeur, année, pages), que vous pouvez modifier, et signale ce qui manque.') +
     `<div class="seg mb-3" id="corMode"><button type="button" data-m="biblio" aria-pressed="${COR.mode === 'biblio'}">📚 Bibliographie</button><button type="button" data-m="notes" aria-pressed="${COR.mode === 'notes'}">¹ Notes de bas de page</button></div>
     <textarea id="corTxt" class="field font-mono text-sm" rows="9" placeholder="Une référence par ligne, par exemple :&#10;Joseph Ratzinger, Foi chrétienne hier et aujourd’hui, Paris, Cerf, 1969, p. 45.&#10;RAHNER Karl. Traité fondamental de la foi. Centurion 1983&#10;Ibid., p. 52.">${esc(COR.txt)}</textarea>
     <div class="flex flex-wrap gap-2 mt-2"><button type="button" class="btn" id="corGo">✍️ Corriger</button><button type="button" class="btn btn-ghost" id="corImp">📄 Importer (Word, PDF, photo)</button><input type="file" id="corImpF" accept=".docx,.pdf,.txt,image/*" hidden></div>
@@ -8229,21 +8246,26 @@ function afficherCorrection() {
       if (vus.has(k) && r.titre) { const base = vus.get(k); prec = base; return { h: refTexte(base, 'court', true, r.page), t: refTexte(base, 'court', false, r.page), m: r.page ? [] : ['page citée'], r }; }
       vus.set(k, r); prec = r; return { h: refTexte(r, 'note', true), t: refTexte(r, 'note', false), m: manquesRef(r, 'notes'), r };
     });
-    box.innerHTML = `<div class="outil-box"><h3 class="font-semibold mb-2">Notes de bas de page corrigées</h3><ol class="list-decimal pl-6">${lignes.map(x => `<li class="ref-l" style="display:list-item"><span class="ref-txt">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></li>`).join('')}</ol>
-      <p class="text-xs text-muted mt-2">1re citation : référence complète ; même ouvrage juste avant : <i>Ibid.</i> ; ouvrage déjà cité plus haut : titre court + <i>op. cit.</i></p></div>`;
+    box.innerHTML = `<div class="outil-box"><h3 class="font-semibold mb-2">Notes de bas de page corrigées</h3><ol class="list-decimal pl-6">${lignes.map(x => `<li class="ref-l" style="display:list-item"><span class="ref-txt" contenteditable="true" spellcheck="true">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></li>`).join('')}</ol>
+      <p class="text-xs text-muted mt-2">1re citation : référence complète ; même ouvrage juste avant : <i>Ibid.</i> ; ouvrage déjà cité plus haut : référence brève (prénom abrégé et nom, titre, page citée).</p></div>`;
   } else {
     const M = new Map(); R.filter(r => !r.ibid && r.titre).forEach(r => { const k = cleRef(r), o = M.get(k); if (!o || Object.values(r).filter(Boolean).length > Object.values(o).filter(Boolean).length) M.set(k, r); });
     const U = [...M.values()];
     lignes = triRefs(U).map(r => ({ h: refTexte(r, 'biblio', true), t: refTexte(r, 'biblio', false), m: manquesRef(r, 'biblio'), r }));
-    const groupe = (titre, f) => { const l = lignes.filter(x => f(x.r)); return l.length ? `<p class="font-semibold mt-3 mb-1">${titre}</p>${l.map(x => `<div class="ref-l" style="display:block"><span class="ref-txt">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></div>`).join('')}` : ''; };
+    const groupe = (titre, f) => { const l = lignes.filter(x => f(x.r)); return l.length ? `<p class="font-semibold mt-3 mb-1">${titre}</p>${l.map(x => `<div class="ref-l" style="display:block"><span class="ref-txt" contenteditable="true" spellcheck="true">${x.h}</span>${alerte(x.m, x.r)}<span class="text-xs text-muted block">Vous aviez écrit : ${esc(x.r.src)}</span></div>`).join('')}` : ''; };
     box.innerHTML = `<div class="outil-box"><h3 class="font-semibold">Bibliographie corrigée <span class="text-muted font-normal">(${U.length}, par ordre alphabétique)</span></h3>${groupe('Ouvrages', r => r.type !== 'article')}${groupe('Articles', r => r.type === 'article')}</div>`;
   }
   const aCompleter = R.some(r => !r.ibid && r.titre && (!r.date || (r.type === 'article' ? !r.revue : !r.ed)));
   box.insertAdjacentHTML('beforeend', `<div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn" id="corCopier">📋 Copier pour Word</button>${aCompleter ? '<button type="button" class="btn btn-ghost" id="corNet">🔎 Compléter par internet (date, éditeur, revue)</button>' : ''}</div>
-    <p class="text-xs text-muted mt-2">Le site devine l’auteur, le titre, l’éditeur… à partir de ce que vous avez écrit : relisez chaque ligne. « s. d. » = sans date ; « s. éd. » = sans éditeur.</p>`);
+    <p class="text-xs text-muted mt-2"><b>Propositions</b> selon les normes du cours de Méthodologie du GSTF : le site devine l’auteur, le titre, le lieu, l’éditeur… à partir de ce que vous avez écrit. <b>Relisez chaque ligne et modifiez-la directement</b> si besoin (cliquez dans le texte) : c’est votre version qui est copiée. « s. d. » = sans date ; « s. l. » = sans lieu ; « s. éd. » = sans éditeur.</p>`);
   $('#corCopier').addEventListener('click', e => {
-    const html = COR.mode === 'notes' ? lignes.map(x => `<p style="margin:0 0 4pt">${x.h}</p>`).join('') : bibliographieHtml(lignes.map(x => x.r), true);
-    const txt = COR.mode === 'notes' ? lignes.map(x => x.t).join('\n') : bibliographieHtml(lignes.map(x => x.r), false);
+    // on copie ce qui est à l’écran (avec les modifications de l’étudiant)
+    const B = $('#corRes .outil-box'), H = [], Tx = [];
+    B.querySelectorAll(':scope > p.font-semibold, .ref-txt').forEach(z => {
+      if (z.classList.contains('ref-txt')) { H.push(COR.mode === 'notes' ? `<p style="margin:0 0 4pt">${z.innerHTML}</p>` : `<p style="margin:0 0 6pt 1.25cm;text-indent:-1.25cm">${z.innerHTML}</p>`); Tx.push(z.innerText.trim()); }
+      else { H.push(`<p style="font-weight:bold;margin:12pt 0 6pt">${esc(z.textContent)}</p>`); Tx.push((Tx.length ? '\n' : '') + z.textContent); }
+    });
+    const html = H.join(''), txt = Tx.join('\n');
     copierRiche(html, txt, e.currentTarget);
   });
   if ($('#corNet')) $('#corNet').addEventListener('click', e => completerRefs(e.currentTarget));
@@ -8449,7 +8471,7 @@ function renderPrep() {
  *  État du site (vérification de l’installation), rapport mensuel,    *
  *  liens de partage, site sans internet, mode connexion faible         *
  * =================================================================== */
-const VERSION_SITE = 187, VERSION_FONCTION_ATTENDUE = 41;
+const VERSION_SITE = 188, VERSION_FONCTION_ATTENDUE = 41;
 const MANIF_SQL = [["01_schema","Grand Séminaire de Théologie de Faliarivo (GSTF)",[["f","stats_publiques"],["f","notes_tracer"],["f","presences_signer"]]],["02_donnees_livret","données du livret 2026–2027",[]],["04_emploi_du_temps","modifications de l'emploi du temps par l'administration",[["t","edt_modifs"]]],["05_annonces","annonces et adresses email personnelles",[["f","mon_annee"],["f","mon_email_perso"],["f","definir_email_perso"]]],["06_reponses_messages","réponses aux messages reçus par le formulaire de contact",[["c","messages_contact.reponse"],["c","messages_contact.repondu_le"],["c","messages_contact.repondu_par"]]],["07_compte_secretaire","compte de la secrétaire, Mme Ninah Ariane (administratrice)",[]],["08_emails_professeurs","adresses email réelles des professeurs (livret 2026-2027)",[]],["09_apparence_actualites","apparence du site et actualités avec photos",[["t","reglages"],["t","actualites"],["b","actualites"]]],["10_nom_secretaire","nom complet de la secrétaire, tel qu'il figure dans le livret",[]],["11_articles","articles (rubrique « Articles » de la page Cours-GSTF)",[["t","articles"],["b","documents"]]],["12_inscriptions_en_ligne","inscription en ligne des nouveaux étudiants",[["t","demandes_inscription"],["b","inscriptions"]]],["13_documents_cours","documents de cours envoyés par les professeurs",[["t","documents_cours"],["f","est_educateur"],["b","cours"]]],["14_photos","photo de chaque étudiant et de chaque professeur",[["c","enseignants.photo"],["f","definir_ma_photo"],["b","photos"]]],["15_comptes_educateurs_foyers","comptes des éducateurs et des responsables de foyers",[["c","enseignants.foyer"],["f","suit_etudiant"]]],["16_deconnexion","déconnecter une personne sur tous ses appareils",[["f","deconnecter_partout"]]],["17_annuaire","annuaire (nom, email, téléphone) réservé aux membres",[["f","annuaire"],["f","mes_coordonnees"],["f","definir_mes_coordonnees"]]],["18_archives","archives des bulletins de notes",[["t","archives_bulletins"],["b","archives"]]],["19_bulletins_authentiques","bulletin consultable à tout moment par l'étudiant,",[["f","archiver_annee"],["f","archiver_annee_automatique"],["j","gstf-archivage-annuel"]]],["20_groupes_publications","publications des groupes d'activité",[["c","actualites.auteur_nom"],["f","est_redacteur"],["f","mes_groupes"]]],["21_videos","vidéos dans les actualités (lien YouTube)",[["c","actualites.video"]]],["22_annee_academique","gestion de l'année académique par l'administration",[["c","cours.actif"],["f","profs_publics"],["f","passer_annee"]]],["23_confidentialite_moderation","confidentialité, validation des publications, anti-spam",[["c","actualites.statut"],["f","donner_consentement"],["f","limiter_envois"]]],["24_economat","Économat (une seule caisse, en Ariary)",[["f","economat_viser"],["f","economat_rouvrir"],["b","economat"]]],["25_bibliotheque","Bibliothèque",[["f","preter_livre"],["f","prolonger_pret"],["f","rendre_livre"]]],["26_entretiens","Rendez-vous avec Père Préfet (entretiens)",[["f","reserver_entretien"],["f","annuler_entretien"],["f","mes_entretiens"]]],["27_rappels_rdv","rappel automatique des rendez-vous, la veille à 7 h (Madagascar)",[["c","entretien_rdv.rappel_le"],["j","gstf-rappels-rdv"]]],["28_releve_notes","relevé des notes au modèle officiel du séminaire",[["t","examens_finaux"],["c","etudiants.numero"]]],["29_rdv_telephone","rendez-vous avec nom et téléphone du séminariste",[["c","entretien_rdv.telephone"]]],["30_connexion_nom_oubli","connexion par le nom et « mot de passe oublié »",[["t","oubli_demandes"],["f","identifiant_par_nom"]]],["31_cartes_etudiant","cartes d'étudiant",[["c","etudiants.carte_code"],["c","demandes_inscription.lieu_naissance"],["f","verifier_carte"]]],["32_carte_automatique","carte d'étudiant remplie automatiquement",[["c","etudiants.annee_entree"],["f","debut_annee_courante"],["f","etudiant_nouveau"]]],["33_jury_a_definir","le jury de l'examen final de 3e année est à définir chaque année (on efface les noms pré-r",[]],["34_carte_matricule_secretariat","le matricule est attribué par le secrétariat (plus automatiquement)",[["f","definir_ma_naissance"]]],["35_rappels_bibliotheque","rappels automatiques de la bibliothèque (par email)",[["c","prets.rappel_avant_le"],["c","prets.rappel_retard_le"]]],["36_bibliotheque_plus","bibliothèque, suite",[["f","definir_biblio_pratique"],["f","stats_bibliotheque_detail"],["j","gstf-reservations"]]],["37_pret_identite","pour emprunter, nom, prénom(s), classe (L1, L2, L3) et diocèse ou congrégation",[["c","prets.emprunteur_prenoms"],["c","prets.emprunteur_origine"],["c","prets.emprunteur_classe"]]],["38_etudes_rayonnement","études, sécurité et rayonnement",[["f","historique_notes"],["j","gstf-sauvegarde-mensuelle"],["b","travaux"]]],["39_tableau_recus","tableau de bord de l'administration · reçus de dons",[["t","recus_dons"],["f","emettre_recu"],["f","tableau_de_bord"]]],["40_releves_plus","relevés de notes (suite)",[["f","demander_releve"],["f","decider_releve"],["f","mes_annees_archivees"]]],["41_identifiants_ovh","les identifiants passent de @gstf.mg à @gstf-faliarivo.ovh",[]],["42_redirections_email","redirections email automatiques (OVH)",[["t","email_redirections"],["f","etat_redirections"],["j","gstf-redirections"]]],["43_connexion_email_perso","se connecter aussi avec son adresse email personnelle",[["f","identifiant_par_email_perso"]]],["44_public_annuaire_biblio","annuaire visible par le public, prêts aux lecteurs extérieurs",[["c","prets.emprunteur_tel"],["f","annuaire_public"],["f","preter_livre_exterieur"]]],["45_chiffres_publics","« Le séminaire en chiffres » (page d'accueil, public)",[["f","chiffres_publics"]]],["46_emails_perso_annuaire","adresses personnelles manquantes, retrait de l'annuaire public",[["f","definir_annuaire_public"],["f","noter_visite"],["f","stats_visites"]]],["47_evenements_inoubliables","événements inoubliables (onglet « Souvenirs »)",[["c","actualites.inoubliable"]]],["48_medias_evenements","plus de médias dans les publications et les événements",[["c","actualites.videos"],["c","actualites.documents"]]],["49_fiches_apercu","APERÇU des fiches de présence 2026-2027 — L1, L2, L3 (260 étudiants)",[]],["50_fiches_numeros_noms","NUMÉROS et NOMS d'après les fiches de présence 2026-2027",[]],["51_fiches_fin","fin de la mise à jour d'après les fiches de présence",[]],["52_connexion_telephone","se connecter aussi avec son numéro de téléphone",[["f","identifiant_par_telephone"]]],["53_intentions_priere","Intentions de prière déposées depuis la page d'accueil",[["t","intentions"],["f","intentions_publiques"]]],["54_notifications_telephone","Notifications sur téléphone (annonces, actualités, bibliothèque)",[["f","push_abonner"],["f","push_desabonner"],["f","stats_push"]]],["55_francais_mme_lanto","Cours de Français (1re année) : professeur Mme Lanto RABEROHOAVY",[]],["56_agenda_plus","Agenda : groupes, rappels la veille, calendrier modifiable, abonnement",[["c","agenda.pour"],["c","agenda.rappel"],["j","gstf-agenda-rappels"]]],["57_demandes_livres_en_ligne","Bibliothèque : emprunter, réserver et renouveler un livre en ligne",[["f","demander_livre"],["f","prets_par_telephone"],["f","renouveler_en_ligne"]]],["58_resumes_livres","Bibliothèque : résumé et couverture de chaque livre, cherchés sur internet",[["c","livres.resume_cherche_le"],["f","livres_resume_a_refaire"],["j","gstf-resumes-livres"]]],["59_articles_payants","Articles payants : consulter sur le site ou télécharger le PDF, paiement par MVola",[["c","articles.texte_payant"],["f","acheter_article"],["b","articles-payants"]]],["60_paiement_par_capture","Articles payants : le lecteur envoie la capture du SMS MVola (Yas),",[["c","achats_articles.texte_lu"],["f","payer_article_capture"],["b","paiements"]]],["61_actes_symposium","Actes du symposium : le livre se prépare dans l'Admin (couverture, préface,",[["t","actes_symposium"]]],["62_couvertures_et_revision","Couverture des articles et révision des cours",[["t","revision_questions"],["c","articles.couverture"],["c","articles.affiche"]]],["63_corrections_identite","« Signaler une erreur sur mon nom ou mon diocèse »",[["t","corrections_identite"],["f","demander_correction"],["f","traiter_correction"]]],["64_etat_et_rapport","État du site et rapport mensuel",[["f","etat_installation"],["j","gstf-rapport-mensuel"]]],["65_espace_stockage","Espace de stockage et photos lourdes",[["f","espace_utilise"]]],["66_reussite_etudes","Annales, retours sur les devoirs, suivi des étudiants",[["t","annales"],["c","remises.corrige_fichier"],["f","etudiants_a_suivre"],["b","annales"]]],["67_plagiat","Plagiat : comparaison des travaux",[["t","plagiat_empreintes"],["f","plagiat_comparer"]]],["68_plagiat_plus","Plagiat : déclaration, test, décisions, versions",[["t","plagiat_decisions"],["t","plagiat_versions"],["f","plagiat_tester"],["c","remises.plagiat_pct"]]],["69_plagiat_droits","Plagiat : notice, conservation, recours",[["t","plagiat_notice"],["t","plagiat_recours"],["f","plagiat_contester"],["j","gstf-plagiat-purge"]]],["70_economat_plus","Économat : comptes, accords, pensions, stocks, historique",[["t","economat_demandes"],["t","economat_journal"],["f","economat_pensions"],["c","economat_ops.compte"]]],["71_echeances","Échéances et abonnements",[["t","echeances"],["t","echeances_paiements"],["f","echeance_payer"]]],["72_departs","Retirer une personne : date et motif",[["t","departs"]]],["73_pages","Créateur de pages (menus…)",[["t","pages_site"],["f","page_contenu"]]],["74_cours_plus","Cours : crédits ECTS, syllabus par le professeur",[["c","cours.credits"],["f","cours_syllabus"]]],["75_contact","Contact : objet, numéro de suivi, coordonnées",[["c","messages_contact.objet"],["f","contact_envoyer"]]],["76_paiement_sans_capture","Article payant : coller le SMS ou taper la référence",[["c","achats_articles.source"],["f","payer_article_sans_capture"]]],["77_vitesse","Mesure de la vitesse du site",[["t","perf_mesures"],["f","perf_resume"]]],["78_agenda_signature","Agenda (Je participe, répétition, services liturgiques) et signature",[["c","agenda.recurrence"],["t","agenda_participants"],["t","liturgie_services"],["t","signatures"],["f","agenda_inscrire"]]],["79_alertes","Alertes au Préfet par mail et WhatsApp",[["t","alertes"],["f","alerte_nouvelle"],["j","gstf-alertes"]]],["80_homelies","Homélie du dimanche (RDB LIVE)",[["t","homelies"],["j","gstf-homelies"]]],["81_articles_plus","Articles : rubriques, modifier, statistiques, questions, propositions",[["c","articles.rubrique"],["t","article_stats"],["t","article_questions"],["t","article_propositions"],["f","article_accepter"]]],["82_chaine_youtube","Chaîne YouTube et Page Facebook du séminaire",[]],["83_droit_image_attestations","Droit à l'image, accusé de réception, attestation en ligne",[["c","etudiants.image_accord"],["c","messages_contact.accuse_le"],["t","attestation_demandes"],["f","demander_attestation"]]],["84_saint_facebook","Saint du jour publié chaque nuit sur la Page Facebook",[["j","gstf-saint-facebook"]]],["85_homelies_horaire","Homélie cherchée toutes les heures (alerte du samedi 20 h)",[]],["86_documents_video","Documents de cours : vidéo, classes concernées, public",[["c","documents_cours.video"],["c","documents_cours.pour_annees"],["f","peut_voir_document"]]],["87_aide_questions","Aide : questions des visiteurs restées sans réponse",[["t","aide_questions"],["f","aide_noter"]]],["88_rdv_public","Rendez-vous ouverts au public",[["c","entretien_rdv.jeton"],["f","reserver_entretien_public"]]],["89_abonnes_articles","Abonnement gratuit aux articles",[["t","abonnes"],["f","abonner"],["t","emails_articles"]]]];
 const TACHES_LBL = { 'gstf-rappels-rdv': 'Rappels des rendez-vous et de la bibliothèque (chaque matin)', 'gstf-archivage-annuel': 'Archivage des bulletins (chaque année)', 'gstf-reservations': 'Réservations de livres et demandes en ligne (chaque heure)',
   'gstf-sauvegarde-mensuelle': 'Sauvegarde envoyée par email (le 1er du mois)', 'gstf-redirections': 'Redirections des adresses email (chaque nuit)', 'gstf-agenda-rappels': 'Rappels de l’agenda (chaque heure)',
@@ -9597,7 +9619,7 @@ async function blocSyllabusProf(box) {
     z.innerHTML = `<p class="text-xs text-muted mt-2">« ## » devant un titre de partie, « - » devant chaque point.</p><textarea class="field font-mono text-xs mt-1" rows="14">${esc(modele)}</textarea><div class="flex gap-2 mt-2"><button type="button" class="btn btn-sm" data-ok>Enregistrer le syllabus</button><button type="button" class="btn btn-ghost btn-sm" data-non>Fermer</button></div>`;
     z.querySelector('[data-non]').onclick = () => { z.innerHTML = ''; };
     z.querySelector('[data-ok]').onclick = async () => {
-      const syl = z.querySelector('textarea').value.split('\n').map(l => l.trim()).filter(l => l && l !== '-').map(l => l.startsWith('## ') ? ['h', l.slice(3).trim()] : l.startsWith('- ') ? ['li', l.slice(2).trim()] : ['p', l]);
+      const syl = texteVersSyllabus(z.querySelector('textarea').value.split('\n').filter(l => l.trim() !== '-').join('\n'), f);
       const { error } = await sb.rpc('cours_syllabus', { p_cours: c.id, p_syllabus: syl });
       if (error) { toast('Non enregistré', /cours_syllabus|schema cache/i.test(error.message) ? 'Exécutez d’abord 74_cours_plus.sql dans Supabase.' : errText(error), 'bad'); return; }
       if (syl.length) DATA.FICHES[c.id] = syl; else delete DATA.FICHES[c.id];
@@ -11523,6 +11545,289 @@ function dialogueDeposerDocument(c, apres) {
 }
 const peutDeposer = c => isAdmin() || (state.profil && state.profil.type === 'enseignant' && c && c.prof === state.profil.id);
 
+/* ---------- Références bibliographiques des syllabus : modifiables sur place (normes du cours de Méthodologie du GSTF) ----------
+   Le site PROPOSE une référence à partir des cases remplies ; le professeur DÉCIDE : il peut tout modifier dans la zone finale.
+   Balisage enregistré : *italique*  et  {Petites capitales}.
+   Bibliographie : NOM P.  ·  Note de bas de page : P. NOM.
+   Livre        : DUPUIS J., *Titre*, Paris, Cerf, 1997, pp. 9-470.
+   Article      : DONNEAUD H., « Titre », *RT*, 102 (2002), pp. 43-62.
+   Contribution : MERRIGAN T., « Titre », dans DORÉ J. (Dir.), *Titre de l’ouvrage*, Paris, Mame-Desclée, 2011, pp. 257-290.
+   Site web     : NOM P., « Titre », date de mise en ligne, *source*, lien (en bibliographie seulement), consulté le … */
+const REF_TYPES = [['livre', '📕 Livre'], ['article', '📰 Article de revue'], ['contrib', '📚 Article dans un ouvrage collectif'], ['pere', '✝️ Père de l’Église'], ['magistere', '⛪ Magistère'], ['web', '🌐 Site web'], ['texte', '✎ Texte libre (note, remarque)']];
+const REF_PARTICULES = new Set(['de', 'du', 'des', 'd’', "d'", 'von', 'van', 'der', 'di', 'da', 'del', 'della', 'la', 'le']);
+// « DE LUBAC » → « de Lubac » ; « LÉON-DUFOUR » → « Léon-Dufour » (affiché ensuite en petites capitales)
+function refNomPropre(n) {
+  n = String(n || '').trim().replace(/\s+/g, ' '); if (!n) return '';
+  if (n !== n.toUpperCase()) return n;
+  return n.toLowerCase().split(' ').map((w, i, L) => REF_PARTICULES.has(w) && i < L.length - 1 ? w : w.replace(/(^|[-’'])(\p{L})/gu, (m, a, b) => a + b.toUpperCase())).join(' ');
+}
+// « Jean-Noël » → « J.-N. » ; « Charles » → « Ch. » ; déjà abrégé : inchangé
+function refPrenom(p) {
+  p = String(p || '').trim().replace(/\s+/g, ' '); if (!p) return '';
+  return p.split(' ').map(w => w.split('-').map(x => { if (!x) return x; if (/\.$/.test(x)) return x; const d = /^(ch|ph|th)/i.exec(x); return d ? d[0].charAt(0).toUpperCase() + d[0].charAt(1).toLowerCase() + '.' : x.charAt(0).toUpperCase() + '.'; }).join('-')).join(' ');
+}
+const refCap = n => n ? '{' + refNomPropre(n) + '}' : '';
+function refPersonnes(L, mode) {   // mode 'biblio' : NOM P. — 'note' : P. NOM
+  L = (L || []).filter(x => x && (x.n || '').trim());
+  // théologien devenu pape (méthodologie) : J. RATZINGER – BENOÎT XVI
+  const f = x => (mode === 'biblio' ? [refCap(x.n), refPrenom(x.p)].filter(Boolean).join(' ') : [refPrenom(x.p), refCap(x.n)].filter(Boolean).join(' ')) + (x.pape ? ' – ' + refCap(x.pape) : '');
+  if (L.length > 3) return f(L[0]) + ' *et alii*';
+  if (mode === 'note' && L.length > 1) return L.map(f).join(' - ');   // méthodologie 3.4.3 : F. BOUSQUET - H. DE LA HOUGUE (Dir.)
+  return L.length < 2 ? L.map(f).join('') : L.slice(0, -1).map(f).join(', ') + ' et ' + f(L[L.length - 1]);
+}
+const refPages = pp => { pp = String(pp || '').trim().replace(/\s*[–—-]\s*/, '-').replace(/^(pp?\.)\s*/i, ''); return pp ? (/-/.test(pp) ? 'pp. ' : 'p. ') + pp : ''; };
+// Proposition du site (balisée). mode : 'biblio' (complète, NOM P.), 'note' (1re citation, P. NOM), 'breve' (référence brève)
+function refPropose(r, mode, page) {
+  const N = mode === 'biblio' ? 'biblio' : 'note', pg = mode === 'biblio' ? refPages(r.pp) : refPages(page || '') || 'p. …';
+  const aut = refPersonnes(mode === 'breve' ? (r.a || []).filter(x => x && (x.n || '').trim()).slice(0, 1) : r.a, N) + (r.dir && mode !== 'breve' && (r.a || []).some(x => x.n) ? ' (Dir.)' : '');
+  const coll = r.coll && mode !== 'breve' ? ` (coll. « ${r.coll} »${r.colln ? ', ' + r.colln : ''})` : '';
+  const edition = [r.lieu || 's. l.', r.ed || 's. éd.', r.an || 's. d.'];
+  const P = []; const fin = x => { const t = P.filter(Boolean).join(', ').replace(/\s+,/g, ',') + (x || ''); return /[….]$/.test(t) ? t : t + '.'; };
+  switch (r.ty) {
+    case 'article':
+      P.push(aut, `« ${r.ti || '[titre]'} »`);
+      if (mode === 'breve') { P.push(pg); return fin(); }
+      P.push(`*${r.revue || '[revue]'}*`, [r.vol, (r.an || r.fasc) ? `(${[r.an, r.fasc].filter(Boolean).join('/')})` : ''].filter(Boolean).join(' '), pg); return fin();
+    case 'contrib':
+      P.push(aut, `« ${r.ti || '[titre]'} »`);
+      if (mode === 'breve') { P.push(pg); return fin(); }
+      const memeAut = (r.oa || []).length && JSON.stringify((r.oa || []).map(x => (x.n || '').toLowerCase().trim())) === JSON.stringify((r.a || []).map(x => (x.n || '').toLowerCase().trim()));
+      if (memeAut) { P.push(`dans {Id.}, *${r.oti || '[titre de l’ouvrage]'}*`, ...edition, pg); return fin(); }   // recueil du même auteur : « Id. »
+      P.push(`dans ${[refPersonnes(r.oa, N) + ((r.oa || []).some(x => x.n) ? ' (Dir.)' : ''), `*${r.oti || '[titre de l’ouvrage]'}*`].filter(x => x.trim()).join(', ')}`, ...edition, pg); return fin();
+    case 'pere': {   // méthodologie GSTF 3.4.1 : JUSTIN, *Apologie* I, 46, 2-3 ; *SC* 507, p. 251.
+      const ref = String(r.loc || '').trim(), sep = /^[IVXLC]+(\s|,|$)/.test(ref) && !/^[IVXLC]+a/.test(ref) ? ' ' : ', ';
+      let t = `${refCap(r.auteur)}, *${r.ti || '[œuvre]'}*${ref ? sep + ref : ''}`;
+      const sc = r.coll ? `*${r.coll}*${r.colln ? ' ' + r.colln : ''}` : '';
+      const pgp = mode === 'biblio' ? refPages(r.pp) : (refPages(page || r.pp) || '');
+      if (sc) t += ` ; ${[sc, mode === 'biblio' && (r.lieu || r.ed || r.an) ? [r.lieu, r.ed, r.an].filter(Boolean).join(', ') : '', pgp].filter(Boolean).join(', ')}`;
+      else if (pgp || (mode === 'biblio' && r.ed)) t += ', ' + [r.trad ? 'trad. ' + r.trad : '', mode === 'biblio' ? [r.lieu, r.ed, r.an].filter(Boolean).join(', ') : '', pgp].filter(Boolean).join(', ');
+      return t.replace(/[,\s]+$/, '') + '.'; }
+    case 'magistere':
+    {   // méthodologie 3.4.4 : PAUL VI, « Lettre encyclique *Humanae vitae* » [En ligne], 25 juillet 1968, in *vatican.va* – (cons. 12/04/2021).
+      const site = String(r.src || '').trim(), vat = /(^|\.)vatican\.va$/i.test(site.replace(/^https?:\/\/(www\.)?|\/.*$/g, ''));
+      const titre = [r.doc, r.ti ? `*${r.ti}*` : ''].filter(Boolean).join(' ');
+      P.push(refCap(r.auteur) + (titre ? `, « ${titre} »` + (site && mode !== 'breve' ? ' [En ligne]' : '') : ''));
+      if (mode !== 'breve') P.push(r.date);
+      if (r.ed && !site && mode !== 'breve') P.push(r.lieu, r.ed, r.an);
+      if (mode !== 'biblio') P.push(r.num ? 'n° ' + r.num : '');
+      if (site && mode !== 'breve') P.push(`in *${site}*` + (r.cons ? ` – (cons. ${r.cons})` : ''));
+      return fin(r.url && site && mode === 'biblio' ? `. URL : ${r.url}` : ''); }
+    case 'web':
+    // méthodologie 3.4.4-3.4.5 : TV PLUS, « Fomba… » [En ligne], 01 avril 2018, in *youtube* – (cons. 02/04/2022). URL : https://…
+      if (mode === 'breve') { P.push(aut, `« ${r.ti || '[titre de la page]'} »`); return fin(); }
+      P.push(aut + `, « ${r.ti || '[titre de la page]'} » [En ligne]`, r.mel);
+      if (mode !== 'breve') P.push((r.src ? `in *${r.src}*` : '') + (r.cons ? ` – (cons. ${r.cons})` : ''));
+      return fin(mode === 'biblio' && r.url ? `. URL : ${r.url}` : '');
+    default:   // livre
+      P.push(aut, `*${r.ti || '[titre]'}*${coll}`);
+      if (mode === 'breve') { P.push(pg); return fin(); }
+      if (r.trad) P.push('trad. ' + r.trad);
+      P.push(...edition, pg); return fin();
+  }
+}
+// Balisage → HTML / texte simple
+const refHtml = m => esc(String(m || '')).replace(/\*([^*]+)\*/g, '<i>$1</i>').replace(/\{([^}]+)\}/g, '<span class="pcap">$1</span>');
+const refTxt = m => String(m || '').replace(/\*([^*]+)\*/g, '$1').replace(/\{([^}]+)\}/g, (x, y) => y.toUpperCase());
+const refFinal = r => r && r.txt ? r.txt : refPropose(r || {}, 'biblio');
+function refManques(r) {
+  const M = [];
+  if (r.ty === 'texte') return M;
+  if (['livre', 'article', 'contrib', 'web'].includes(r.ty) && !(r.a || []).some(x => x.n)) M.push('auteur');
+  if ((r.ty === 'pere' || r.ty === 'magistere') && !r.auteur) M.push('auteur');
+  if (!r.ti) M.push('titre');
+  if (r.ty === 'article' && !r.revue) M.push('revue');
+  if (['livre', 'contrib'].includes(r.ty)) { if (!r.lieu) M.push('lieu'); if (!r.ed) M.push('éditeur'); if (!r.an) M.push('année'); }
+  if (r.ty === 'article' && !r.an) M.push('année');
+  if (r.ty === 'magistere' && !r.date) M.push('date');
+  if (r.ty === 'magistere' && r.src) { if (!r.cons) M.push('date de consultation'); if (!r.url && !/vatican\.va/i.test(r.src)) M.push('lien (obligatoire hors vatican.va)'); }
+  if (r.ty === 'web') { if (!r.url) M.push('lien'); if (!r.cons) M.push('date de consultation'); }
+  if (['livre', 'article', 'contrib'].includes(r.ty) && !r.pp) M.push('pages');
+  return M;
+}
+// Ancienne référence (texte) → proposition de cases, avec l’analyseur du Correcteur de bibliographie
+function refDepuisTexte(t) {
+  const s = String(t || '').trim(), r = { ty: 'livre', a: [], ti: '', lieu: '', ed: '', an: '', pp: '' };
+  if (!s) return r;
+  if (/\b(encyclique|exhortation|constitution|d[ée]cret|d[ée]claration|motu proprio|instruction|lettre apostolique|directoire|concile|congr[ée]gation|dicast[èe]re|conseil pontifical|commission)\b/i.test(s) && !/«/.test(s.slice(0, 12))) {
+    const m = s.match(/^([^,]+),\s*(.*)$/); r.ty = 'magistere'; r.auteur = m ? m[1].trim() : ''; const rest = m ? m[2] : s;
+    const d = rest.match(/(\d{1,2}(?:er)?\s+\p{L}+\s+\d{4}|\(\d{4}\)|\b\d{4}\b)/u); r.date = d ? d[1].replace(/[()]/g, '') : '';
+    const dm = rest.match(/^((?:Lettre|Exhortation|Constitution|Décret|Déclaration|Instruction|Motu proprio|Directoire|Encyclique)[^A-Z]*?)\s+(\p{Lu}.*?)(?:,|$)/u);
+    if (dm) { r.doc = dm[1].trim(); r.ti = dm[2].trim(); } else r.ti = rest.replace(d ? d[0] : '', '').replace(/[,.\s]+$/, '').trim();
+    return r;
+  }
+  if (/https?:\/\//.test(s)) { r.ty = 'web'; r.url = (s.match(/https?:\/\/\S+/) || [''])[0].replace(/[.,;]$/, ''); }
+  // avant l’analyse : (dir.), (éd.), collections et mentions d’édition entre parenthèses
+  let s2 = s;
+  if (/\((dir|éd|ed|sous la dir[^)]*)\.?\)/i.test(s2)) { r.dir = true; s2 = s2.replace(/\s*\((dir|éd|ed|sous la dir[^)]*)\.?\)/gi, ''); }
+  s2 = s2.replace(/\(\s*(?:coll\.?\s*)?[«“"]?([^()«»“”"]{3,70}?)[»”"]?\s*(?:;\s*([\dIVX]+))?\s*\)/g, (m, c, n) => {
+    if (/\b(1[5-9]|20)\d{2}\b/.test(c) && !/;/.test(m)) return ', ' + c;   // (Genève 2004) : lieu et date, pas une collection
+    if (!r.coll) { r.coll = c.replace(/\s*;\s*$/, '').trim(); if (n) r.colln = n; } return ''; });
+  s2 = s2.replace(/,?\s*\d+(?:e|è|ème|ᵉ|re)\s+[ée]d(?:ition|\.)?(?:\s+revue)?/gi, '').replace(/,\s*,/g, ',');
+  try {
+    const x = analyserRef(s2);
+    r.a = (x.aut || []).filter(p => p.nom || p.coll).map(p => p.coll ? { n: p.coll, p: '' } : { n: refNomPropre(p.nom), p: p.pre || '' });
+    r.dir = r.dir || (x.aut || []).some(p => p.dir);
+    r.ti = x.titre || ''; r.an = x.date || ''; r.ed = x.ed || '';
+    if (x.type === 'article' && r.ty !== 'web') { if (/\bdans\b|\bin\b/i.test(s) && /\((dir|éd|ed)\.?\)/i.test(s.split(/\bdans\b|\bin\b/i)[1] || '')) { r.ty = 'contrib'; r.oti = x.revue || ''; } else { r.ty = 'article'; r.revue = x.revue || ''; r.vol = x.num || ''; } }
+    r.pp = (x.pages || '').replace('–', '-');
+  } catch (_) { r.ti = s; }
+  const v = s.match(/\b(Paris|Rome|Roma|Genève|Lyon|Bruxelles|Namur|Louvain|Tournai|Montréal|Fribourg|Antananarivo|Fianarantsoa|Milano|Torino|Bologna|Brescia|Madrid|Kinshasa|Lomé|Luxembourg|Neuchâtel|Ottawa|Québec|Cité du Vatican|Città del Vaticano|New York|London|Lugano)\b/);
+  if (v) r.lieu = v[1];
+  const c = !r.coll && s.match(/coll(?:ection)?\.?\s*[«“"]?\s*([^»”",;)]+)/i); if (c) r.coll = c[1].trim();
+  // l’éditeur connu (Cerf, Desclée, Seuil…) plutôt qu’un morceau de titre
+  const ek = s2.split(/\s*,\s*/).find(x => EDITEURS_RX.test(x) && x !== r.ti); if (ek && (!r.ed || !EDITEURS_RX.test(r.ed))) r.ed = ek.replace(/^([ée]ditions|[ée]d\.)\s+/i, '').replace(/[.\s]+$/, '');
+  if (r.ed && r.lieu && r.ed === r.lieu) r.ed = '';
+  return r;
+}
+// Peut modifier : administration, ou le professeur du cours
+const refPeutModifier = cid => { const c = C[cid]; return isAdmin() || !!(c && state.profil && state.profil.type === 'enseignant' && c.prof === state.profil.id); };
+// Enregistrer le syllabus modifié puis réafficher la carte du cours
+async function refSauver(cid, syl, msg) {
+  const { error } = await sb.rpc('cours_syllabus', { p_cours: cid, p_syllabus: syl });
+  if (error) { toast('Non enregistré', /cours_syllabus|schema cache/i.test(error.message || '') ? 'Exécutez d’abord 74_cours_plus.sql dans Supabase.' : errText(error), 'bad'); return false; }
+  if (syl.length) DATA.FICHES[cid] = syl; else delete DATA.FICHES[cid];
+  if (C[cid]) C[cid].syllabus = syl;
+  const y = window.scrollY; renderFiches(); const d = document.querySelector(`#ficheList details[data-fiche="${cid}"]`); if (d) d.open = true; window.scrollTo(0, y);
+  toast(msg || 'Référence enregistrée', C[cid] ? C[cid].nom : ''); return true;
+}
+// Zone finale modifiable (italique, petites capitales) : HTML ↔ balisage
+function refZoneVersBalise(z) {
+  const parcours = (n, it, pc) => [...n.childNodes].map(x => {
+    if (x.nodeType === 3) { const t = x.nodeValue.replace(/[*{}]/g, ''); return it && pc ? `*{${t}}*` : it ? `*${t}*` : pc ? `{${t}}` : t; }
+    if (x.nodeType !== 1) return '';
+    const st = (x.getAttribute('style') || '') + ' ' + (x.className || '');
+    const i2 = it || /^(I|EM)$/.test(x.tagName) || /italic/.test(st), p2 = pc || /pcap|small-caps/.test(st);
+    return (x.tagName === 'BR' ? ' ' : '') + parcours(x, i2, p2);
+  }).join('');
+  return parcours(z, false, false).replace(/\*\*/g, '').replace(/\}\{/g, '').replace(/\s+/g, ' ').trim();
+}
+/* La fenêtre : type (boutons) → cases → proposition modifiable → Enregistrer */
+function refEditeur(cid, opts) {
+  // opts : { bi, part, insertAt, ancien (texte), r (objet existant) }
+  let r = opts.r ? JSON.parse(JSON.stringify(opts.r)) : (opts.ancien ? refDepuisTexte(opts.ancien) : { ty: 'livre', a: [{ n: '', p: '' }] });
+  if (!r.a || !r.a.length) r.a = [{ n: '', p: '' }];
+  if (!r.oa || !r.oa.length) r.oa = [{ n: '', p: '' }];
+  let perso = !!(r.txt);   // la personne a modifié la proposition à la main
+  const champ = (k, lib, ph, w) => `<label class="text-sm ${w || ''}"><span class="block font-semibold mb-0.5">${lib}</span><input class="field py-1.5" data-k="${k}" value="${esc(r[k] || '')}" placeholder="${esc(ph || '')}"></label>`;
+  const personnes = (k, lib) => `<div class="text-sm sm:col-span-2"><span class="block font-semibold mb-0.5">${lib}</span><div data-pers="${k}" class="flex flex-col gap-1.5">${(r[k] || []).map((x, i) => `<div class="flex gap-1.5" data-pi="${i}"><input class="field py-1.5" data-pn value="${esc(x.n || '')}" placeholder="Nom (ex. Dupuis)"><input class="field py-1.5" data-pp value="${esc(x.p || '')}" placeholder="Prénom (ex. Jacques)" style="max-width:11rem"><input class="field py-1.5" data-pq value="${esc(x.pape || '')}" placeholder="Devenu pape ? (ex. Benoît XVI)" title="Seulement si l’auteur est devenu pape : J. RATZINGER – BENOÎT XVI" style="max-width:12rem"><button type="button" class="linkbtn text-xs text-bad" data-px aria-label="Retirer">✕</button></div>`).join('')}</div>
+    <button type="button" class="linkbtn text-xs mt-1" data-padd="${k}">＋ un autre nom</button></div>`;
+  const cases = () => {
+    const ty = r.ty, T = [];
+    if (ty === 'texte') return `<label class="text-sm sm:col-span-2"><span class="block font-semibold mb-0.5">Texte</span><textarea class="field" rows="3" data-k="ti">${esc(r.ti || '')}</textarea></label>`;
+    if (ty === 'pere') T.push(champ('auteur', 'Père de l’Église ou auteur ancien (nom d’usage)', 'ex. Justin, Irénée de Lyon, Thomas d’Aquin'));
+    else if (ty === 'magistere') T.push(champ('auteur', 'Auteur', 'ex. Jean-Paul II, Concile Vatican II, Congrégation pour la doctrine de la foi'), champ('doc', 'Type de document', 'ex. Lettre encyclique, Constitution pastorale'));
+    else T.push(personnes('a', ty === 'web' ? 'Auteur (s’il y en a un)' : 'Auteur(s)'), `<label class="text-sm flex items-center gap-2 sm:col-span-2"><input type="checkbox" data-dir ${r.dir ? 'checked' : ''}> Ce sont des directeurs de l’ouvrage (Dir.)</label>`);
+    T.push(champ('ti', ty === 'article' || ty === 'contrib' ? 'Titre de l’article' : ty === 'web' ? 'Titre de la page' : ty === 'magistere' ? 'Titre (en latin)' : ty === 'pere' ? 'Titre de l’œuvre (en latin conseillé)' : 'Titre du livre', ty === 'pere' ? 'ex. Apologie, Adversus haereses, Somme théologique' : 'Le sous-titre après un point', 'sm:col-span-2'));
+    if (ty === 'livre') T.push(champ('coll', 'Collection', 'ex. Lire la Bible'), champ('colln', 'N° dans la collection', 'ex. 47'), champ('trad', 'Traduction (facultatif)', 'ex. J. Tricot'));
+    if (ty === 'pere') T.push(champ('loc', 'Livre, chapitre, paragraphe', 'ex. I, 46, 2-3  ·  IV, 6, 6  ·  IIIa, q. 69, a. 4, arg. 2', 'sm:col-span-2'), champ('coll', 'Collection (sigle)', 'ex. SC (Sources chrétiennes)'), champ('colln', 'Volume', 'ex. 507'), champ('trad', 'Traduction (facultatif)', ''));
+    if (ty === 'article') T.push(champ('revue', 'Revue (nom ou sigle)', 'ex. RT, Nouvelle revue théologique'), champ('vol', 'Volume (tome)', 'ex. 102'), champ('an', 'Année', 'ex. 2002'), champ('fasc', 'Fascicule (facultatif)', 'ex. 1'));
+    if (ty === 'contrib') T.push(personnes('oa', 'Directeur(s) de l’ouvrage collectif'), champ('oti', 'Titre de l’ouvrage collectif', '', 'sm:col-span-2'));
+    if (['livre', 'contrib'].includes(ty)) T.push(champ('lieu', 'Lieu d’édition', 'ex. Paris'), champ('ed', 'Éditeur', 'ex. Cerf'), champ('an', 'Année', 'ex. 1997'));
+    if (ty === 'pere') T.push(champ('lieu', 'Lieu (facultatif)', 'ex. Paris'), champ('ed', 'Éditeur (facultatif)', 'ex. Cerf'), champ('an', 'Année (facultatif)', ''));
+    if (ty === 'magistere') T.push(champ('date', 'Date du document', 'ex. 6 août 1993'), champ('num', 'Numéro cité (notes)', 'ex. 12'), champ('src', 'Site, si consulté en ligne', 'ex. vatican.va'), champ('cons', 'Date de consultation', 'ex. 12/04/2021'), champ('url', 'Adresse URL (facultative pour vatican.va)', 'https://…', 'sm:col-span-2'), champ('lieu', 'Lieu d’édition (facultatif)', 'ex. Cité du Vatican'), champ('ed', 'Éditeur (facultatif)', 'ex. LEV'), champ('an', 'Année d’édition (facultatif)', ''));
+    if (['livre', 'article', 'contrib'].includes(ty)) T.push(champ('pp', 'Pages', ty === 'livre' ? 'de l’introduction à la fin de la table des matières, ex. 9-470' : 'première et dernière page, ex. 43-62'));
+    if (ty === 'pere') T.push(champ('pp', 'Page(s)', 'ex. 251  ou  449-451'));
+    if (ty === 'web') T.push(champ('src', 'Source (nom du site)', 'ex. youtube, La Croix'), champ('mel', 'Date de mise en ligne', 'ex. 12 mars 2020'), champ('url', 'Lien (adresse)', 'https://…', 'sm:col-span-2'), champ('cons', 'Date de consultation', 'ex. 02/04/2022'));
+    return T.join('');
+  };
+  const lire = () => {
+    document.querySelectorAll('#refF [data-k]').forEach(i => { r[i.dataset.k] = i.value.trim(); });
+    ['a', 'oa'].forEach(k => { const z = document.querySelector(`#refF [data-pers="${k}"]`); if (z) r[k] = [...z.querySelectorAll('[data-pi]')].map(x => { const o = { n: x.querySelector('[data-pn]').value.trim(), p: x.querySelector('[data-pp]').value.trim() }, q = (x.querySelector('[data-pq]') || {}).value; if (q && q.trim()) o.pape = q.trim(); return o; }); });
+    const d = document.querySelector('#refF [data-dir]'); if (d) r.dir = d.checked;
+  };
+  const apercu = () => {
+    lire();
+    if (r.ty === 'texte') { $('#refBib').innerHTML = refHtml(r.ti); $('#refNotes').innerHTML = ''; $('#refManq').textContent = ''; return; }
+    if (!perso) $('#refBib').innerHTML = refHtml(refPropose(r, 'biblio'));
+    $('#refNotes').innerHTML = `<p><span class="text-muted">Note (1re citation) :</span> ${refHtml(refPropose(r, 'note'))}</p><p><span class="text-muted">Note brève (citations suivantes) :</span> ${refHtml(refPropose(r, 'breve'))}</p><p class="text-xs text-muted">Note qui suit immédiatement, même ouvrage : <i>Ibid.</i> (même page) ou <i>Ibid.</i>, p. … (autre page). Deux œuvres du même auteur dans la même note : la deuxième fois, <span class="pcap">Id.</span> à la place du nom.</p>`;
+    const m = refManques(r); $('#refManq').textContent = m.length ? '⚠ À compléter si possible : ' + m.join(', ') + '. (Rien n’est inventé : laissez vide si vous ne savez pas.)' : '';
+  };
+  const dessiner = () => {
+    $('#refCases').innerHTML = cases();
+    document.querySelectorAll('#refTypes [data-ty]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ty === r.ty)));
+    $('#refFinWrap').hidden = r.ty === 'texte';
+    apercu();
+  };
+  dialogueBiblio(`<p class="eyebrow mb-1">Syllabus · ${esc((C[cid] || {}).nom || '')}</p><h2 class="font-display text-2xl font-semibold mb-2">${opts.r || opts.ancien ? 'Modifier la référence' : 'Ajouter une référence'}</h2>
+    ${opts.ancien ? `<div class="text-sm p-2 rounded bg-sunk mb-3"><span class="text-xs text-muted block">Texte actuel (pour recopier) :</span>${esc(opts.ancien)}</div>` : ''}
+    <form id="refF" novalidate>
+      <div id="refTypes" class="flex flex-wrap gap-1.5 mb-3" role="group" aria-label="Type de référence">${REF_TYPES.map(([k, l]) => `<button type="button" class="btn btn-ghost btn-sm" data-ty="${k}" aria-pressed="false">${l}</button>`).join('')}</div>
+      <div id="refCases" class="grid sm:grid-cols-2 gap-2"></div>
+      <div id="refFinWrap" class="mt-4">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">Référence pour la bibliographie · proposition du site, modifiable</p>
+        <div class="flex gap-1 mb-1"><button type="button" class="btn btn-ghost btn-sm" data-fmt="i" title="Italique"><i>I</i></button><button type="button" class="btn btn-ghost btn-sm" data-fmt="pc" title="Petites capitales"><span class="pcap">Pc</span></button><button type="button" class="btn btn-ghost btn-sm ml-auto" id="refReset" title="Reprendre la proposition du site">↺ Revenir à la proposition</button></div>
+        <div id="refBib" class="field cit-ref" contenteditable="true" spellcheck="true" style="min-height:3rem;font-family:'Times New Roman',serif;font-size:15px;line-height:1.5"></div>
+        <p class="text-xs text-muted mt-1">Proposition selon les normes du cours de Méthodologie du GSTF : vérifiez-la et corrigez-la selon votre savoir. C’est votre version qui est enregistrée.</p>
+        <div id="refNotes" class="text-sm mt-2 flex flex-col gap-1" style="font-family:'Times New Roman',serif"></div>
+        <p id="refManq" class="text-xs text-warn mt-2"></p></div>
+      <div class="flex flex-wrap gap-2 mt-4"><button class="btn" type="submit">Enregistrer</button>${opts.bi != null ? '<button type="button" class="btn btn-ghost text-bad" id="refSuppr">🗑 Supprimer</button>' : ''}<button type="button" class="btn btn-ghost" data-dl-fermer>Annuler</button></div>
+    </form>`);
+  if (perso) $('#refBib').innerHTML = refHtml(r.txt);
+  dessiner();
+  $('#refTypes').addEventListener('click', e => { const b = e.target.closest('[data-ty]'); if (!b) return; lire(); r.ty = b.dataset.ty; if (r.ty === 'texte' && !r.ti && opts.ancien) r.ti = opts.ancien; perso = false; dessiner(); });
+  $('#refCases').addEventListener('input', apercu);
+  $('#refCases').addEventListener('change', apercu);
+  $('#refCases').addEventListener('click', e => {
+    const a = e.target.closest('[data-padd]'); if (a) { lire(); r[a.dataset.padd].push({ n: '', p: '' }); dessiner(); return; }
+    const x = e.target.closest('[data-px]'); if (x) { lire(); const k = x.closest('[data-pers]').dataset.pers, i = +x.closest('[data-pi]').dataset.pi; r[k].splice(i, 1); if (!r[k].length) r[k].push({ n: '', p: '' }); dessiner(); }
+  });
+  $('#refBib').addEventListener('input', () => { perso = true; });
+  document.querySelectorAll('#refF [data-fmt]').forEach(b => b.addEventListener('mousedown', e => {   // mise en forme de la sélection
+    e.preventDefault(); const sel = window.getSelection(); if (!sel.rangeCount || sel.isCollapsed || !$('#refBib').contains(sel.anchorNode)) { toast('Sélectionnez d’abord des mots', 'dans la référence'); return; }
+    const rg = sel.getRangeAt(0), el = document.createElement(b.dataset.fmt === 'i' ? 'i' : 'span'); if (b.dataset.fmt === 'pc') el.className = 'pcap';
+    el.appendChild(rg.extractContents()); rg.insertNode(el); sel.removeAllRanges(); perso = true;
+  }));
+  $('#refReset').onclick = () => { perso = false; apercu(); };
+  const fermer = () => { $('#dlDlg').hidden = true; };
+  $('#refF').onsubmit = async ev => {
+    ev.preventDefault(); apercu();
+    const syl = JSON.parse(JSON.stringify(DATA.FICHES[cid] || []));
+    let bloc;
+    if (r.ty === 'texte') { if (!r.ti) { toast('Texte vide', '', 'warn'); return; } bloc = ['p', r.ti]; }
+    else {
+      const o = { ...r }; o.a = (o.a || []).filter(x => x.n); o.oa = (o.oa || []).filter(x => x.n); if (!o.oa.length) delete o.oa; if (!o.a.length) delete o.a;
+      Object.keys(o).forEach(k => { if (o[k] === '' || o[k] === false) delete o[k]; });
+      const fin = refZoneVersBalise($('#refBib'));
+      if (perso && fin && fin !== refPropose(o, 'biblio')) o.txt = fin; else delete o.txt;
+      bloc = ['ref', o];
+    }
+    refRemplacer(syl, opts, [bloc]);
+    if (await refSauver(cid, syl, 'Référence enregistrée')) fermer();
+  };
+  if ($('#refSuppr')) $('#refSuppr').onclick = async () => {
+    if (!confirm('Supprimer cette référence du syllabus ?')) return;
+    const syl = JSON.parse(JSON.stringify(DATA.FICHES[cid] || [])); refRemplacer(syl, opts, []);
+    if (await refSauver(cid, syl, 'Référence supprimée')) fermer();
+  };
+}
+// Remplace le bloc bi (ou une partie d’un paragraphe qui contenait plusieurs références) ; ou insère
+function refRemplacer(syl, opts, nouveaux) {
+  if (opts.bi == null) { syl.splice(opts.insertAt != null ? opts.insertAt : syl.length, 0, ...nouveaux); return; }
+  const [t, x] = syl[opts.bi];
+  if (opts.part != null && opts.part !== '' && t !== 'ref') {
+    const P = bibCouper(x); syl.splice(opts.bi, 1, ...P.slice(0, +opts.part).map(y => ['li', y]), ...nouveaux, ...P.slice(+opts.part + 1).map(y => ['li', y]));
+  } else syl.splice(opts.bi, 1, ...nouveaux);
+}
+// Trier une bibliographie par ordre alphabétique (les phrases de remarque restent à leur place)
+async function refTrier(cid, debut) {
+  const syl = JSON.parse(JSON.stringify(DATA.FICHES[cid] || [])); let fin = debut + 1; while (fin < syl.length && syl[fin][0] !== 'h') fin++;
+  const idx = []; for (let i = debut + 1; i < fin; i++) if (syl[i][0] === 'li' || syl[i][0] === 'ref') idx.push(i);
+  const cle = b => sans(b[0] === 'ref' ? refTxt(refFinal(b[1])) : String(b[1])).replace(/^[^a-z0-9]+/, '');
+  const tri = idx.map(i => syl[i]).sort((a, b) => cle(a).localeCompare(cle(b), 'fr'));
+  idx.forEach((i, k) => { syl[i] = tri[k]; });
+  await refSauver(cid, syl, 'Bibliographie triée de A à Z');
+}
+document.addEventListener('click', e => {   // la liste des cours est créée plus tard : écoute au niveau du document
+  const b = e.target.closest('#ficheList [data-ref-ed], #ficheList [data-ref-aj], #ficheList [data-ref-tri]'); if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  const cid = b.closest('details[data-fiche]').dataset.fiche; if (!refPeutModifier(cid)) return;
+  if (b.dataset.refTri != null) { refTrier(cid, +b.dataset.refTri); return; }
+  if (b.dataset.refAj != null) { refEditeur(cid, { insertAt: +b.dataset.refAj }); return; }
+  const bi = +b.dataset.refEd, part = b.dataset.part, [t, x] = (DATA.FICHES[cid] || [])[bi] || [];
+  if (t === 'ref') refEditeur(cid, { bi, r: x });
+  else refEditeur(cid, { bi, part, ancien: part !== '' && part != null ? bibCouper(x)[+part] : x });
+});
+
 /* ---------- Bibliothèque numérique : liens choisis, gratuits et sûrs ---------- */
 const BIBNUM_DEFAUT = [
   ['Magistère', 'Le Saint-Siège : documents des papes', 'https://www.vatican.va/content/vatican/fr.html', 'Encycliques, exhortations, lettres et discours, en français.'],
@@ -12515,6 +12820,26 @@ const AIDE = [
     e: ['En bas de chaque email d’article : cliquez sur « Se désabonner ».', 'Confirmez sur le site : c’est immédiat. Vous pouvez vous réabonner quand vous voulez.'] },
   { q: 'Envoyer un nouvel article par email et voir les abonnés', r: ['admin'], k: 'abonnes abonnement email article envoyer newsletter liste membres file',
     e: ['Admin > « Articles » : en publiant, laissez cochée « 📧 Envoyer par email aux abonnés et aux membres ».', 'Les emails partent par paquets de 40 toutes les 5 minutes (400 par jour au plus, limite de Gmail).', '« (voir les abonnés) » : liste des abonnés, état des envois, « Envoyer un paquet maintenant ».', 'Un article « réservé aux étudiants et professeurs » n’est envoyé qu’aux membres.'], go: { tab: 'admin', adm: 'articles' } },
+  { q: 'Corriger ou ajouter une référence dans la bibliographie d’un syllabus', r: ['prof', 'admin'], k: 'syllabus bibliographie reference corriger modifier ajouter supprimer livre article auteur titre normes methodologie crayon',
+    e: ['Onglet Cours : ouvrez la carte de votre cours (connecté comme professeur du cours ou administration).', 'Dans la bibliographie, cliquez sur ✏️ à côté d’une référence, ou sur « ＋ Ajouter une référence ».', 'Choisissez le type (Livre, Article de revue, Article dans un ouvrage collectif, Père de l’Église, Magistère, Site web, Texte libre), puis remplissez les cases : l’ancien texte reste affiché pour le recopier.', 'Le site propose la référence aux normes du cours de Méthodologie ; vous pouvez la modifier directement (boutons I = italique, Pc = petites capitales). C’est votre version qui est enregistrée. ↺ reprend la proposition.', '« Enregistrer » ; 🗑 pour supprimer. ⚠ signale ce qui manque encore (pages, lieu…), visible seulement par le professeur.'], go: { tab: 'documents' } },
+  { q: 'Trier une bibliographie de A à Z', r: ['prof', 'admin'], k: 'trier bibliographie ordre alphabetique classer syllabus',
+    e: ['Carte du cours > sous la bibliographie : « ↕ Trier de A à Z ».', 'Les références sont rangées par ordre alphabétique des noms ; les phrases de remarque restent à leur place.'], go: { tab: 'documents' } },
+  { q: 'Normes du GSTF : comment citer un livre ?', r: ['tous'], k: 'norme normes methodologie citer livre ouvrage reference note bas page bibliographie gstf tp travail memoire',
+    e: ['Note de bas de page : J. DUPUIS, Vers une théologie chrétienne du pluralisme religieux, Paris, Cerf, 1997, p. 9. (prénom abrégé, NOM en petites capitales, titre en italique, lieu, éditeur, année, page citée).', 'Note brève (citations suivantes) : J. DUPUIS, Vers une théologie chrétienne du pluralisme religieux, p. 12.', 'Bibliographie : DUPUIS J., Vers une théologie chrétienne du pluralisme religieux, Paris, Cerf, 1997, pp. 9-470 (nom puis prénom abrégé ; pages de l’introduction à la fin de la table des matières).', '« p. » pour une seule page, « pp. » pour plusieurs. Ces modèles sont des propositions : suivez toujours les consignes de votre professeur.'] },
+  { q: 'Normes du GSTF : comment citer un article de revue ?', r: ['tous'], k: 'norme normes methodologie citer article revue periodique reference note bibliographie gstf',
+    e: ['Note : H. DONNEAUD, « Chalcédoine contre l’unicité absolue du Médiateur Jésus-Christ ? Autour d’un article récent », RT, 102 (2002), p. 43.', 'Bibliographie : DONNEAUD H., « … », RT, 102 (2002), pp. 43-62.', 'Titre de l’article entre « guillemets », revue en italique, volume, (année ou année/fascicule), pages.'] },
+  { q: 'Normes du GSTF : citer un article dans un ouvrage collectif', r: ['tous'], k: 'norme citer contribution chapitre ouvrage collectif actes colloque directeur dir dans',
+    e: ['Bibliographie : MERRIGAN T., « Christologie et théologie des religions. L’héritage de Jacques Dupuis », dans DORÉ J. (Dir.), De Jésus à Jésus-Christ II, Paris, Mame-Desclée, 2011, pp. 257-290.', 'En note : F. BOUSQUET, « Postface. Le dialogue devant nous », dans F. BOUSQUET - H. DE LA HOUGUE (Dir.), Le dialogue interreligieux. Le christianisme face aux autres traditions, Paris, DDB, 2009, pp. 201-216.', 'Plusieurs directeurs : séparés par un tiret (F. BOUSQUET - H. DE LA HOUGUE).', 'Recueil d’écrits du même auteur : on ne répète pas le nom, on écrit « dans ID., » (ex. G. ROBBERS, « État et Église en Allemagne », dans ID., État et Église dans l’Union européenne…). Le site le fait tout seul quand l’auteur et le directeur sont les mêmes.'] },
+  { q: 'Normes du GSTF : citer un Père de l’Église ou saint Thomas d’Aquin', r: ['tous'], k: 'norme citer pere eglise patristique antique medieval thomas aquin somme theologique sources chretiennes sc augustin irenee justin',
+    e: ['Le titre de l’œuvre d’un Père de l’Église est en italique et en latin (conseillé).', 'Exemples : JUSTIN, Apologie I, 46, 2-3 ; SC 507, p. 251. — IRÉNÉE DE LYON, Contre les hérésies IV, 6, 6 ; SC 100, pp. 449-451.', 'Saint Thomas d’Aquin : THOMAS D’AQUIN, Somme théologique, IIIa, q. 69, a. 4, arg. 2. — THOMAS D’AQUIN, Somme théologique, Ia-IIae, q. 89, a. 6.', 'Les documents du Magistère sont abrégés dans le texte (CEC, LG, RM) ; les abréviations bibliques n’entrent pas dans la liste des sigles.'] },
+  { q: 'Normes du GSTF : citer un document pontifical (encyclique, exhortation, motu proprio…)', r: ['tous'], k: 'norme citer document pontifical pape encyclique lettre apostolique exhortation motu proprio bulle discours magistere incipit vatican va en ligne',
+    e: ['Le nom du Pontife est en caractères romains (petites majuscules), suivi d’une virgule ; puis entre « » le type de document et l’incipit en italique ; puis la date suivie d’une virgule.', 'En ligne : JEAN-PAUL II, « Lettre apostolique Tertio Millennio Adveniente » [En ligne], 10 novembre 1994, in vatican.va – (cons. 12/04/2021).', 'Pas besoin de l’adresse (URL) pour vatican.va ; pour les autres sites, l’omettre est une faute grave.', 'Dans le corps du texte : seulement l’abréviation du document et le numéro, ex. (CR 66).', 'Dans le syllabus : ✏️ puis le bouton « ⛪ Magistère » ; remplissez « Site » et « Date de consultation » si le document a été lu en ligne.'] },
+  { q: 'Règles des travaux pratiques (TP) : combien, quelles matières, qui dirige ?', r: ['tous'], k: 'regle tp travaux pratiques combien huit 8 pages 12 15 compte rendu lecture dogmatique ecriture symposium directeur enseignant plagiat copie 0 20 sujet',
+    e: ['Huit TP de 12 à 15 pages en trois ans, plus un compte-rendu de lecture : deux en théologie dogmatique, deux en Écritures saintes, un dans une autre discipline, trois pour les trois symposiums.', 'Vous choisissez le sujet et l’enseignant ; le TP se fait uniquement sous la direction d’un enseignant du GSTF : prenez contact avec lui dès le sujet choisi.', 'Forme (méthodologie) et fond (absence d’hérésie) sont évalués. Plagiat ou copie : 0/20.', 'Les règles complètes sont sur votre page d’accueil (après connexion) : « 📝 Travaux pratiques : les règles du GSTF ». L’administration peut les modifier avec ✏️.'] },
+  { q: 'Normes du GSTF : deuxième citation, Ibid., Id. (note brève)', r: ['tous'], k: 'norme citer deuxieme citation seconde suivante ibid id idem note breve op cit meme ouvrage meme auteur',
+    e: ['La première citation est toujours complète : B. SESBOÜÉ, Hors de l’Église, pas de salut. Histoire d’une formule et problèmes d’interprétation, Paris, DDB, 2004, p. 88.', 'Même référence que la note précédente, identique en tout : seulement « Ibid. » (en italique).', 'Même référence, autre page : « Ibid., p. 95. »', 'Deux œuvres du même auteur à la suite dans la même note : la deuxième fois, « ID. » à la place du nom.', 'À partir de la deuxième citation : le nom de l’auteur (le premier s’il y en a plusieurs), le titre en italique et la page, séparés par des virgules. Le site le propose sous « Note brève » dans la fenêtre ✏️.'] },
+  { q: 'Normes du GSTF : citer un site internet (webographie)', r: ['tous'], k: 'norme citer site internet web webographie lien url en ligne consultation theologien devenu pape ratzinger benoit youtube',
+    e: ['Toujours la référence complète : prénom abrégé et NOM de l’auteur, « titre de l’article », date de mise en ligne, source (en italique), date de consultation.', 'Le lien (adresse internet) n’apparaît que dans la bibliographie, pas dans les notes.', 'Modèle : TV PLUS, « Fomba malagasy rehefa misy fahoriana » [En ligne], 01 avril 2018, in youtube – (cons. 02/04/2022). URL : https://www.youtube.com/watch?v=…', 'Théologien devenu pape : J. RATZINGER – BENOÎT XVI, « Contexte et signification de la Déclaration Dominus Iesus » [En ligne], 09 mai 2000, in vatican.va - (cons. 21/10/2020). URL : https://www.vatican.va/… (dans la fenêtre ✏️, case « Devenu pape ? » à côté du prénom).', 'Sites très structurés : seule l’adresse de la page d’accueil ou la rubrique (vatican.va), en italique, jamais soulignée.', 'Pas de numéro de page pour un texte en ligne : il est remplacé par l’URL. La date de consultation est toujours indiquée. La version papier est toujours préférable quand elle existe.'] },
   // ---------- Tâches de l’administration (une réponse par geste courant)
   { q: 'Ajouter un nouveau cours', r: ['admin'], k: 'ajouter nouveau cours creer matiere programme annee semestre heures professeur attribuer',
     e: ['Admin > « Année académique » > partie « Cours ».', 'En bas du tableau, formulaire « Nouveau cours » : nom du cours, année et semestre, nombre d’heures, professeur.', 'Cliquez sur « Ajouter le cours » : il apparaît tout de suite dans l’onglet Cours, l’emploi du temps et la saisie des notes.', 'Puis « Syllabus » sur sa ligne pour écrire sa présentation (objectifs, plan, bibliographie, évaluation).'], go: { tab: 'admin', adm: 'annee' } },
@@ -12744,11 +13069,11 @@ const AIDE = [
   { q: 'Voir le résumé d’un livre', r: ['tous'], k: 'resume livre contenu couverture savoir quoi parle',
     e: ['Bibliothèque : cherchez le livre.', 'Sous son titre : sa couverture et « 📖 Résumé » (cherché automatiquement sur internet, avec sa source).'], go: { tab: 'bibliotheque' } },
   { q: 'Citer un livre dans un devoir ou un mémoire', r: ['tous'], k: 'citer citation reference note bas page bibliographie normes methodologie memoire',
-    e: ['Bibliothèque : cherchez le livre, puis « ❝ Citer ce livre ».', 'Trois références prêtes : note de bas de page, notes suivantes (op. cit.) et bibliographie, aux normes du cours de Méthodologie (prénom abrégé, nom en petites capitales, titre en italique, date, édition, page).', '« 📋 Copier » puis collez dans Word : la mise en forme est gardée.'], go: { tab: 'bibliotheque' } },
+    e: ['Bibliothèque : cherchez le livre, puis « ❝ Citer ce livre ».', 'Trois propositions : note de bas de page (1re citation), référence brève (citations suivantes) et bibliographie, selon les normes du cours de Méthodologie du GSTF : en note, prénom abrégé et nom en petites capitales ; en bibliographie, nom puis prénom abrégé ; titre en italique (article entre « guillemets »), lieu, éditeur, année, pages.', 'Chaque texte est modifiable : cliquez dedans pour le corriger avant de copier.', '« 📋 Copier » puis collez dans Word : la mise en forme est gardée.'], go: { tab: 'bibliotheque' } },
   { q: 'Préparer la bibliographie de mon mémoire (assistant de mémoire)', r: ['tous'], k: 'memoire assistant bibliographie sujet travail recherche these livres articles preparer',
     e: ['Documents › « 🎓 Assistant de mémoire » (ou Bibliothèque › « Pour vos travaux »).', 'Tapez votre sujet en quelques mots, puis « Préparer ma bibliographie ».', 'Le site montre les livres de notre bibliothèque (avec la cote), puis les meilleurs livres et articles trouvés sur internet, déjà aux normes du GSTF.', 'Cochez ce que vous gardez, puis « 📋 Copier la bibliographie cochée » et collez dans Word. Vérifiez chaque référence sur le livre lui-même.'], go: { tab: 'documents' } },
   { q: 'Corriger ma bibliographie ou mes notes de bas de page', r: ['tous'], k: 'correcteur corriger bibliographie notes bas page normes methodologie ibid op cit reference citation format',
-    e: ['Documents › « ✍️ Correcteur de bibliographie ».', 'Choisissez « Bibliographie » ou « Notes de bas de page », puis collez vos références (une par ligne) ou importez votre travail (Word, PDF, photo).', '« ✍️ Corriger » : chaque référence est remise aux normes (nom en petites capitales, prénom abrégé, titre en italique, date, édition, page) ; ⚠️ signale ce qui manque. En notes, le site met Ibid. et op. cit. tout seul.', '« 🔎 Compléter par internet » trouve la date, l’éditeur ou la revue qui manquent ; « 📋 Copier pour Word » garde la mise en forme.'], go: { tab: 'documents' } },
+    e: ['Documents › « ✍️ Correcteur de bibliographie ».', 'Choisissez « Bibliographie » ou « Notes de bas de page », puis collez vos références (une par ligne) ou importez votre travail (Word, PDF, photo).', '« ✍️ Corriger » : chaque référence reçoit une proposition selon les normes du cours de Méthodologie du GSTF : en note, prénom abrégé et nom en petites capitales ; en bibliographie, nom puis prénom abrégé ; titre en italique (article entre « guillemets »), lieu, éditeur, année, pages ; relisez-la et modifiez-la directement dans le texte ; ⚠️ signale ce qui manque. En notes, le site met Ibid. et op. cit. tout seul.', '« 🔎 Compléter par internet » trouve la date, l’éditeur ou la revue qui manquent ; « 📋 Copier pour Word » garde la mise en forme.'], go: { tab: 'documents' } },
   { q: 'Réviser un cours avant les examens (cartes et quiz)', r: ['tous'], k: 'reviser revision examen cartes quiz questions cours preparer apprendre memoriser flashcard',
     e: ['Documents › « 🧠 Révision des cours », puis choisissez le cours.', '🃏 Cartes : lisez la question, « Voir la réponse », puis « Je savais » ou « À revoir » ; le site vous remontre les cartes au bon moment.', '✅ Quiz : 10 questions à choix multiple, avec votre score. 📋 Plan de révision : le contenu du syllabus à cocher.', 'Le professeur prépare les questions (ou les fait fabriquer à partir de son cours) ; chacun peut aussi fabriquer les siennes à partir de ses notes.'], go: { tab: 'documents' } },
   { q: 'Écouter un article ou un texte (lecture à voix haute)', r: ['tous'], k: 'ecouter voix haute lire audio son entendre lecture article resume',
@@ -14199,6 +14524,43 @@ document.querySelectorAll('#barreBas [data-bb]').forEach(b => b.addEventListener
 
 /* Accueil personnel (connectés) */
 let PERSO_PRETS = null;
+/* Règles des travaux pratiques (méthodologie GSTF, chap. V) : sur l’accueil de chaque étudiant ; modifiables par l’administration (réglage « regles_tp ») */
+const REGLES_TP_DEF = [
+  'Chaque étudiant doit rédiger, au cours de ses trois années d’études académiques au GSTF, huit travaux pratiques (TP) de 12 à 15 pages ainsi qu’un compte-rendu de lecture : deux TP en théologie dogmatique, deux en Écritures saintes, un dans une autre discipline et trois TP consacrés aux trois symposiums.',
+  'Le TP est un travail de recherche original qui permet à l’étudiant de démontrer sa capacité à mettre en pratique les connaissances et les compétences acquises au cours de ses études.',
+  'Vous pouvez choisir le sujet que vous souhaitez traiter ainsi que l’enseignant avec lequel vous désirez travailler.',
+  'La rédaction du TP doit répondre à plusieurs exigences, tant sur la forme (méthodologie) que sur le fond (absence d’hérésie).',
+  'Les travaux pratiques doivent être réalisés uniquement et exclusivement sous la direction d’un Enseignant du GSTF.',
+  'Après avoir choisi votre sujet, vous êtes donc tenu de prendre contact avec l’Enseignant qui assurera la direction de votre travail.',
+  'Un TP doit être un véritable travail de recherche et de lecture. Tout plagiat ou toute copie du travail d’autrui sera sévèrement sanctionné(e) par la note de 0/20.'];
+let REGLES_TP = null;   // null = pas encore chargé
+function reglesTp() { return (REGLES_TP && REGLES_TP.length) ? REGLES_TP : REGLES_TP_DEF; }
+function chargerReglesTp() {
+  if (REGLES_TP !== null || !sb) return; REGLES_TP = [];
+  try { const c = JSON.parse(localStorage.getItem('gstf-regles-tp') || 'null'); if (Array.isArray(c)) REGLES_TP = c; } catch (_) {}
+  sb.from('reglages').select('valeur').eq('cle', 'regles_tp').maybeSingle().then(({ data }) => {
+    const L = data && data.valeur && Array.isArray(data.valeur.lignes) ? data.valeur.lignes.filter(Boolean) : [];
+    REGLES_TP = L; try { localStorage.setItem('gstf-regles-tp', JSON.stringify(L)); } catch (_) {}
+    if (currentTab === 'accueil') renderPerso();
+  }, () => {});
+}
+function editerReglesTp() {
+  dialogueBiblio(`<p class="eyebrow mb-1">Administration</p><h2 class="font-display text-2xl font-semibold mb-2">Règles des travaux pratiques</h2>
+    <p class="text-sm text-muted mb-3">Affichées sur l’accueil de chaque étudiant. Une règle par ligne ; la numérotation se fait toute seule. Videz tout pour revenir au texte de la méthodologie.</p>
+    <textarea class="field" rows="14" id="rtpTexte">${esc(reglesTp().join('\n'))}</textarea>
+    <p class="text-sm text-bad mt-2" id="rtpErr" hidden></p>
+    <div class="flex flex-wrap gap-2 mt-3"><button type="button" class="btn" id="rtpOk">Enregistrer</button><button type="button" class="btn btn-ghost" id="rtpDef">↺ Texte de la méthodologie</button></div>`);
+  $('#rtpDef').addEventListener('click', () => { $('#rtpTexte').value = REGLES_TP_DEF.join('\n'); });
+  $('#rtpOk').addEventListener('click', async () => {
+    const L = $('#rtpTexte').value.split('\n').map(x => x.replace(/^\s*\d+[.)]\s*/, '').trim()).filter(Boolean);
+    const lignes = JSON.stringify(L) === JSON.stringify(REGLES_TP_DEF) ? [] : L;
+    const { error } = await sb.from('reglages').upsert({ cle: 'regles_tp', valeur: { lignes }, modifie_le: new Date().toISOString() });
+    if (error) { const z = $('#rtpErr'); z.textContent = 'Non enregistré : ' + error.message; z.hidden = false; return; }
+    REGLES_TP = lignes; try { localStorage.setItem('gstf-regles-tp', JSON.stringify(lignes)); } catch (_) {}
+    $('#dlDlg').hidden = true;
+    const el = $('#accPerso'); if (el) el.dataset.cle = ''; renderPerso(); toast('Règles des TP enregistrées.');
+  });
+}
 async function renderPerso() {
   const el = $('#accPerso'); if (!el) return;
   const p = state.profil;
@@ -14220,7 +14582,8 @@ async function renderPerso() {
   } catch (_) { cours = []; }
   const ann = (typeof ANNONCES !== 'undefined' ? ANNONCES : []).filter(a => typeof enCours !== 'function' || enCours(a))[0];
   const prets = (PERSO_PRETS || []).slice().sort((a, b) => String(a.retour_prevu).localeCompare(String(b.retour_prevu)));
-  const cle = JSON.stringify([p.email, nom, cours, ann && ann.id, prets.map(l => l.id + l.retour_prevu)]);
+  const voitTp = p.type === 'etudiant' || isAdmin(); if (voitTp) chargerReglesTp();
+  const cle = JSON.stringify([p.email, nom, cours, ann && ann.id, prets.map(l => l.id + l.retour_prevu), voitTp && reglesTp()]);
   if (el.dataset.cle === cle) return; el.dataset.cle = cle;
   const heure = new Date().getHours(), salut = heure < 5 || heure >= 18 ? 'Bonsoir' : 'Bonjour';
   el.innerHTML = `<p class="eyebrow mb-1">${esc(new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))}</p>
@@ -14230,8 +14593,10 @@ async function renderPerso() {
       <div class="perso-bloc"><p class="eyebrow mb-1">Dernière annonce</p>${ann ? `<p class="font-semibold">${esc(ann.titre)}</p>${ann.texte ? `<p class="opacity-90" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(ann.texte)}</p>` : ''}` : '<p>Aucune annonce en cours.</p>'}</div>
       <div class="perso-bloc"><p class="eyebrow mb-1">Bibliothèque</p>${prets.length ? `<ul>${prets.slice(0, 3).map(l => `<li><b>${esc(l.titre)}</b><br><span class="opacity-90">${l.retour_prevu < TODAY ? '⚠️ en retard depuis le ' : 'à rendre le '}${esc(fmtDate(l.retour_prevu, { day: 'numeric', month: 'short' }))}</span></li>`).join('')}</ul>` : '<p>Aucun livre à rendre.</p>'}</div>
     </div>
+    ${voitTp ? `<details class="perso-bloc mt-3" id="persoTp"><summary class="cursor-pointer font-semibold">📝 Travaux pratiques : les règles du GSTF</summary><ol class="list-decimal pl-5 mt-2" style="text-align:left;hyphens:manual">${reglesTp().map(x => `<li>${esc(x)}</li>`).join('')}</ol><p class="text-xs opacity-80 mt-2">Méthodologie du GSTF, chapitre V. Pour citer vos sources : « Besoin d’aide » › Normes du GSTF.</p>${isAdmin() ? '<button type="button" class="linkbtn text-xs mt-1" data-tp-modif>✏️ Modifier ces règles</button>' : ''}</details>` : ''}
     <div class="flex flex-wrap gap-2 mt-4"><button type="button" class="btn-clair" data-perso="moi">Mon espace →</button>${p.type === 'etudiant' ? '<button type="button" class="btn-voile" data-perso="carte">🪪 Ma carte</button>' : ''}<button type="button" class="btn-voile" data-perso="prieres">🙏 Prières</button><span class="notif-zone"></span></div>`;
   el.hidden = false;
+  const tpm = el.querySelector('[data-tp-modif]'); if (tpm) tpm.addEventListener('click', editerReglesTp);
   el.querySelectorAll('[data-perso]').forEach(b => b.addEventListener('click', () => { const v = b.dataset.perso; if (v === 'prieres') showTab('prieres'); else allerRaccourci(v === 'carte' ? 'macarte' : 'monespace'); }));
   majBoutonsNotif();
 }
