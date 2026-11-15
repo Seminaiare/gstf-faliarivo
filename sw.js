@@ -33,8 +33,17 @@ async function rapideEtFrais(e, cle, url) {
   if (enCache) { e.waitUntil(reseau.catch(() => {})); return enCache; }
   return reseau;
 }
+// v275 : les programmes pris sur jsdelivr avec un numéro de version exact (supabase-js…) ne changent jamais : gardés sur le téléphone
+async function cdnVersionne(r) {
+  const c = await caches.open(CACHE), en = await c.match(r.url);
+  if (en) return en;
+  const x = await fetch(r);
+  if (x.ok && x.type === 'cors') await c.put(r.url, x.clone());
+  return x;
+}
 self.addEventListener('fetch', e => {
   const r = e.request, u = new URL(r.url);
+  if (r.method === 'GET' && u.origin === 'https://cdn.jsdelivr.net' && /@\d+\.\d+\.\d+\//.test(u.pathname)) { e.respondWith(cdnVersionne(r).catch(() => fetch(r))); return; }
   if (u.origin !== location.origin || r.method !== 'GET') return;
   if (r.mode === 'navigate') {
     if (u.pathname === '/' || u.pathname === '/index.html') { e.respondWith(rapideEtFrais(e, PAGE, '/').catch(() => caches.match('/offline.html'))); return; }
