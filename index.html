@@ -747,6 +747,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
         <div id="studentSummary" class="grid grid-cols-2 md:grid-cols-4 gap-px bg-line border border-line rounded-lg overflow-hidden mb-8"></div>
         <div id="stuBulletin" class="mb-8"></div>
         <div id="stuCarte" class="mb-8"></div>
+        <div id="stuTp" class="mb-8"></div>
         <div id="stuDevoirs" class="mb-8"></div>
         <div id="stuEval" class="mb-8"></div>
         <div class="grid lg:grid-cols-5 gap-8">
@@ -928,6 +929,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
           <button type="button" class="btn btn-ghost" id="admBullAll">Imprimer / PDF des bulletins affichés</button>
           <span id="admCount" class="text-sm text-muted"></span>
         </div>
+        <details class="mb-3 bg-surface border border-line rounded-lg" id="admTpDet"><summary class="cursor-pointer p-3 text-sm font-semibold">📝 Travaux pratiques : les règles du GSTF (affichées dans le portail des étudiants)</summary><div class="px-3 pb-3 text-sm" id="admTp"></div></details>
         <details class="mb-3 bg-surface border border-line rounded-lg" id="admCongDet"><summary class="cursor-pointer p-3 text-sm font-semibold">🏛 Congrégations religieuses : la liste du site (ajouter, renommer, retirer)</summary><div class="px-3 pb-3" id="admCong"></div></details>
         <div class="bg-surface border border-line rounded-lg overflow-x-auto">
           <table class="text-sm" style="min-width: 760px"><thead><tr><th>Étudiant</th><th>Année · origine</th><th>Identifiant</th><th>Email personnel</th><th>Téléphone</th><th>Mot de passe</th><th></th></tr></thead><tbody id="admStuBody"></tbody></table>
@@ -1105,6 +1107,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1') document.write('<link rel=
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=237"></script>
+<script defer src="/app.js?v=238"></script>
 </body>
 </html>
