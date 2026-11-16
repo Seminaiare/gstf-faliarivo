@@ -69,7 +69,12 @@ def texte_html(t):
 MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
 def date_fr(iso):
     try:
-        d = datetime.date.fromisoformat(str(iso)[:10]); return f'{d.day} {MOIS[d.month-1]} {d.year}'
+        t = str(iso)
+        if len(t) > 10:   # heure de publication → jour à Madagascar (UTC+3), comme sur le site
+            d = (datetime.datetime.fromisoformat(t.replace('Z', '+00:00')) + datetime.timedelta(hours=3)).date()
+        else:
+            d = datetime.date.fromisoformat(t[:10])
+        return f'{d.day} {MOIS[d.month-1]} {d.year}'
     except Exception:
         return ''
 
