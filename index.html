@@ -954,7 +954,10 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
         <button type="button" data-adm="annonces" aria-pressed="false">Annonces</button>
         <button type="button" data-adm="pages" aria-pressed="false">Pages du site</button>
         <button type="button" data-adm="lettres" aria-pressed="false">Lettres et attestations</button>
-        <button type="button" data-adm="actus" aria-pressed="false">Actualités et photos<span id="admActusCount"></span></button>
+        <button type="button" data-adm="actus" aria-pressed="false">Actualités<span id="admActusCount"></span></button>
+        <button type="button" data-adm="photos" aria-pressed="false" data-nouveau="2026-11-16">Photos</button>
+        <button type="button" data-adm="homelies" aria-pressed="false" data-nouveau="2026-11-16">Homélies</button>
+        <button type="button" data-adm="meditations" aria-pressed="false" data-nouveau="2026-11-16">Méditations</button>
         <button type="button" data-adm="articles" aria-pressed="false">Articles</button>
         <button type="button" data-adm="actes" aria-pressed="false">Actes du symposium</button>
         <button type="button" data-adm="apparence" aria-pressed="false" data-nouveau="2026-11-15">Apparence</button>
@@ -1048,6 +1051,9 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <div id="adm-pages" hidden></div>
 
       <div id="adm-actus" hidden></div>
+      <div id="adm-photos" hidden></div>
+      <div id="adm-homelies" hidden></div>
+      <div id="adm-meditations" hidden></div>
 
       <div id="adm-articles" hidden></div>
       <div id="adm-actes" hidden></div>
@@ -1180,6 +1186,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=295"></script>
+<script defer src="/app.js?v=296"></script>
 </body>
 </html>
