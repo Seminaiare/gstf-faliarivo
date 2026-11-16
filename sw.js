@@ -7,7 +7,7 @@ const HORS_LIGNE = ['/offline.html', '/icon-192.png', '/badge-96.png', '/therese
 const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
-// Le code du site (app.js?v=…, et espace.js?v=… pour le personnel) : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
+// Le code du site (app.js?v=…, espace.js?v=… pour le personnel, aide.js?v=… pour « Aide ») : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
 async function scriptVersionne(u) {
   const c = await caches.open(CACHE), cle = u.pathname + u.search, enCache = await c.match(cle);
   if (enCache) return enCache;
@@ -49,7 +49,7 @@ self.addEventListener('fetch', e => {
     if (u.pathname === '/' || u.pathname === '/index.html') { e.respondWith(rapideEtFrais(e, PAGE, '/').catch(() => caches.match('/offline.html'))); return; }
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
-  if (u.pathname === '/app.js' || u.pathname === '/espace.js') { e.respondWith(scriptVersionne(u)); return; }
+  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js') { e.respondWith(scriptVersionne(u)); return; }
   if (STATIQUES.includes(u.pathname)) { e.respondWith(rapideEtFrais(e, u.pathname, u.pathname)); return; }
   if (HORS_LIGNE.includes(u.pathname)) e.respondWith(caches.match(r).then(x => x || fetch(r)));
 });
