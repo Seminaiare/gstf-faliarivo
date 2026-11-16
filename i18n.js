@@ -1,6 +1,7 @@
 /* Traductions du site (malgache, anglais, italien) : chargées seulement si on choisit une autre langue que le français. */
 window.I18N_DATA = {
 "mg": {
+"Aide": "Fanampiana",
 "Études": "Fianarana",
 "Connexion": "Fidirana",
 "Mon espace": "Ny toerako",
@@ -317,6 +318,7 @@ window.I18N_DATA = {
 "Cours": "Lesona"
 },
 "en": {
+"Aide": "Help",
 "Études": "Studies",
 "Connexion": "Sign in",
 "Mon espace": "My space",
@@ -633,6 +635,7 @@ window.I18N_DATA = {
 "Cours": "Courses"
 },
 "it": {
+"Aide": "Aiuto",
 "Études": "Studi",
 "Connexion": "Accedi",
 "Mon espace": "Il mio spazio",

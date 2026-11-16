@@ -1164,7 +1164,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 
 <div id="actuVue" class="vue-fond" hidden role="dialog" aria-modal="true" aria-label="Publication"><div class="vue-panneau"><div class="vue-tete flex justify-end p-2"><button type="button" class="btn btn-ghost btn-sm" id="actuFermer">Fermer ✕</button></div><div class="actu-corps px-5 pb-6"></div></div></div>
 <button type="button" id="hautBtn" class="haut-btn" aria-label="Revenir en haut de la page" title="Haut de page"><span aria-hidden="true">↑</span></button>
-<button type="button" id="aideBtn" class="aide-btn" aria-controls="aidePanel" data-nouveau="2026-11-15"><span aria-hidden="true">?</span> Besoin d’aide ?</button>
+<button type="button" id="aideBtn" class="aide-btn" aria-controls="aidePanel" data-nouveau="2026-11-15"><span aria-hidden="true">?</span> Aide</button>
 <nav id="barreBas" class="barre-bas" aria-label="Menu principal">
   <button type="button" data-bb="accueil"><span class="bb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg></span>Accueil</button>
   <button type="button" data-bb="actus"><span class="bb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></span>Actualités</button>
@@ -1180,12 +1180,12 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
   <div id="aideTete" class="aide-tete flex items-center justify-between gap-2 px-4 pt-3 pb-2 border-b border-line" title="Glissez pour déplacer">
     <div><p class="font-display text-lg font-semibold leading-tight">Savoir utiliser notre site</p><p class="text-xs text-muted">Posez votre question avec vos mots.</p></div>
     <button type="button" id="aideFermer" class="linkbtn text-xl leading-none" aria-label="Fermer">×</button></div>
-  <form id="aideForm" class="flex gap-2 px-4 py-3"><input id="aideQ" class="field" placeholder="Votre question (français ou malagasy)" autocomplete="off"><button class="btn btn-sm">Chercher</button></form>
+  <form id="aideForm" class="flex gap-2 px-4 py-3"><input id="aideQ" class="field" placeholder="Votre question (français, malagasy, English, italiano)" autocomplete="off"><button type="button" class="btn btn-ghost btn-sm" id="aideMicro" title="Dicter ma question" aria-label="Dicter ma question" hidden>🎤</button><button class="btn btn-sm">Chercher</button></form>
   <div id="aideRes" class="px-4 pb-4 overflow-y-auto"></div>
 </section>
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=299"></script>
+<script defer src="/app.js?v=300"></script>
 </body>
 </html>
