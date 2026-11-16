@@ -122,6 +122,28 @@ def main():
     A = [a for a in A if a.get('public') and not a.get('destinataires') and paru(a)]
     H = lire('homelies', 'video_id,titre,dimanche,publie_le,visible', '&visible=eq.true&order=dimanche.desc.nullslast&limit=500')
     H = [h for h in H if h.get('visible', True) and re.match(r'^[A-Za-z0-9_-]{11}$', str(h.get('video_id', '')))]
+    # Une seule homélie par dimanche, comme sur le site : si deux vidéos annoncent le même dimanche, la plus tardive
+    # reçoit le dimanche de sa mise en ligne (titre mal daté par la chaîne) ; s'il est déjà pris, elle n'a pas de page.
+    def dim_pub(p):
+        try:
+            d = (datetime.datetime.fromisoformat(str(p).replace('Z', '+00:00')) + datetime.timedelta(hours=3)).date()
+        except Exception:
+            return None
+        j = (d.weekday() + 1) % 7          # 0 = dimanche, comme en JavaScript
+        dec = 0 if j == 0 else (7 - j if j >= 5 else -j)
+        return (d + datetime.timedelta(days=dec)).isoformat()
+    vus = {}
+    for h in sorted(H, key=lambda x: str(x.get('publie_le') or '')):
+        d = h.get('dimanche')
+        if d and d in vus:
+            d2 = dim_pub(h.get('publie_le'))
+            h['dimanche'] = d2 if (d2 and d2 not in vus) else None
+        if h.get('dimanche'): vus[h['dimanche']] = h
+    H = [h for h in H if h.get('dimanche')]
+    H.sort(key=lambda x: x['dimanche'], reverse=True)
+    for h in H:   # un seul format de titre pour toutes les homélies
+        h['titre_source'] = h.get('titre') or ''
+        h['titre'] = f"Homélie du dimanche {date_fr(h['dimanche'])}"
 
     gardes = set(); plan = []
     for a in A:
@@ -164,7 +186,7 @@ def main():
         nom = f'{h.get("dimanche") or "sans-date"}-{h["video_id"]}.html'; gardesH.add(nom)
         titre = h.get('titre') or 'Homélie du dimanche'
         vid = h['video_id']
-        corps = f'''<p class="meta">Homélie du dimanche · {date_fr(h.get("dimanche"))}</p><h1>{E(titre)}</h1>
+        corps = f'''<p class="meta">Homélie du dimanche · {date_fr(h.get("dimanche"))}{(' · vidéo « ' + E(h['titre_source']) + ' »') if h.get('titre_source') else ''}</p><h1>{E(titre)}</h1>
 <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}" title="{E(titre)}" loading="lazy" allowfullscreen></iframe></div>
 <p><a class="btn" href="https://www.youtube.com/watch?v={vid}" rel="noopener">Voir sur YouTube</a> <a class="btn2" href="/?src=page-homelie#accueil">Le site du Séminaire</a></p>'''
         ecrire(f'homelies/{nom}', page(f'homelies/{nom}', titre, f'Homélie du dimanche {date_fr(h.get("dimanche"))} – Grand Séminaire de Théologie de Faliarivo.', f'https://i.ytimg.com/vi/{vid}/hqdefault.jpg', corps, 'video.other'))
