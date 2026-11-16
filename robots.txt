@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://gstf-faliarivo.ovh/sitemap.xml
+Sitemap: https://gstf-faliarivo.ovh/sitemap-articles.xml
