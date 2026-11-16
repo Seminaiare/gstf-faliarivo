@@ -1,0 +1,31 @@
+# Pages publiques des articles et des homélies (pour Google, WhatsApp et Facebook).
+# Chaque heure, GitHub lit les articles PUBLICS comme un visiteur non connecté et met à jour
+# les dossiers articles/ et homelies/ et le fichier sitemap-articles.xml. Rien d’autre n’est touché.
+# Pour le lancer tout de suite : onglet « Actions » › « Pages des articles » › « Run workflow ».
+name: Pages des articles
+on:
+  schedule:
+    - cron: '7 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: pages-articles
+  cancel-in-progress: false
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fabriquer les pages
+        run: python3 outils/pages_articles.py
+      - name: Enregistrer s’il y a du nouveau
+        run: |
+          git config user.name "Pages des articles"
+          git config user.email "actions@users.noreply.github.com"
+          for f in articles homelies sitemap-articles.xml; do if [ -e "$f" ]; then git add -A "$f"; fi; done
+          if git diff --cached --quiet; then echo "Rien de nouveau."; else git commit -m "Pages des articles mises à jour" && git push; fi
