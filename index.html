@@ -864,7 +864,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
               <div id="dcPublic"></div>
               <label class="text-sm"><span class="block font-semibold mb-1">ou lien d’une vidéo <span class="font-normal text-muted">(YouTube ou Facebook)</span></span><input id="dcVideo" class="field" placeholder="https://youtu.be/…"></label>
               <label class="text-sm"><span class="block font-semibold mb-1">Message <span class="font-normal text-muted">(facultatif)</span></span><textarea id="dcDesc" class="field" rows="3" maxlength="3000" placeholder="Consignes, travail à rendre…"></textarea></label>
-              <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="dcMail" checked>Prévenir aussi par email les étudiants qui ont donné une adresse</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="dcMail">Prévenir aussi par email les étudiants qui ont donné une adresse</label>
               <p id="dcErr" class="text-sm text-bad" hidden></p>
               <button class="btn" type="submit" id="dcBtn">Envoyer aux étudiants</button>
             </form>
@@ -1189,6 +1189,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=314"></script>
+<script defer src="/app.js?v=316"></script>
 </body>
 </html>
