@@ -104,6 +104,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
         <button class="tab" role="tab" data-tab="agenda" id="tab-agenda">Agenda</button>
         <button class="tab" role="tab" data-tab="articles" id="tab-articles">Articles</button>
         <button class="tab" role="tab" data-tab="contact" id="tab-contact">Contact</button>
+        <button class="tab" role="tab" data-tab="admin" id="tab-admin" hidden>Administration</button>
       </div>
     </nav>
   </div>
@@ -114,7 +115,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
   <aside class="nav-lat-zone">
     <nav id="navLat" class="nav-lat" aria-label="Espace du Séminaire" role="tablist">
       <div class="nav-lat-titre">Espace du Séminaire</div>
-      <button class="tab" role="tab" data-tab="admin" id="tab-admin">Administration</button>
       <button class="tab" role="tab" data-tab="anciens" id="tab-anciens">Anciens</button>
       <button class="tab" role="tab" data-tab="annuaire" id="tab-annuaire">Annuaire</button>
       <button class="tab" role="tab" data-tab="archives" id="tab-archives">Archives</button>
@@ -1186,6 +1186,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=311"></script>
+<script defer src="/app.js?v=312"></script>
 </body>
 </html>
