@@ -1,12 +1,24 @@
 /* GSTF : application installable.
    Rapide : la page du site est servie tout de suite depuis le téléphone, puis mise à jour en arrière-plan
    (le site affiche « Nouvelle version disponible » quand il y en a une). Sans Internet, le site s'ouvre quand même ;
-   la toute première fois sans Internet, la page « hors connexion » montre la carte d’étudiant et les prières. */
+   la toute première fois sans Internet, la page « hors connexion » montre la carte d’étudiant et les prières.
+   v328 : les contenus déjà vus (prières, agenda, livres, articles) restent lisibles sans Internet. */
 const CACHE = 'gstf-v8';
 const HORS_LIGNE = ['/offline.html', '/icon-192.png', '/badge-96.png', '/therese.jpg'];
 const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
-self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
+// v328 : dès la première visite, la page, son code et ses programmes sont gardés (avant : il fallait deux visites)
+async function garderPage() {
+  const r = await fetch('/', { cache: 'no-cache', credentials: 'same-origin' }); if (!r.ok) return;
+  const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
+  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; }
+  for (const u of html.match(/https:\/\/cdn\.jsdelivr\.net\/[^"'\s]+@\d+\.\d+\.\d+\/[^"'\s]+/g) || []) await cdnVersionne(new Request(u, { mode: 'cors' })).catch(() => {});
+  const c = await caches.open(CACHE);
+  for (const x of STATIQUES) { const y = await fetch(x, { credentials: 'same-origin' }).catch(() => null); if (y && y.ok) await c.put(x, y); }
+  await c.put(PAGE, r);
+}
+self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => garderPage().catch(() => {})).then(() => self.skipWaiting())); });
+// « gstf-donnees » : la dernière copie des contenus (prières, agenda, livres, articles…) gardée par la page, à ne pas effacer
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE && n !== 'gstf-donnees').map(n => caches.delete(n)))).then(() => self.clients.claim())); });
 // Le code du site (app.js?v=…, espace.js?v=… pour le personnel, aide.js?v=… pour « Aide ») : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
 async function scriptVersionne(u) {
   const c = await caches.open(CACHE), cle = u.pathname + u.search, enCache = await c.match(cle);
