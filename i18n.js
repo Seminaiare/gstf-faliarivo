@@ -1,6 +1,11 @@
 /* Traductions du site (malgache, anglais, italien) : chargées seulement si on choisit une autre langue que le français. */
 window.I18N_DATA = {
 "mg": {
+"Prier, servir, jouer, apprendre ensemble": "Hivavaka, hanompo, hilalao, hianatra miaraka",
+"Accès réservé, avec votre compte": "Ho an’ireo manana kaonty ihany",
+"La vie au Séminaire": "Ny fiainana ao amin’ny Seminera",
+"Le Séminaire en un clic": "Ny Seminera indray tsindry",
+"Se former, lire, prier, nous rencontrer": "Hiofana, hamaky, hivavaka, hihaona aminay",
 "Saint du jour": "Olomasina androany",
 "Saint de demain": "Olomasina rahampitso",
 "Jour passé": "Andro lasa",
@@ -327,6 +332,11 @@ window.I18N_DATA = {
 "Cours": "Lesona"
 },
 "en": {
+"Prier, servir, jouer, apprendre ensemble": "Praying, serving, playing, learning together",
+"Accès réservé, avec votre compte": "Restricted access, with your account",
+"La vie au Séminaire": "Life at the Seminary",
+"Le Séminaire en un clic": "The Seminary in one click",
+"Se former, lire, prier, nous rencontrer": "Learn, read, pray, meet us",
 "Saint du jour": "Saint of the day",
 "Saint de demain": "Tomorrow’s saint",
 "Jour passé": "Past day",
@@ -654,6 +664,11 @@ window.I18N_DATA = {
 "Cours": "Courses"
 },
 "it": {
+"Prier, servir, jouer, apprendre ensemble": "Pregare, servire, giocare, imparare insieme",
+"Accès réservé, avec votre compte": "Accesso riservato, con il tuo account",
+"La vie au Séminaire": "La vita in Seminario",
+"Le Séminaire en un clic": "Il Seminario in un clic",
+"Se former, lire, prier, nous rencontrer": "Formarsi, leggere, pregare, incontrarci",
 "Saint du jour": "Santo del giorno",
 "Saint de demain": "Santo di domani",
 "Jour passé": "Giorno passato",
