@@ -1,6 +1,15 @@
 /* Traductions du site (malgache, anglais, italien) : chargées seulement si on choisit une autre langue que le français. */
 window.I18N_DATA = {
 "mg": {
+"Saint du jour": "Olomasina androany",
+"Saint de demain": "Olomasina rahampitso",
+"Jour passé": "Andro lasa",
+"Jour à venir": "Andro ho avy",
+"Couleur liturgique :": "Lokon’ny litorjia :",
+"Aujourd’hui": "Androany",
+"Liturgie du jour": "Litorjian’ny andro",
+"Liturgie du jour · demain": "Litorjian’ny andro · rahampitso",
+"Toujours afficher à l’ouverture de l’application": "Asehoy foana rehefa misokatra ny fampiharana",
 "Aide": "Fanampiana",
 "Études": "Fianarana",
 "Connexion": "Fidirana",
@@ -318,6 +327,16 @@ window.I18N_DATA = {
 "Cours": "Lesona"
 },
 "en": {
+"Saint du jour": "Saint of the day",
+"Saint de demain": "Tomorrow’s saint",
+"Jour passé": "Past day",
+"Jour à venir": "Coming day",
+"Couleur liturgique :": "Liturgical colour:",
+"Aujourd’hui": "Today",
+"Liturgie du jour": "Liturgy of the day",
+"Liturgie du jour · demain": "Liturgy of the day · tomorrow",
+"Toujours afficher à l’ouverture de l’application": "Always show when the app opens",
+"Glissez vers la gauche ou la droite (ou ‹ ›) pour voir les jours suivants et précédents du calendrier liturgique.": "Swipe left or right (or ‹ ›) to see the next and previous days of the liturgical calendar.",
 "Aide": "Help",
 "Études": "Studies",
 "Connexion": "Sign in",
@@ -635,6 +654,16 @@ window.I18N_DATA = {
 "Cours": "Courses"
 },
 "it": {
+"Saint du jour": "Santo del giorno",
+"Saint de demain": "Santo di domani",
+"Jour passé": "Giorno passato",
+"Jour à venir": "Giorno a venire",
+"Couleur liturgique :": "Colore liturgico:",
+"Aujourd’hui": "Oggi",
+"Liturgie du jour": "Liturgia del giorno",
+"Liturgie du jour · demain": "Liturgia del giorno · domani",
+"Toujours afficher à l’ouverture de l’application": "Mostra sempre all’apertura dell’app",
+"Glissez vers la gauche ou la droite (ou ‹ ›) pour voir les jours suivants et précédents du calendrier liturgique.": "Scorri a sinistra o a destra (o ‹ ›) per vedere i giorni successivi e precedenti del calendario liturgico.",
 "Aide": "Aiuto",
 "Études": "Studi",
 "Connexion": "Accedi",
