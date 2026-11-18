@@ -18,7 +18,10 @@ section{margin:14px}h2{font-family:Georgia,serif;font-size:20px;margin:6px 0 10p
 .carteq{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:170px}.carteq .q{font-family:Georgia,serif;font-size:19px;font-weight:600;margin:0 0 12px}.carteq .r{border-top:1px solid var(--line);padding-top:10px;white-space:pre-line}
 select{font-size:15px;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;margin-bottom:10px}.lu{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}.lu h3{margin:0 0 4px;font-family:Georgia,serif}.lu p{white-space:pre-line;line-height:1.55}
 .note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px}
-</style><style id="carteCss"></style></head>
+</style><script>/* v333 : le fond choisi par le Séminaire (gardé sur le téléphone) */
+try { var F = JSON.parse(localStorage.getItem('gstf-fond') || 'null'), ok = function (c) { return /^#[0-9a-f]{6}$/i.test(c || ''); };
+  if (F && !F.sombre && ok(F.bg) && ok(F.surface)) { var st = document.createElement('style'); st.textContent = '@media (prefers-color-scheme: light) { :root { --bg: ' + F.bg + '; --surface: ' + F.surface + (ok(F.line) ? '; --line: ' + F.line : '') + '; } }'; document.head.appendChild(st); } } catch (e) {}
+</script><style id="carteCss"></style></head>
 <body>
 <header><img src="/icon-192.png" alt=""><div><b>Grand Séminaire de Théologie</b><small>Sainte Thérèse de l’Enfant-Jésus · Faliarivo</small></div></header>
 <div class="etat"><p><b>Pas de connexion Internet.</b><br><span lang="mg">Tsy misy aterineto.</span></p><button onclick="location.reload()">Réessayer</button></div>
