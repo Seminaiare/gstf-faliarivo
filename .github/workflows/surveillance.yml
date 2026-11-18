@@ -1,0 +1,21 @@
+# Surveillance du site : toutes les 15 minutes, GitHub vérifie que le site, la base et le certificat vont bien.
+# Si une vérification échoue, GitHub envoie un email au propriétaire du dépôt (réglage GitHub :
+# Settings › Notifications › Actions › « Only notify for failed workflows », par email).
+# Pour essayer tout de suite : onglet « Actions » › « Surveillance du site » › « Run workflow ».
+name: Surveillance du site
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sondes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: outils
+      - name: Vérifier le site
+        run: python3 outils/surveillance.py
