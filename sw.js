@@ -18,7 +18,7 @@ async function garderPage() {
 }
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => garderPage().catch(() => {})).then(() => self.skipWaiting())); });
 // « gstf-donnees » : la dernière copie des contenus (prières, agenda, livres, articles…) gardée par la page, à ne pas effacer
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE && n !== 'gstf-donnees').map(n => caches.delete(n)))).then(() => self.clients.claim())); });
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE && n !== 'gstf-donnees' && n !== LUS).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
 // Le code du site (app.js?v=…, espace.js?v=… pour le personnel, aide.js?v=… pour « Aide ») : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
 async function scriptVersionne(u) {
   const c = await caches.open(CACHE), cle = u.pathname + u.search, enCache = await c.match(cle);
@@ -53,6 +53,29 @@ async function cdnVersionne(r) {
   if (x.ok && x.type === 'cors') await c.put(r.url, x.clone());
   return x;
 }
+/* v346 : les pages publiques lues (articles, homélies, pages du Séminaire) restent lisibles hors connexion :
+   les 10 derniers articles ou homélies lus, et les pages du Séminaire ; hors ligne, un bandeau dit de quand date la copie */
+const LUS = 'gstf-lus';
+async function pageLue(r, u) {
+  try {
+    const x = await fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' });
+    if (x.ok) {
+      const c = await caches.open(LUS), h = new Headers(x.headers); h.set('x-gstf-lu', new Date().toISOString());
+      await c.put(u.pathname, new Response(await x.clone().blob(), { status: 200, headers: h }));
+      const k = (await c.keys()).filter(q => /\/(articles|homelies)\//.test(q.url));
+      for (const q of k.slice(0, Math.max(0, k.length - 10))) await c.delete(q);   // les plus anciens d’abord
+    }
+    return x;
+  } catch (_) {
+    const en = await caches.match(u.pathname, { cacheName: LUS });
+    if (!en) return (await caches.match('/offline.html')) || Response.error();
+    const d = new Date(en.headers.get('x-gstf-lu') || Date.now()), j = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const video = /\/homelies\//.test(u.pathname) ? ' La vidéo de l’homélie se regarde quand vous aurez Internet.' : '';
+    const bandeau = `<div style="background:#fff4d6;color:#5a4300;padding:8px 12px;font:14px/1.4 sans-serif;text-align:center">📶 Lu hors connexion · copie du ${j}.${video}</div>`;
+    const html = (await en.text()).replace(/<body([^>]*)>/i, m => m + bandeau);
+    return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8' } });
+  }
+}
 self.addEventListener('fetch', e => {
   const r = e.request, u = new URL(r.url);
   if (r.method === 'GET' && u.origin === 'https://cdn.jsdelivr.net' && /@\d+\.\d+\.\d+\//.test(u.pathname)) { e.respondWith(cdnVersionne(r).catch(() => fetch(r))); return; }
@@ -63,6 +86,7 @@ self.addEventListener('fetch', e => {
       e.respondWith(fetch(r.url, { cache: 'no-cache' }).then(async x => { if (x.ok) { const c = await caches.open(CACHE); await c.put('/aujourdhui.html', x.clone()); } return x; })
         .catch(async () => (await caches.match('/aujourdhui.html')) || caches.match('/offline.html'))); return;
     }
+    if (/^\/(articles|homelies)\/[^/]+$/.test(u.pathname) || /^\/[a-z0-9-]+\.html$/.test(u.pathname)) { e.respondWith(pageLue(r, u)); return; }   // v346
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
   if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js') { e.respondWith(scriptVersionne(u)); return; }
