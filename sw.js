@@ -59,6 +59,10 @@ self.addEventListener('fetch', e => {
   if (u.origin !== location.origin || r.method !== 'GET') return;
   if (r.mode === 'navigate') {
     if (u.pathname === '/' || u.pathname === '/index.html') { e.respondWith(rapideEtFrais(e, PAGE, '/').catch(() => caches.match('/offline.html'))); return; }
+    if (u.pathname === '/aujourdhui.html') {   // v344 : la page légère du jour reste lisible hors ligne (avec la date du jour où elle a été lue)
+      e.respondWith(fetch(r.url, { cache: 'no-cache' }).then(async x => { if (x.ok) { const c = await caches.open(CACHE); await c.put('/aujourdhui.html', x.clone()); } return x; })
+        .catch(async () => (await caches.match('/aujourdhui.html')) || caches.match('/offline.html'))); return;
+    }
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
   if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js') { e.respondWith(scriptVersionne(u)); return; }
