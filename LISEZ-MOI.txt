@@ -1,0 +1,72 @@
+GSTF · « Aide » · Prototype de reconnaissance du SENS (sans IA) · 20-11-2026
+=============================================================================
+
+1. CE QUE C'EST
+---------------
+Un petit programme (aide_sens_prototype.js) qui se pose PAR-DESSUS l'Aide actuelle.
+Il lit une question en 3 temps :
+  a) le CADRE : parle-t-elle du Séminaire / du site, ou du monde extérieur
+     (Gmail, riz, météo, match, visa…) sans aucun mot qui la rattache au Séminaire ?
+     → monde extérieur : « Je n'ai pas de réponse sûre » (pas de fiche affirmée) ;
+  b) les CONCEPTS : environ 40 groupes de sens en FR / EN / IT (PAYER, FRAIS, ENTRER,
+     PAPIERS, SANSREP = « pas de réponse »…) ;
+  c) les RÈGLES : des concepts présents ENSEMBLE désignent une fiche
+     (ex. PAYER + ETUDES → « Frais de scolarité et pension »).
+     Si une seule règle correspond, sa fiche passe en premier ; si aucune ou plusieurs,
+     l'Aide d'aujourd'hui répond exactement comme avant.
+Aucune donnée n'est envoyée, rien n'est modifié sur le serveur, aucune IA.
+
+2. COMMENT L'ESSAYER (sans rien changer au site)
+-------------------------------------------------
+Ouvrir le site, ouvrir « Aide » une fois, puis coller le contenu de aide_sens_prototype.js
+dans la console du navigateur. Pour voir comment une question est lue :
+    aideSens("C'est cher d'étudier au GSTF ?")
+Recharger la page enlève le prototype.
+
+3. RÉSULTATS MESURÉS (détail exact dans resultats_examens.txt)
+--------------------------------------------------------------
+                                   v388 seule      v388 + prototype
+  examen_aide_214                  173/184         175/184
+  aveugle_60                        54/56           56/56
+  examen_inedit_40                  34/34           34/34
+  contrôle 19 nov.                  34/37           34/37
+  hors sujet (série existante)      26/27           27/27
+  série de RÉGLAGE (nouvelle)       15/24 + 5/6     24/24 + 6/6
+  série SECRÈTE (nouvelle)          12/22 + 8/8     22/22 + 8/8
+  passer.py                        104/104         104/104
+  passer_ami (aveugle, 1re place)   53/56           54/56
+  test_32                           29/29           29/29
+Aucune question qui était bonne en v388 n'est devenue fausse (comparaison ligne à ligne).
+
+4. LIMITES — À LIRE AVANT DE DÉCIDER
+------------------------------------
+- Les deux nouvelles séries ont été écrites par la même personne (Claude), sur les MÊMES
+  sujets (frais, conditions d'entrée, horaires, adresse, visite, messe, don, mot de passe…).
+  La série secrète mesure donc « la même question dite autrement », PAS des sujets nouveaux.
+  Le 22/22 est bon signe, mais il est sûrement optimiste.
+- Le prototype ne connaît que 21 fiches sur 228 (celles des visiteurs les plus demandées).
+  Pour les autres, rien ne change.
+- Trois premiers essais ont cassé de bonnes réponses ailleurs (ex. « combien d'heures de cours
+  par an » → frais ; « mon téléphone a l'ancienne version » → téléphone du Séminaire ;
+  « mon travail a été signalé pour plagiat » → pas de réponse, à cause du mot « travail »).
+  Ils ont été corrigés, mais cela montre qu'une règle trop large est dangereuse :
+  TOUT RETESTER à chaque nouvelle règle.
+- Le branchement dans ce prototype remplace aideChercher, aideSur, aideIntention et
+  aidePorte (enveloppes). C'est pratique pour essayer, pas propre pour la version finale.
+- Le malgache n'est pas traité (examens « sans malgache »).
+
+5. CONSEILS POUR L'INTÉGRER DANS aide.js
+----------------------------------------
+1) Appeler aideSens(q) une seule fois dans le gestionnaire de #aideForm, juste après aidePrepQ,
+   et garder le résultat (au lieu de le recalculer dans 4 enveloppes).
+2) Mettre le contrôle du CADRE avant les détours (intention, porte, agenda), pour qu'un
+   détour ne puisse pas affirmer une fiche sur une question du monde extérieur.
+3) Ne jamais laisser le cadre « dehors » passer avant la détresse / le deuil (aideExpr) :
+   ces protections restent en premier.
+4) Garder la règle « une seule règle → décision ; sinon l'Aide actuelle ».
+5) Chaque règle doit avoir ses exclusions (ex. ENTRER mais pas « entrer dans mon espace »).
+6) Après chaque ajout : relancer tous les examens et comparer ligne à ligne avec la version
+   d'avant ; zéro bonne réponse perdue, sinon la règle ne part pas.
+7) Pour juger la version intégrée : la série secrète reste chez Claude (empreinte SHA-256 dans
+   resultats_examens.txt) et ne sera pas donnée ; une nouvelle série, sur des SUJETS nouveaux
+   cette fois, sera écrite avant l'examen final.
