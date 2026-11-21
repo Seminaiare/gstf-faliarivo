@@ -544,10 +544,11 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <p class="text-muted" id="bqStats"></p><div id="bqProg"></div></div>
       <div id="bqModeBtns" class="mb-5" hidden></div>
       <div class="flex flex-wrap items-end gap-3 mb-2">
-        <label class="text-sm grow max-w-2xl"><span class="block font-semibold mb-1">Rechercher un livre</span><input id="bqQ" class="field" type="search" placeholder="Titre, auteur, sujet ou cote" autocomplete="off"></label>
+        <label class="text-sm grow max-w-2xl"><span class="block font-semibold mb-1">Rechercher un livre</span><input id="bqQ" class="field" type="search" placeholder="Titre, auteur, sujet, cote ou référence (Jn 3,16 · CIC 1024)" autocomplete="off"></label>
         <button type="button" class="btn btn-ghost btn-sm" id="bqMesCours" hidden>📚 Tous les livres de mes cours</button>
         <div class="seg" id="bqFiltre"><button type="button" data-f="tous" aria-pressed="true">Tous</button><button type="button" data-f="gstf" title="Livres que l’on peut emprunter">🏛 GSTF Bibliothèque</button><button type="button" data-f="usuel" title="Dictionnaires, usuels : à consulter sur place">📖 GSTF Usuel · sur place</button><button type="button" data-f="ucm" title="Pour information : ces livres s’empruntent à l’UCM">🏫 UCM · information</button><button type="button" data-f="en_ligne">🌐 En ligne · gratuit</button><button type="button" data-f="revues">Revues</button></div>
       </div>
+      <div id="bqRef" aria-live="polite"></div>
       <div id="bqThemes" class="bq-themes mb-3" aria-label="Guide de recherche par thème"></div>
       <p class="text-sm mb-1"><button type="button" class="linkbtn" id="bqCommentBtn" aria-expanded="false" aria-controls="bqRegles">❓ Comment emprunter un livre ?</button></p>
       <p class="text-xs text-muted mb-4" id="bqRegles"></p>
@@ -1260,6 +1261,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=402"></script>
+<script defer src="/app.js?v=403"></script>
 </body>
 </html>
