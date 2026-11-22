@@ -5,6 +5,7 @@
 if (location.hostname === 'gstf-faliarivo.netlify.app') location.replace('https://gstf-faliarivo.ovh' + location.pathname + location.search + location.hash);</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdn.sheetjs.com https://www.youtube.com; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#8c2a34">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
@@ -1262,6 +1263,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=409"></script>
+<script defer src="/app.js?v=410"></script>
 </body>
 </html>
