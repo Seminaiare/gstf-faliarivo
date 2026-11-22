@@ -89,7 +89,7 @@ self.addEventListener('fetch', e => {
     if (/^\/(articles|homelies)\/[^/]+$/.test(u.pathname) || /^\/[a-z0-9-]+\.html$/.test(u.pathname)) { e.respondWith(pageLue(r, u)); return; }   // v346
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
-  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js') { e.respondWith(scriptVersionne(u)); return; }
+  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js' || u.pathname === '/nouveautes.js') { e.respondWith(scriptVersionne(u)); return; }
   if (STATIQUES.includes(u.pathname)) { e.respondWith(rapideEtFrais(e, u.pathname, u.pathname)); return; }
   if (HORS_LIGNE.includes(u.pathname)) e.respondWith(caches.match(r).then(x => x || fetch(r)));
 });
