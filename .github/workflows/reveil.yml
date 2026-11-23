@@ -1,0 +1,23 @@
+# GSTF · Réveil quotidien de la base Supabase (pour que l'offre gratuite ne la mette jamais en pause)
+# Une seule action : appeler la fonction « battement_github », qui écrit une date. Aucune donnée n'est lue ni renvoyée.
+# La clé utilisée est la clé PUBLIQUE (publishable), gardée dans les Secrets de GitHub : jamais la clé de service.
+name: Réveil Supabase
+on:
+  schedule:
+    - cron: '17 5 * * *'   # chaque jour à 8 h 17, heure de Madagascar
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reveil:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Battement de cœur
+        env:
+          CLE: ${{ secrets.SUPABASE_CLE_PUBLIQUE }}
+        run: |
+          r=$(curl -fsS --max-time 30 -X POST "https://lznusbdqkzcxhskgdyip.supabase.co/rest/v1/rpc/battement_github" \
+            -H "apikey: $CLE" -H "Content-Type: application/json" -d '{}')
+          echo "Réponse : $r"
+          test "$r" = '"OK"'
