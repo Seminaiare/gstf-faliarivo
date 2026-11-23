@@ -662,7 +662,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <div id="arcAdmin" class="grid lg:grid-cols-2 gap-6 mb-8" hidden>
         <div class="bg-surface border border-line rounded-lg p-5 flex flex-col gap-3 self-start">
           <h2 class="h2">Archiver une année</h2>
-          <p class="text-sm text-muted">Chaque <b>1er juillet</b>, à la fin de l’année académique, la base de données archive automatiquement le bulletin de chaque étudiant, avec un code d’authenticité. Ces bulletins archivés sont <b>définitifs</b> : personne ne peut plus les modifier. Ce bouton sert seulement si l’archivage automatique n’a pas eu lieu.</p>
+          <p class="text-sm text-muted">À la fin de l’année académique, quand toutes les notes sont à leur place, le Père Préfet ou le secrétariat fige les bulletins (Relevés de notes › « 🔒 Figer les bulletins », ou ce bouton). Rien n’est figé automatiquement. Les bulletins figés ont un code d’authenticité et sont <b>définitifs</b> : personne ne peut plus les modifier.</p>
           <label class="text-sm"><span class="block font-semibold mb-1">Année académique</span><input id="arcSnapAcad" class="field" style="max-width: 10rem" value=""></label>
           <button type="button" class="btn self-start" id="arcSnapBtn">Archiver les bulletins</button>
         </div>
@@ -959,6 +959,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
           <button id="allPresent" class="btn btn-ghost" type="button" title="Enregistre la séance (sa durée compte dans les heures faites), même sans absent">✓ Appel fait</button>
           <button id="rosterValider" class="btn btn-ghost" type="button" title="Les notes ne pourront plus être modifiées ; seul le Préfet des études peut déverrouiller">✅ Valider et verrouiller les notes</button>
           <button id="rosterEmarg" class="btn btn-ghost" type="button">🖨 Fiche de présence</button>
+          <span class="flex items-center gap-1"><input id="rosterAbsN" class="field py-1" style="max-width:13rem" placeholder="Absents : n° 3, 12, 45" aria-label="Numéros des absents sur la fiche de présence"><button id="rosterAbsOk" class="btn btn-ghost btn-sm" type="button">Marquer absents</button></span>
           <button id="rosterExamen" class="btn btn-ghost" type="button">🖨 Liste pour l’examen</button>
           <button id="rosterCsv" class="btn btn-ghost" type="button">⬇️ Notes (Excel)</button>
           <button id="importNotesBtn" class="btn btn-ghost" type="button" title="Lire les notes depuis une photo, un PDF, un fichier Word ou Excel">📥 Importer les notes (photo, PDF, Word, Excel)</button>
@@ -974,6 +975,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
         </div>
         <p class="text-xs text-muted mt-2">Touchez « Absent » pour chaque absent ; tous les autres sont présents (un second toucher efface). Choisissez la durée de la séance (2 h ou 4 h). Moins de 26 h de présence sur 30 h (52 h sur 60 h pour la Dogmatique spéciale) : pas d’examen. Note : 14,5 ou 14.5 ; Entrée passe à l’étudiant suivant, dans l’ordre de la fiche.</p>
         <div id="rosterExamenBox" class="mt-4"></div>
+        <div id="rosterListesBox" class="mt-4"></div>
         <div id="rosterBarre" class="roster-barre" hidden role="status"></div>
         </div>
         </div>
@@ -1071,6 +1073,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
         <p class="text-xs text-muted mt-3">Ce mot de passe ne sera plus affiché après fermeture. Remettez la fiche en main propre.</p>
       </div>
 
+      <div id="admMesRoles" class="mb-4"></div>
       <div id="adm-tableau"></div>
       <div id="adm-etudiants" hidden>
         <p class="text-sm text-muted mb-4 max-w-[75ch]">Cliquez sur le nom d'un étudiant pour voir son bulletin de notes et l'imprimer. Pour imprimer tous les bulletins d'une année, choisissez l'année puis « Imprimer les bulletins affichés ». Chaque étudiant se connecte avec l'identifiant de sa fiche (forme <span class="font-mono">xxxxxx@gstf-faliarivo.ovh</span>) et peut ensuite changer son mot de passe lui-même. S'il l'a oublié, cliquez sur « Nouveau mot de passe » et imprimez la nouvelle fiche : l'ancien mot de passe cesse aussitôt de fonctionner.</p>
@@ -1079,6 +1082,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
           <input id="admSearch" class="field" style="max-width: 16rem" type="search" placeholder="Rechercher un nom ou un numéro">
           <button type="button" class="btn btn-ghost" id="admBullAll">Imprimer / PDF des bulletins affichés</button>
           <button type="button" class="btn btn-ghost" id="admDoublons" data-nouveau="2026-11-15">🔍 Fiches en double</button>
+          <button type="button" class="btn btn-ghost" id="admListes" data-nouveau="2026-11-22">🖨 Listes de classe</button>
           <span id="admCount" class="text-sm text-muted"></span>
         </div>
         <details class="mb-3 bg-surface border border-line rounded-lg" id="admTpDet"><summary class="cursor-pointer p-3 text-sm font-semibold">📝 Travaux pratiques : les règles du GSTF (affichées dans le portail des étudiants)</summary><div class="px-3 pb-3 text-sm" id="admTp"></div></details>
@@ -1116,9 +1120,10 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       </div>
 
       <div id="adm-enseignants" hidden>
+        <div id="admRolesBox" class="mb-5"></div>
         <form id="neForm" class="bg-surface border border-line rounded-lg p-4 grid sm:grid-cols-5 gap-3 items-end mb-5" novalidate>
           <label class="text-sm sm:col-span-2"><span class="block font-semibold mb-1">Ajouter un enseignant ou un membre du personnel</span><input class="field ne-nom" maxlength="120" placeholder="Ex. P. Jean RAKOTO (NOM en majuscules)"></label>
-          <label class="text-sm"><span class="block font-semibold mb-1">Rôle</span><select class="field ne-role"><option value="enseignant">Enseignant</option><option value="educateur">Éducateur</option><option value="foyer">Responsable de foyer</option><option value="secretariat">Secrétariat</option><option value="recteur">Recteur</option><option value="prefet">Préfet des études</option></select></label>
+          <label class="text-sm"><span class="block font-semibold mb-1">Rôle</span><select class="field ne-role"><option value="enseignant">Enseignant</option></select><span class="block text-xs text-muted mt-1">Un autre rôle se donne ensuite : « 🔑 Rôles » (le Père Préfet).</span></label>
           <label class="text-sm"><span class="block font-semibold mb-1">Email personnel *</span><input class="field ne-mail" type="email" placeholder="ex. nom@gmail.com" required></label>
           <label class="text-sm"><span class="block font-semibold mb-1">Téléphone</span><input class="field ne-tel" type="tel" placeholder="facultatif"></label>
           <div class="sm:col-span-5 flex flex-wrap items-center gap-3"><button class="btn" type="submit">Ajouter et créer son compte</button><span class="text-xs text-muted">L’identifiant @gstf-faliarivo.ovh est créé aussitôt ; la fiche d’accès s’affiche pour l’imprimer. Pour un responsable de foyer, indiquez ensuite son foyer à Claude ou dans Supabase.</span></div>
@@ -1275,6 +1280,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=418"></script>
+<script defer src="/app.js?v=426"></script>
 </body>
 </html>
