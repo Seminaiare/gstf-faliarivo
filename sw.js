@@ -10,7 +10,7 @@ const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
 async function garderPage() {
   const r = await fetch('/', { cache: 'no-cache', credentials: 'same-origin' }); if (!r.ok) return;
   const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
-  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; }
+  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; await garderTout(m[0].split('v=')[1]).catch(() => {}); }
   for (const u of html.match(/https:\/\/cdn\.jsdelivr\.net\/[^"'\s]+@\d+\.\d+\.\d+\/[^"'\s]+/g) || []) await cdnVersionne(new Request(u, { mode: 'cors' })).catch(() => {});
   const c = await caches.open(CACHE);
   for (const x of STATIQUES) { const y = await fetch(x, { credentials: 'same-origin' }).catch(() => null); if (y && y.ok) await c.put(x, y); }
@@ -32,13 +32,25 @@ async function scriptVersionne(u) {
 }
 // Servir depuis le téléphone, puis rafraîchir en arrière-plan.
 // Une nouvelle page n'est gardée qu'une fois son code (app.js) gardé aussi : l'application s'ouvre toujours, même sans Internet.
+/* v450 : à chaque nouvelle version, garder tout de suite tout le code (Aide, nouveautés) et les pages du Séminaire */
+const PAGES_SEMINAIRE = ['/le-seminaire.html', '/programme-des-etudes.html', '/corps-enseignant.html', '/calendrier-academique.html', '/contact-acces.html', '/inscription-seminaire.html', '/bibliotheque-seminaire.html', '/soutenir-seminaire.html'];
+async function garderTout(v) {
+  const c = await caches.open(CACHE), marque = '/__gstf-tout-' + v;
+  if (await c.match(marque)) return;
+  for (const s of ['/aide.js', '/nouveautes.js']) await scriptVersionne(new URL(s + '?v=' + v, self.location.origin)).catch(() => null);
+  const l = await caches.open(LUS);
+  for (const p of PAGES_SEMINAIRE) { try { const x = await fetch(p, { cache: 'no-cache', credentials: 'same-origin' }); if (x.ok) { const h = new Headers(x.headers); h.set('x-gstf-lu', new Date().toISOString()); await l.put(p, new Response(await x.blob(), { status: 200, headers: h })); } } catch (_) {} }
+  for (const k of await c.keys()) if (/\/__gstf-tout-/.test(k.url)) await c.delete(k);
+  await c.put(marque, new Response('1'));
+}
 async function rapideEtFrais(e, cle, url) {
   const c = await caches.open(CACHE), enCache = await c.match(cle);
   const reseau = fetch(url, { cache: 'no-cache', credentials: 'same-origin' }).then(async r => {
     if (!r.ok) return r;
     if (cle === PAGE) {
       const m = (await r.clone().text()).match(/\/app\.js\?v=[\w.-]+/);
-      if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return r; }
+      if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return r;
+        const v = m[0].split('v=')[1]; const g = garderTout(v).catch(() => {}); try { e.waitUntil(g); } catch (_) {} }   // v450
     }
     await c.put(cle, r.clone()); return r;
   });
@@ -71,7 +83,7 @@ async function pageLue(r, u) {
     if (!en) return (await caches.match('/offline.html')) || Response.error();
     const d = new Date(en.headers.get('x-gstf-lu') || Date.now()), j = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     const video = /\/homelies\//.test(u.pathname) ? ' La vidéo de l’homélie se regarde quand vous aurez Internet.' : '';
-    const bandeau = `<div style="background:#fff4d6;color:#5a4300;padding:8px 12px;font:14px/1.4 sans-serif;text-align:center">📶 Lu hors connexion · copie du ${j}.${video}</div>`;
+    const bandeau = `<div style="background:#fff4d6;color:#5a4300;padding:8px 12px;font:14px/1.4 sans-serif;text-align:center">📴 Hors connexion – informations du ${j} (copie gardée sur cet appareil).${video}</div>`;
     const html = (await en.text()).replace(/<body([^>]*)>/i, m => m + bandeau);
     return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8' } });
   }
