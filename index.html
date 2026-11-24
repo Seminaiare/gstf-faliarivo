@@ -548,6 +548,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <div class="bq-tete">
         <label for="bqQ" class="sr-only">Rechercher dans la bibliothèque</label>
         <div class="bq-q-ligne"><span class="bq-q-ico" aria-hidden="true">🔎</span><input id="bqQ" class="field bq-q-grand" type="search" placeholder="Un livre, un auteur, un sujet ou une référence (Jn 3,16 · CIC 1024)" autocomplete="off"></div>
+        <div class="seg text-xs mt-1 mb-2" role="group" aria-label="Chercher dans" id="bqChamp"><span class="text-muted px-1">Chercher dans :</span><button type="button" data-bq-champ="" aria-pressed="true">partout</button><button type="button" data-bq-champ="auteur" aria-pressed="false">l’auteur</button><button type="button" data-bq-champ="titre" aria-pressed="false">le titre</button><button type="button" data-bq-champ="sujet" aria-pressed="false">le sujet</button></div>
         <div class="bq-voies" role="group" aria-label="Où chercher">
           <button type="button" class="bq-voie" data-voie="tous" aria-pressed="true"><span class="bq-voie-i" aria-hidden="true">📚</span><b>Tout le catalogue</b><small>livres du Séminaire et ressources en ligne</small></button>
           <button type="button" class="bq-voie" data-voie="en_ligne" aria-pressed="false"><span class="bq-voie-i" aria-hidden="true">🌐</span><b>En ligne, gratuit</b><small>jour et nuit, rangé par rayons</small></button>
@@ -1281,6 +1282,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=446"></script>
+<script defer src="/app.js?v=449"></script>
 </body>
 </html>
