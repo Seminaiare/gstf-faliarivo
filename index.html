@@ -1052,6 +1052,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
         <button type="button" data-adm="groupes" aria-pressed="false">Groupes d’activité</button>
         <button type="button" data-adm="annee" aria-pressed="false">Année académique</button>
         <button type="button" data-adm="releves" aria-pressed="false">Relevés de notes</button>
+        <button type="button" data-adm="anciens" aria-pressed="false" data-nouveau="2026-11-25">Relevés des anciens</button>
         <button type="button" data-adm="cartes" aria-pressed="false">Cartes d’étudiant</button>
         <button type="button" data-adm="evaluation" aria-pressed="false">Évaluation des cours</button>
         <button type="button" data-adm="historique" aria-pressed="false">Historique des notes</button>
@@ -1169,6 +1170,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <div id="adm-livret" hidden></div>
       <div id="adm-sakafo" hidden></div>
       <div id="adm-releves" hidden></div>
+      <div id="adm-anciens" hidden></div>
       <div id="adm-cartes" hidden></div>
       <div id="adm-evaluation" hidden></div>
       <div id="adm-historique" hidden></div>
@@ -1285,6 +1287,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script defer src="/app.js?v=504"></script>
+<script defer src="/app.js?v=506"></script>
 </body>
 </html>
