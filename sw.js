@@ -10,11 +10,17 @@ const PAGE = '/', STATIQUES = ['/i18n.js', '/fiches.js'];
 async function garderPage() {
   const r = await fetch('/', { cache: 'no-cache', credentials: 'same-origin' }); if (!r.ok) return;
   const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
-  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; await garderTout(m[0].split('v=')[1]).catch(() => {}); }
+  if (!await stylesGardes(html)) return;   // v515
+  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; await garderTout(m[0].split('v=')[1], html).catch(() => {}); }
   for (const u of html.match(/https:\/\/cdn\.jsdelivr\.net\/[^"'\s]+@\d+\.\d+\.\d+\/[^"'\s]+/g) || []) await cdnVersionne(new Request(u, { mode: 'cors' })).catch(() => {});
   const c = await caches.open(CACHE);
   for (const x of STATIQUES) { const y = await fetch(x, { credentials: 'same-origin' }).catch(() => null); if (y && y.ok) await c.put(x, y); }
   await c.put(PAGE, r);
+}
+/* v515 : les styles sont dans site.css?v=<empreinte> ; une page n'est gardée qu'avec ses styles (sinon, hors ligne, une page sans mise en forme) */
+async function stylesGardes(html) {
+  const m = html.match(/\/site\.css\?v=[\w.-]+/); if (!m) return true;
+  const r = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); return !!(r && r.ok);
 }
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => garderPage().catch(() => {})).then(() => self.skipWaiting())); });
 // « gstf-donnees » : la dernière copie des contenus (prières, agenda, livres, articles…) gardée par la page, à ne pas effacer
@@ -34,12 +40,22 @@ async function scriptVersionne(u) {
 // Une nouvelle page n'est gardée qu'une fois son code (app.js) gardé aussi : l'application s'ouvre toujours, même sans Internet.
 /* v450 : à chaque nouvelle version, garder tout de suite tout le code (Aide, nouveautés) et les pages du Séminaire */
 const PAGES_SEMINAIRE = ['/le-seminaire.html', '/programme-des-etudes.html', '/corps-enseignant.html', '/calendrier-academique.html', '/contact-acces.html', '/inscription-seminaire.html', '/bibliotheque-seminaire.html', '/soutenir-seminaire.html'];
-async function garderTout(v) {
-  const c = await caches.open(CACHE), marque = '/__gstf-tout-' + v;
+/* v513 : chaque fichier a sa propre empreinte, écrite dans la page (window.GSTF_EMP = {"aide.js": "…", …}) */
+function empreintes(html) { try { const m = html.match(/GSTF_EMP=(\{[^<]*?\})<\/script>/); return m ? JSON.parse(m[1]) : {}; } catch (_) { return {}; } }
+/* v514 (vitesse) : l'Aide et les nouveautés ne sont gardées d'avance que pour ceux qui les ont déjà ouvertes sur cet appareil ;
+   une page du Séminaire n'est relue que si son empreinte a changé */
+async function dejaGarde(c, chemin) { for (const k of await c.keys()) if (new URL(k.url).pathname === chemin) return true; return false; }
+async function garderTout(v, html) {
+  const emp = empreintes(html), n = (html.match(/GSTF_V=(\d+)/) || [0, v])[1];
+  const c = await caches.open(CACHE), marque = '/__gstf-tout-' + n;
   if (await c.match(marque)) return;
-  for (const s of ['/aide.js', '/nouveautes.js']) await scriptVersionne(new URL(s + '?v=' + v, self.location.origin)).catch(() => null);
+  for (const s of ['aide.js', 'nouveautes.js', ...Object.keys(emp).filter(k => /^m-[a-z]+\.js$/.test(k))]) if (emp[s] && await dejaGarde(c, '/' + s)) /* v522 : aussi les morceaux déjà ouverts */ await scriptVersionne(new URL('/' + s + '?v=' + emp[s], self.location.origin)).catch(() => null);
   const l = await caches.open(LUS);
-  for (const p of PAGES_SEMINAIRE) { try { const x = await fetch(p, { cache: 'no-cache', credentials: 'same-origin' }); if (x.ok) { const h = new Headers(x.headers); h.set('x-gstf-lu', new Date().toISOString()); await l.put(p, new Response(await x.blob(), { status: 200, headers: h })); } } catch (_) {} }
+  for (const p of PAGES_SEMINAIRE) { try {
+    const e = emp[p.slice(1)], avant = await l.match(p);
+    if (e && avant && avant.headers.get('x-gstf-emp') === e) continue;   // v514 : inchangée, rien à télécharger
+    const x = await fetch(p, { cache: 'no-cache', credentials: 'same-origin' });
+    if (x.ok) { const h = new Headers(x.headers); h.set('x-gstf-lu', new Date().toISOString()); if (e) h.set('x-gstf-emp', e); await l.put(p, new Response(await x.blob(), { status: 200, headers: h })); } } catch (_) {} }
   for (const k of await c.keys()) if (/\/__gstf-tout-/.test(k.url)) await c.delete(k);
   await c.put(marque, new Response('1'));
 }
@@ -48,9 +64,10 @@ async function rapideEtFrais(e, cle, url) {
   const reseau = fetch(url, { cache: 'no-cache', credentials: 'same-origin' }).then(async r => {
     if (!r.ok) return r;
     if (cle === PAGE) {
-      const m = (await r.clone().text()).match(/\/app\.js\?v=[\w.-]+/);
+      const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
+      if (!await stylesGardes(html)) return r;   // v515
       if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return r;
-        const v = m[0].split('v=')[1]; const g = garderTout(v).catch(() => {}); try { e.waitUntil(g); } catch (_) {} }   // v450
+        const v = m[0].split('v=')[1]; const g = garderTout(v, html).catch(() => {}); try { e.waitUntil(g); } catch (_) {} }   // v450
     }
     await c.put(cle, r.clone()); return r;
   });
@@ -101,7 +118,7 @@ self.addEventListener('fetch', e => {
     if (/^\/(articles|homelies)\/[^/]+$/.test(u.pathname) || /^\/[a-z0-9-]+\.html$/.test(u.pathname)) { e.respondWith(pageLue(r, u)); return; }   // v346
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
-  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js' || u.pathname === '/nouveautes.js') { e.respondWith(scriptVersionne(u)); return; }
+  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js' || u.pathname === '/nouveautes.js' || (u.pathname === '/site.css' && u.search) || /^\/m-[a-z]+\.js$/.test(u.pathname)) { /* v522 : les morceaux */ e.respondWith(scriptVersionne(u)); return; }
   if (STATIQUES.includes(u.pathname)) { e.respondWith(rapideEtFrais(e, u.pathname, u.pathname)); return; }
   if (HORS_LIGNE.includes(u.pathname)) e.respondWith(caches.match(r).then(x => x || fetch(r)));
 });
