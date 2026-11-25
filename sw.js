@@ -11,7 +11,7 @@ async function garderPage() {
   const r = await fetch('/', { cache: 'no-cache', credentials: 'same-origin' }); if (!r.ok) return;
   const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
   if (!await stylesGardes(html)) return;   // v515
-  if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return; await garderTout(m[0].split('v=')[1], html).catch(() => {}); }
+  if (m) { if (!await garde(new URL(m[0], self.location.origin))) return; await garderTout(m[0].split('v=')[1], html).catch(() => {}); }
   for (const u of html.match(/https:\/\/cdn\.jsdelivr\.net\/[^"'\s]+@\d+\.\d+\.\d+\/[^"'\s]+/g) || []) await cdnVersionne(new Request(u, { mode: 'cors' })).catch(() => {});
   const c = await caches.open(CACHE);
   for (const x of STATIQUES) { const y = await fetch(x, { credentials: 'same-origin' }).catch(() => null); if (y && y.ok) await c.put(x, y); }
@@ -20,17 +20,27 @@ async function garderPage() {
 /* v515 : les styles sont dans site.css?v=<empreinte> ; une page n'est gardée qu'avec ses styles (sinon, hors ligne, une page sans mise en forme) */
 async function stylesGardes(html) {
   const m = html.match(/\/site\.css\?v=[\w.-]+/); if (!m) return true;
-  const r = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); return !!(r && r.ok);
+  return garde(new URL(m[0], self.location.origin));   // v530
 }
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(HORS_LIGNE)).then(() => garderPage().catch(() => {})).then(() => self.skipWaiting())); });
 // « gstf-donnees » : la dernière copie des contenus (prières, agenda, livres, articles…) gardée par la page, à ne pas effacer
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE && n !== 'gstf-donnees' && n !== LUS).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
 // Le code du site (app.js?v=…, espace.js?v=… pour le personnel, aide.js?v=… pour « Aide ») : une version = un contenu ; gardée sur le téléphone, les anciennes versions effacées
+/* v530 : avant de garder un fichier, le téléphone recalcule son empreinte (sha-256, 10 premiers caractères) et la compare
+   à celle de son adresse (?v=…). Si elles diffèrent (fichier pas encore à jour chez GitHub), il s'en sert cette fois mais
+   ne le garde pas : il le redemandera. Les adresses sans empreinte (anciennes versions) restent gardées comme avant. */
+async function empreinteJuste(u, r) {
+  const v = u.searchParams.get('v'); if (!/^[0-9a-f]{10}$/.test(v || '')) return true;
+  try { const h = new Uint8Array(await crypto.subtle.digest('SHA-256', await r.clone().arrayBuffer()));
+    return [...h.slice(0, 5)].map(b => b.toString(16).padStart(2, '0')).join('') === v; } catch (_) { return false; }
+}
+// v530 : vrai seulement si le fichier est maintenant gardé sur le téléphone (empreinte juste)
+async function garde(u) { const r = await scriptVersionne(u).catch(() => null); if (!r || !r.ok) return false; return !!(await (await caches.open(CACHE)).match(u.pathname + u.search)); }
 async function scriptVersionne(u) {
   const c = await caches.open(CACHE), cle = u.pathname + u.search, enCache = await c.match(cle);
   if (enCache) return enCache;
   const r = await fetch(u.href, { credentials: 'same-origin' });
-  if (r.ok) {
+  if (r.ok && await empreinteJuste(u, r)) {
     await c.put(cle, r.clone());
     for (const k of await c.keys()) { const x = new URL(k.url); if (x.pathname === u.pathname && x.search !== u.search) await c.delete(k); }
   }
@@ -66,7 +76,7 @@ async function rapideEtFrais(e, cle, url) {
     if (cle === PAGE) {
       const html = await r.clone().text(), m = html.match(/\/app\.js\?v=[\w.-]+/);
       if (!await stylesGardes(html)) return r;   // v515
-      if (m) { const a = await scriptVersionne(new URL(m[0], self.location.origin)).catch(() => null); if (!a || !a.ok) return r;
+      if (m) { if (!await garde(new URL(m[0], self.location.origin))) return r;   // v530 : la nouvelle page n'est gardée qu'avec son code vérifié
         const v = m[0].split('v=')[1]; const g = garderTout(v, html).catch(() => {}); try { e.waitUntil(g); } catch (_) {} }   // v450
     }
     await c.put(cle, r.clone()); return r;
