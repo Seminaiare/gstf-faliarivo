@@ -49,7 +49,7 @@ async function garderTout(v, html) {
   const emp = empreintes(html), n = (html.match(/GSTF_V=(\d+)/) || [0, v])[1];
   const c = await caches.open(CACHE), marque = '/__gstf-tout-' + n;
   if (await c.match(marque)) return;
-  for (const s of ['aide.js', 'nouveautes.js', ...Object.keys(emp).filter(k => /^m-[a-z]+\.js$/.test(k))]) if (emp[s] && await dejaGarde(c, '/' + s)) /* v522 : aussi les morceaux déjà ouverts */ await scriptVersionne(new URL('/' + s + '?v=' + emp[s], self.location.origin)).catch(() => null);
+  for (const s of ['aide.js', 'nouveautes.js']) if (emp[s] && await dejaGarde(c, '/' + s)) await scriptVersionne(new URL('/' + s + '?v=' + emp[s], self.location.origin)).catch(() => null);
   const l = await caches.open(LUS);
   for (const p of PAGES_SEMINAIRE) { try {
     const e = emp[p.slice(1)], avant = await l.match(p);
@@ -118,7 +118,7 @@ self.addEventListener('fetch', e => {
     if (/^\/(articles|homelies)\/[^/]+$/.test(u.pathname) || /^\/[a-z0-9-]+\.html$/.test(u.pathname)) { e.respondWith(pageLue(r, u)); return; }   // v346
     e.respondWith(fetch(r.url, { cache: 'no-cache', credentials: 'same-origin' }).catch(() => caches.match('/offline.html'))); return;
   }
-  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js' || u.pathname === '/nouveautes.js' || (u.pathname === '/site.css' && u.search) || /^\/m-[a-z]+\.js$/.test(u.pathname)) { /* v522 : les morceaux */ e.respondWith(scriptVersionne(u)); return; }
+  if (u.pathname === '/app.js' || u.pathname === '/espace.js' || u.pathname === '/aide.js' || u.pathname === '/nouveautes.js' || (u.pathname === '/site.css' && u.search)) { e.respondWith(scriptVersionne(u)); return; }
   if (STATIQUES.includes(u.pathname)) { e.respondWith(rapideEtFrais(e, u.pathname, u.pathname)); return; }
   if (HORS_LIGNE.includes(u.pathname)) e.respondWith(caches.match(r).then(x => x || fetch(r)));
 });
