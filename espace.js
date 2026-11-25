@@ -1436,7 +1436,11 @@ begin
       end if;
       begin
         execute format('alter table public.%I disable trigger user', r.t);
-        execute format('insert into public.%I overriding system value select * from json_populate_recordset(null::public.%I, $1) on conflict do nothing', r.t, r.t) using r.d;
+        if exists (select 1 from pg_index i where i.indrelid = format('public.%I', r.t)::regclass and (i.indisprimary or i.indisunique)) then
+          execute format('insert into public.%I overriding system value select * from json_populate_recordset(null::public.%I, $1) on conflict do nothing', r.t, r.t) using r.d;
+        else   -- v528 : table sans clé : seulement les lignes qui n'y sont pas déjà (on peut relancer sans doublon)
+          execute format('insert into public.%I overriding system value select * from json_populate_recordset(null::public.%I, $1) x where not exists (select 1 from public.%I y where to_jsonb(y) = to_jsonb(x))', r.t, r.t, r.t) using r.d;
+        end if;
         get diagnostics n = row_count;
         execute format('alter table public.%I enable trigger user', r.t);
         update _gstf_r set fait = true, ajoutees = n, erreur = null where ordre = r.ordre;
