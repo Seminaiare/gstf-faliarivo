@@ -632,10 +632,17 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <div id="agApp"></div>
     </section>
 
+    <section id="panel-memoire" role="tabpanel" hidden>
+      <div class="mb-6"><p class="eyebrow mb-1">Le Séminaire</p>
+      <h2 data-titre-page class="font-display text-3xl sm:text-4xl font-semibold">Mémoire du Séminaire</h2>
+      <p class="text-muted">Les archives du Grand Séminaire de Faliarivo, année par année : livrets, fêtes, célébrations, photos… pour que rien ne se perde pour les générations futures.</p></div>
+      <div id="memApp"></div>
+    </section>
+
     <section id="panel-anciens" role="tabpanel" hidden>
       <div class="mb-6"><p class="eyebrow mb-1">Anciens</p>
       <h2 data-titre-page class="font-display text-3xl sm:text-4xl font-semibold">Anciens du Séminaire</h2>
-      <p class="text-muted">Les prêtres formés à Faliarivo depuis 1998 : promotion, diocèse, ordination.</p></div>
+      <p class="text-muted">Les prêtres formés à Faliarivo depuis 1998 : promotion, diocèse, ordination. <button type="button" class="linkbtn" onclick="showTab('memoire')">📜 Mémoire du Séminaire (archives)</button></p></div>
       <div id="anApp"></div>
     </section>
 
@@ -1215,6 +1222,7 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
       <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" data-inscription data-ic="inscription">Inscription en ligne</button></li>
       <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" onclick="showTab('contact')" data-ic="contact">Contact et plan d’accès</button></li>
       <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" onclick="showTab('anciens')" data-ic="anciens">Anciens du Séminaire</button></li>
+      <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" onclick="showTab('memoire')" data-ic="archives">Mémoire du Séminaire</button></li>
       <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" onclick="showTab('entretiens')" data-ic="entretiens">Rendez-vous</button></li>
       <li><button type="button" class="hover:underline inline-flex items-center gap-2 text-left" onclick="showTab('confidentialite')" data-ic="confidentialite">Confidentialité</button></li></ul><ul id="pdLiens" class="flex flex-col gap-1.5 mt-1.5"></ul>
       <button type="button" class="hover:underline mt-1.5 text-left inline-flex items-center gap-2" data-abonner data-ic="abonner">Recevoir les articles par email</button></div>
@@ -1290,6 +1298,6 @@ try { if (localStorage.getItem('gstf-leger') !== '1' && !window.__LENT) document
 <div id="printArea" hidden></div>
 <div id="toastHost" class="fixed z-30 flex flex-col gap-2" style="right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; align-items: flex-end"></div>
 
-<script>window.GSTF_V=538;window.GSTF_EMP={"fiches.js":"426a224af7","i18n.js":"c03fa5d43a","aide.js":"231337b778","nouveautes.js":"50aa6081fd","espace.js":"a0fe4b9d27","chiffres.json":"97c3cd2f7d","app.js":"e34349be23","site.css":"e8e6d15174","m-agenda.js":"2b0edfb61c","m-articles.js":"71b4bf2fda","m-bibliotheque.js":"48dd7f1c5f","m-portail.js":"b96ff26ec8","le-seminaire.html":"60b912e323","programme-des-etudes.html":"8ec1932fd9","corps-enseignant.html":"b4085d06e5","calendrier-academique.html":"dd2a108faa","contact-acces.html":"9eef65252f","inscription-seminaire.html":"caebc0f58a","bibliotheque-seminaire.html":"e434c59b6d","soutenir-seminaire.html":"ec7076a504"};window.GSTF_TAILLES={"app.js":371,"espace.js":494,"aide.js":137,"site.css":33}</script><script defer src="/app.js?v=e34349be23"></script>
+<script>window.GSTF_V=540;window.GSTF_EMP={"fiches.js":"426a224af7","i18n.js":"c03fa5d43a","aide.js":"32001d2d21","nouveautes.js":"cd560873c4","espace.js":"61559ed09a","chiffres.json":"97c3cd2f7d","app.js":"edaf7372c8","site.css":"e8e6d15174","m-agenda.js":"2b0edfb61c","m-articles.js":"71b4bf2fda","m-bibliotheque.js":"48dd7f1c5f","m-portail.js":"b96ff26ec8","le-seminaire.html":"60b912e323","programme-des-etudes.html":"8ec1932fd9","corps-enseignant.html":"b4085d06e5","calendrier-academique.html":"dd2a108faa","contact-acces.html":"9eef65252f","inscription-seminaire.html":"caebc0f58a","bibliotheque-seminaire.html":"e434c59b6d","soutenir-seminaire.html":"ec7076a504"};window.GSTF_TAILLES={"app.js":375,"espace.js":494,"aide.js":137,"site.css":33}</script><script defer src="/app.js?v=edaf7372c8"></script>
 </body>
 </html>
