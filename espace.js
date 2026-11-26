@@ -3257,7 +3257,7 @@ function carteDosHtml(e,t){const s=CARTE_FORMATS[e]||CARTE_FORMATS.p45;return`<d
     <div class="ce-dos-c">
       <p><b>Cette carte est rigoureusement personnelle.</b> Elle ne doit pas être prêtée.</p>
       <p>Si vous la trouvez : Grand Séminaire, BP 6047, 101 Antananarivo, +261 38 21 220 21.</p>
-      <p><b>${t?"Bibliothèque":"Bibliothèque et examens"} :</b> présenter cette carte.</p>
+      ${t?"<p><b>À présenter</b> à toute demande, et à la bibliothèque.</p><p><b>À rendre</b> au secrétariat en quittant le Séminaire.</p>":"<p><b>Bibliothèque et examens :</b> présenter cette carte.</p>"}
       <p><b>Vérifier :</b> scannez le QR code au recto.</p>
     </div>
   </div>`}
