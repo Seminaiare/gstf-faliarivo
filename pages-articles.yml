@@ -1,0 +1,50 @@
+# Pages publiques des articles et des homélies (pour Google, WhatsApp et Facebook).
+# Chaque heure, GitHub lit les articles PUBLICS comme un visiteur non connecté et met à jour
+# les dossiers articles/ et homelies/ et le fichier sitemap-articles.xml, et la page légère aujourdhui.html
+# (liturgie du jour, prochains événements publics, horaires, contact). Rien d’autre n’est touché.
+# Pour le lancer tout de suite : onglet « Actions » › « Pages des articles » › « Run workflow ».
+name: Pages des articles
+on:
+  schedule:
+    - cron: '7 * * * *'
+  workflow_dispatch:
+    inputs:
+      autoriser:
+        description: 'J’autorise les suppressions (seulement si j’ai retiré beaucoup d’articles exprès)'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: pages-articles
+  cancel-in-progress: false
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # v599 : si Supabase répond vide ou très réduit, ce pas s’arrête EN ÉCHEC sans rien écrire (courriel de GitHub).
+      - name: Fabriquer les pages
+        id: pages
+        env:
+          AUTORISER_SUPPRESSIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.autoriser && 'oui' || 'non' }}
+        run: python3 outils/pages_articles.py
+      # v599 : la page du jour continue d’être mise à jour même si les pages des articles sont bloquées.
+      - name: Fabriquer la page légère du jour
+        if: ${{ !cancelled() }}
+        run: node outils/page_aujourdhui.js
+      - name: Enregistrer s’il y a du nouveau
+        if: ${{ !cancelled() }}
+        env:
+          PAGES_OK: ${{ steps.pages.outcome }}
+        run: |
+          git config user.name "Pages des articles"
+          git config user.email "actions@users.noreply.github.com"
+          # v599 : les pages des articles ne sont enregistrées que si leur fabrication a réussi
+          if [ "$PAGES_OK" = "success" ]; then for f in articles homelies sitemap-articles.xml; do if [ -e "$f" ]; then git add -A "$f"; fi; done; fi
+          if [ -e aujourdhui.html ]; then git add -A aujourdhui.html; fi
+          if git diff --cached --quiet; then echo "Rien de nouveau."; else git commit -m "Pages des articles mises à jour" && git push; fi
