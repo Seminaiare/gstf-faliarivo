@@ -539,7 +539,7 @@ ${l===2?`<script>document.querySelectorAll('.contrib').forEach(s => { const fns 
   fns.forEach((f, i) => { const sup = document.createElement('sup'); sup.textContent = i + 1; sup.style.fontSize = '65%'; f.replaceWith(sup); const p = document.createElement('p'); p.innerHTML = (i + 1) + '. ' + f.innerHTML; box.appendChild(p); }); s.appendChild(box); });<\/script>`:""}
 <script>
 window.apresMiseEnPage = () => { const att = document.getElementById('gstf-attente'); if (att) att.remove(); /* v606 */
-  const pages = [...document.querySelectorAll('.pagedjs_page')], n = pages.length, barre = document.createElement('div'); barre.className = 'barre'; barre.id = 'barre'; document.body.prepend(barre);
+  const pages = [...document.querySelectorAll('.pagedjs_page')], n = pages.length, barre = document.createElement('div'); barre.className = 'barre'; barre.id = 'barre'; document.body.prepend(barre); /* v610 : Paged.js retire les @media et le position:fixed de la feuille de style : la barre des boutons était cachée. On les remet après la mise en page. */ const stE = document.createElement('style'); stE.textContent = '@media screen { body { background: #6b7280 !important; padding-top: 64px !important; } .pagedjs_pages { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; padding: 14px; } .pagedjs_page { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.35); } .livret { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 14px; } .feuille { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.35); } #barre { display: flex !important; position: fixed !important; top: 0; left: 0; right: 0; z-index: 9; } } @media print { #barre { display: none !important; } body { background: none !important; padding: 0 !important; } }'; document.head.appendChild(stE);
   try {   // v453 : numéros de page des index, de « Comment citer », titres seuls en bas de page, nombre de pages pour le devis
     const pg = el => { const p = el.closest('.pagedjs_page'); return p ? Number(p.dataset.pageNumber || (pages.indexOf(p) + 1)) : 0; };
     const occ = {}; document.querySelectorAll('.pagedjs_page .ix').forEach(x => { const k = x.dataset.ix, p = pg(x); if (p) (occ[k] = occ[k] || new Set()).add(p); });
@@ -563,7 +563,7 @@ window.apresMiseEnPage = () => { const att = document.getElementById('gstf-atten
     if (document.querySelector('.livret')) return;
     const sansDos = ${b?"true":"false"}, L = pages.slice(), dos = sansDos ? null : L.pop(); while ((L.length + (sansDos ? 0 : 1)) % 4) L.push(null); if (!sansDos) L.push(dos);
     const total = L.length, cont = document.createElement('div'); cont.className = 'livret';
-    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; m.appendChild(c); } return m; };
+    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1); /* v610 : sinon chaque page du livret plié portait le numéro 1 */ m.appendChild(c); } return m; };
     for (let k = 0; k < total / 4; k++) {
       [[total - 1 - 2 * k, 2 * k], [2 * k + 1, total - 2 - 2 * k]].forEach(([g, d]) => { const f = document.createElement('div'); f.className = 'feuille'; f.append(moitie(L[g]), moitie(L[d])); cont.appendChild(f); });
     }
@@ -2587,7 +2587,7 @@ ${c.join(`
 ${d?`<div class="lva-dos">${d[1]}</section></div>`:""}
 <script>
 window.apresMiseEnPage = () => {
-  let pages = [...document.querySelectorAll('.pagedjs_page')]; const barre = document.createElement('div'); barre.className = 'barre'; document.body.prepend(barre);
+  let pages = [...document.querySelectorAll('.pagedjs_page')]; const barre = document.createElement('div'); barre.className = 'barre'; document.body.prepend(barre); /* v610 : la barre était cachée par Paged.js */ const stE = document.createElement('style'); stE.textContent = '@media screen { body { background: #6b7280 !important; padding-top: 64px !important; } .pagedjs_pages { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; padding: 14px; } .pagedjs_page { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.35); } .livret { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 14px; } .feuille { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.35); } html body div.barre { display: flex !important; position: fixed !important; top: 0; left: 0; right: 0; z-index: 9; } } @media print { html body div.barre { display: none !important; } body { background: none !important; padding: 0 !important; } }'; document.head.appendChild(stE);
   document.querySelectorAll('.pagedjs_page .lva-toc a').forEach(a => { const id = a.getAttribute('href').slice(1), t = document.getElementById(id) || document.querySelector('[data-id="' + id + '"]'), pg = t && t.closest('.pagedjs_page');
     const sp = document.createElement('span'); sp.textContent = pg ? (pg.dataset.pageNumber || (pages.indexOf(pg) + 1)) : ''; a.appendChild(sp); });
   ${s.multiple4?`if (pages.length % 4) { const dos = ${d?"pages[pages.length - 1]":"null"}, modele = pages[pages.length - 1];   // pages blanches avant le dos : total multiple de 4
@@ -2601,7 +2601,7 @@ window.apresMiseEnPage = () => {
     if (document.querySelector('.livret')) return;
     const L = pages.slice(); while (L.length % 4) L.splice(L.length - 1, 0, null);
     const total = L.length, cont = document.createElement('div'); cont.className = 'livret';
-    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; m.appendChild(c); } return m; };
+    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1); /* v610 */ m.appendChild(c); } return m; };
     for (let k = 0; k < total / 4; k++) [[total - 1 - 2 * k, 2 * k], [2 * k + 1, total - 2 - 2 * k]].forEach(([g, d]) => { const f = document.createElement('div'); f.className = 'feuille'; f.append(moitie(L[g]), moitie(L[d])); cont.appendChild(f); });
     for (const sh of document.styleSheets) { try { for (let i = sh.cssRules.length - 1; i >= 0; i--) if (sh.cssRules[i].type === CSSRule.PAGE_RULE) sh.deleteRule(i); } catch (e) {} }
     const st = document.createElement('style'); st.textContent = '@page { size: ${2*r}mm ${i}mm; margin: 0; } .pagedjs_pages { display: none !important; }'; document.head.appendChild(st);
