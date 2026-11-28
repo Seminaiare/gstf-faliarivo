@@ -1,0 +1,39 @@
+GSTF – version 621 (paquet pour contrôle avant publication)
+Base : GitHub e7e868e (v620 en ligne)
+
+CONTENU (un seul genre de changement) :
+Sakafom-pitiavana : nouveau modèle d'enveloppe « Comme 2026 » (valeur env_modele = "c2026").
+- espace.js : skEnveloppes() reçoit une branche if(n==="c2026"){…} insérée juste avant le modèle « rubans ».
+  Insertion pure : en retirant ce bloc, le fichier est identique octet par octet à celui de la 620.
+- app.js : une option de plus dans la liste « Modèle des enveloppes » (c2026=Comme 2026…). Rien d'autre.
+- sk-therese-2026.png : NOUVEAU fichier (148 × 197 px), image de sainte Thérèse reprise de l'enveloppe 2026
+  (ENVRLOPPE_SAKAFOMPITIAVANA_2026.pptx). Le Préfet confirme que le Séminaire a le droit de l'utiliser.
+- index.html, version.json, nouveautes.js : passage à 621.
+Aucun SQL. Aucun changement des billets, des 3 anciens modèles, ni de la base.
+
+FICHIERS DU PAQUET (sha256, 10 premiers caractères) :
+4b5e69cb6a  app.js
+8d9330068e  espace.js
+9ad4d5e43f  index.html
+3f2c3d749f  nouveautes.js
+9f03739458  sk-therese-2026.png
+113d698138  version.json
+
+CONTRÔLES FAITS :
+1. Le paquet = tous les fichiers qui diffèrent de GitHub, et seulement eux (5 modifiés + 1 nouveau).
+2. GSTF_EMP : 21/21 justes.
+3. app.js?v= et site.css?v= = empreintes des fichiers.
+4. GSTF_V = 621 = version.json ; nouveautes.js : entrée v621.
+5. node --check : tous les .js OK. Aucun « service_role » ni « sb_secret_ ».
+6. Essai dans un vrai Chrome sans tête, sur la vraie page servie en local, avec le vrai espace.js :
+   - C6 + « Comme 2026 » : PDF de 3 pages, chaque page 161,9 × 114,0 mm ; images chargées (logo 512 px, Thérèse 148 px).
+   - DL et C5 + « Comme 2026 » : 3 pages au bon format.
+   - Non-régression : « Rubans », « Sobre », « Classique » en C6 : 3 pages au bon format.
+7. Texte rendu vérifié (pdftotext) : adresse, « Fanasana », titre, date et heure, « Billet N° : 001 / 002 / 357 ».
+   Aucun commentaire ni « undefined » imprimé.
+   Le livret des Actes n'est pas touché par cette version (pas d'essai Paged.js nécessaire).
+
+À SAVOIR :
+- La date garde « May » (anglais) : le passage à « Mey » est prévu dans une version à part.
+- L'adresse imprimée est celle de « ⚙️ Réglages › Enveloppe : adresse et téléphones »
+  (ou, si elle est vide, celle de « Adresse »).
