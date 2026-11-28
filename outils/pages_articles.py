@@ -113,14 +113,55 @@ def ecrire(chemin, contenu):
         open(p, 'w', encoding='utf-8').write(contenu)
 
 
+# v599 : GARDE-FOU. Contrôle fait JUSTE APRÈS la lecture de Supabase, AVANT d’écrire ou d’effacer le moindre fichier.
+# Une réponse vide ou très réduite n’est pas une « erreur » pour Supabase, mais elle effacerait les pages publiques.
+# Une page ne compte comme supprimée que si son NUMÉRO d’article disparaît (un titre corrigé = même numéro, nouveau nom).
+# Pour les homélies : c’est la vidéo (video_id) qui compte, pas la date.
+# Déblocage volontaire : onglet « Actions » › « Pages des articles » › « Run workflow », cocher « J’autorise les suppressions ».
+MAX_SUPPR = 3
+
+
+def deja_la(dossier, motif):
+    d = os.path.join(RACINE, dossier)
+    if not os.path.isdir(d):
+        return set()
+    return {m.group(1) for f in os.listdir(d) for m in [re.match(motif, f)] if m}
+
+
+def garde_fou(A, H):
+    if os.environ.get('AUTORISER_SUPPRESSIONS') == 'oui':
+        print('Déblocage manuel : les suppressions sont autorisées pour cette fois.')
+        return
+    pb = []
+    for quoi, avant, apres in (
+        ('articles', deja_la('articles', r'^(\d+)-.*\.html$'), {str(a['id']) for a in A}),
+        ('homélies', deja_la('homelies', r'^(?:\d{4}-\d{2}-\d{2}|sans-date)-([A-Za-z0-9_-]{11})\.html$'), {h['video_id'] for h in H}),
+    ):
+        partis = sorted(avant - apres)
+        if avant and not apres:
+            pb.append(f'{quoi} : Supabase n’en donne AUCUN, alors que {len(avant)} page(s) existent')
+        elif len(avant) >= 4 and len(apres) < len(avant) / 2:
+            pb.append(f'{quoi} : Supabase en donne {len(apres)}, moins de la moitié des {len(avant)} page(s) existantes')
+        elif len(partis) > MAX_SUPPR:
+            pb.append(f'{quoi} : {len(partis)} page(s) disparaîtraient d’un coup (plus de {MAX_SUPPR}) : {", ".join(partis)}')
+    if pb:
+        print('ARRÊT PAR PRUDENCE (v599) : aucun fichier n’a été écrit ni effacé.', file=sys.stderr)
+        for x in pb:
+            print(' – ' + x, file=sys.stderr)
+        print('Si c’est voulu : Actions › Pages des articles › Run workflow, cocher « J’autorise les suppressions ».', file=sys.stderr)
+        sys.exit(1)
+
+
 def main():
     A = lire('articles', 'id,titre,auteur,resume,texte,couverture,affiche,rubrique,publie_le,modifie_le,payant,fichier,public,destinataires',
              '&public=eq.true&order=publie_le.desc&limit=1000')
     def paru(a):   # date déjà passée (un article programmé attend son jour)
         try: return datetime.datetime.fromisoformat(str(a.get('publie_le')).replace('Z', '+00:00')) <= datetime.datetime.now(datetime.timezone.utc)
         except Exception: return False
+    if not isinstance(A, list): raise ValueError('réponse inattendue de Supabase pour les articles')   # v599
     A = [a for a in A if a.get('public') and not a.get('destinataires') and paru(a)]
     H = lire('homelies', 'video_id,titre,dimanche,publie_le,visible', '&visible=eq.true&order=dimanche.desc.nullslast&limit=500')
+    if not isinstance(H, list): raise ValueError('réponse inattendue de Supabase pour les homélies')   # v599
     H = [h for h in H if h.get('visible', True) and re.match(r'^[A-Za-z0-9_-]{11}$', str(h.get('video_id', '')))]
     # Une seule homélie par dimanche, comme sur le site : si deux vidéos annoncent le même dimanche, la plus tardive
     # reçoit le dimanche de sa mise en ligne (titre mal daté par la chaîne) ; s'il est déjà pris, elle n'a pas de page.
@@ -145,6 +186,7 @@ def main():
         h['titre_source'] = h.get('titre') or ''
         h['titre'] = f"Homélie du dimanche {date_fr(h['dimanche'])}"
 
+    garde_fou(A, H)   # v599 : avant toute écriture
     gardes = set(); plan = []
     for a in A:
         nom = nom_article(a); gardes.add(nom)
@@ -173,7 +215,7 @@ def main():
     if os.path.isdir(dossier):
         for f in os.listdir(dossier):
             if re.match(r'^\d+-.*\.html$', f) and f not in gardes:
-                os.remove(os.path.join(dossier, f))
+                os.remove(os.path.join(dossier, f)); print('Page retirée : articles/' + f)   # v599 : journal
 
     liste = ''.join(f'<li><a href="/articles/{nom_article(a)}">{E(a.get("titre") or "")}</a><br><small>{E(a.get("rubrique") or "Articles")} · {date_fr(a.get("publie_le"))}{(" · " + E(a["auteur"])) if a.get("auteur") else ""}</small></li>' for a in A)
     ecrire('articles/index.html', page('articles/', 'Articles, homélies et méditations', 'Les articles, homélies et méditations du Grand Séminaire de Théologie de Faliarivo, Antananarivo.', '',
@@ -195,7 +237,7 @@ def main():
     if os.path.isdir(dossierH):
         for f in os.listdir(dossierH):
             if f.endswith('.html') and f not in gardesH:
-                os.remove(os.path.join(dossierH, f))
+                os.remove(os.path.join(dossierH, f)); print('Page retirée : homelies/' + f)   # v599 : journal
 
     date_ok = re.compile(r'^\d{4}-\d{2}-\d{2}$')
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
