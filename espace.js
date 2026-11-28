@@ -563,7 +563,7 @@ window.apresMiseEnPage = () => { const att = document.getElementById('gstf-atten
     if (document.querySelector('.livret')) return;
     const sansDos = ${b?"true":"false"}, L = pages.slice(), dos = sansDos ? null : L.pop(); while ((L.length + (sansDos ? 0 : 1)) % 4) L.push(null); if (!sansDos) L.push(dos);
     const total = L.length, cont = document.createElement('div'); cont.className = 'livret';
-    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1); /* v610 : sinon chaque page du livret plié portait le numéro 1 */ m.appendChild(c); } return m; };
+    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; const av = pages.slice(0, pages.indexOf(p)), nb = q => av.reduce((t, x) => t + x.querySelectorAll(q).length, 0); c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1) + ' footnote ' + nb('[data-footnote-call]') + ' footnote-marker ' + nb('[data-footnote-marker]:not([data-split-from])'); /* v610-611 : numéros de page et de notes justes dans le livret plié */ m.appendChild(c); } return m; };
     for (let k = 0; k < total / 4; k++) {
       [[total - 1 - 2 * k, 2 * k], [2 * k + 1, total - 2 - 2 * k]].forEach(([g, d]) => { const f = document.createElement('div'); f.className = 'feuille'; f.append(moitie(L[g]), moitie(L[d])); cont.appendChild(f); });
     }
@@ -2601,7 +2601,7 @@ window.apresMiseEnPage = () => {
     if (document.querySelector('.livret')) return;
     const L = pages.slice(); while (L.length % 4) L.splice(L.length - 1, 0, null);
     const total = L.length, cont = document.createElement('div'); cont.className = 'livret';
-    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1); /* v610 */ m.appendChild(c); } return m; };
+    const moitie = p => { const m = document.createElement('div'); m.className = 'moitie'; if (p) { const c = p.cloneNode(true); c.style.boxShadow = 'none'; const av = pages.slice(0, pages.indexOf(p)), nb = q => av.reduce((t, x) => t + x.querySelectorAll(q).length, 0); c.style.counterReset = 'page ' + ((Number(p.dataset.pageNumber) || (pages.indexOf(p) + 1)) - 1) + ' footnote ' + nb('[data-footnote-call]') + ' footnote-marker ' + nb('[data-footnote-marker]:not([data-split-from])'); /* v610-611 : numéros de page et de notes justes dans le livret plié */ m.appendChild(c); } return m; };
     for (let k = 0; k < total / 4; k++) [[total - 1 - 2 * k, 2 * k], [2 * k + 1, total - 2 - 2 * k]].forEach(([g, d]) => { const f = document.createElement('div'); f.className = 'feuille'; f.append(moitie(L[g]), moitie(L[d])); cont.appendChild(f); });
     for (const sh of document.styleSheets) { try { for (let i = sh.cssRules.length - 1; i >= 0; i--) if (sh.cssRules[i].type === CSSRule.PAGE_RULE) sh.deleteRule(i); } catch (e) {} }
     const st = document.createElement('style'); st.textContent = '@page { size: ${2*r}mm ${i}mm; margin: 0; } .pagedjs_pages { display: none !important; }'; document.head.appendChild(st);
